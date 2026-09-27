@@ -62,7 +62,7 @@ The parent explicitly allows `product-card`. The card propagates the chosen prod
 
 Static slots have editing restrictions. Use them for required structural positions or repeated resource templates, and dynamic slots for freely reorderable marketing content. Never convert all marketing buttons/headings to static blocks just to avoid solving context.
 
-Shopify's [dynamic resource context](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/dynamic-sources) and [static slot rules](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/static-blocks) govern these choices. XellHub must demonstrate equivalent behavior before claiming compatibility.
+the platform's dynamic resource context and static slot rules govern these choices. XellHub must demonstrate equivalent behavior before claiming compatibility.
 
 ## C04 — Button behavior
 
@@ -86,7 +86,7 @@ Use `.theme-button` and the shared tokens for all functional controls, with the 
 
 Use custom elements or scoped controllers with explicit `mount(root)` and `destroy()` behavior. Mount is idempotent. Destroy clears listeners, observers, pending timers, request controllers and media playback. A controller owns its own DOM subtree, with explicit references for portals.
 
-Handle initial load, `shopify:section:load`, `shopify:section:unload`, relevant block selection, and Ajax-replaced markup. In the editor, reveal a selected hidden slide/tab and pause autoplay. Never use a document-wide first match to choose which product form a quick view/sticky button updates.
+Handle initial load, section load and unload events, relevant block selection, and Ajax-replaced markup. In the editor, reveal a selected hidden slide/tab and pause autoplay. Never use a document-wide first match to choose which product form a quick view/sticky button updates.
 
 Keep the existing cart store as the starting point. Expose one documented, scoped public interface rather than create a second cart state owner. Proposed event payloads:
 
@@ -132,7 +132,7 @@ node scripts/validate-palettes.mjs
 node scripts/validate-tokens.mjs
 node scripts/validate-section-library.mjs
 node scripts/check-composition.mjs
-CI=1 SHOPIFY_CLI_NO_ANALYTICS=1 bun run check
+CI=1 bun run check
 ```
 
 When schemas changed, regenerate usage before this suite. For changed JS, also run `node --check` on those files. Run `bun run test:composition` only when changing composition validators or their fixtures. Add focused tests for money calculations, migrations, request/error handling and controller cleanup; do not add tests that only repeat constant markup.

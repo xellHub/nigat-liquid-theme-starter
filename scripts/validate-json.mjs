@@ -99,7 +99,7 @@ function walkJson(dir, label) {
       const parsed = JSON.parse(readFileSync(full, "utf8"));
       if (Array.isArray(parsed.order) && parsed.order.length > 25) {
         fail(
-          `${entry.name}: exceeds Shopify platform limit of 25 sections (currently ${parsed.order.length})`
+          `${entry.name}: exceeds the platform limit of 25 sections (currently ${parsed.order.length})`
         );
       } else {
         ok(`${entry.name}`);

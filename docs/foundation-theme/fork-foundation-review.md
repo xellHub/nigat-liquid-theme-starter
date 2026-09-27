@@ -12,7 +12,7 @@ The principal weakness is the difference between declaring reusable blocks/token
 
 Use Tailwind v4's CSS-variable approach as the design model. Retain native CSS and Liquid as the implementation. Introducing a Tailwind compilation pipeline would be a separate decision with little immediate benefit to this review's goals.
 
-Platform assumption while preparing this plan: Shopify compatibility is the reference contract; XellHub support must be demonstrated against its actual renderer and endpoints. No XellHub renderer or backend was available in this repository review. This is an implementation prerequisite for platform-dependent tasks, not a claim that Shopify code runs unchanged on XellHub.
+Platform assumption while preparing this plan: Liquid theme compatibility is the reference contract; XellHub support must be demonstrated against its actual renderer and endpoints. No XellHub renderer or backend was available in this repository review. This is an implementation prerequisite for platform-dependent tasks, not a claim that Liquid theme code runs unchanged on XellHub.
 
 ## Verified baseline
 
@@ -28,9 +28,9 @@ Platform assumption while preparing this plan: Shopify compatibility is the refe
 | Theme Check | 205 files inspected; no offenses under current configuration |
 | Atomic composition audit | Zero reported violations |
 | Bun | 1.4.0 |
-| Shopify CLI used for checks | 4.3.0 |
+| theme CLI used for checks | 4.3.0 |
 
-All required commands completed successfully: `bun run sync`, `bun run sync check`, the JSON/palette/token/library/composition validators, and `bun run check`. The last command ran with `CI=1 SHOPIFY_CLI_NO_ANALYTICS=1` to avoid CLI auto-upgrade during validation. Initial CLI version inspection attempted an automatic package-manager upgrade; that process was interrupted. No dependency upgrade was part of this review.
+All required commands completed successfully: `bun run sync`, `bun run sync check`, the JSON/palette/token/library/composition validators, and `bun run check`. The last command ran in CI mode to avoid CLI auto-upgrade during validation. Initial CLI version inspection attempted an automatic package-manager upgrade; that process was interrupted. No dependency upgrade was part of this review.
 
 `AGENTS.md` already had a user modification at the start. It was not edited. No storefront implementation was changed. No browser, merchant editor, live checkout, or XellHub integration test was performed; feature statuses below describe source evidence.
 
@@ -98,11 +98,11 @@ The gaps concern behavior and adoption: product context, automatic badge data, r
 
 `snippets/product-card.liquid:64` applies `escape` after `image_tag` for both product images. That escapes the generated tag rather than just image alt text. The featured collection and catalog use this path, so this is a purchase-path defect to verify and correct before the card migration. Compute fallback alt text separately and pass it into `image_tag`.
 
-### R02 — Parent button variables do not establish a Shopify theme-block contract
+### R02 — Parent button variables do not establish a Liquid theme theme-block contract
 
 `blocks/newsletter-form.liquid:17` assigns `button_element` before a dynamic block slot. `blocks/button.liquid:10` reads that variable and other parent-local variables while suppressing `UndefinedObject`. Similar assignments exist in contact form, featured product and icon-with-text.
 
-Shopify theme blocks do not inherit arbitrary surrounding Liquid assignments. Resource context and explicitly passed static-block parameters are supported alternatives. The current pattern is therefore a compatibility defect/risk, even though its linter passes. In addition, an explicit submit/action context currently wins over a custom link in `button.liquid`, contrary to the documented custom-link precedence. See task F03 and the button decision table.
+Liquid theme theme blocks do not inherit arbitrary surrounding Liquid assignments. Resource context and explicitly passed static-block parameters are supported alternatives. The current pattern is therefore a compatibility defect/risk, even though its linter passes. In addition, an explicit submit/action context currently wins over a custom link in `button.liquid`, contrary to the documented custom-link precedence. See task F03 and the button decision table.
 
 ### R03 — Product proof is fabricated by default
 
@@ -163,9 +163,9 @@ Core foundation release requires A, B, F16–F19, and D. Recently viewed and fre
 
 ## External references checked for this plan
 
-- [Shopify theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/quick-start): reusable block files and Liquid scope.
-- [Dynamic sources and closest resources](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/dynamic-sources): resource propagation through `content_for`.
-- [Static theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/static-blocks): explicit parameters, fixed slots, and persisted `static: true` data.
-- [Theme limits](https://shopify.dev/docs/storefronts/themes/architecture/limits): validate nesting and other platform limits rather than assuming local checks cover them.
+- Liquid theme theme blocks: reusable block files and Liquid scope.
+- Dynamic sources and closest resources: resource propagation through `content_for`.
+- Static theme blocks: explicit parameters, fixed slots, and persisted `static: true` data.
+- Theme limits: validate nesting and other platform limits rather than assuming local checks cover them.
 - [Tailwind theme variables](https://tailwindcss.com/docs/theme): CSS-first configuration; `@theme` belongs to Tailwind's compiler and is not a browser-native substitute for `:root`.
-- [Cart API](https://shopify.dev/docs/api/ajax/reference/cart), [section rendering](https://shopify.dev/docs/api/ajax/section-rendering), and [recommendations](https://shopify.dev/docs/api/ajax/reference/product-recommendations): Shopify runtime contracts for the proposed commerce features.
+- Cart API, section rendering, and recommendations: Liquid theme runtime contracts for the proposed commerce features.

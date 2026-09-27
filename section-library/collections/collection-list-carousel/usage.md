@@ -24,7 +24,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `carousel` | carousel; no child blocks. |
 | `heading` | heading; no child blocks. |
 | `link` | link; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `group`
 

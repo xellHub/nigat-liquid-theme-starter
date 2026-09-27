@@ -25,7 +25,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `media-text` | media-text; no child blocks. |
 | `heading` | heading; no child blocks. |
 | `text` | text; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `accordion-items`
 

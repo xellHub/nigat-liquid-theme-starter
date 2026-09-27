@@ -22,7 +22,7 @@ COMPOSITION & THEME BLOCKS VIOLATION CHECK
 ✓ Audited 411 nested theme block instances with strict parent whitelisting
 ✓ Audited preset integrity across all sections and theme blocks
 ✓ Scanned CSS tokens across 218 source files for hardcoded colors
-✓ Maximum nesting depth: 4 levels (Shopify limit: 8)
+✓ Maximum nesting depth: 4 levels (platform limit: 8)
   Deepest node: index.json > sections > icons-with-text (icons-with-text)/values-surface (surface)/values-grid (grid)/intentional-design (icon-with-text)/intentional-design-heading (heading)
 ----------------------------------------------------
 

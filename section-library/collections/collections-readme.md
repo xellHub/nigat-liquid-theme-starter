@@ -10,7 +10,7 @@ summary: Catalog-navigation families for presenting multiple collection destinat
 tags:
   - collections
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Collections

@@ -6,9 +6,9 @@ group: null
 family: null
 variant: null
 status: ready
-summary: Defines the organization and decision rules for the Shopify section library.
+summary: Defines the organization and decision rules for the Liquid theme section library.
 tags:
-  - shopify
+  - Liquid theme
   - sections
   - library
   - ai-agent
@@ -16,11 +16,11 @@ tags:
 
 # Section Library
 
-A copy-ready Shopify section catalog organized as groups, section families, and concrete variants.
+A copy-ready Liquid theme section catalog organized as groups, section families, and concrete variants.
 
 ## Purpose
 
-Give merchants, engineers, and AI agents a predictable way to discover, evaluate, and install reusable Shopify sections.
+Give merchants, engineers, and AI agents a predictable way to discover, evaluate, and install reusable Liquid theme sections.
 
 ## Physical composition
 
@@ -32,10 +32,10 @@ A consistent hierarchy reduces choice overload and makes tradeoffs visible befor
 
 ## Best used when
 
-- a reusable Shopify section must be selected by customer need, content shape, and structural behavior.
+- a reusable Liquid theme section must be selected by customer need, content shape, and structural behavior.
 - The surrounding page gives the composition enough context and space to perform its role.
 
-**Decision rule:** Best used when a reusable Shopify section must be selected by customer need, content shape, and structural behavior; not when a one-off page fragment has no reusable behavior or cannot satisfy the package contract.
+**Decision rule:** Best used when a reusable Liquid theme section must be selected by customer need, content shape, and structural behavior; not when a one-off page fragment has no reusable behavior or cannot satisfy the package contract.
 
 ## Avoid when
 
@@ -64,7 +64,7 @@ Choosing a section from its screenshot alone ignores content, accessibility, and
 
 ## AI-agent guidance
 
-- **Choose this when:** the task requires discovering or installing a reusable Shopify section
+- **Choose this when:** the task requires discovering or installing a reusable Liquid theme section
 - **Reject this when:** the requested artifact is a full template, layout, snippet, or store-specific one-off
 - **Prefer instead:** the live theme directories when modifying an already-installed section.
 - **Required evidence:** The requested page context, content type, interaction needs, and available merchant data.

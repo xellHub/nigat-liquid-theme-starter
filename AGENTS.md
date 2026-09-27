@@ -142,7 +142,7 @@ A single theme codebase must maintain **one unified typography identity**; it mu
 
 ## 7. The 5-Layer Theme Block Architecture & Fine-Grained Composition Standard
 
-Every component in this repository adheres strictly to Shopify's modern 5-layer dependency hierarchy. A layer may only depend on layers below it:
+Every component in this repository adheres strictly to the modern 5-layer dependency hierarchy. A layer may only depend on layers below it:
 
 ```text
 Layer 1: Layout & Storeframe (layout/theme.liquid)
@@ -178,7 +178,7 @@ Design Tokens (config/settings_data.json, assets/base.css)
 ### C. HTML5 Semantic Tree & Canvas Clickability Rule
 
 - **No Interactive Nesting:** Never wrap `{% content_for 'blocks' %}` inside an HTML `<button>` or `<a>` tag (e.g. for accordion triggers or step headers).
-- **Rationale:** Because child blocks can render buttons or links, nesting `<button>` or `<a>` inside an outer `<button>` is illegal in HTML5. It causes browser click dispatch bugs, invalidates keyboard focus, and breaks canvas selection in the Shopify Theme Editor.
+- **Rationale:** Because child blocks can render buttons or links, nesting `<button>` or `<a>` inside an outer `<button>` is illegal in HTML5. It causes browser click dispatch bugs, invalidates keyboard focus, and breaks canvas selection in the visual theme editor.
 - **Accessible Delegation:** Use semantic `<div>` elements with ARIA attributes and click event listeners that explicitly ignore clicks originating from interactive children:
   ```javascript
   step.addEventListener("click", (e) => {
@@ -242,3 +242,12 @@ Tailwind CSS v4 serves as the repository's principal design-system mental model 
 - **Contextual Overrides Without Structural Mutation:**
   A parent section may supply layout coordinates (grid placement, flex ordering) or pass contextual custom properties (e.g. `--card-size`, `--grid-gap`), but the child block retains authority over its internal anatomy, states, and token consumption.
 
+---
+
+## 10. Original Content and Third-Party References
+
+- Write original copy and create original visual assets. Do not copy or closely imitate third-party documentation, marketing copy, illustrations, screenshots, or other protected material unless the repository has a license or explicit permission covering that use.
+- Avoid adding third-party brand names, trademarks, product names, and proprietary labels to user-facing copy, documentation, examples, or agent instructions when they are not needed.
+- Keep names that are required for technical compatibility, file formats, APIs, legal attribution, or accurate license notices. Do not rename compatibility identifiers in a way that breaks behavior; explain unavoidable references in the change.
+- When updating a file, remove unnecessary legacy brand references in the edited content. Reviewers should flag new copied material and unnecessary third-party names, and request a source or license for any questionable reuse.
+- Follow the focused pull request review checklist in [`PR_REVIEWER.md`](PR_REVIEWER.md).

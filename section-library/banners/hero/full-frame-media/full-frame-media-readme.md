@@ -25,7 +25,7 @@ Deliver an immersive brand atmosphere immediately upon page landing using high-i
 
 ## Physical composition
 
-- **Full-Frame Media Layer:** Supports high-resolution imagery, Shopify-hosted video (`video_tag`), or external video streams (`YouTube`/`Vimeo`) with an adjustable contrast overlay.
+- **Full-Frame Media Layer:** Supports high-resolution imagery, Liquid theme-hosted video (`video_tag`), or external video streams (`YouTube`/`Vimeo`) with an adjustable contrast overlay.
 - **Overlaid Text Cluster:** Heading, rich body text, and responsive action cluster.
 - **Dual Buttons (Pair):** Supports two customizable buttons (Primary & Secondary) displayed side-by-side with responsive flex wrapping.
 

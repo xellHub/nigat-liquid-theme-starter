@@ -431,7 +431,7 @@
         },
         "video": {
           "label": "Background video",
-          "info": "Shopify-hosted video. Overrides background image."
+          "info": "Hosted video. Overrides background image."
         },
         "video_url": {
           "label": "External video URL",
@@ -1183,7 +1183,7 @@
         },
         "video": {
           "label": "Background video",
-          "info": "Shopify-hosted video. Overrides background image."
+          "info": "Hosted video. Overrides background image."
         },
         "video_url": {
           "label": "External video URL",

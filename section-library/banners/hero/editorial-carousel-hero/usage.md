@@ -33,7 +33,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `badge` | badge; no child blocks. |
 | `eyebrow` | eyebrow; no child blocks. |
 | `link` | link; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `_editorial-slide`
 

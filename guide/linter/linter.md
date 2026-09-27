@@ -1,4 +1,4 @@
-Built and tested — this parses your .liquid files with Shopify's own @shopify/liquid-html-parser (the same parser theme-check uses), not regex, so it correctly understands nesting and loop scope instead of guessing from text patterns.
+Built and tested — this parses your .liquid files with the Liquid HTML parser package (the same parser theme-check uses), not regex, so it correctly understands nesting and loop scope instead of guessing from text patterns.
 
 The archive is integrated into the repository as `scripts/lint-blocks.cjs`. Install dependencies and lint all runtime sections and theme blocks with:
 

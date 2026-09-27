@@ -10,7 +10,7 @@ summary: Typography-led families for explanation, reassurance, quotation, and st
 tags:
   - text
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Text

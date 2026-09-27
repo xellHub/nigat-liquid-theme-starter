@@ -1,6 +1,6 @@
 # Foundational Theme — Must-Have Sections
 
-Universal, vertical-agnostic sections every fork starts with. Each is a pure layout shell — arrangement settings only, content comes from blocks. Names are kebab-case, matching Shopify section file handles.
+Universal, vertical-agnostic sections every fork starts with. Each is a pure layout shell — arrangement settings only, content comes from blocks. Names are kebab-case, matching Liquid theme section file handles.
 
 ## Structure
 

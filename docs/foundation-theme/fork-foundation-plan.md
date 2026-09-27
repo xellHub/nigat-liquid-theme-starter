@@ -10,7 +10,7 @@ Read [the current review](fork-foundation-review.md) and [the implementation con
 2. Read the task's listed files and directly affected consumers. Existing canonical paths below are intentional. New canonical packages follow the required group/family/variant naming.
 3. Follow C01 for section synchronization, documentation, group JSON and usage regeneration. Follow C07 for compatibility. Every task inherits C08's mandatory validation suite in addition to its own acceptance checks.
 4. Record implementation status separately from browser/editor/platform acceptance. Do not replace “not tested” with “passed” based on static analysis.
-5. The platform question must be resolved in F01: Shopify, XellHub, or both. Default planning assumption is Shopify contracts plus an explicit XellHub capability assessment. This review does not authorize platform-specific guesses.
+5. The platform question must be resolved in F01: Liquid theme, XellHub, or both. Default planning assumption is Liquid theme contracts plus an explicit XellHub capability assessment. This review does not authorize platform-specific guesses.
 6. No new package manager, framework, wholesale CSS rewrite, broad `@theme` whitelist or alternative font system is required.
 
 ## Dependency and priority table
@@ -70,7 +70,7 @@ P0 protects basic correctness and contracts. P1 is the default foundation releas
 2. In an isolated fixture/preview, prove dynamic nesting, resource context, static parameters, static card repetition, block editor attributes, native forms, app slots and Ajax section rendering. The fixture must not become a production homepage.
 3. Specifically prove the newsletter button's generated element and the selected product available to card children. Capture rendered HTML and editor observations. If a renderer lacks a required capability, record the adapter or prerequisite before dependent work.
 4. Correct old section/block counts and the absent `index.second.json` claim. Replace “update both copies” with canonical edits plus sync. State that existing validators have a limited scope.
-5. Make `dev` accept the fork's store configuration instead of prescribing `eragel-mismar.myshopify.com`. Document environment/CLI input without embedding credentials. Preserve an explicit local override workflow.
+5. Make `dev` accept the fork's store configuration instead of prescribing a specific development host. Document environment/CLI input without embedding credentials. Preserve an explicit local override workflow.
 
 **Acceptance:** A reader can identify supported platforms, reproduce the small fixture, and see which checks are pending. Handoff docs never instruct edits through `sections/`. A new fork can choose its own preview store without editing application code.
 
@@ -275,7 +275,7 @@ P0 protects basic correctness and contracts. P1 is the default foundation releas
 **Steps:**
 
 1. Build a banner shell from existing image/heading/text atoms bound to current collection resources. Empty image/description does not leave a large blank area. The collection heading owns the page H1.
-2. Add menu-based subcategory navigation. Do not infer parent/child collection hierarchy from Shopify collections; the merchant chooses a navigation menu. Mark current destination appropriately.
+2. Add menu-based subcategory navigation. Do not infer parent/child collection hierarchy from Liquid theme collections; the merchant chooses a navigation menu. Mark current destination appropriately.
 3. Integrate banner/navigation/results in the template using registered clean presets, preserving existing results settings and merchant data via migration.
 4. Keep sorting/filter URLs compatible with form GET fallback. Verify active-filter removal, clear-all, mobile drawer, pagination, back/forward, price range and empty results after Ajax replacement.
 5. Use F07/F08 cards and actions; make desktop/mobile column settings affect the actual grid with inherited defaults.
@@ -334,7 +334,7 @@ P0 protects basic correctness and contracts. P1 is the default foundation releas
 **Steps:**
 
 1. Register a real canonical recommendation section, with independent heading/text and a resource-loop composite. Preserve the existing family documentation and mark implementation status accurately.
-2. Request recommendations through the locale-aware Shopify endpoint with product ID, section ID, limit and declared intent, or the F01-proven XellHub equivalent. Avoid calling a curated featured collection personalized recommendations.
+2. Request recommendations through the locale-aware Liquid theme endpoint with product ID, section ID, limit and declared intent, or the F01-proven XellHub equivalent. Avoid calling a curated featured collection personalized recommendations.
 3. Render returned product resources through the same static card slot. Handle initial unperformed state, empty list, failed request, disposed section and changed product context.
 4. Keep related and complementary intents distinct. Filter duplicates/current product as appropriate; allow an explicitly labeled curated fallback only if configured.
 5. Replace the default PDP's mislabeled featured-collection fallback with the real recommendation preset through a compatibility migration.

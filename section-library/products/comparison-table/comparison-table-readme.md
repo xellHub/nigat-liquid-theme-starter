@@ -12,7 +12,7 @@ The `comparison-table` section enables merchants to present a high-clarity, side
    - Can be completely disabled via `show_header`.
 2. **Product Media Row (Toggable)**:
    - Dedicated photography container for each compared column with zoom-on-hover interaction.
-   - Supports custom uploads (`image_picker`), direct Shopify product association (`product`), or built-in SVG skincare fallback illustrations (`serum`, `jar`, `oil`, `tube`, `dropper`).
+   - Supports custom uploads (`image_picker`), direct Liquid theme product association (`product`), or built-in SVG skincare fallback illustrations (`serum`, `jar`, `oil`, `tube`, `dropper`).
    - Can be disabled via `show_column_images`.
 3. **Column Titles Header Row (Toggable)**:
    - Prominent titles identifying each compared product.

@@ -1,6 +1,6 @@
-# Guide: Converting Sections to Fine-Grained Theme Blocks (Shopify 5-Layer Architecture)
+# Guide: Converting Sections to Fine-Grained Theme Blocks (Liquid theme 5-Layer Architecture)
 
-This guide provides an end-to-end, reproducible manual for decomposing any monolithic Shopify section into fine-grained, nested theme blocks. Following this architecture ensures that merchants can individually select, edit, reorder, style, hide, and toggle every single element (headings, badges, prices, copy, and buttons) directly in the Shopify Theme Editor sidebar and canvas, while maintaining zero drift and strict design-token governance.
+This guide provides an end-to-end, reproducible manual for decomposing any monolithic Liquid theme section into fine-grained, nested theme blocks. Following this architecture ensures that merchants can individually select, edit, reorder, style, hide, and toggle every single element (headings, badges, prices, copy, and buttons) directly in the theme editor sidebar and canvas, while maintaining zero drift and strict design-token governance.
 
 ---
 
@@ -71,7 +71,7 @@ Every session working in this repository **must** abide by the following non-neg
 
 ---
 
-## 3. Shopify Theme Blocks Schema Rules (Crucial Pitfalls)
+## 3. theme blocks Schema Rules (Crucial Pitfalls)
 
 ### A. The `@theme` Requirement
 
@@ -86,7 +86,7 @@ Any block located in the `/blocks/*.liquid` directory is a **theme-defined block
     { "type": "button" }
   ]
   ```
-  Shopify will reject the schema with:
+  Liquid theme will reject the schema with:
   `invalid block type "badge": "_xxx" does not accept theme defined blocks`
   or when saving `templates/index.json`:
   `Block type 'heading' is not allowed in 'sections/xxx.liquid'`.
@@ -103,7 +103,7 @@ Any block located in the `/blocks/*.liquid` directory is a **theme-defined block
 
 ### B. Single `{% content_for 'blocks' %}` Entry
 
-Shopify's Liquid parser strictly forbids multiple `{% content_for 'blocks' %}` tags within the same Liquid file, even if placed inside mutually exclusive `{% if product != blank %}` branches.
+the Liquid parser strictly forbids multiple `{% content_for 'blocks' %}` tags within the same Liquid file, even if placed inside mutually exclusive `{% if product != blank %}` branches.
 
 - **Wrong:**
   ```liquid
@@ -208,7 +208,7 @@ Create or edit `blocks/_<name>-content.liquid`:
 
 1. Render structural containers and layouts (e.g. media gallery on the left, info column on the right).
 2. Inside the content column, render `{% content_for 'blocks' %}`.
-3. Ensure the root element carries `{{ block.shopify_attributes }}` if `"tag": null`.
+3. Ensure the root element carries the required editor-selection attributes if `"tag": null`.
 4. Define the schema with `@theme` and `@app`:
    ```json
    {% schema %}
@@ -269,7 +269,7 @@ When nesting buttons inside a `group` block:
    }
    ```
 2. **Mock Pricing Fallback:**
-   In `blocks/price.liquid`, ensure it provides a `custom_price` setting so sections can display prices (`$12.00`) even when no Shopify catalog product is selected in demo templates.
+   In `blocks/price.liquid`, ensure it provides a `custom_price` setting so sections can display prices (`$12.00`) even when no Liquid theme catalog product is selected in demo templates.
 3. **Button Form Submission:**
    In `blocks/button.liquid`, ensure setting `"element": "submit"` renders `<button type="submit" ...>` so it functions seamlessly within product forms.
 
@@ -400,7 +400,7 @@ node scripts/validate-palettes.mjs
 node scripts/validate-tokens.mjs
 node scripts/validate-section-library.mjs
 
-# 5. Run Shopify Theme Check (0 errors, 0 warnings)
+# 5. Run theme checker (0 errors, 0 warnings)
 bun run check
 ```
 

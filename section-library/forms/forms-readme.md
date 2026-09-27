@@ -10,7 +10,7 @@ summary: Customer-input families for communication, consent, and subscription.
 tags:
   - forms
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Forms

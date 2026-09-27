@@ -162,7 +162,7 @@ for (const id of foundationSettings) {
 }
 
 if (blockFiles.length > 300)
-  errors.push(`theme block count ${blockFiles.length} exceeds Shopify's limit of 300`);
+  errors.push(`theme block count ${blockFiles.length} exceeds the platform limit of 300`);
 
 for (const file of blockFiles) {
   const source = readFileSync(join(blocksDir, file), "utf8");

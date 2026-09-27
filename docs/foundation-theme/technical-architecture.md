@@ -4,7 +4,7 @@ The normative five-layer dependency model is documented in [`theme-architecture.
 
 ## Configuration layers
 
-### 1. Shopify settings schema
+### 1. Liquid theme settings schema
 
 `config/settings_schema.json` defines:
 
@@ -13,11 +13,11 @@ The normative five-layer dependency model is documented in [`theme-architecture.
 - Existing typography/layout/card settings.
 - `Foundation: future global tokens`: the extended inventory for geometry, typography, borders/elevation, controls, media, navigation, motion, and accessibility.
 
-Shopify range settings have strict requirements. Every default must align to `min + n × step`, and a range may have at most 101 steps. Validate this whenever changing ranges.
+Liquid theme range settings have strict requirements. Every default must align to `min + n × step`, and a range may have at most 101 steps. Validate this whenever changing ranges.
 
 ### 2. Root custom properties
 
-`layout/theme.liquid` emits the saved settings as CSS custom properties on `html:root`, then emits each Shopify color scheme as both:
+`layout/theme.liquid` emits the saved settings as CSS custom properties on `html:root`, then emits each Liquid theme color scheme as both:
 
 ```css
 html[data-color-scheme="scheme-id"],
@@ -91,6 +91,6 @@ Header controls use `data-theme-toggle`, `data-palette-toggle`, and `data-palett
 - active layout/radius/elevation/type/motion tokens
 - the entire future foundation-token inventory in collapsed groups
 
-Preview values are saved only in `sessionStorage` under `nigat-design-preview`; they are never written to Shopify theme settings. The FAB writes root inline custom properties. `Reset preview` removes them.
+Preview values are saved only in `sessionStorage` under `nigat-design-preview`; they are never written to theme settings. The FAB writes root inline custom properties. `Reset preview` removes them.
 
 For custom accent values, `assets/theme.js` calculates a black or white foreground to preserve button-label contrast.

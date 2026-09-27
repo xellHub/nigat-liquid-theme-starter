@@ -24,7 +24,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `button` | button; no child blocks. |
 | `link` | link; no child blocks. |
 | `_size-guide-content` | _size-guide-content; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `heading`
 

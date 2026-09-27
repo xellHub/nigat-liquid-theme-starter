@@ -9,7 +9,7 @@ The desired end state is:
 - Several coherent light/dark palettes, including a bare black-and-white baseline.
 - Semantic color roles instead of component-specific color literals.
 - A global foundation-token layer for geometry, type, surfaces, controls, media, navigation, motion, and accessibility.
-- Library source material organized by section family, with deployable Shopify copies kept in sync.
+- Library source material organized by section family, with deployable Liquid theme copies kept in sync.
 - Theme-editor settings as the source of saved configuration.
 - A footer FAB for safe, tab-only exploration of the same system.
 
@@ -27,9 +27,9 @@ A section should inherit global foundation values by default. A section-level se
 
 Text placed over imagery must use the media foreground and scrim tokens. It must not rely on the active page text color or a hard-coded black/white value.
 
-### Shopify remains deployable
+### Liquid theme remains deployable
 
-Shopify only loads files inside `sections/`. The section library cannot replace these runtime files directly. Library files are canonical reference/mirror copies; `sections/` files remain Shopify entry points.
+Liquid theme only loads files inside `sections/`. The section library cannot replace these runtime files directly. Library files are canonical reference/mirror copies; `sections/` files remain Liquid theme entry points.
 
 ### Progressive adoption is deliberate
 

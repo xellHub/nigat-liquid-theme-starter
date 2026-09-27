@@ -1,10 +1,10 @@
 # Gift card
 
-A layout-only Shopify resource section backed by the scoped `_gift-card-resource` extension.
+A layout-only Liquid theme resource section backed by the scoped `_gift-card-resource` extension.
 
 ## Anatomy
 
-The section supplies the tokenized color context. The extension preserves the resource-specific semantic markup, interaction, responsive behavior, and merchant customization required by this Shopify surface.
+The section supplies the tokenized color context. The extension preserves the resource-specific semantic markup, interaction, responsive behavior, and merchant customization required by this Liquid theme surface.
 
 ## Accessibility
 

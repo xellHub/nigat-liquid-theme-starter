@@ -4,7 +4,7 @@ A constrained page-resource layout rendering the current page title and rich con
 
 ## Anatomy
 
-The section owns color scheme, maximum width, and vertical spacing. The `_page-content` block owns Shopify-resource rendering and its internal accessible structure.
+The section owns color scheme, maximum width, and vertical spacing. The `_page-content` block owns Liquid theme-resource rendering and its internal accessible structure.
 
 ## Responsive behavior
 

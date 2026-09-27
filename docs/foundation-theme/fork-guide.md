@@ -5,7 +5,7 @@ Create one fork per brand. Keep structural fixes in `section-library/`, blocks, 
 ## Start a fork
 
 1. Fork or clone the repository, then run `bun install` (Bun 1.4 or newer) and `bun run sync` to restore library-to-runtime hardlinks after checkout.
-2. Set up an authorized Shopify development store and run `bun run dev` for a preview. This repository has no connected live XellHub or Shopify preview target, so local checks cannot prove Theme Editor behavior.
+2. Set up an authorized Liquid theme development store and run `bun run dev` for a preview. This repository has no connected live XellHub or Liquid theme preview target, so local checks cannot prove Theme Editor behavior.
 3. Set metadata, logo, favicon, social links, policies, menus and products in the preview store. Replace starter content with brand content before release. Keep optional sections such as recently viewed and bundles uninstalled until configured.
 4. Choose one heading font and one body font in `config/settings_data.json`. Set palette roles and type, spacing, width, radius, button and card values there; `assets/base.css` and `layout/theme.liquid` resolve reusable variables. Review explicit section color schemes individually.
 5. Configure homepage presets through the Theme Editor or `templates/index.json`. Edit section implementations only in `section-library/`, register new mirrors and run `bun run sync`; never edit `sections/` directly.

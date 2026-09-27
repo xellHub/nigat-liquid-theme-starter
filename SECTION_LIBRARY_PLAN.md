@@ -1,8 +1,8 @@
-# Shopify Section Library Plan
+# Liquid theme Section Library Plan
 
 ## Objective
 
-Build a copy-ready Shopify section library using the seven requested groups.
+Build a copy-ready Liquid theme section library using the seven requested groups.
 The 41 named second-level folders are section families, not installable Liquid
 components. Each family can hold multiple concrete variants one level deeper.
 
@@ -94,7 +94,7 @@ Each concrete variant folder contains:
   use, inappropriate use, and dark-pattern safeguards.
 - `screenshot.png` showing the canonical preset at a 1440 px viewport.
 
-Each Liquid variant includes valid Shopify schema, locally scoped CSS and
+Each Liquid variant includes valid theme schema, locally scoped CSS and
 JavaScript, empty-state handling, reduced-motion behavior, and support for
 multiple instances. It must not depend on repository-specific snippets or
 assets.
@@ -112,8 +112,8 @@ Validation must confirm:
 - Every cataloged variant has one Liquid file, three Markdown documents, and
   one screenshot.
 - Every completed family has at least two structurally distinct variants.
-- Embedded Shopify schemas and catalog JSON are valid.
-- Components pass Shopify Theme Check and rendering checks for empty content,
+- Embedded theme schemas and catalog JSON are valid.
+- Components pass theme checker and rendering checks for empty content,
   populated content, mobile, desktop, keyboard access, repeated instances, and
   reduced motion.
 - Importing a library variant does not alter live homepage references.

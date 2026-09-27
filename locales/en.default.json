@@ -106,7 +106,7 @@
       "submit": "Enter",
       "login_form_heading": "Enter store using password",
       "admin_link_html": "Are you the store owner? <a href=\"/admin\" class=\"link\">Log in here</a>",
-      "powered_by_shopify_html": "This shop will be powered by {{ shopify }}"
+      "powered_by_shopify_html": "This shop is powered by its Liquid theme."
     },
     "header": {
       "account_menu": "Account menu",

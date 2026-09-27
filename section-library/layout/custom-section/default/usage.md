@@ -34,7 +34,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `newsletter-form` | newsletter-form; no child blocks. |
 | `divider` | divider; no child blocks. |
 | `spacer` | spacer; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `group`
 

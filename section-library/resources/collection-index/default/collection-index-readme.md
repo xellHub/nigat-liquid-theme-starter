@@ -4,7 +4,7 @@ A responsive index of the shop's collection resources.
 
 ## Anatomy
 
-The section owns color scheme, maximum width, and vertical spacing. The `_collection-index` block owns Shopify-resource rendering and its internal accessible structure.
+The section owns color scheme, maximum width, and vertical spacing. The `_collection-index` block owns Liquid theme-resource rendering and its internal accessible structure.
 
 ## Responsive behavior
 

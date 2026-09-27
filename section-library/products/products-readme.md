@@ -10,7 +10,7 @@ summary: Merchandising families for product discovery, evaluation, and purchase.
 tags:
   - products
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Products

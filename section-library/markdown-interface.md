@@ -221,7 +221,7 @@ theme-editor settings.>
 
 ## Liquid behavior
 
-<Explain Shopify objects, render order, empty states, schema, CSS, JavaScript,
+<Explain Liquid theme objects, render order, empty states, schema, CSS, JavaScript,
 and external dependencies. Name the exact file: sections/<id>.liquid or
 blocks/<id>.liquid.>
 ```
@@ -239,7 +239,7 @@ blocks, each block's settings, and allowed children.
 
 | Setting | Type           | Default | Effect     | Constraint   |
 | ------- | -------------- | ------- | ---------- | ------------ |
-| <id>    | <Shopify type> | <value> | <behavior> | <constraint> |
+| <id>    | <Liquid theme type> | <value> | <behavior> | <constraint> |
 
 ## Blocks interface
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "nigat-shopify-theme",
+  "name": "nigat-liquid-theme",
   "private": true,
   "scripts": {
     "dev": "shopify theme dev",

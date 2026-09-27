@@ -2,10 +2,10 @@
 
 ## Why mirrors exist
 
-The library organizes reusable section implementations by intent. Shopify, however, can only render runtime files from `sections/`. Each installed library implementation therefore has two identical files:
+The library organizes reusable section implementations by intent. Liquid theme, however, can only render runtime files from `sections/`. Each installed library implementation therefore has two identical files:
 
 - Library reference: `section-library/.../*.liquid`
-- Shopify runtime: `sections/*.liquid`
+- Liquid theme runtime: `sections/*.liquid`
 
 Do not edit only one side.
 
@@ -27,7 +27,7 @@ The script permits a different leading Liquid comment, but the implementation mu
 
 1. Choose the library family based on structure and content purpose, not color or superficial styling.
 2. Add the implementation under the correct `section-library/` family directory.
-3. Create the same Shopify runtime file in `sections/`.
+3. Create the same Liquid theme runtime file in `sections/`.
 4. Add the pair to `scripts/validate-section-library.mjs`.
 5. Bind the section to semantic colors and applicable foundation tokens.
 6. Run the full validation suite.

@@ -10,7 +10,7 @@ summary: Narrative families combining text, imagery, video, sequencing, and edit
 tags:
   - storytelling
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Storytelling

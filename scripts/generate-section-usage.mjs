@@ -54,7 +54,7 @@ function childTypes(schema) {
 function blockDescription(type, inlineBlock) {
   if (type === "@theme")
     return "Any public foundational block documented in `guide/fundamental-blocks.md`.";
-  if (type === "@app") return "A Shopify app block.";
+  if (type === "@app") return "An app extension block.";
   const schema =
     inlineBlock ||
     (existsSync(join(blocksDir, `${type}.liquid`))

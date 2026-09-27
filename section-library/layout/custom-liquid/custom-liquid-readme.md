@@ -31,10 +31,10 @@ They support comprehension through rhythm and grouping. Decorative structure sho
 
 ## Best used when
 
-- a trusted merchant needs a small Shopify-aware composition unavailable elsewhere.
+- a trusted merchant needs a small Liquid theme-aware composition unavailable elsewhere.
 - The surrounding page gives the composition enough context and space to perform its role.
 
-**Decision rule:** Best used when a trusted merchant needs a small Shopify-aware composition unavailable elsewhere; not when the requirement can be met by an existing supported section.
+**Decision rule:** Best used when a trusted merchant needs a small Liquid theme-aware composition unavailable elsewhere; not when the requirement can be met by an existing supported section.
 
 ## Avoid when
 
@@ -43,7 +43,7 @@ They support comprehension through rhythm and grouping. Decorative structure sho
 
 ## Good usage
 
-A merchant uses this family when a trusted merchant needs a small Shopify-aware composition unavailable elsewhere, then selects a child variant whose structure matches the available content.
+A merchant uses this family when a trusted merchant needs a small Liquid theme-aware composition unavailable elsewhere, then selects a child variant whose structure matches the available content.
 
 ## Bad usage
 
@@ -63,7 +63,7 @@ Using this family when the requirement can be met by an existing supported secti
 
 ## AI-agent guidance
 
-- **Choose this when:** a trusted merchant needs a small Shopify-aware composition unavailable elsewhere, and at least one child variant matches the available content
+- **Choose this when:** a trusted merchant needs a small Liquid theme-aware composition unavailable elsewhere, and at least one child variant matches the available content
 - **Reject this when:** the requirement can be met by an existing supported section, or no concrete variant has evidence for the required interaction
 - **Prefer instead:** custom-section or a purpose-built family.
 - **Required evidence:** Content count, media shape, hierarchy, interaction model, viewport needs, and merchant-configurable data.

@@ -4,7 +4,7 @@ A search-resource layout containing search results, sorting, filtering, and pagi
 
 ## Anatomy
 
-The section owns color scheme, maximum width, and vertical spacing. The `_catalog-results` block owns Shopify-resource rendering and its internal accessible structure.
+The section owns color scheme, maximum width, and vertical spacing. The `_catalog-results` block owns Liquid theme-resource rendering and its internal accessible structure.
 
 ## Responsive behavior
 

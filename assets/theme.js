@@ -1,7 +1,7 @@
 /* ==========================================================================
    nigat — theme.js
    Vanilla, dependency-free interactivity built on Web Components.
-   Uses the Shopify AJAX Cart API and Predictive Search API.
+   Uses the storefront cart and predictive-search APIs.
    ========================================================================== */
 
 (function () {
@@ -26,7 +26,7 @@
     },
     ImageBreakpoints: Object.freeze(
       (window.nigat && window.nigat.ImageBreakpoints) || {
-        SHOPIFY: Object.freeze([
+        CDN: Object.freeze([
           64, 128, 165, 192, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000, 2400, 3000, 3840,
         ]),
         THUMBNAIL: Object.freeze({
@@ -641,8 +641,8 @@
 
   CartEvents.addEventListener("cart:updated", (e) => updateCartCount(e.detail.item_count));
 
-  /* Resolve the Shopify section id that wraps an element. Shopify wraps every
-     rendered section in <div id="shopify-section-{id}">. The Section Rendering
+  /* Resolve the platform section id that wraps an element. The platform wraps every
+     rendered section in <div id="shopify-section-{id}">. The section rendering
      API expects that {id}, NOT the section type. */
   function sectionIdFor(el) {
     if (!el) return null;
@@ -1840,7 +1840,7 @@
         const data = await response.json();
         if (!response.ok || data.status) {
           const reason = new Error(data.description || data.message || this.dataset.addError);
-          reason.shopifyResponse = true;
+          reason.serverResponse = true;
           throw reason;
         }
         if (!form.isConnected || request.signal.aborted) return;
@@ -1853,7 +1853,7 @@
         else window.location.href = `${nigat.routes.root}cart`;
       } catch (cause) {
         if (cause.name !== "AbortError" && form.isConnected && error) {
-          error.textContent = cause.shopifyResponse ? cause.message : this.dataset.addError;
+          error.textContent = cause.serverResponse ? cause.message : this.dataset.addError;
           error.hidden = false;
         }
       } finally {

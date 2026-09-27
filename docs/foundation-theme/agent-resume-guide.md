@@ -43,18 +43,18 @@ node scripts/validate-tokens.mjs
 node scripts/validate-section-library.mjs
 node --check assets/theme.js
 git diff --check
-shopify theme check --path .
+bun run check
 ```
 
 For settings-schema changes, also check range arithmetic. A quick one-liner is:
 
 ```bash
-node -e "const fs=require('fs'); const groups=JSON.parse(fs.readFileSync('config/settings_schema.json','utf8')); const bad=[]; for (const group of groups) for (const s of group.settings||[]) if(s.type==='range'){const steps=(s.max-s.min)/s.step; if(steps>100 || Math.abs(steps-Math.round(steps))>1e-9 || Math.abs((s.default-s.min)/s.step-Math.round((s.default-s.min)/s.step))>1e-9) bad.push(s.id)} if(bad.length){console.error(bad.join('\\n'));process.exit(1)} console.log('All range defaults and step counts are Shopify-valid.')"
+node -e "const fs=require('fs'); const groups=JSON.parse(fs.readFileSync('config/settings_schema.json','utf8')); const bad=[]; for (const group of groups) for (const s of group.settings||[]) if(s.type==='range'){const steps=(s.max-s.min)/s.step; if(steps>100 || Math.abs(steps-Math.round(steps))>1e-9 || Math.abs((s.default-s.min)/s.step-Math.round((s.default-s.min)/s.step))>1e-9) bad.push(s.id)} if(bad.length){console.error(bad.join('\\n'));process.exit(1)} console.log('All range defaults and step counts are Liquid theme-valid.')"
 ```
 
 ## Current constraints and decisions
 
-- Do not use a blank default for `color_background`; Shopify requires a string. Existing scheme data uses an empty string for “no gradient,” while the schema supplies a valid gradient default.
+- Do not use a blank default for `color_background`; Liquid theme requires a string. Existing scheme data uses an empty string for “no gradient,” while the schema supplies a valid gradient default.
 - Do not add raw color/shadow/radius values without a documented reason. Extend the semantic/foundation token layer instead.
 - The FAB is a preview tool only. Persisted merchant values belong in theme settings, not `sessionStorage`.
 - Native dialog backdrop is intentionally transparent for the design FAB. Do not restore dim/blur without an explicit product decision.

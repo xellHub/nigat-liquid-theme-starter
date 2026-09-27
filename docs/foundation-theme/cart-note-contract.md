@@ -6,7 +6,7 @@ The page note belongs to `cart-page-form`; the drawer note belongs to `cart-draw
 
 With JavaScript, every note instance shares one draft. Input updates the other instances, saves after 600 ms, and saves immediately on blur or Save note. Requests to `cart/update.js` run sequentially; a change made during a request is sent after that request succeeds. Clearing the textarea sends an empty note. Errors leave the draft intact, show a localized error, and expose Retry. Checkout waits for the latest save and stays on the cart if saving fails. Cart section replacement restores the draft and focused note textarea where possible.
 
-## Live Shopify proof still required
+## Live Liquid theme proof still required
 
 1. Type a note in the drawer, reload and confirm it persists; edit it on the cart page and confirm the drawer mirrors it.
 2. Clear the note, reload, and confirm it remains empty. Type rapidly while throttling the network and verify the last value wins.

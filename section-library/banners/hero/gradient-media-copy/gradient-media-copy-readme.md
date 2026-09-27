@@ -88,4 +88,4 @@ Desktop positions copy opposite the selected media focal side. Below 750 px, the
 
 ## Liquid behavior
 
-The section uses responsive Shopify image output, prioritizes media only when first on the page, and renders inline fallback SVG when empty. CSS is scoped to the section ID; no snippets, assets, translations, or JavaScript are required.
+The section uses responsive Liquid theme image output, prioritizes media only when first on the page, and renders inline fallback SVG when empty. CSS is scoped to the section ID; no snippets, assets, translations, or JavaScript are required.

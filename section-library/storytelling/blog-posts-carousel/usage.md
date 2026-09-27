@@ -40,7 +40,7 @@ Showcase editorial articles and journal stories in a compact, touch-friendly hor
 | Setting                  | Type     | Default              | Description                                              |
 | ------------------------ | -------- | -------------------- | -------------------------------------------------------- |
 | `title`                  | text     | `"From the Journal"` | Section heading text                                     |
-| `blog`                   | blog     | `blank`              | Shopify Blog source to pull articles from                |
+| `blog`                   | blog     | `blank`              | Liquid theme Blog source to pull articles from                |
 | `post_limit`             | range    | `6`                  | Maximum number of articles to render in the carousel     |
 | `media_aspect_ratio`     | select   | `"square"`           | Frame ratio (`square`, `landscape`, `portrait`, `adapt`) |
 | `media_radius`           | range    | `12px`               | Corner radius of the media container                     |

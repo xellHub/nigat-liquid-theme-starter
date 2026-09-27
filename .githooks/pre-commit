@@ -2,7 +2,7 @@
 set -e
 
 # nigat Git Pre-Commit Hook
-# Validates Liquid, Shopify schemas, JSON integrity, and syntax before commit.
+# Validates Liquid schemas, JSON integrity, and syntax before commit.
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -36,17 +36,17 @@ else
   echo -e "  ${YELLOW}⚠ Warning: Node.js is not installed. Skipping JSON schema validation.${NC}"
 fi
 
-# 3. Shopify Theme Check
-echo "  [3/3] Running Shopify Theme Check..."
+# 3. Theme Check
+echo "  [3/3] Running theme checks..."
 if command -v shopify >/dev/null 2>&1; then
   shopify theme check
-  echo -e "  ${GREEN}✓${NC} Shopify theme check passed with 0 offenses."
+  echo -e "  ${GREEN}✓${NC} Theme checks passed with 0 offenses."
 elif command -v theme-check >/dev/null 2>&1; then
   theme-check
   echo -e "  ${GREEN}✓${NC} Theme Check passed with 0 offenses."
 else
-  echo -e "  ${YELLOW}⚠ Warning: Shopify CLI ('shopify') or 'theme-check' not found in PATH.${NC}"
-  echo "    Install via: npm install -g @shopify/cli"
+  echo -e "  ${YELLOW}⚠ Warning: Theme CLI ('shopify') or 'theme-check' not found in PATH.${NC}"
+  echo "    Install via: bun add --global @shopify/cli"
 fi
 
 echo -e "${GREEN}==> All nigat pre-commit checks passed! Proceeding with commit.${NC}\n"

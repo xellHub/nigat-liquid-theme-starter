@@ -1,9 +1,9 @@
 {%- comment -%}
-  Global Image Configuration & Shopify Breakpoints Enum
-  Centralized definition of Shopify CDN standard breakpoints and responsive configurations:
+  Global Image Configuration and Breakpoint Enum
+  Centralized definition of platform CDN breakpoints and responsive configurations:
   - THUMBNAIL: Sized to match visual nav buttons (64px / 6.4rem) with 1x, 2x, 3x DPR quality levels (64, 128, 192).
-  - MAIN: Product detail main photo with standard Shopify breakpoints up to 2000px maximum.
-  - PORTAL: Ultra hi-res zoomer portal supporting maximum 3840px (4K) Shopify CDN limit.
+  - MAIN: Product detail main photo with standard breakpoints up to 2000px maximum.
+  - PORTAL: Ultra hi-res zoomer portal supporting the 3840px (4K) CDN limit.
 {%- endcomment -%}
 
 <script>
@@ -14,8 +14,8 @@
    * @enum {Object}
    */
   window.nigat.ImageBreakpoints = Object.freeze({
-    // Standard Shopify CDN Breakpoint Tiers
-    SHOPIFY: Object.freeze([
+    // Standard CDN breakpoint tiers
+    CDN: Object.freeze([
       64, 128, 165, 192, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000, 2400, 3000, 3840,
     ]),
 

@@ -25,7 +25,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `group` | group; no child blocks. |
 | `button` | button; no child blocks. |
 | `_events-stack` | _events-stack; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `heading`
 

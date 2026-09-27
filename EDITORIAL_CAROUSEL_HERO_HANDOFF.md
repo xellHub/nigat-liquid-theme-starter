@@ -12,12 +12,12 @@ The **Editorial Carousel Hero** represents an evolution of the furniture showcas
 
 | Purpose                      | File Path                                                                                                                                                                                                                                                    |
 | :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Live Shopify Section**     | [`sections/editorial-carousel-hero.liquid`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/sections/editorial-carousel-hero.liquid)                                                                                               |
-| **Reusable Library Variant** | [`section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero.liquid`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero.liquid)       |
-| **Active Homepage Template** | [`templates/index.json`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/templates/index.json) (under section key `"editorial-carousel-hero"`)                                                                                     |
-| **Variant Readme**           | [`section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero-readme.md`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero-readme.md) |
-| **Usage Reference**          | [`section-library/banners/hero/editorial-carousel-hero/usage.md`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/section-library/banners/hero/editorial-carousel-hero/usage.md)                                                   |
-| **Psychology & Strategy**    | [`section-library/banners/hero/editorial-carousel-hero/psychology.md`](file:///mnt/my_data_1/docs/my-projects/ACTIVE/shopify-themes/source/nigat/section-library/banners/hero/editorial-carousel-hero/psychology.md)                                         |
+| **Live Liquid theme Section**     | `sections/editorial-carousel-hero.liquid`                                                                                               |
+| **Reusable Library Variant** | `section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero.liquid`       |
+| **Active Homepage Template** | `templates/index.json` (under section key `"editorial-carousel-hero"`)                                                                                     |
+| **Variant Readme**           | `section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero-readme.md` |
+| **Usage Reference**          | `section-library/banners/hero/editorial-carousel-hero/usage.md`                                                   |
+| **Psychology & Strategy**    | `section-library/banners/hero/editorial-carousel-hero/psychology.md`                                         |
 
 > [!IMPORTANT]
 > **Library Synchronization Rule:** The live section (`sections/editorial-carousel-hero.liquid`) and the library copy (`section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero.liquid`) must remain bit-for-bit identical. Always verify parity using `cmp -s`.
@@ -355,7 +355,7 @@ When modifying or refactoring this section, guard against these regressions:
 
 ## 11. Verification & Quality Assurance Commands
 
-Run the following test suite from the theme root to verify syntax, JSON integrity, liquid parity, and Shopify theme linting:
+Run the following test suite from the theme root to verify syntax, JSON integrity, liquid parity, and Liquid theme theme linting:
 
 ```bash
 # 1. Check git cleanliness
@@ -367,8 +367,8 @@ jq empty templates/index.json
 # 3. Confirm live section and section-library copy are identical
 cmp -s sections/editorial-carousel-hero.liquid section-library/banners/hero/editorial-carousel-hero/editorial-carousel-hero.liquid
 
-# 4. Execute Shopify Theme Check
-shopify theme check --path .
+# 4. Execute theme checker
+bun run check
 ```
 
-_Expected output: All commands exit with code 0, and Shopify Theme Check reports 0 offenses across all inspected files._
+_Expected output: All commands exit with code 0, and theme checker reports 0 offenses across all inspected files._

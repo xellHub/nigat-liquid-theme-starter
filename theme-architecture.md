@@ -44,7 +44,7 @@ Every atom:
 - consumes global tokens by default;
 - groups closely related controls rather than creating microscopic blocks;
 - includes at least one preset;
-- includes `block.shopify_attributes` when using `tag: null`.
+- includes the required editor-selection attributes when using `tag: null`.
 
 ## 4. Composite blocks
 

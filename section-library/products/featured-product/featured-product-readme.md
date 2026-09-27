@@ -23,7 +23,7 @@ A family presenting one product with core purchase information.
 
 ## Physical composition
 
-A large media region paired with title, price, options, description, and purchase actions structured according to Shopify's 5-layer Theme Blocks architecture:
+A large media region paired with title, price, options, description, and purchase actions structured according to the platform's 5-layer Theme Blocks architecture:
 
 1. **Section (`featured-product.liquid`):** Owns layout-only properties (color scheme) and top-level block slots (`heading`, `_featured-product-content`, `@theme`).
 2. **Composite Block (`_featured-product-content.liquid`):** Houses the media gallery, interactive thumbnail strip, and the nested `fp__info-wrap` block container.

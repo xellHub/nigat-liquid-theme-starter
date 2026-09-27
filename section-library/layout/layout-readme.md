@@ -10,7 +10,7 @@ summary: Structural families for merchant-authored content and page separation.
 tags:
   - layout
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Layout

@@ -28,7 +28,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `quote` | quote; no child blocks. |
 | `spacer` | spacer; no child blocks. |
 | `divider` | divider; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `heading`
 

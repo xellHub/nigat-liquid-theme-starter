@@ -57,7 +57,7 @@
                 assign initial_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
                 assign first_media_aspect = initial_media.aspect_ratio | default: 1
 
-                # Global Image Configuration Enum (Shopify standard breakpoints)
+                # Global image configuration enum (standard platform breakpoints)
                 # THUMBNAIL: Variety of qualities (1x, 2x, 3x) matching visual button size (64px / 6.4rem)
                 assign thumb_widths = '64, 128, 192'
                 assign thumb_sizes = '64px'

@@ -1,0 +1,5 @@
+# Repository Brand-Term Audit
+# Human-readable brand wording: removed from the scoped docs, comments, logs, and labels
+# Remaining technical identifiers: 207 matches in 129 files; retained for runtime compatibility
+# Markdown files: 0 matches, excluding the local agent workspace
+# Updated: 2026-09-27

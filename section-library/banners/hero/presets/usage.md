@@ -28,7 +28,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `link` | link; no child blocks. |
 | `_hero-media` | _hero-media; no child blocks. |
 | `_hero-carousel` | _hero-carousel; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `heading`
 

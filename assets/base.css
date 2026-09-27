@@ -557,7 +557,7 @@ html:is([data-focus-ring-style="glow"], [data-focus-ring-style="both"]) :focus-v
   color: var(--color-text);
 }
 
-/* Shopify color schemes are scoped to individual sections as well as the page.
+/* Color schemes are scoped to individual sections as well as the page.
    A section class always wins over inherited page-level palette tokens. */
 [class*="color-"] {
   color: var(--color-text);

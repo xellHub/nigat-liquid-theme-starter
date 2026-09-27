@@ -24,7 +24,7 @@ The editorial rail remains horizontally scrollable while callouts are removed on
 
 ## Accessibility
 
-Both presets preserve native heading and link semantics. The carousel uses native horizontal scrolling and scroll snapping, decorative scrims are hidden from assistive technology, and each block exposes Shopify editor attributes.
+Both presets preserve native heading and link semantics. The carousel uses native horizontal scrolling and scroll snapping, decorative scrims are hidden from assistive technology, and each block exposes Liquid theme editor attributes.
 
 ## Related files
 

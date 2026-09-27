@@ -10,7 +10,7 @@ summary: Large-format visual composition families for immediate orientation and 
 tags:
   - banners
   - section-group
-  - shopify
+  - Liquid theme
 ---
 
 # Banners

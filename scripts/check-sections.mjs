@@ -2,7 +2,7 @@
 /**
  * check-sections.mjs
  *
- * Scans a Shopify theme's `sections/` directory and verifies that sections
+ * Scans the theme's `sections/` directory and verifies that sections
  * are composed from Theme Blocks and Snippets (Atomic Design hierarchy)
  * rather than hard-built or monolithic.
  *

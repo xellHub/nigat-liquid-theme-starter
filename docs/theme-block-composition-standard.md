@@ -7,7 +7,7 @@
 
 ## 1. Core Philosophy: The 5-Layer Architecture
 
-Shopify Theme Blocks provide fine-grained, merchant-editable composability. In this repository, all UI is decomposed into five strict, one-way dependency layers. A layer may only depend on layers below it:
+theme blocks provide fine-grained, merchant-editable composability. In this repository, all UI is decomposed into five strict, one-way dependency layers. A layer may only depend on layers below it:
 
 ```text
 Layer 1: Storeframe Layout (layout/theme.liquid)
@@ -116,7 +116,8 @@ When building interactive elements (such as accordions, interactive steps, tabs,
 Instead of wrapping the entire row in a `<button>`, use a semantic container with accessible delegation:
 
 ```liquid
-<div class="is__step" data-step-index="{{ block.id }}" {{ block.shopify_attributes }}>
+<div class="is__step" data-step-index="{{ block.id }}">
+  <!-- Add the required editor-selection attributes to this root element. -->
   <div class="is__step-header">
     <div class="is__step-eyebrow">
       <span class="is__step-bullet" aria-hidden="true"></span>
@@ -238,7 +239,7 @@ When sections are instantiated in templates:
                  "type": "button",
                  "settings": {
                    "label": "Shop Cleansers",
-                   "link": "shopify://collections/all",
+                   "link": "/collections/all",
                    "style": "primary"
                  }
                }

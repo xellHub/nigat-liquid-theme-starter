@@ -4,7 +4,7 @@ A cart-resource layout rendering interactive cart line items and totals.
 
 ## Anatomy
 
-The section owns color scheme, maximum width, and vertical spacing. The `_cart-content` block owns Shopify-resource rendering and its internal accessible structure.
+The section owns color scheme, maximum width, and vertical spacing. The `_cart-content` block owns Liquid theme-resource rendering and its internal accessible structure.
 
 ## Responsive behavior
 

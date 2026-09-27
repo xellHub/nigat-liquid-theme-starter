@@ -2,12 +2,12 @@
 
 ## Objective
 
-Extend the theme with the requested Shopify storefront, utility, and custom
+Extend the theme with the requested Liquid theme storefront, utility, and custom
 page templates. Do not add legacy customer-account templates.
 
 ## Templates to add
 
-### Shopify utility template
+### Liquid theme utility template
 
 - `templates/gift_card.liquid`
   - Render the gift-card page using the password-style minimal layout or a

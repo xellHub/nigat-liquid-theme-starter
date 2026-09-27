@@ -23,7 +23,7 @@
  *    footer-group.json) must only contain valid group sections.
  * 8. STRICT TEMPLATE COMPOSITION & WHITELISTING: Every block instance in templates/*.json
  *    must strictly be permitted by its parent container's schema.blocks whitelist.
- *    Block order consistency is validated, and nesting depth must not exceed Shopify's limit of 8.
+ *    Block order consistency is validated, and nesting depth must not exceed the platform limit of 8.
  * 9. PRESET INTEGRITY: Presets in sections and blocks must reference valid existing blocks
  *    and strictly conform to parent whitelist hierarchies.
  * 10. SAVED SETTING IDS: Template, section-group and preset settings must exist in
@@ -675,7 +675,7 @@ function inspectBlocks(blocks, order, depth, path, parentType, parentAllowedBloc
     }
     if (depth > 8) {
       errors.push(
-        `[NESTING VIOLATION] ${currentPath}: nesting depth ${depth} exceeds Shopify limit of 8`
+        `[NESTING VIOLATION] ${currentPath}: nesting depth ${depth} exceeds the platform limit of 8`
       );
     }
 
@@ -1052,7 +1052,7 @@ for (const file of snippetFiles) {
 //
 //     Exemptions:
 //     - Terminal leaf blocks (heading, text, button, etc.)
-//     - Specialized Shopify resource plugs that bind to native Liquid objects
+//     - Specialized platform resource bindings that use native Liquid objects
 // ============================================================================
 
 // Extended monolithic setting IDs — wider net than the container-only set
@@ -1080,7 +1080,7 @@ const monolithicContentIds = new Set([
   "note_2_text",
 ]);
 
-// Blocks that are specialized Shopify resource plugs — they bind to native
+// Blocks that are specialized platform resource bindings — they use native
 // Liquid objects (product, article, cart, etc.) and are exempt from the
 // general "decompose into theme blocks" mandate because their content is
 // data-driven, not merchant-authored copy.
@@ -1181,7 +1181,7 @@ if (monolithicBlockCount > 0) {
 if (totalHardcodedColorViolations > 0) {
   console.log(`⚠ Found ${totalHardcodedColorViolations} hardcoded CSS color(s) (hex/rgba/rgb)`);
 }
-console.log(`✓ Maximum nesting depth: ${deepestNesting} levels (Shopify limit: 8)`);
+console.log(`✓ Maximum nesting depth: ${deepestNesting} levels (platform limit: 8)`);
 if (deepestPath) {
   console.log(`  Deepest node: ${deepestPath}`);
 }

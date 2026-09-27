@@ -24,7 +24,7 @@ The section owns layout and color context only. Content and behavior are supplie
 | `group` | group; no child blocks. |
 | `surface` | surface; no child blocks. |
 | `card` | card; no child blocks. |
-| `@app` | A Shopify app block. |
+| `@app` | An app extension block. |
 
 ## Block: `_contact-form-aside`
 
