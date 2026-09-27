@@ -1,0 +1,89 @@
+<label class="theme-field" {{ block.shopify_attributes }}>
+  <span>
+    {{- block.settings.label | escape -}}
+    <span class="field__required" aria-hidden="true">*</span></span
+  >
+  <textarea
+    id="Field-{{ block.id }}"
+    name="contact[body]"
+    placeholder="{{ block.settings.placeholder | escape }}"
+    rows="{{ block.settings.rows | default: 5 }}"
+    required
+  ></textarea>
+  {% if block.settings.hint != blank %}
+    <p class="field__hint">{{ block.settings.hint | escape }}</p>
+  {% endif %}
+</label>
+{% stylesheet %}
+  .theme-field textarea {
+    width: 100%;
+    min-height: 12rem;
+    padding: var(--space-3) var(--foundation-input-padding-x, var(--space-4));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input, var(--corner-radius, 4px));
+    color: var(--color-text);
+    background: var(--color-surface-raised, var(--color-background));
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .theme-field textarea:focus-visible {
+    outline: var(--foundation-focus-ring-width, 2px) solid var(--foundation-focus-outline-color, var(--color-accent));
+    outline-offset: var(--foundation-focus-ring-offset, 2px);
+    border-color: transparent;
+  }
+  .theme-field .field__hint {
+    font-size: 1.25rem;
+    line-height: 1.45;
+    color: var(--color-muted);
+    margin: var(--space-1) 0 0;
+  }
+  .theme-field .field__required {
+    color: var(--color-danger);
+    margin-left: var(--space-1);
+    font-weight: 600;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Textarea",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Write your message here..."
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Rows",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "hint",
+      "label": "Helper text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Textarea"
+    }
+  ]
+}
+{% endschema %}

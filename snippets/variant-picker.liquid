@@ -1,0 +1,204 @@
+{%- comment -%}
+  Renders the variant picker (buttons, dropdowns, or swatches).
+  theme.js syncs the hidden form input + URL + availability.
+
+  Accepts:
+  - product: {Object} the product (required)
+  - section_id: {String} the section id (required)
+  - block: {Object} the block settings (optional)
+
+  Usage:
+  {% render 'variant-picker', product: product, section_id: section.id, block: block %}
+{%- endcomment -%}
+
+{%- unless product.has_only_default_variant -%}
+  {%- liquid
+    assign picker_type = block.settings.picker_type | default: 'button'
+    assign enable_color_swatches = block.settings.enable_color_swatches
+    if enable_color_swatches == null
+      assign enable_color_swatches = true
+    endif
+    assign swatch_shape = block.settings.swatch_shape | default: 'circle'
+  -%}
+
+  <variant-picker
+    class="variant-picker"
+    data-section-id="{{ section_id }}"
+    data-url="{{ product.url }}"
+    data-add-text="{{ 'products.product.add_to_cart' | t | escape }}"
+    data-sold-out-text="{{ 'products.product.sold_out' | t | escape }}"
+    data-unavailable-text="{{ 'products.product.unavailable' | t | escape }}"
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_index = forloop.index0
+        assign selected_value = option.selected_value
+        assign option_name_lower = option.name | downcase
+        assign is_color = false
+        assign is_size = false
+        if option_name_lower contains 'color' or option_name_lower contains 'colour' or option_name_lower contains 'couleur' or option_name_lower contains 'farbe'
+          assign is_color = true
+        elsif option_name_lower contains 'size' or option_name_lower contains 'taille' or option_name_lower contains 'groesse'
+          assign is_size = true
+        endif
+
+        assign render_as_swatches = false
+        if is_color and enable_color_swatches
+          assign render_as_swatches = true
+        endif
+      -%}
+
+      <fieldset class="variant-picker__option{% if render_as_swatches %} variant-picker__option--swatches{% elsif picker_type == 'dropdown' %} variant-picker__option--dropdown{% else %} variant-picker__option--button{% endif %}">
+        <div class="variant-picker__header">
+          <legend class="variant-picker__label">
+            {{ option.name }}:
+            <strong class="variant-picker__selected" data-selected-value="{{ option_index }}">
+              {{- selected_value -}}
+            </strong>
+          </legend>
+          {%- if is_size and block.settings.size_chart_page != blank and block.settings.size_chart_page.content != blank -%}
+            <button
+              type="button"
+              class="variant-picker__size-chart-btn"
+              data-modal-open="size-chart-dialog-{{ section_id }}"
+              aria-haspopup="dialog"
+            >
+              {{ 'products.product.view_size_chart' | t }}
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if render_as_swatches -%}
+          <div class="variant-picker__values variant-picker__values--swatches">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign input_id = section_id | append: '-' | append: option_index | append: '-' | append: forloop.index0
+                assign is_checked = false
+                if value == selected_value
+                  assign is_checked = true
+                endif
+
+                assign swatch_bg = 'var(--color-surface)'
+                assign has_native_swatch = false
+                if value.swatch.color != blank
+                  assign swatch_bg = value.swatch.color
+                  assign has_native_swatch = true
+                endif
+              -%}
+              <input
+                type="radio"
+                id="{{ input_id }}"
+                name="{{ option.name }}-{{ option_index }}-{{ section_id }}"
+                value="{{ value | escape }}"
+                class="variant-picker__input visually-hidden"
+                data-option-index="{{ option_index }}"
+                {% if is_checked %}
+                  checked
+                {% endif %}
+              >
+              <label
+                for="{{ input_id }}"
+                class="variant-picker__swatch{% if swatch_shape == 'square' %} variant-picker__swatch--square{% endif %}{% unless has_native_swatch %} variant-picker__swatch--fallback{% endunless %}"
+                title="{{ value | escape }}"
+                style="--swatch-background: {{ swatch_bg }};"
+                aria-label="{{ value | escape }}"
+              >
+                <span class="{% if has_native_swatch %}visually-hidden{% else %}variant-picker__swatch-initial{% endif %}">{{ value | slice: 0, 1 | escape }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+
+        {%- elsif picker_type == 'dropdown' -%}
+          <div class="variant-picker__select-wrap select">
+            <select
+              id="Option-{{ section_id }}-{{ option_index }}"
+              class="variant-picker__input variant-picker__select select__select"
+              name="{{ option.name }}-{{ option_index }}-{{ section_id }}"
+              data-option-index="{{ option_index }}"
+            >
+              {%- for value in option.values -%}
+                <option
+                  value="{{ value | escape }}"
+                  {% if value == selected_value %}
+                    selected="selected"
+                  {% endif %}
+                >
+                  {{ value }}
+                </option>
+              {%- endfor -%}
+            </select>
+            <span class="select__icon" aria-hidden="true">
+              {% render 'icon', name: 'chevron-down' %}
+            </span>
+          </div>
+
+        {%- else -%}
+          <div class="variant-picker__values variant-picker__values--buttons">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign input_id = section_id | append: '-' | append: option_index | append: '-' | append: forloop.index0
+                assign is_checked = false
+                if value == selected_value
+                  assign is_checked = true
+                endif
+              -%}
+              <input
+                type="radio"
+                id="{{ input_id }}"
+                name="{{ option.name }}-{{ option_index }}-{{ section_id }}"
+                value="{{ value | escape }}"
+                class="variant-picker__input visually-hidden"
+                data-option-index="{{ option_index }}"
+                {% if is_checked %}
+                  checked
+                {% endif %}
+              >
+              <label for="{{ input_id }}" class="variant-picker__value">
+                {{ value }}
+              </label>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json" data-variant-json>
+      {{ product.variants | json }}
+    </script>
+    <script type="application/json" data-quantity-rules>
+      [
+        {%- for variant in product.variants -%}
+          {"id":{{ variant.id | json }},"min":{{ variant.quantity_rule.min | default: 1 | json }},"max":{{ variant.quantity_rule.max | json }},"increment":{{ variant.quantity_rule.increment | default: 1 | json }}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+    <script type="application/json" data-variant-media>
+      [
+        {%- for variant in product.variants -%}
+          {"id":{{ variant.id | json }},"mediaId":{{ variant.featured_media.id | json }}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+  </variant-picker>
+  {%- if block.settings.size_chart_page != blank and block.settings.size_chart_page.content != blank -%}
+    <dialog
+      class="product-modal"
+      id="size-chart-dialog-{{ section_id }}"
+      aria-modal="true"
+      aria-labelledby="size-chart-title-{{ section_id }}"
+    >
+      <div class="product-modal__backdrop" data-modal-close></div>
+      <div class="product-modal__content">
+        <div class="product-modal__header">
+          <h2 class="product-modal__title" id="size-chart-title-{{ section_id }}">
+            {{ block.settings.size_chart_page.title | escape }}
+          </h2>
+          <button type="button" class="product-modal__close" data-modal-close aria-label="{{ 'accessibility.close' | t }}">
+            {% render 'icon', name: 'close' %}
+          </button>
+        </div>
+        <div class="product-modal__body rte">{{ block.settings.size_chart_page.content }}</div>
+      </div>
+    </dialog>
+  {%- endif -%}
+{%- endunless -%}

@@ -1,0 +1,630 @@
+<div
+  id="InteractiveSteps-{{ block.id }}"
+  class="interactive-steps-extension{% if block.settings.image_position == 'right' %} interactive-steps-extension--reverse{% endif %}{% if block.settings.always_expand %} is--always-expand{% endif %}{% if block.settings.stretch_to_image %} is--stretch-to-image{% endif %}{% if block.settings.enable_image_tilt %} is--tilt-enabled{% endif %}{% if block.settings.enable_3d_tilt %} is--3d-tilt-enabled{% endif %}"
+  style="
+    --media-aspect-ratio: {% case block.settings.media_aspect_ratio %}{% when 'portrait' %}3 / 4{% when 'tall' %}4 / 5{% when 'landscape' %}4 / 3{% else %}1 / 1{% endcase %};
+    --image-tilt: {{ block.settings.image_tilt | default: -3 }}deg;
+    --pill-tilt: {{ block.settings.pill_tilt | default: -2 }}deg;
+  "
+  data-interactive-steps
+  data-always-expand="{% if block.settings.always_expand %}true{% else %}false{% endif %}"
+  data-tilt-enabled="{% if block.settings.enable_image_tilt %}true{% else %}false{% endif %}"
+  data-3d-tilt-enabled="{% if block.settings.enable_3d_tilt %}true{% else %}false{% endif %}"
+  data-active-step="{{ block.settings.active_step_default }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="is__grid{% if block.settings.image_position == 'right' %} is__grid--reverse{% endif %}">
+    <div class="is__media-col"><div class="is__media-frame" data-step-media-host></div></div>
+    <div class="is__steps-col">
+      <div
+        class="is__steps-list"
+        role="tablist"
+        aria-label="{{ block.settings.accessibility_label | escape }}"
+      >
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  #InteractiveSteps-{{ block.id }} {
+    padding-top: var(--padding-top, 56px);
+    padding-bottom: var(--padding-bottom, 56px);
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: var(--grid-gap, clamp(36px, 5.5vw, 76px));
+    align-items: start;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__grid--reverse {
+    grid-template-columns: 1fr 1.05fr;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__grid--reverse .is__media-col {
+    order: 2;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__media-col {
+    position: sticky;
+    top: 90px;
+    width: 100%;
+    padding: 12px;
+    perspective: 1000px;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__media-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--media-aspect-ratio, 1 / 1);
+    border-radius: var(--radius-card, 20px);
+    overflow: hidden;
+    background-color: var(--color-surface);
+  }
+
+  #InteractiveSteps-{{ block.id }}.is--tilt-enabled .is__media-frame {
+    transform: rotate(var(--image-tilt, -3deg));
+    transform-origin: center center;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+    box-shadow: 0 16px 36px -12px color-mix(in srgb, var(--color-text) 18%, transparent);
+  }
+
+  #InteractiveSteps-{{ block.id }}.is--tilt-enabled .is__media-frame:hover {
+    box-shadow: 0 24px 48px -12px color-mix(in srgb, var(--color-text) 24%, transparent);
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__media-item {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__media-item--active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__media-item img,
+  #InteractiveSteps-{{ block.id }} .is__media-item svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__steps-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__steps-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    padding: 24px 0;
+    transition: border-color 0.25s ease;
+    cursor: pointer;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body-family);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    line-height: 1.2;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-bullet {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--color-text);
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step--active .is__step-bullet {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-body-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 18px;
+    margin-top: 6px;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-content-col {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step .theme-heading {
+    margin: 0;
+    width: auto;
+    text-align: left;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step .theme-heading__text,
+  #InteractiveSteps-{{ block.id }} .is__step-title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.85rem, 2.6vw, 2.25rem);
+    font-weight: 500;
+    color: var(--color-text);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step .theme-text,
+  #InteractiveSteps-{{ block.id }} .is__step-text {
+    font-family: var(--font-body-family);
+    font-size: 15px;
+    line-height: 1.62;
+    color: var(--color-text);
+    opacity: 0.85;
+    max-width: 480px;
+    margin: 14px 0 20px;
+    text-align: left;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step .theme-text p,
+  #InteractiveSteps-{{ block.id }} .is__step-text p {
+    margin: 0;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step .theme-button {
+    margin: 0 0 4px;
+  }
+
+  #InteractiveSteps-{{ block.id }}:not(.is--always-expand) .is__step:not(.is__step--active) .is__step-content-col > :not(:first-child) {
+    display: none !important;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-pill-col {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-pill {
+    width: 86px;
+    height: 42px;
+    border-radius: 9999px;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--color-surface);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step-pill img,
+  #InteractiveSteps-{{ block.id }} .is__step-pill svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step:not(.is__step--active) .is__step-pill img,
+  #InteractiveSteps-{{ block.id }} .is__step:not(.is__step--active) .is__step-pill svg {
+    filter: grayscale(100%);
+    opacity: 0.72;
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step--active .is__step-pill {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-text) calc(var(--shadow-opacity) * 40%), transparent);
+  }
+
+  #InteractiveSteps-{{ block.id }} .is__step--active .is__step-pill img,
+  #InteractiveSteps-{{ block.id }} .is__step--active .is__step-pill svg {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+
+  #InteractiveSteps-{{ block.id }}.is--tilt-enabled .is__step-pill {
+    transform: rotate(var(--step-pill-tilt, var(--pill-tilt, -2deg)));
+    transform-origin: center center;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  #InteractiveSteps-{{ block.id }}.is--tilt-enabled .is__step--active .is__step-pill {
+    transform: rotate(var(--step-pill-tilt, var(--pill-tilt, -2deg))) scale(1.05);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--color-text) 20%, transparent);
+  }
+
+  #InteractiveSteps-{{ block.id }}.is--tilt-enabled .is__step:hover:not(.is__step--active) .is__step-pill {
+    transform: rotate(calc(var(--step-pill-tilt, var(--pill-tilt, -2deg)) * -1)) scale(1.02);
+  }
+
+  @media screen and (min-width: 851px) {
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__grid {
+      align-items: stretch;
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__media-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      top: 0;
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__media-frame {
+      flex: 1 1 auto;
+      height: 100%;
+      min-height: 520px;
+      aspect-ratio: var(--media-aspect-ratio, 3 / 4);
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__steps-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-width: 0;
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__steps-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      flex: 1 1 auto;
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__step {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(14px, 2vh, 26px) 0;
+    }
+
+    #InteractiveSteps-{{ block.id }}.is--stretch-to-image .is__step:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media screen and (max-width: 850px) {
+    #InteractiveSteps-{{ block.id }} .is__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    #InteractiveSteps-{{ block.id }} .is__media-col {
+      position: relative;
+      top: 0;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    #InteractiveSteps-{{ block.id }} .is__media-frame {
+      aspect-ratio: var(--media-aspect-ratio, 1 / 1);
+    }
+
+    #InteractiveSteps-{{ block.id }} .is__heading {
+      max-width: 100%;
+    }
+  }
+</style>
+<script>
+  (() => {
+    const init = (root) => {
+      if (root.dataset.initialized === 'true') return;
+      root.dataset.initialized = 'true';
+      const host = root.querySelector('[data-step-media-host]');
+      const steps = [...root.querySelectorAll('[data-step-index]')].filter((node) =>
+        node.classList.contains('is__step')
+      );
+      steps.forEach((step, index) => {
+        const template = step.querySelector('template[data-step-media-template]');
+        if (!template) return;
+        const media = template.content.firstElementChild.cloneNode(true);
+        media.dataset.stepIndex = String(index + 1);
+        host.append(media);
+        step.dataset.stepIndex = String(index + 1);
+      });
+      const media = [...host.querySelectorAll('.is__media-item')];
+      const activate = (index) => {
+        const safe = Math.max(0, Math.min(index, steps.length - 1));
+        steps.forEach((step, i) => {
+          const active = i === safe;
+          step.classList.toggle('is__step--active', active);
+        });
+        media.forEach((item, i) => item.classList.toggle('is__media-item--active', i === safe));
+      };
+      steps.forEach((step, index) => {
+        step.addEventListener('click', (e) => {
+          if (e.target.closest('a, button, input, select, textarea')) return;
+          activate(index);
+        });
+        step.addEventListener('mouseenter', () => activate(index));
+      });
+      activate((Number(root.dataset.activeStep) || 1) - 1);
+
+      if (
+        root.dataset.tiltEnabled === 'true' &&
+        root.dataset.tilt3dEnabled === 'true' &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        const mediaFrame = root.querySelector('.is__media-frame');
+        const mediaCol = root.querySelector('.is__media-col');
+        if (mediaFrame && mediaCol) {
+          let bounds = null;
+          const getBaseTilt = () =>
+            parseFloat(getComputedStyle(root).getPropertyValue('--image-tilt')) || -3;
+
+          mediaCol.addEventListener('mouseenter', () => {
+            bounds = mediaCol.getBoundingClientRect();
+            mediaFrame.style.transition = 'transform 0.12s ease-out, box-shadow 0.3s ease';
+          });
+
+          mediaCol.addEventListener('mousemove', (e) => {
+            if (!bounds) bounds = mediaCol.getBoundingClientRect();
+            const x = e.clientX - bounds.left;
+            const y = e.clientY - bounds.top;
+            const xPct = Math.max(-1, Math.min(1, (x / bounds.width - 0.5) * 2));
+            const yPct = Math.max(-1, Math.min(1, (y / bounds.height - 0.5) * 2));
+
+            const maxRotX = 7;
+            const maxRotY = 7;
+            const rotX = -yPct * maxRotX;
+            const rotY = xPct * maxRotY;
+            const baseTilt = getBaseTilt();
+
+            mediaFrame.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) rotate(${baseTilt}deg) scale3d(1.02, 1.02, 1.02)`;
+          });
+
+          mediaCol.addEventListener('mouseleave', () => {
+            bounds = null;
+            const baseTilt = getBaseTilt();
+            mediaFrame.style.transition =
+              'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease';
+            mediaFrame.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) rotate(${baseTilt}deg) scale3d(1, 1, 1)`;
+          });
+        }
+      }
+    };
+    document.querySelectorAll('[data-interactive-steps]').forEach(init);
+    document.addEventListener('shopify:section:load', (event) =>
+      event.target.querySelectorAll('[data-interactive-steps]').forEach(init)
+    );
+  })();
+</script>
+{% schema %}
+{
+  "name": "Interactive steps",
+  "tag": null,
+  "blocks": [{ "type": "_interactive-step" }],
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "always_expand",
+      "label": "Always expand all steps",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "stretch_to_image",
+      "label": "Stretch steps to match image height",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "tall", "label": "Tall (4:5)" },
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "landscape", "label": "Landscape (4:3)" }
+      ],
+      "default": "portrait"
+    },
+    { "type": "header", "content": "Tilt effects" },
+    {
+      "type": "checkbox",
+      "id": "enable_image_tilt",
+      "label": "Enable image tilt",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "image_tilt",
+      "label": "Showcase image tilt angle",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "default": -3
+    },
+    {
+      "type": "range",
+      "id": "pill_tilt",
+      "label": "Step thumbnails tilt angle",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "default": -2
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_3d_tilt",
+      "label": "Enable 3D hover tilt",
+      "default": true
+    },
+    { "type": "header", "content": "Behavior" },
+    {
+      "type": "range",
+      "id": "active_step_default",
+      "label": "Initially active step",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Skin care routine steps"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive steps",
+      "settings": {
+        "always_expand": true,
+        "stretch_to_image": true,
+        "media_aspect_ratio": "portrait",
+        "enable_image_tilt": true,
+        "image_tilt": -3,
+        "pill_tilt": -2,
+        "enable_3d_tilt": true
+      },
+      "blocks": [
+        {
+          "type": "_interactive-step",
+          "settings": {
+            "step_index": 1
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Cleansers",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Start with a gentle purifying cleanser to remove impurities while preserving your natural skin moisture barrier.</p>",
+                "color_role": "muted"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Cleansers",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_interactive-step",
+          "settings": {
+            "step_index": 2
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Serums",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Target specific skin concerns with concentrated botanical actives and deeply penetrating hydration.</p>",
+                "color_role": "muted"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Serums",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_interactive-step",
+          "settings": {
+            "step_index": 3
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Toners",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Achieve glowing skin with our toners as part of your skincare routine. Scientifically formulated for optimal results.</p>",
+                "color_role": "muted"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Toners",
+                "style": "primary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

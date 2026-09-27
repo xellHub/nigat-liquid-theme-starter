@@ -1,0 +1,51 @@
+<section
+  id="footer-menu-{{ section.id }}"
+  class="footer-menu-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+  "name": "Footer menu",
+  "tag": "section",
+  "class": "footer-menu-section",
+  "blocks": [
+    {
+      "type": "_footer-menu-content"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "presets": [
+    {
+      "name": "t:sections.footer_menu.name",
+      "blocks": [
+        {
+          "type": "_footer-menu-content",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Quick links",
+                "level": "h4",
+                "size": "small"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Information & Utility"
+    }
+  ]
+}
+{% endschema %}

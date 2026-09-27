@@ -1,0 +1,144 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<label
+  class="{{ block.settings.foundation_custom_class | escape }} theme-checkbox"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+  ><input
+    type="checkbox"
+    name="{{ block.settings.name | escape }}"
+    {% if block.settings.checked %}
+      checked
+    {% endif -%}
+    {% if block.settings.required %}
+      required
+    {% endif %}
+
+  ><span>{{ block.settings.label | escape }}</span></label
+>
+{% stylesheet %}.theme-checkbox { display: inline-flex; min-height: var(--foundation-minimum-target-size); align-items: center; gap: var(--space-2); color: var(--color-text); font-family: var(--font-body-family); } .theme-checkbox input { width: 1.8rem; height: 1.8rem; accent-color: var(--color-accent); }{% endstylesheet %}
+{% schema %}
+{
+  "name": "Checkbox",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "I agree"
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "label": "Field name",
+      "default": "agree"
+    },
+    {
+      "type": "checkbox",
+      "id": "checked",
+      "label": "Checked by default",
+      "default": false
+    },
+    { "type": "checkbox", "id": "required", "label": "Required", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Checkbox"
+    }
+  ]
+}
+{% endschema %}

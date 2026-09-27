@@ -1,0 +1,794 @@
+<section
+  id="QuotesCarouselSection-{{ section.id }}"
+  class="quotes-carousel-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--quotes-width: {{ section.settings.page_width }}px; --quotes-pt: {{ section.settings.padding_top }}px; --quotes-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="quotes-carousel-layout__inner">
+    <div
+      id="QuoteCarousel-{{ section.id }}"
+      class="quote-carousel quote-carousel--{{ section.settings.text_casing }} quote-carousel--size-{{ section.settings.size }} quote-carousel--card-{{ section.settings.card_style }} quote-carousel--align-{{ section.settings.alignment }} quote-carousel--rating-{{ section.settings.rating_color }} {% if section.settings.italic %}quote-carousel--italic{% endif %} {% if section.settings.show_quotation_marks %}quote-carousel--show-quotes{% endif %} {% if section.settings.show_quote_icon %}quote-carousel--show-quote-icon{% endif %}"
+      data-autorotate="{{ section.settings.autorotate }}"
+      data-interval="{{ section.settings.autorotate_speed | times: 1000 }}"
+      data-loop="{{ section.settings.loop | default: true }}"
+      data-dot-label="{{ 'accessibility.quotes.go_to' | t: number: '__NUMBER__' | escape }}"
+    >
+      <div class="quote-carousel__layout">
+        {% if section.settings.show_arrows != false %}
+          <button
+            class="quote-carousel__arrow quote-carousel__arrow--previous"
+            type="button"
+            aria-label="{{ 'accessibility.quotes.previous' | t }}"
+            data-carousel-previous
+          >
+            {% render 'icon', name: 'chevron-left' %}
+          </button>
+        {% endif %}
+
+        <div class="quote-carousel__viewport" data-carousel-viewport>
+          <div class="quote-carousel__container" data-carousel-container aria-live="polite">
+            {% content_for 'blocks' %}
+          </div>
+        </div>
+
+        {% if section.settings.show_arrows != false %}
+          <button
+            class="quote-carousel__arrow quote-carousel__arrow--next"
+            type="button"
+            aria-label="{{ 'accessibility.quotes.next' | t }}"
+            data-carousel-next
+          >
+            {% render 'icon', name: 'chevron-right' %}
+          </button>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_dots != false %}
+        <div
+          class="quote-carousel__dots"
+          role="tablist"
+          aria-label="{{ 'accessibility.quotes.slides' | t }}"
+          data-carousel-dots
+        ></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .quotes-carousel-layout {
+    padding-block: var(--quotes-pt) var(--quotes-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+
+  .quotes-carousel-layout__inner {
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--quotes-width));
+    margin-inline: auto;
+  }
+
+  .quote-carousel {
+    width: 100%;
+    position: relative;
+  }
+
+  .quote-carousel__layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .quote-carousel__viewport {
+    overflow: hidden;
+    width: 100%;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y pinch-zoom;
+    padding-block: var(--space-6);
+  }
+
+  .quote-carousel__viewport.is-dragging {
+    cursor: grabbing;
+  }
+
+  .quote-carousel__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    backface-visibility: hidden;
+    will-change: transform;
+    align-items: center;
+  }
+
+  .quote-carousel__container > .theme-quote {
+    flex: 0 0 clamp(66%, 72%, 78%);
+    min-width: 0;
+    margin-inline: var(--space-2);
+    box-sizing: border-box;
+    opacity: 0.3;
+    transform: scale(0.8);
+    filter: blur(0.6px);
+    cursor: pointer;
+    transform-origin: center center;
+    position: relative;
+    z-index: 1;
+    transition:
+      opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      filter 0.4s ease;
+  }
+
+  .quote-carousel__container > .theme-quote:hover:not(.is-active) {
+    opacity: 0.55;
+    transform: scale(0.84);
+  }
+
+  .quote-carousel__container > .theme-quote.is-active {
+    opacity: 1;
+    transform: scale(1.06);
+    filter: none;
+    cursor: default;
+    z-index: 2;
+  }
+
+  .quote-carousel__arrow {
+    display: grid;
+    width: var(--foundation-minimum-target-size);
+    height: var(--foundation-minimum-target-size);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    place-items: center;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    transition:
+      transform var(--motion-duration-fast, 0.2s) var(--motion-ease, ease),
+      background-color var(--motion-duration-fast, 0.2s) var(--motion-ease, ease),
+      opacity var(--motion-duration-fast, 0.2s) var(--motion-ease, ease);
+  }
+
+  .quote-carousel__arrow:hover {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    transform: scale(1.08);
+  }
+
+  .quote-carousel__arrow:disabled,
+  .quote-carousel__arrow[aria-disabled='true'] {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .quote-carousel__arrow svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .quote-carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .quote-carousel__dot {
+    width: var(--foundation-minimum-target-size);
+    height: var(--foundation-minimum-target-size);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .quote-carousel__dot::before {
+    display: block;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin: auto;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--color-text) 24%, transparent);
+    content: '';
+    transition:
+      transform var(--motion-duration-fast, 0.2s) var(--motion-ease, ease),
+      background-color var(--motion-duration-fast, 0.2s) var(--motion-ease, ease);
+  }
+
+  .quote-carousel__dot:hover::before {
+    background: color-mix(in srgb, var(--color-text) 45%, transparent);
+  }
+
+  .quote-carousel__dot[aria-selected='true']::before,
+  .quote-carousel__dot.is-active::before {
+    background: var(--color-text);
+    transform: scale(1.3);
+  }
+
+  @media (max-width: 749px) {
+    .quote-carousel__layout {
+      grid-template-columns: 1fr;
+    }
+    .quote-carousel__arrow {
+      display: none;
+    }
+    .quote-carousel__container > .theme-quote {
+      flex: 0 0 88%;
+      margin-inline: var(--space-1);
+      transform: scale(0.92);
+    }
+    .quote-carousel__container > .theme-quote.is-active {
+      transform: scale(1);
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const init = () => {
+      const root = document.getElementById('QuoteCarousel-{{ section.id }}');
+      if (!root || root.dataset.initialized === 'true') return;
+
+      const viewport = root.querySelector('[data-carousel-viewport]');
+      const container = root.querySelector('[data-carousel-container]');
+      if (!viewport || !container) return;
+
+      const slides = Array.from(container.children).filter((item) =>
+        item.classList.contains('theme-quote')
+      );
+      const dotsContainer = root.querySelector('[data-carousel-dots]');
+      const prevBtn = root.querySelector('[data-carousel-previous]');
+      const nextBtn = root.querySelector('[data-carousel-next]');
+
+      if (!slides.length) return;
+      root.dataset.initialized = 'true';
+
+      const loop = root.dataset.loop !== 'false';
+      const autorotate = root.dataset.autorotate === 'true';
+      const interval = Number(root.dataset.interval) || 5000;
+      let timer = null;
+      let dots = [];
+
+      if (dotsContainer) {
+        dotsContainer.replaceChildren();
+        slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'quote-carousel__dot';
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-label', root.dataset.dotLabel.replace('__NUMBER__', String(index + 1)));
+          dotsContainer.appendChild(dot);
+          dots.push(dot);
+        });
+      }
+
+      const updateUI = (activeIndex) => {
+        slides.forEach((slide, i) => {
+          const isActive = i === activeIndex;
+          slide.classList.toggle('is-active', isActive);
+          slide.setAttribute('aria-hidden', String(!isActive));
+        });
+        dots.forEach((dot, i) => {
+          const isActive = i === activeIndex;
+          dot.classList.toggle('is-active', isActive);
+          dot.setAttribute('aria-selected', String(isActive));
+        });
+      };
+
+      if (typeof EmblaCarousel === 'function') {
+        const embla = EmblaCarousel(viewport, {
+          loop: loop,
+          align: 'center',
+          containScroll: 'trimSnaps',
+          skipSnaps: false,
+          duration: 25,
+        });
+
+        const onSelect = () => {
+          const activeIndex = embla.selectedScrollSnap();
+          updateUI(activeIndex);
+
+          if (!loop && prevBtn && nextBtn) {
+            prevBtn.disabled = !embla.canScrollPrev();
+            prevBtn.setAttribute('aria-disabled', String(!embla.canScrollPrev()));
+            nextBtn.disabled = !embla.canScrollNext();
+            nextBtn.setAttribute('aria-disabled', String(!embla.canScrollNext()));
+          }
+        };
+
+        embla.on('select', onSelect);
+        embla.on('init', onSelect);
+        embla.on('pointerDown', () => {
+          viewport.classList.add('is-dragging');
+          stopAutoplay();
+        });
+        embla.on('pointerUp', () => {
+          viewport.classList.remove('is-dragging');
+          startAutoplay();
+        });
+
+        slides.forEach((slide, i) => {
+          slide.addEventListener('click', (e) => {
+            if (i !== embla.selectedScrollSnap()) {
+              e.preventDefault();
+              embla.scrollTo(i);
+              resetAutoplay();
+            }
+          });
+        });
+
+        let wheelCooldown = false;
+        let wheelAccumulator = 0;
+        let wheelResetTimer = null;
+
+        root.addEventListener(
+          'wheel',
+          (e) => {
+            let dx = e.deltaX;
+            let dy = e.deltaY;
+
+            if (e.deltaMode === 1) {
+              dx *= 26;
+              dy *= 26;
+            } else if (e.deltaMode === 2) {
+              dx *= 400;
+              dy *= 400;
+            }
+
+            if (e.shiftKey && Math.abs(dx) < Math.abs(dy)) {
+              dx = dy;
+              dy = 0;
+            }
+
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 2) {
+              e.preventDefault();
+              if (wheelCooldown) return;
+
+              wheelAccumulator += dx;
+
+              clearTimeout(wheelResetTimer);
+              wheelResetTimer = setTimeout(() => {
+                wheelAccumulator = 0;
+              }, 180);
+
+              if (Math.abs(wheelAccumulator) >= 16) {
+                wheelCooldown = true;
+                if (wheelAccumulator > 0) {
+                  embla.scrollNext();
+                } else {
+                  embla.scrollPrev();
+                }
+                resetAutoplay();
+                wheelAccumulator = 0;
+                setTimeout(() => {
+                  wheelCooldown = false;
+                }, 320);
+              }
+            }
+          },
+          { passive: false }
+        );
+
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => {
+            embla.scrollTo(i);
+            resetAutoplay();
+          });
+        });
+
+        prevBtn?.addEventListener('click', () => {
+          embla.scrollPrev();
+          resetAutoplay();
+        });
+        nextBtn?.addEventListener('click', () => {
+          embla.scrollNext();
+          resetAutoplay();
+        });
+
+        root.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') {
+            embla.scrollPrev();
+            resetAutoplay();
+          }
+          if (e.key === 'ArrowRight') {
+            embla.scrollNext();
+            resetAutoplay();
+          }
+        });
+
+        function startAutoplay() {
+          if (!autorotate || slides.length < 2 || timer) return;
+          timer = setInterval(() => {
+            if (embla.canScrollNext() || loop) {
+              embla.scrollNext();
+            } else {
+              embla.scrollTo(0);
+            }
+          }, interval);
+        }
+
+        function stopAutoplay() {
+          if (timer) {
+            clearInterval(timer);
+            timer = null;
+          }
+        }
+
+        function resetAutoplay() {
+          stopAutoplay();
+          startAutoplay();
+        }
+
+        root.addEventListener('pointerenter', stopAutoplay);
+        root.addEventListener('pointerleave', startAutoplay);
+        root.addEventListener('focusin', stopAutoplay);
+        root.addEventListener('focusout', startAutoplay);
+
+        document.addEventListener('shopify:block:select', (e) => {
+          const selected = e.target.closest?.('.theme-quote');
+          if (selected && container.contains(selected)) {
+            stopAutoplay();
+            embla.scrollTo(slides.indexOf(selected));
+          }
+        });
+
+        onSelect();
+        startAutoplay();
+      } else {
+        let activeIndex = 0;
+        let startX = 0;
+        let deltaX = 0;
+        let isDragging = false;
+
+        const setSlide = (index) => {
+          const prevIndex = activeIndex;
+          activeIndex = loop
+            ? (index + slides.length) % slides.length
+            : Math.max(0, Math.min(index, slides.length - 1));
+
+          const isWrapping =
+            (prevIndex === 0 && activeIndex === slides.length - 1) ||
+            (prevIndex === slides.length - 1 && activeIndex === 0);
+
+          if (isWrapping) {
+            container.style.transition = 'none';
+            container.style.transform = `translate3d(-${activeIndex * 100}%, 0, 0)`;
+            void container.offsetHeight;
+            requestAnimationFrame(() => {
+              container.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            });
+          } else {
+            container.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            container.style.transform = `translate3d(-${activeIndex * 100}%, 0, 0)`;
+          }
+
+          updateUI(activeIndex);
+          if (!loop && prevBtn && nextBtn) {
+            prevBtn.disabled = activeIndex === 0;
+            nextBtn.disabled = activeIndex === slides.length - 1;
+          }
+        };
+
+        slides.forEach((slide, i) => {
+          slide.addEventListener('click', (e) => {
+            if (i !== activeIndex) {
+              e.preventDefault();
+              setSlide(i);
+              resetAutoplay();
+            }
+          });
+        });
+
+        let fallbackWheelCooldown = false;
+        let fallbackWheelAccumulator = 0;
+        let fallbackWheelResetTimer = null;
+        root.addEventListener(
+          'wheel',
+          (e) => {
+            let dx = e.deltaX;
+            let dy = e.deltaY;
+            if (e.deltaMode === 1) {
+              dx *= 26;
+              dy *= 26;
+            } else if (e.deltaMode === 2) {
+              dx *= 400;
+              dy *= 400;
+            }
+            if (e.shiftKey && Math.abs(dx) < Math.abs(dy)) {
+              dx = dy;
+              dy = 0;
+            }
+
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 2) {
+              e.preventDefault();
+              if (fallbackWheelCooldown) return;
+              fallbackWheelAccumulator += dx;
+              clearTimeout(fallbackWheelResetTimer);
+              fallbackWheelResetTimer = setTimeout(() => {
+                fallbackWheelAccumulator = 0;
+              }, 180);
+              if (Math.abs(fallbackWheelAccumulator) >= 16) {
+                fallbackWheelCooldown = true;
+                if (fallbackWheelAccumulator > 0) {
+                  setSlide(activeIndex + 1);
+                } else {
+                  setSlide(activeIndex - 1);
+                }
+                resetAutoplay();
+                fallbackWheelAccumulator = 0;
+                setTimeout(() => {
+                  fallbackWheelCooldown = false;
+                }, 350);
+              }
+            }
+          },
+          { passive: false }
+        );
+
+        dots.forEach((dot, i) =>
+          dot.addEventListener('click', () => {
+            setSlide(i);
+            resetAutoplay();
+          })
+        );
+        prevBtn?.addEventListener('click', () => {
+          setSlide(activeIndex - 1);
+          resetAutoplay();
+        });
+        nextBtn?.addEventListener('click', () => {
+          setSlide(activeIndex + 1);
+          resetAutoplay();
+        });
+
+        viewport.addEventListener('pointerdown', (e) => {
+          isDragging = true;
+          startX = e.clientX;
+          deltaX = 0;
+          container.style.transition = 'none';
+          viewport.classList.add('is-dragging');
+          stopAutoplay();
+        });
+
+        viewport.addEventListener('pointermove', (e) => {
+          if (!isDragging) return;
+          deltaX = e.clientX - startX;
+          container.style.transform = `translate3d(calc(-${activeIndex * 100}% + ${deltaX}px), 0, 0)`;
+        });
+
+        const onPointerEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          viewport.classList.remove('is-dragging');
+          if (Math.abs(deltaX) > 40) {
+            setSlide(activeIndex + (deltaX < 0 ? 1 : -1));
+          } else {
+            setSlide(activeIndex);
+          }
+          startAutoplay();
+        };
+
+        viewport.addEventListener('pointerup', onPointerEnd);
+        viewport.addEventListener('pointercancel', onPointerEnd);
+        viewport.addEventListener('pointerleave', onPointerEnd);
+
+        function startAutoplay() {
+          if (!autorotate || slides.length < 2 || timer) return;
+          timer = setInterval(() => setSlide(activeIndex + 1), interval);
+        }
+        function stopAutoplay() {
+          if (timer) {
+            clearInterval(timer);
+            timer = null;
+          }
+        }
+        function resetAutoplay() {
+          stopAutoplay();
+          startAutoplay();
+        }
+
+        setSlide(0);
+        startAutoplay();
+      }
+    };
+
+    const initAfterLoad = async () => {
+      if (typeof window.EmblaCarousel !== 'function') {
+        window.nigatEmblaLoader ||= new Promise((resolve) => {
+          const script = document.createElement('script');
+          script.src = {{ 'embla-carousel.umd.js' | asset_url | json }};
+          script.onload = resolve;
+          script.onerror = resolve;
+          document.head.appendChild(script);
+        });
+        await window.nigatEmblaLoader;
+      }
+      init();
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAfterLoad, { once: true });
+    } else {
+      initAfterLoad();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Quotes carousel",
+  "tag": "section",
+  "class": "quotes-carousel-section",
+  "blocks": [{ "type": "quote" }],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Quote Style"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Quote size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "checkbox",
+      "id": "italic",
+      "label": "Italicize quotes",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quotation_marks",
+      "label": "Show surrounding quotation marks",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quote_icon",
+      "label": "Show decorative quote mark",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "card", "label": "Card" },
+        { "value": "bordered", "label": "Bordered" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "rating_color",
+      "label": "Rating star color",
+      "options": [
+        { "value": "accent", "label": "Accent" },
+        { "value": "text", "label": "Text" },
+        { "value": "muted", "label": "Muted" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "select",
+      "id": "text_casing",
+      "label": "Quote letter case",
+      "options": [
+        { "value": "none", "label": "Natural" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop continuously",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autorotate",
+      "label": "Auto-rotate",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autorotate_speed",
+      "label": "Change quote every",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quotes carousel",
+      "settings": {
+        "size": "large",
+        "italic": true,
+        "show_quotation_marks": true,
+        "show_quote_icon": false,
+        "card_style": "none",
+        "alignment": "center",
+        "rating_color": "accent"
+      },
+      "blocks": []
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,232 @@
+{% liquid
+  assign overlay = block.settings.image_overlay_opacity | default: 0 | divided_by: 100.0
+  assign pos_h = block.settings.content_position | default: 'center'
+  assign pos_v = block.settings.content_vertical_position | default: 'middle'
+  assign backdrop = block.settings.content_backdrop | default: 'glass'
+  assign text_align = block.settings.text_alignment | default: 'center'
+%}
+<div
+  class="slideshow__slide {% if block.settings.color_scheme != blank %}{% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}{% endif %}"
+  id="Slide-{{ block.id }}"
+  data-full-slide
+  role="group"
+  aria-roledescription="slide"
+  aria-label="{{ block.settings.heading | default: 'Promotional slide' | escape }}"
+  aria-hidden="true"
+  style="--slide-overlay:{{ overlay }};"
+  {{ block.shopify_attributes }}
+>
+  <div class="slideshow__media">
+    {% if block.settings.image != blank %}
+      <picture>
+        {% if block.settings.image_mobile != blank %}
+          <source
+            media="(max-width:749px)"
+            srcset="{{ block.settings.image_mobile | image_url: width: 750 }} 750w, {{ block.settings.image_mobile | image_url: width: 1100 }} 1100w"
+          >
+        {% endif %}
+        {{
+          block.settings.image
+          | image_url: width: 3000
+          | image_tag:
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '375, 750, 1100, 1500, 1900, 2400, 3000',
+            class: 'slideshow__image',
+            alt: ''
+        }}
+      </picture>
+    {% else %}
+      <img
+        src="{{ 'slideshow-hero-1.jpg' | asset_url }}"
+        alt="Hero slide"
+        width="2000"
+        height="1200"
+        loading="lazy"
+        class="slideshow__image"
+      >
+    {% endif %}
+    <div class="slideshow__overlay" aria-hidden="true"></div>
+  </div>
+  <div class="slideshow__content-wrapper slideshow__content-wrapper--h-{{ pos_h }} slideshow__content-wrapper--v-{{ pos_v }} page-width">
+    <div class="slideshow__content slideshow__content--{{ backdrop }} slideshow__content--align-{{ text_align }}">
+      {% content_for 'blocks' %}
+      {%- if block.blocks.size == 0 -%}
+        <div class="slideshow__buttons">
+          <a
+            href="{{ routes.all_products_collection_url }}"
+            class="button button--primary slideshow__button"
+            >Shop now</a
+          >
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Full-frame slide",
+  "tag": null,
+  "blocks": [
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "icon" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.slideshow.blocks.slide.settings.image.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.slideshow.blocks.slide.settings.image_mobile.label"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "t:sections.slideshow.blocks.slide.settings.image_overlay_opacity.label",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "content_backdrop",
+      "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.none"
+        },
+        {
+          "value": "glass",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.glass"
+        },
+        {
+          "value": "glass_light",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.glass_light"
+        },
+        {
+          "value": "card",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.card"
+        },
+        {
+          "value": "fade_horizontal",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.fade_horizontal"
+        },
+        {
+          "value": "fade_bottom",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_backdrop.options.fade_bottom"
+        }
+      ],
+      "default": "glass"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "t:sections.slideshow.blocks.slide.settings.content_position.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_position.options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_position.options.center"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_position.options.right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_position",
+      "label": "t:sections.slideshow.blocks.slide.settings.content_vertical_position.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_vertical_position.options.top"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_vertical_position.options.middle"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.slideshow.blocks.slide.settings.content_vertical_position.options.bottom"
+        }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.options.center"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.options.right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Full-frame slide",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Minimal & Modern",
+            "level": "h2",
+            "size": "large"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover thoughtfully designed essentials made to last a lifetime.</p>"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "/collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

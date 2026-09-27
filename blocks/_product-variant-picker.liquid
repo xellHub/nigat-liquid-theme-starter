@@ -1,0 +1,62 @@
+<div {{ block.shopify_attributes }}>
+  {% render 'variant-picker', product: product, section_id: section.id, block: block %}
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Variant picker",
+  "tag": null,
+  "blocks": [{ "type": "badge" }, { "type": "text" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "select",
+      "id": "picker_type",
+      "label": "t:sections.main_product.blocks.variant_picker.settings.picker_type.label",
+      "options": [
+        {
+          "value": "button",
+          "label": "t:sections.main_product.blocks.variant_picker.settings.picker_type.options.button"
+        },
+        {
+          "value": "dropdown",
+          "label": "t:sections.main_product.blocks.variant_picker.settings.picker_type.options.dropdown"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "t:sections.main_product.blocks.variant_picker.settings.enable_color_swatches.label",
+      "default": true
+    },
+    {
+      "type": "page",
+      "id": "size_chart_page",
+      "label": "Size chart page"
+    },
+    {
+      "type": "select",
+      "id": "swatch_shape",
+      "label": "t:sections.main_product.blocks.variant_picker.settings.swatch_shape.label",
+      "options": [
+        {
+          "value": "circle",
+          "label": "t:sections.main_product.blocks.variant_picker.settings.swatch_shape.options.circle"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main_product.blocks.variant_picker.settings.swatch_shape.options.square"
+        }
+      ],
+      "default": "circle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Variant picker"
+    }
+  ]
+}
+{% endschema %}

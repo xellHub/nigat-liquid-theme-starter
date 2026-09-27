@@ -1,0 +1,38 @@
+<div class="resource-cart" data-cart-page {{ block.shopify_attributes }}>
+  <div class="resource-cart__header">
+    {% content_for 'blocks' %}
+  </div>
+  {% if cart == empty %}
+    <form id="cart-page-form" action="{{ routes.cart_url }}" method="post"></form>
+  {% endif %}
+  {% render 'cart-items', context: 'page' %}
+</div>
+{% stylesheet %}
+  .resource-cart__title {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    line-height: var(--line-height-heading);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Cart content",
+  "tag": null,
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "button" }, { "type": "cart-note" }, { "type": "@app" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Cart content",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Your cart"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

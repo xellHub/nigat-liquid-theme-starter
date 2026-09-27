@@ -1,0 +1,776 @@
+<div class="product-resource-extension" {{ block.shopify_attributes }}>
+  {%- comment -%} Main product section: gallery + info column driven by blocks. {%- endcomment -%}
+
+  <section
+    class="main-product section {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}"
+    data-product-section
+    data-product-id="{{ product.id }}"
+    data-product-instance="{{ section.id }}"
+    style="--padding-top: var(--space-4); --padding-bottom: var(--spacing-sections);"
+  >
+    <div class="page-width">
+      {%- if block.settings.show_breadcrumbs != false -%}
+        <nav class="product__breadcrumbs" aria-label="{{ 'products.product.breadcrumb' | t }}">
+          <a href="{{ routes.root_url }}" class="product__breadcrumb-link">{{ 'general.breadcrumbs.home' | t }}</a>
+          <span class="product__breadcrumb-sep" aria-hidden="true">
+            {%- render 'icon', name: 'chevron-right' -%}
+          </span>
+          {%- if collection -%}
+            <a href="{{ collection.url }}" class="product__breadcrumb-link">
+              {{- collection.title -}}
+            </a>
+            <span class="product__breadcrumb-sep" aria-hidden="true">
+              {%- render 'icon', name: 'chevron-right' -%}
+            </span>
+          {%- elsif product.collections.size > 0 -%}
+            <a href="{{ product.collections.first.url }}" class="product__breadcrumb-link">
+              {{- product.collections.first.title -}}
+            </a>
+            <span class="product__breadcrumb-sep" aria-hidden="true">
+              {%- render 'icon', name: 'chevron-right' -%}
+            </span>
+          {%- else -%}
+            <a href="{{ routes.all_products_collection_url }}" class="product__breadcrumb-link"
+              >{{ 'products.product.shop' | t }}</a
+            >
+            <span class="product__breadcrumb-sep" aria-hidden="true">
+              {%- render 'icon', name: 'chevron-right' -%}
+            </span>
+          {%- endif -%}
+          {%- if product.type != blank -%}
+            <span class="product__breadcrumb-type">{{ product.type }}</span>
+            <span class="product__breadcrumb-sep" aria-hidden="true">
+              {%- render 'icon', name: 'chevron-right' -%}
+            </span>
+          {%- endif -%}
+          <span class="product__breadcrumb-current" aria-current="page">{{ product.title }}</span>
+        </nav>
+      {%- endif -%}
+
+      <div class="product">
+        <div class="product__media-wrap">
+          {%- if product.media.size > 0 -%}
+            <div class="product__gallery" data-product-gallery>
+              {%- liquid
+                assign media_height = block.settings.media_height | default: 'medium'
+                assign media_fit = block.settings.media_fit | default: 'cover'
+                assign initial_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+                assign first_media_aspect = initial_media.aspect_ratio | default: 1
+
+                # Global Image Configuration Enum (Shopify standard breakpoints)
+                # THUMBNAIL: Variety of qualities (1x, 2x, 3x) matching visual button size (64px / 6.4rem)
+                assign thumb_widths = '64, 128, 192'
+                assign thumb_sizes = '64px'
+                assign thumb_width = 192
+
+                # MAIN: Standard responsive breakpoints up to 2000px maximum
+                assign main_widths = '360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000'
+                assign main_sizes = '(min-width: 990px) 50vw, 100vw'
+                assign main_width = 2000
+              -%}
+              <div
+                class="product__media-main product__media-main--{{ media_height }} product__media-main--fit-{{ media_fit }}"
+                data-product-media-main
+                style="--product-media-aspect: {{ first_media_aspect }};"
+              >
+                {%- for media in product.media -%}
+                  {%- liquid
+                    if media.id == initial_media.id
+                      assign media_loading = 'eager'
+                      assign media_priority = 'high'
+                    else
+                      assign media_loading = 'lazy'
+                      assign media_priority = 'auto'
+                    endif
+                  -%}
+                  <div
+                    class="product__media-item{% if media.id == initial_media.id %} is-active{% endif %}"
+                    data-media-id="{{ media.id }}"
+                    data-media-type="{{ media.media_type }}"
+                    {% if media.media_type == 'image' %}
+                      role="button"
+                      tabindex="0"
+                      aria-label="{{ 'products.product.media.open_media' | t }}"
+                    {% endif %}
+                  >
+                    {%- if media.media_type == 'image' -%}
+                      {%- assign media_alt = media.alt | default: product.title -%}
+                      {{ media | image_url: width: main_width | image_tag: loading: media_loading, fetchpriority: media_priority, sizes: main_sizes, widths: main_widths, class: 'product__image', alt: media_alt }}
+                    {%- else -%}
+                      {{ media | media_tag: image_size: '1200x' }}
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+
+                <div class="product__image-actions">
+                  <button
+                    type="button"
+                    class="product__floating-btn"
+                    data-floating-share
+                    aria-label="{{ 'products.product.share' | t | default: 'Share' }}"
+                    aria-haspopup="dialog"
+                  >
+                    {% render 'icon', name: 'share' %}
+                  </button>
+                  <button
+                    type="button"
+                    class="product__floating-btn"
+                    data-floating-wishlist
+                    data-wishlist-add-label="{{ 'products.product.add_to_wishlist' | t | escape }}"
+                    data-wishlist-saved-label="{{ 'products.product.saved_to_wishlist' | t | escape }}"
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                    aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Save to wishlist' }}"
+                  >
+                    {% render 'icon', name: 'heart' %}
+                  </button>
+                </div>
+              </div>
+
+              {%- if product.media.size > 1 -%}
+                <ul class="product__thumbnails" role="list" data-product-thumbnails>
+                  {%- for media in product.media -%}
+                    <li>
+                      <button
+                        type="button"
+                        class="product__thumbnail{% if media.id == initial_media.id %} is-active{% endif %}"
+                        data-thumbnail
+                        data-media-id="{{ media.id }}"
+                        aria-label="{{ media.alt | default: product.title | escape }}"
+                      >
+                        {%- if media.preview_image != blank -%}
+                          {%- assign thumb_alt = media.alt | default: product.title -%}
+                          {{ media.preview_image | image_url: width: thumb_width, height: thumb_width, crop: 'center' | image_tag: loading: 'lazy', widths: thumb_widths, sizes: thumb_sizes, class: 'product__thumbnail-image', alt: thumb_alt }}
+                        {%- endif -%}
+                        {%- if media.media_type == 'video'
+                          or media.media_type == 'external_video'
+                        -%}
+                          <span class="product__thumbnail-badge" aria-hidden="true">
+                            {% render 'icon', name: 'play' %}
+                          </span>
+                        {%- endif -%}
+                      </button>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              <dialog
+                class="product-zoomer"
+                data-product-zoomer
+                aria-modal="true"
+                aria-label="{{ 'products.product.media.open_media' | t }}"
+              >
+                <div class="product-zoomer__backdrop" data-product-zoomer-close></div>
+
+                <div class="product-zoomer__header">
+                  <span class="product-zoomer__counter" data-zoomer-counter></span>
+                  <button
+                    type="button"
+                    class="product-zoomer__close"
+                    data-product-zoomer-close
+                    aria-label="{{ 'accessibility.close' | t }}"
+                    title="{{ 'accessibility.close' | t }}"
+                  >
+                    {% render 'icon', name: 'close' %}
+                  </button>
+                </div>
+
+                {%- if product.media.size > 1 -%}
+                  <button
+                    type="button"
+                    class="product-zoomer__nav product-zoomer__nav--prev"
+                    data-zoomer-prev
+                    aria-label="{{ 'accessibility.previous_slide' | t }}"
+                    title="{{ 'accessibility.previous_slide' | t }}"
+                  >
+                    {% render 'icon', name: 'arrow-left' %}
+                  </button>
+                  <button
+                    type="button"
+                    class="product-zoomer__nav product-zoomer__nav--next"
+                    data-zoomer-next
+                    aria-label="{{ 'accessibility.next_slide' | t }}"
+                    title="{{ 'accessibility.next_slide' | t }}"
+                  >
+                    {% render 'icon', name: 'arrow-right' %}
+                  </button>
+                {%- endif -%}
+
+                <div class="product-zoomer__viewport" data-zoomer-viewport>
+                  {%- for media in product.media -%}
+                    <div
+                      class="product-zoomer__slide{% if media.id == initial_media.id %} is-active{% endif %}"
+                      data-zoomer-slide
+                      data-media-id="{{ media.id }}"
+                      data-index="{{ forloop.index }}"
+                    >
+                      <div
+                        class="product-zoomer__skeleton"
+                        data-zoomer-skeleton
+                        aria-hidden="true"
+                      ></div>
+                      {%- assign original_width = media.preview_image.width
+                        | default: media.width
+                        | default: 3840
+                      -%}
+                      {%- if media.preview_image != blank -%}
+                        {%- assign zoom_alt = media.alt | default: product.title -%}
+                        {{ media.preview_image | image_url: width: original_width | image_tag: loading: 'lazy', class: 'product-zoomer__img', alt: zoom_alt }}
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+
+                <div
+                  class="product-zoomer__toolbar"
+                  data-zoomer-toolbar
+                  role="toolbar"
+                  aria-label="{{ 'products.product.zoom_controls' | t }}"
+                >
+                  <button
+                    type="button"
+                    class="product-zoomer__btn"
+                    data-zoom-out
+                    aria-label="{{ 'products.product.zoom_out' | t }}"
+                    title="{{ 'products.product.zoom_out' | t }}"
+                  >
+                    {% render 'icon', name: 'zoom-out' %}
+                  </button>
+                  <span class="product-zoomer__pct" data-zoom-pct aria-live="polite">100%</span>
+                  <button
+                    type="button"
+                    class="product-zoomer__btn"
+                    data-zoom-in
+                    aria-label="{{ 'products.product.zoom_in' | t }}"
+                    title="{{ 'products.product.zoom_in' | t }}"
+                  >
+                    {% render 'icon', name: 'zoom-in' %}
+                  </button>
+                  <button
+                    type="button"
+                    class="product-zoomer__btn"
+                    data-zoom-reset
+                    aria-label="{{ 'products.product.zoom_reset' | t }}"
+                    title="{{ 'products.product.zoom_reset' | t }}"
+                  >
+                    {% render 'icon', name: 'reset' %}
+                  </button>
+                </div>
+              </dialog>
+            </div>
+          {%- else -%}
+            <div class="placeholder-image product__media-placeholder product__media-main--{{ block.settings.media_height | default: 'medium' }}">
+              {% render 'placeholder-image', variant: 'product_1' %}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ——— Share bottom sheet ——— {%- endcomment -%}
+        <dialog
+          class="share-sheet product-modal"
+          id="share-sheet-{{ block.id }}"
+          aria-modal="true"
+          aria-label="{{ 'products.product.share' | t }}"
+        >
+          <div class="product-modal__backdrop" data-modal-close></div>
+          <div class="share-sheet__panel modal-shadow-panel">
+            <div class="share-sheet__handle" aria-hidden="true"></div>
+            <div class="product-modal__header">
+              <h2 class="product-modal__title">{{ 'products.product.share' | t }}</h2>
+              <button
+                type="button"
+                class="product-modal__close"
+                data-modal-close
+                aria-label="{{ 'accessibility.close' | t }}"
+              >
+                {% render 'icon', name: 'close' %}
+              </button>
+            </div>
+            <div class="share-sheet__grid">
+              {%- if block.settings.share_copy != false -%}
+                <button
+                  type="button"
+                  class="share-sheet__option share-sheet__option--copy"
+                  data-share-action="copy"
+                  data-share-url="{{ request.origin | append: product.url }}"
+                  aria-label="{{ 'products.product.copy_link' | t }}"
+                >
+                  <span class="share-sheet__option-icon">{% render 'icon', name: 'copy' %}</span>
+                  <span class="share-sheet__option-label">{{ 'products.product.copy_link_short' | t }}</span>
+                  <span class="share-sheet__copied-tag" data-copied-tag aria-hidden="true"
+                    >{{ 'products.product.copied' | t }}</span
+                  >
+                </button>
+              {%- endif -%}
+
+              {%- if block.settings.share_whatsapp != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--whatsapp"
+                  href="https://api.whatsapp.com/send?text={{ product.title | append: ' ' | append: request.origin | append: product.url | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'products.product.share_whatsapp' | t }}"
+                >
+                  <span class="share-sheet__option-icon">
+                    {%- render 'icon', name: 'whatsapp' -%}
+                  </span>
+                  <span class="share-sheet__option-label">WhatsApp</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_facebook != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--facebook"
+                  href="https://www.facebook.com/sharer/sharer.php?u={{ request.origin | append: product.url | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'blogs.article.share_on_facebook' | t }}"
+                >
+                  <span class="share-sheet__option-icon">
+                    {%- render 'icon', name: 'facebook' -%}
+                  </span>
+                  <span class="share-sheet__option-label">Facebook</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_x != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--x"
+                  href="https://x.com/intent/tweet?url={{ request.origin | append: product.url | url_encode }}&text={{ product.title | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'blogs.article.share_on_x' | t }}"
+                >
+                  <span class="share-sheet__option-icon">{% render 'icon', name: 'x' %}</span>
+                  <span class="share-sheet__option-label">X (Twitter)</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_pinterest != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--pinterest"
+                  href="https://pinterest.com/pin/create/button/?url={{ request.origin | append: product.url | url_encode }}&media={{ product.featured_image | default: product.featured_media | image_url: width: 1200 | url_encode }}&description={{ product.title | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'products.product.share_pinterest' | t }}"
+                >
+                  <span class="share-sheet__option-icon">
+                    {%- render 'icon', name: 'pinterest' -%}
+                  </span>
+                  <span class="share-sheet__option-label">Pinterest</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_telegram != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--telegram"
+                  href="https://t.me/share/url?url={{ request.origin | append: product.url | url_encode }}&text={{ product.title | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'products.product.share_telegram' | t }}"
+                >
+                  <span class="share-sheet__option-icon">
+                    {%- render 'icon', name: 'telegram' -%}
+                  </span>
+                  <span class="share-sheet__option-label">Telegram</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_linkedin != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--linkedin"
+                  href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.origin | append: product.url | url_encode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="{{ 'products.product.share_linkedin' | t }}"
+                >
+                  <span class="share-sheet__option-icon">
+                    {%- render 'icon', name: 'linkedin' -%}
+                  </span>
+                  <span class="share-sheet__option-label">LinkedIn</span>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.share_email != false -%}
+                <a
+                  class="share-sheet__option share-sheet__option--email"
+                  href="mailto:?subject={{ product.title | url_encode }}&body={{ 'Check this out: ' | append: request.origin | append: product.url | url_encode }}"
+                  aria-label="{{ 'products.product.share_email' | t }}"
+                >
+                  <span class="share-sheet__option-icon">{% render 'icon', name: 'mail' %}</span>
+                  <span class="share-sheet__option-label">{{ 'products.product.email' | t }}</span>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </dialog>
+
+        {%- comment -%} ——— Wishlist / quick-add popover ——— {%- endcomment -%}
+        <div
+          class="wishlist-popover"
+          id="wishlist-popover-{{ block.id }}"
+          role="dialog"
+          aria-modal="true"
+          aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+          hidden
+        >
+          <div class="wishlist-popover__backdrop" data-wishlist-close></div>
+          <div class="wishlist-popover__panel">
+            <div class="wishlist-popover__header">
+              <h2 class="wishlist-popover__title">{{ 'products.product.add_to_wishlist' | t }}</h2>
+              <button
+                type="button"
+                class="product-modal__close"
+                data-wishlist-close
+                aria-label="{{ 'accessibility.close' | t }}"
+              >
+                {% render 'icon', name: 'close' %}
+              </button>
+            </div>
+            <div class="wishlist-popover__body">
+              <p class="wishlist-popover__product-name">{{ product.title | escape }}</p>
+              {%- if product.variants.size > 1 -%}
+                <p class="wishlist-popover__note">{{ 'products.product.select_wishlist_variant' | t }}</p>
+                <div class="wishlist-popover__variants">
+                  {%- for variant in product.variants -%}
+                    <button
+                      type="button"
+                      class="wishlist-popover__variant-btn{% if variant == product.selected_or_first_available_variant %} is-selected{% endif %}"
+                      data-wishlist-variant="{{ variant.id }}"
+                      {% unless variant.available %}
+                        disabled title="{{ 'products.product.sold_out' | t }}"
+                      {% endunless %}
+                    >
+                      {{ variant.title | escape }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              <button
+                type="button"
+                class="button button--primary wishlist-popover__save-btn"
+                data-wishlist-save
+              >
+                {% render 'icon', name: 'heart' %}
+                <span>{{ 'products.product.add_to_wishlist' | t }}</span>
+              </button>
+              <p class="wishlist-popover__saved-msg" hidden>
+                {{ 'products.product.saved_to_wishlist' | t }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="product__info">
+          {% content_for 'blocks' %}
+        </div>
+      </div>
+    </div>
+
+    <div class="product__toast" data-product-toast aria-live="polite" hidden>
+      <span class="product__toast-msg" data-toast-msg></span>
+    </div>
+
+    {%- if block.settings.enable_sticky_cart != false -%}
+      {%- assign current_variant = product.selected_or_first_available_variant -%}
+      {%- assign sticky_image = current_variant.featured_media.preview_image | default: product.featured_image -%}
+
+      <div class="sticky-add-to-cart" data-sticky-add-to-cart aria-hidden="true" inert>
+        <div class="sticky-add-to-cart__inner">
+          <div class="sticky-add-to-cart__product">
+            {%- if sticky_image != blank -%}
+              {%- assign sticky_image_alt = sticky_image.alt | default: product.title | escape -%}
+              {{
+                sticky_image
+                | image_url: width: 120, height: 120, crop: 'center'
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'sticky-add-to-cart__image',
+                  alt: sticky_image_alt,
+                  data-sticky-image: ''
+              }}
+            {%- else -%}
+              <div class="sticky-add-to-cart__image sticky-add-to-cart__image--placeholder">
+                {% render 'icon', name: 'cart' %}
+              </div>
+            {%- endif -%}
+
+            <div class="sticky-add-to-cart__info">
+              <p class="sticky-add-to-cart__title">{{ product.title | escape }}</p>
+              <p class="sticky-add-to-cart__variant" data-sticky-variant>
+                {%- unless product.has_only_default_variant -%}
+                  {{ current_variant.title | escape }}
+                {%- endunless -%}
+              </p>
+            </div>
+          </div>
+
+          <div class="sticky-add-to-cart__actions">
+            <div class="sticky-add-to-cart__price" data-sticky-price>
+              {{ current_variant.price | money }}
+            </div>
+
+            {% # theme-check-disable ValidScopedCSSClass %}
+            <button
+              type="button"
+              class="sticky-add-to-cart__btn theme-button theme-button--primary"
+              data-sticky-submit
+              tabindex="-1"
+              {% unless current_variant.available %}
+                disabled
+              {% endunless %}
+            >
+              <span class="sticky-add-to-cart__btn-icon" aria-hidden="true">
+                {% render 'icon', name: 'bag-plus' %}
+              </span>
+              <span data-sticky-btn-text>
+                {%- if current_variant.available -%}
+                  {{ 'products.product.add_to_cart' | t | default: 'Add to cart' }}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t | default: 'Sold out' }}
+                {%- endif -%}
+              </span>
+            </button>
+            {% # theme-check-enable ValidScopedCSSClass %}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <script type="application/json" data-product-json>
+      {{ product.variants | json }}
+    </script>
+
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Product resource",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_product-vendor"
+    },
+    {
+      "type": "_product-title"
+    },
+    {
+      "type": "_product-price"
+    },
+    {
+      "type": "_product-description"
+    },
+    {
+      "type": "_product-info"
+    },
+    {
+      "type": "_product-reviews"
+    },
+    {
+      "type": "_product-variant-picker"
+    },
+    {
+      "type": "_product-quantity"
+    },
+    {
+      "type": "_product-buy-buttons"
+    },
+    {
+      "type": "_product-payment-guarantee"
+    },
+    {
+      "type": "_product-return-policy"
+    },
+    {
+      "type": "_product-share"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "t:sections.main_product.settings.show_breadcrumbs.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_cart",
+      "label": "t:sections.main_product.settings.enable_sticky_cart.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_product.settings.share_platforms_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "share_copy",
+      "label": "t:sections.main_product.settings.share_copy.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_whatsapp",
+      "label": "t:sections.main_product.settings.share_whatsapp.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_facebook",
+      "label": "t:sections.main_product.settings.share_facebook.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_x",
+      "label": "t:sections.main_product.settings.share_x.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_pinterest",
+      "label": "t:sections.main_product.settings.share_pinterest.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_telegram",
+      "label": "t:sections.main_product.settings.share_telegram.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_linkedin",
+      "label": "t:sections.main_product.settings.share_linkedin.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_email",
+      "label": "t:sections.main_product.settings.share_email.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "media_height",
+      "label": "t:sections.main_product.settings.media_height.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main_product.settings.media_height.options.adapt"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.main_product.settings.media_height.options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main_product.settings.media_height.options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.main_product.settings.media_height.options.large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "t:sections.main_product.settings.media_fit.label",
+      "options": [
+        {
+          "value": "cover",
+          "label": "t:sections.main_product.settings.media_fit.options.cover"
+        },
+        {
+          "value": "contain",
+          "label": "t:sections.main_product.settings.media_fit.options.contain"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "t:common.padding.header"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product resource",
+      "blocks": [
+        {
+          "type": "_product-vendor"
+        },
+        {
+          "type": "_product-title"
+        },
+        {
+          "type": "_product-price"
+        },
+        {
+          "type": "_product-variant-picker"
+        },
+        {
+          "type": "_product-quantity"
+        },
+        {
+          "type": "_product-buy-buttons"
+        },
+        {
+          "type": "_product-description",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Description:"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_product-payment-guarantee",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Payment methods"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

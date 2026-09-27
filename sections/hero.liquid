@@ -1,0 +1,308 @@
+{%- liquid
+  assign width_class = 'hero-layout__inner--' | append: section.settings.max_width
+-%}
+
+<section
+  id="Hero-{{ section.id }}"
+  class="hero-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--hero-padding-top: {{ section.settings.padding_top }}px; --hero-padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="hero-layout__inner {{ width_class }}">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero-layout {
+    width: 100%;
+    padding-block: var(--hero-padding-top, 0) var(--hero-padding-bottom, 0);
+    color: var(--color-text);
+    background: var(--color-background);
+  }
+
+  .hero-layout__inner {
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .hero-layout__inner--page {
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--page-width));
+  }
+
+  .hero-layout__inner--narrow {
+    width: min(
+      calc(100% - (2 * var(--foundation-gutter-mobile))),
+      var(--foundation-content-width-narrow)
+    );
+  }
+
+  @media (min-width: 750px) {
+    .hero-layout__inner--page,
+    .hero-layout__inner--narrow {
+      width: min(
+        calc(100% - (2 * var(--foundation-gutter-desktop))),
+        var(--hero-layout-width, var(--page-width))
+      );
+    }
+
+    .hero-layout__inner--narrow {
+      --hero-layout-width: var(--foundation-content-width-narrow);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "hero-layout-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_hero-media" },
+    { "type": "_hero-carousel" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Maximum width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero — editorial carousel",
+      "settings": {
+        "max_width": "full"
+      },
+      "blocks": [
+        {
+          "type": "_hero-carousel",
+          "blocks": [
+            {
+              "type": "_hero-slide",
+              "blocks": [
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Gather beautifully",
+                    "style": "on-media"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Made for the moments between",
+                    "level": "h1",
+                    "size": "display",
+                    "color_role": "on_media",
+                    "max_width": 18
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+                    "size": "large",
+                    "color_role": "on_media",
+                    "max_width": 48
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Explore collection",
+                    "style": "outline",
+                    "icon": "arrow-right"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_hero-slide",
+              "settings": {
+                "content_position": "end"
+              },
+              "blocks": [
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Architectural seating",
+                    "style": "on-media"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Precision lines, enduring comfort",
+                    "level": "h2",
+                    "size": "display",
+                    "color_role": "on_media",
+                    "max_width": 18
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Elevated proportions meet thoughtful materials for contemporary living spaces.</p>",
+                    "size": "large",
+                    "color_role": "on_media",
+                    "max_width": 48
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop seating",
+                    "style": "outline"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_hero-slide",
+              "blocks": [
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Living icons",
+                    "style": "on-media"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Designed to stay in memory",
+                    "level": "h2",
+                    "size": "display",
+                    "color_role": "on_media",
+                    "max_width": 18
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Every seam and curve is shaped by mindful material selection and lasting craft.</p>",
+                    "size": "large",
+                    "color_role": "on_media",
+                    "max_width": 48
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    },
+    {
+      "name": "Hero — gradient media",
+      "settings": {
+        "max_width": "full"
+      },
+      "blocks": [
+        {
+          "type": "_hero-media",
+          "settings": {
+            "media_side": "right",
+            "scrim_tone": "dark",
+            "height": "medium"
+          },
+          "blocks": [
+            {
+              "type": "badge",
+              "settings": {
+                "label": "New collection",
+                "style": "on-media"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Designed to last, made to love",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media",
+                "max_width": 18
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Thoughtful essentials made with enduring materials and effortless form.</p>",
+                "size": "large",
+                "color_role": "on_media",
+                "max_width": 48
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop collection",
+                "style": "primary"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Our approach",
+                "style": "outline"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ]
+}
+{% endschema %}

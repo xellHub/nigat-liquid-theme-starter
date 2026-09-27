@@ -1,0 +1,418 @@
+<div class="section-extension section-extension--header" {{ block.shopify_attributes }}>
+  {%- comment -%} Site header: logo, navigation, search, cart. {%- endcomment -%}
+
+  {%- liquid
+    assign menu = block.settings.menu
+    assign cart_count = cart.item_count
+  -%}
+
+  <header
+    class="header {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}{% if block.settings.sticky %} header--sticky{% endif %}"
+    data-header
+  >
+    <div class="header__inner page-width">
+      <button
+        type="button"
+        class="header__menu-toggle button button--icon"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="MobileMenu"
+        aria-label="{{ 'accessibility.menu' | t }}"
+      >
+        {% render 'icon', name: 'menu' %}
+      </button>
+
+      <div class="header__logo">
+        {%- if settings.logo != blank -%}
+          {%- liquid
+            assign logo_sizes = settings.logo_width | append: 'px'
+            assign logo_style = 'width: ' | append: settings.logo_width | append: 'px;'
+            assign logo_alt = shop.name | escape
+          -%}
+          <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ shop.name }}">
+            {{
+              settings.logo
+              | image_url: width: 480
+              | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                widths: '120, 240, 360, 480',
+                sizes: logo_sizes,
+                class: 'header__logo-image',
+                alt: logo_alt,
+                style: logo_style
+            }}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="header__logo-link header__logo-text">
+            {{- shop.name -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if menu != blank -%}
+        <nav class="header__nav" aria-label="{{ 'accessibility.menu' | t }}">
+          <ul class="header__menu" role="list">
+            {%- for link in menu.links -%}
+              <li class="header__menu-item{% if link.links != blank %} header__menu-item--has-children{% endif %}">
+                {%- if link.links != blank -%}
+                  <details class="header__dropdown">
+                    <summary class="header__menu-link">
+                      {{ link.title | escape }}
+                      {% render 'icon', name: 'chevron-down', class: 'header__menu-caret' %}
+                    </summary>
+                    <div class="header__mega-panel">
+                    <a class="header__submenu-link" href="{{ link.url }}">{{ 'general.navigation.view_all' | t: title: link.title }}</a>
+                    <ul class="header__submenu" role="list">
+                      {%- for child in link.links -%}
+                        <li>
+                          <a
+                            href="{{ child.url }}"
+                            class="header__submenu-link{% if child.current %} header__menu-link--active{% endif %}"
+                            {% if child.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{ child.title | escape }}
+                          </a>
+                          {%- if child.links.size > 0 -%}
+                            <ul class="header__submenu-nested" role="list">
+                              {%- for grandchild in child.links -%}
+                                <li><a href="{{ grandchild.url }}" {% if grandchild.current %}aria-current="page"{% endif %}>{{ grandchild.title | escape }}</a></li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                    {% content_for 'block', type: '_header-mega-promo', id: 'mega-promo', menu_resource_id: link.object.id %}
+                    </div>
+                  </details>
+                {%- else -%}
+                  <a
+                    href="{{ link.url }}"
+                    class="header__menu-link{% if link.current %} header__menu-link--active{% endif %}"
+                    {% if link.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{ link.title | escape }}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+      <div class="header__actions">
+        {%- if block.settings.show_search -%}
+          <a
+            href="{{ routes.search_url }}"
+            class="header__action button button--icon"
+            data-search-toggle
+            aria-label="{{ 'accessibility.search' | t }}"
+          >
+            {% render 'icon', name: 'search' %}
+          </a>
+        {%- endif -%}
+
+        {%- if shop.customer_accounts_enabled -%}
+          {%- capture account_trigger -%}
+          {%- if customer -%}
+            <span class="header__account-avatar" aria-hidden="true">{{ customer.first_name | default: customer.email | slice: 0, 1 | upcase }}</span>
+          {%- else -%}
+            {% render 'icon', name: 'account' %}
+          {%- endif -%}
+        {%- endcapture -%}
+
+          {%- capture account_panel_content -%}
+          {%- if customer -%}
+            <div class="header__account-profile">
+              <span class="header__account-avatar header__account-avatar--large" aria-hidden="true">{{ customer.first_name | default: customer.email | slice: 0, 1 | upcase }}</span>
+              <div>
+                <strong>{{ customer.name | default: customer.email | escape }}</strong>
+                <span>{{ customer.email | escape }}</span>
+              </div>
+            </div>
+            <nav class="header__account-links" aria-label="{{ 'general.header.account_menu' | t }}">
+              <a href="{{ routes.account_url }}">{{ 'general.header.account_overview' | t }}</a>
+              <a href="{{ routes.account_profile_url }}">{{ 'general.header.profile_notifications' | t }}</a>
+              <a href="{{ routes.account_addresses_url }}">{{ 'general.header.addresses' | t }}</a>
+              <a href="{{ routes.account_url }}">{{ 'general.header.payments_security' | t }}</a>
+            </nav>
+            <a class="header__account-signout" href="{{ routes.account_logout_url }}" rel="nofollow">{{ 'general.header.sign_out' | t }}</a>
+          {%- else -%}
+            <div class="header__account-profile header__account-profile--signed-out">
+              <span class="header__account-avatar header__account-avatar--large" aria-hidden="true">{% render 'icon', name: 'account' %}</span>
+              <div>
+                <strong>{{ 'general.header.your_account' | t }}</strong>
+                <span>{{ 'general.header.sign_in_details' | t }}</span>
+              </div>
+            </div>
+            <div class="header__account-links header__account-links--disabled" aria-label="{{ 'general.header.account_options_unavailable' | t }}">
+              <span>{{ 'general.header.orders_account' | t }}</span>
+              <span>{{ 'general.header.addresses' | t }}</span>
+              <span>{{ 'general.header.payments_security' | t }}</span>
+            </div>
+            <a class="header__account-signin" href="{{ routes.storefront_login_url }}" rel="nofollow">
+              <span class="header__account-signin-provider" aria-hidden="true">{% render 'icon', name: 'account' %}</span>
+              <span>{{ 'general.header.sign_in_securely' | t }}</span>
+              {% render 'icon', name: 'arrow-right' %}
+            </a>
+          {%- endif -%}
+        {%- endcapture -%}
+
+          {% assign account_aria_label = 'general.header.account_menu' | t %}
+          {% render 'overlay',
+            type: 'popover',
+            id: 'HeaderAccountPopover',
+            class: 'header__account',
+            trigger_class: 'header__account-trigger header__action button button--icon',
+            trigger_content: account_trigger,
+            panel_class: 'header__account-panel',
+            content: account_panel_content,
+            aria_label: account_aria_label,
+            position: 'bottom-end',
+            backdrop_dismiss: true
+          %}
+        {%- endif -%}
+
+        <button
+          type="button"
+          class="header__action header__theme-toggle button button--icon"
+          data-theme-toggle
+          data-light-mode-label="{{ 'general.header.switch_to_light_mode' | t | escape }}"
+          data-dark-mode-label="{{ 'general.header.switch_to_dark_mode' | t | escape }}"
+          aria-pressed="false"
+          aria-label="{{ 'general.header.toggle_dark_mode' | t }}"
+        >
+          <span data-theme-icon="moon">{% render 'icon', name: 'moon' %}</span>
+          <span data-theme-icon="sun" hidden>{% render 'icon', name: 'sun' %}</span>
+        </button>
+
+        <div class="header__palette-picker" data-palette-picker>
+          <button
+            type="button"
+            class="header__action header__palette-toggle button button--icon"
+            data-palette-toggle
+            aria-expanded="false"
+            aria-controls="PaletteMenu"
+            aria-haspopup="menu"
+            aria-label="{{ 'general.header.choose_color_palette' | t }}"
+          >
+            {% render 'icon', name: 'palette' %}
+          </button>
+          <div
+            class="header__palette-menu"
+            id="PaletteMenu"
+            data-palette-menu
+            role="menu"
+            aria-label="{{ 'general.header.color_palettes' | t }}"
+            hidden
+          >
+            <button
+              type="button"
+              class="header__palette-option"
+              data-palette-option
+              data-palette="palette_1"
+              data-light-scheme="{{ settings.palette_1_light.id }}"
+              data-dark-scheme="{{ settings.palette_1_dark.id }}"
+              role="menuitemradio"
+              aria-checked="false"
+            >
+              <span
+                class="header__palette-swatch"
+                style="--palette-swatch: {{ settings.palette_1_light.settings.accent }};"
+              ></span
+              ><span>{{ settings.palette_1_name | escape }}</span>
+            </button>
+            <button
+              type="button"
+              class="header__palette-option"
+              data-palette-option
+              data-palette="palette_2"
+              data-light-scheme="{{ settings.palette_2_light.id }}"
+              data-dark-scheme="{{ settings.palette_2_dark.id }}"
+              role="menuitemradio"
+              aria-checked="false"
+            >
+              <span
+                class="header__palette-swatch"
+                style="--palette-swatch: {{ settings.palette_2_light.settings.accent }};"
+              ></span
+              ><span>{{ settings.palette_2_name | escape }}</span>
+            </button>
+            <button
+              type="button"
+              class="header__palette-option"
+              data-palette-option
+              data-palette="palette_3"
+              data-light-scheme="{{ settings.palette_3_light.id }}"
+              data-dark-scheme="{{ settings.palette_3_dark.id }}"
+              role="menuitemradio"
+              aria-checked="false"
+            >
+              <span
+                class="header__palette-swatch"
+                style="--palette-swatch: {{ settings.palette_3_light.settings.accent }};"
+              ></span
+              ><span>{{ settings.palette_3_name | escape }}</span>
+            </button>
+            <button
+              type="button"
+              class="header__palette-option"
+              data-palette-option
+              data-palette="palette_4"
+              data-light-scheme="{{ settings.palette_4_light.id }}"
+              data-dark-scheme="{{ settings.palette_4_dark.id }}"
+              role="menuitemradio"
+              aria-checked="false"
+            >
+              <span
+                class="header__palette-swatch"
+                style="--palette-swatch: {{ settings.palette_4_light.settings.accent }};"
+              ></span
+              ><span>{{ settings.palette_4_name | escape }}</span>
+            </button>
+            <button
+              type="button"
+              class="header__palette-option"
+              data-palette-option
+              data-palette="palette_5"
+              data-light-scheme="{{ settings.palette_5_light.id }}"
+              data-dark-scheme="{{ settings.palette_5_dark.id }}"
+              role="menuitemradio"
+              aria-checked="false"
+            >
+              <span
+                class="header__palette-swatch"
+                style="--palette-swatch: {{ settings.palette_5_light.settings.accent }};"
+              ></span
+              ><span>{{ settings.palette_5_name | escape }}</span>
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="header__action header__cart button button--icon"
+          data-cart-toggle
+          aria-expanded="false"
+          aria-controls="CartDrawer"
+          aria-label="{{ 'header.cart_count' | t: count: cart_count }}"
+        >
+          {% render 'icon', name: 'cart' %}
+          <span
+            class="header__cart-count{% if cart_count == 0 %} is-empty{% endif %}"
+            data-cart-count
+          >
+            {{- cart_count -}}
+          </span>
+        </button>
+
+        <div class="header__blocks">
+          {% content_for 'blocks' %}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Mobile menu drawer {%- endcomment -%}
+    {%- if menu != blank -%}
+      <div class="mobile-menu" id="MobileMenu" data-mobile-menu hidden>
+        <nav class="mobile-menu__nav" aria-label="{{ 'accessibility.menu' | t }}">
+          <ul class="mobile-menu__list" role="list">
+            {%- for link in menu.links -%}
+              <li class="mobile-menu__item">
+                {%- if link.links != blank -%}
+                  <details class="mobile-menu__details">
+                    <summary class="mobile-menu__link">
+                      {{ link.title | escape }}
+                      {% render 'icon', name: 'chevron-down' %}
+                    </summary>
+                    <a href="{{ link.url }}" class="mobile-menu__sublink">{{ 'general.navigation.view_all' | t: title: link.title }}</a>
+                    <ul class="mobile-menu__sublist" role="list">
+                      {%- for child in link.links -%}
+                        <li>
+                          <a href="{{ child.url }}" class="mobile-menu__sublink" {% if child.current %}aria-current="page"{% endif %}>
+                            {{- child.title | escape -}}
+                          </a>
+                          {%- if child.links.size > 0 -%}
+                            <ul class="mobile-menu__sublist" role="list">
+                              {%- for grandchild in child.links -%}
+                                <li><a href="{{ grandchild.url }}" class="mobile-menu__sublink" {% if grandchild.current %}aria-current="page"{% endif %}>{{ grandchild.title | escape }}</a></li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                {%- else -%}
+                  <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title | escape }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    {%- endif -%}
+  </header>
+</div>
+
+{% stylesheet %}
+  .header__mega-panel { position: absolute; z-index: 30; inset-block-start: calc(100% + .2rem); inset-inline-start: 0; width: min(80vw, 80rem); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-background); box-shadow: var(--shadow-md); }
+  .header__mega-panel:has(.header-mega-promo) { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: var(--space-4); }
+  .header__mega-panel > .header__submenu-link { display: inline-block; grid-column: 1 / -1; margin-block-end: var(--space-3); }
+  .header__menu-item:last-child .header__mega-panel { inset-inline-start: auto; inset-inline-end: 0; }
+  .header__mega-panel .header__submenu { position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); min-width: 0; padding: 0; border: 0; box-shadow: none; background: transparent; }
+  .header__submenu-nested { list-style: none; padding-inline-start: var(--space-3); }
+  .header__submenu-nested a { display: block; padding: var(--space-2); color: var(--color-muted); }
+  .header__submenu-nested a:hover, .header__submenu-nested a[aria-current="page"] { color: var(--color-accent); }
+  .mobile-menu__sublist .mobile-menu__sublist { padding-inline-start: var(--space-4); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Header content",
+  "tag": null,
+  "blocks": [
+    { "type": "button" },
+    { "type": "text" },
+    { "type": "icon-button" },
+    { "type": "_header-mega-promo" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.header.settings.menu.label",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "t:sections.header.settings.sticky.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "t:sections.header.settings.show_search.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header content"
+    }
+  ]
+}
+{% endschema %}

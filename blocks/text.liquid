@@ -1,0 +1,267 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign text_size = block.settings.size | default: 'inherit'
+  assign text_color = 'var(--color-text)'
+  if block.settings.color_role == 'muted'
+    assign text_color = 'var(--color-muted)'
+  elsif block.settings.color_role == 'on_media'
+    assign text_color = 'color-mix(in srgb, var(--color-on-media) 90%, transparent)'
+  endif
+-%}
+
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-text theme-text--{{ text_size }} theme-text--{{ block.settings.alignment }}"
+  style="--text-color: {{ text_color }}; --text-max-width: {{ block.settings.max_width }}ch; --text-custom-size: {{ block.settings.custom_size }}px;"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text }}
+</div>
+
+{% stylesheet %}
+  .theme-text {
+    width: 100%;
+    max-width: var(--text-max-width, 60ch);
+    color: var(--text-color, var(--color-text));
+    font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight);
+    line-height: var(--line-height-body);
+  }
+  .theme-text p {
+    margin: 0;
+  }
+  .theme-text em {
+    font-style: normal;
+  }
+  .theme-text--inherit {
+    font-size: calc(1.6rem * var(--font-body-scale));
+  }
+  .theme-text--small {
+    font-size: calc(1.3rem * var(--font-body-scale));
+  }
+  .theme-text--medium {
+    font-size: calc(1.6rem * var(--font-body-scale));
+  }
+  .theme-text--large {
+    font-size: calc(1.9rem * var(--font-body-scale));
+  }
+  .theme-text--custom {
+    font-size: var(--text-custom-size);
+  }
+  .theme-text--left {
+    margin-inline: 0 auto;
+    text-align: left;
+  }
+  .theme-text--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .theme-text--right {
+    margin-inline: auto 0;
+    text-align: right;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Text",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share details about your brand, product, or announcement.</p>"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Use global body size"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "custom_size",
+      "label": "Custom size",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "color_role",
+      "label": "Color",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "muted",
+          "label": "Muted"
+        },
+        {
+          "value": "on_media",
+          "label": "On media"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "ch",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text"
+    },
+    {
+      "name": "Muted text",
+      "settings": {
+        "color_role": "muted"
+      }
+    }
+  ]
+}
+{% endschema %}

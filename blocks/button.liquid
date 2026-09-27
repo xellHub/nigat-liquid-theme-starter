@@ -1,0 +1,363 @@
+{% # theme-check-disable UndefinedObject %}
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign final_link = block.settings.link
+  if final_link == blank
+    assign final_link = button_link | default: parent_link | default: card_link
+  endif
+
+  assign is_submit = false
+  if block.settings.link == blank
+    if button_element == 'submit' or button_action == 'submit'
+      assign is_submit = true
+    elsif form != blank and button_action == blank
+      assign is_submit = true
+    endif
+  endif
+
+  assign is_action = false
+  if block.settings.link == blank
+    if button_action != blank and button_action != 'submit'
+      assign is_action = true
+    elsif button_element == 'action' or button_element == 'button'
+      assign is_action = true
+    endif
+  endif
+-%}
+{% if is_submit %}
+  <button
+    class="{{ block.settings.foundation_custom_class | escape }} theme-button theme-button--{{ block.settings.style }} theme-button--{{ block.settings.size }}"
+    type="submit"
+    data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+    data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+    data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+    {{ block.shopify_attributes }}
+  >
+    <span>{{ block.settings.label | escape }}</span>
+    {% if block.settings.icon != 'none' -%}
+      {%- render 'icon', name: block.settings.icon, class: 'theme-button__icon' -%}
+    {%- endif %}
+  </button>
+{% elsif is_action %}
+  <button
+    class="{{ block.settings.foundation_custom_class | escape }} theme-button theme-button--{{ block.settings.style }} theme-button--{{ block.settings.size }}"
+    type="button"
+    data-action="{{ button_action | default: 'trigger' }}"
+    {% if button_target != blank %}
+      data-target="{{ button_target | escape }}"
+    {% endif %}
+    data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+    data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+    data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+    {{ block.shopify_attributes }}
+  >
+    <span>{{ block.settings.label | escape }}</span>
+    {% if block.settings.icon != 'none' -%}
+      {%- render 'icon', name: block.settings.icon, class: 'theme-button__icon' -%}
+    {%- endif %}
+  </button>
+{% else %}
+  <a
+    class="{{ block.settings.foundation_custom_class | escape }} theme-button theme-button--{{ block.settings.style }} theme-button--{{ block.settings.size }}"
+    href="{{ final_link | default: '#' }}"
+    {% if block.settings.open_in_new_tab %}
+      target="_blank" rel="noopener noreferrer"
+    {% endif %}
+    data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+    data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+    data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+    {{ block.shopify_attributes }}
+  >
+    <span>{{ block.settings.label | escape }}</span>
+    {% if block.settings.icon != 'none' -%}
+      {%- render 'icon', name: block.settings.icon, class: 'theme-button__icon' -%}
+    {%- endif %}
+  </a>
+{% endif %}
+{% # theme-check-enable UndefinedObject %}
+
+{% stylesheet %}
+  .theme-button {
+    display: inline-flex;
+    width: fit-content;
+    min-width: var(--foundation-minimum-target-size, 44px);
+    min-height: var(--control-height);
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--radius-button);
+    font-family: var(--font-body-family);
+    font-weight: var(--font-button-weight);
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform var(--motion-duration-fast) var(--motion-ease),
+      opacity var(--motion-duration-fast) var(--motion-ease);
+  }
+  .theme-button--small {
+    padding: var(--space-2) var(--space-4);
+    font-size: 1.3rem;
+  }
+  .theme-button--medium {
+    padding: var(--foundation-button-padding-y) var(--foundation-button-padding-x);
+    font-size: 1.5rem;
+  }
+  .theme-button--large {
+    padding: var(--space-4) var(--space-6);
+    font-size: 1.7rem;
+  }
+  .theme-button--primary {
+    color: var(--color-button-text);
+    background: var(--color-button);
+  }
+  html[data-primary-button-style='outline'] .theme-button--primary {
+    color: var(--color-button);
+    background: transparent;
+    border-color: var(--color-button);
+  }
+  html[data-primary-button-style='soft'] .theme-button--primary {
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-button) 16%, var(--color-background));
+    border-color: transparent;
+  }
+  .theme-button--secondary {
+    color: var(--color-secondary-button-text);
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  html[data-secondary-button-style='solid'] .theme-button--secondary {
+    background: var(--color-surface);
+    border-color: transparent;
+  }
+  html[data-secondary-button-style='outline'] .theme-button--secondary {
+    background: transparent;
+    border-color: var(--color-border);
+  }
+  html[data-secondary-button-style='ghost'] .theme-button--secondary {
+    background: transparent;
+    border-color: transparent;
+  }
+  .theme-button--outline {
+    color: currentColor;
+    background: transparent;
+    border-color: currentColor;
+  }
+  .theme-button--link {
+    min-height: var(--foundation-minimum-target-size, 44px);
+    padding: 0;
+    color: var(--color-accent);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+  .theme-button:hover {
+    opacity: 0.86;
+    transform: translateY(calc(var(--foundation-hover-lift) * -1));
+  }
+  .theme-button:focus-visible {
+    outline: var(--foundation-focus-ring-width) solid var(--foundation-focus-outline-color);
+    outline-offset: var(--foundation-focus-ring-offset);
+  }
+  .theme-button__icon {
+    width: 1.1em;
+    height: 1.1em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Optional custom link override; defaults to parent context URL if left empty"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "arrow-right",
+          "label": "Arrow right"
+        },
+        {
+          "value": "bag-plus",
+          "label": "Bag plus"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button"
+    },
+    {
+      "name": "Text link",
+      "settings": {
+        "style": "link",
+        "icon": "arrow-right"
+      }
+    }
+  ]
+}
+{% endschema %}

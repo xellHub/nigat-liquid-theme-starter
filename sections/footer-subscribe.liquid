@@ -1,0 +1,136 @@
+<section
+  id="FooterSubscribe-{{ section.id }}"
+  class="footer-subscribe-section section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--footer-sub-pt:{{ section.settings.padding_top }}px;--footer-sub-pb:{{ section.settings.padding_bottom }}px;"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% stylesheet %}
+  .footer-subscribe-section {
+    padding-block: var(--footer-sub-pt) var(--footer-sub-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer subscribe",
+  "tag": "section",
+  "class": "footer-subscribe-layout",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "blocks": [
+    {
+      "type": "_footer-subscribe"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer subscribe",
+      "category": "Information & Utility",
+      "blocks": [
+        {
+          "type": "_footer-subscribe",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "A More Thoughtful Way to Live",
+                "level": "h2",
+                "size": "large",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Be the first to discover new collections, thoughtful design ideas, and curated pieces for your space.</p>",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "newsletter-form",
+              "blocks": [
+                {
+                  "type": "input",
+                  "settings": {
+                    "label": "Email",
+                    "type": "email",
+                    "autocomplete": "email"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "SUBSCRIBE",
+                    "style": "primary",
+                    "icon": "arrow-right"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>We respect your inbox — only meaningful updates, always.</p>",
+                "size": "small",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,63 @@
+<section
+  id="shipping-rates-{{ section.id }}"
+  class="shipping-rates-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+  "name": "Shipping rates",
+  "tag": "section",
+  "class": "section-shipping-rates",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_shipping-rates-content" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shipping_rates.presets.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Shipping & Delivery Rates",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Transparent, fast, and secure delivery options tailored to your location.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        },
+        {
+          "type": "_shipping-rates-content"
+        }
+      ],
+      "category": "Information & Utility"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

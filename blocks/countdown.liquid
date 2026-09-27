@@ -1,0 +1,155 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{% if block.settings.end_date != blank %}
+<theme-countdown
+  class="{{ block.settings.foundation_custom_class | escape }} theme-countdown theme-countdown--{{ block.settings.style }}"
+  data-end="{{ block.settings.end_date | escape }}"
+  data-countdown
+  data-expired-behavior="{{ block.settings.expired_behavior }}"
+  data-expired-text="{{ block.settings.expired_text | escape }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+  ><time datetime="{{ block.settings.end_date | escape }}" data-countdown-value>{{ block.settings.fallback_text | escape }}</time></theme-countdown
+>
+{% endif %}
+{% stylesheet %}.theme-countdown { display: inline-flex; width: fit-content; padding: var(--space-2) var(--space-3); border-radius: var(--radius-button); color: var(--color-accent-text); background: var(--color-accent); font-family: var(--font-body-family); font-weight: var(--font-button-weight); }.theme-countdown--outline{border:var(--foundation-divider-width) solid var(--color-border);color:var(--color-text);background:transparent}.theme-countdown--plain{padding:0;color:var(--color-text);background:transparent}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Countdown",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End date (ISO 8601)",
+      "info": "Include a timezone, for example 2030-12-31T23:59:59Z"
+    },
+    {
+      "type": "text",
+      "id": "fallback_text",
+      "label": "Fallback text",
+      "default": "Countdown"
+    },
+    {
+      "type": "select",
+      "id": "expired_behavior",
+      "label": "When expired",
+      "options": [
+        { "value": "message", "label": "Show message" },
+        { "value": "hide", "label": "Hide countdown" }
+      ],
+      "default": "message"
+    },
+    { "type": "text", "id": "expired_text", "label": "Expired message", "default": "Ended" },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "accent", "label": "Accent" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "plain", "label": "Plain" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown"
+    }
+  ]
+}
+{% endschema %}

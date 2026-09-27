@@ -1,0 +1,187 @@
+{
+  "sections": {
+    "rates": {
+      "type": "shipping-rates",
+      "settings": {},
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Delivery Timelines & Methods",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Fast, carbon-conscious fulfillment dispatched directly to your doorstep.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        },
+        "content": {
+          "type": "_shipping-rates-content",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "content"
+      ]
+    },
+    "shipping_faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-intro": {
+          "type": "group",
+          "settings": {
+            "alignment": "center",
+            "gap": "2"
+          },
+          "blocks": {
+            "faq-intro-heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Everything You Need to Know",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            "faq-intro-text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Thoughtfully answered to make your experience seamless.</p>"
+              }
+            }
+          },
+          "block_order": [
+            "faq-intro-heading",
+            "faq-intro-text"
+          ]
+        },
+        "faq-layout": {
+          "type": "media-text",
+          "settings": {
+            "media_position": "start"
+          },
+          "blocks": {
+            "faq-media": {
+              "type": "_faq-media",
+              "settings": {
+                "aspect_ratio": "portrait"
+              }
+            },
+            "faq-content": {
+              "type": "accordion-items",
+              "blocks": {
+                "q_dispatch": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": true
+                  },
+                  "blocks": {
+                    "q_dispatch-answer": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Orders placed Monday through Friday before 2:00 PM EST are fulfilled and dispatched the same day. Orders placed on weekends or holidays ship the next business day.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "When will my order ship?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "q_dispatch-answer"
+                  ]
+                },
+                "q_customs": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "q_customs-answer": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes. All international shipments are delivered with duties and taxes prepaid (DDP). There are no unexpected fees upon delivery.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Are international duties and import taxes included?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "q_customs-answer"
+                  ]
+                },
+                "q_address": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "q_address-answer": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>If your package has not yet left our fulfillment facility, our support team can adjust your destination address. Please message us promptly via our contact page.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Can I update my delivery address after ordering?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "q_address-answer"
+                  ]
+                }
+              },
+              "block_order": [
+                "q_dispatch",
+                "q_customs",
+                "q_address"
+              ]
+            }
+          },
+          "block_order": [
+            "faq-media",
+            "faq-content"
+          ]
+        }
+      },
+      "block_order": [
+        "faq-intro",
+        "faq-layout"
+      ],
+      "settings": {
+        "page_width": 1300,
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "rates",
+    "shipping_faq"
+  ]
+}

@@ -1,0 +1,242 @@
+<div class="contact-form__main" {{ block.shopify_attributes }}>
+  {%- form 'contact', id: 'ContactForm', class: 'contact-form__form' -%}
+    {%- if form.posted_successfully? -%}
+      <div class="form-status form-status--success" tabindex="-1" autofocus role="status">
+        {% render 'icon', name: 'check', class: 'form-status__icon' %}
+        <p class="form-status__message">{{ 'templates.contact.form.post_success' | t }}</p>
+      </div>
+    {%- elsif form.errors -%}
+      <div class="form-status form-status--error" tabindex="-1" autofocus role="alert">
+        <p class="form-status__title">{{ 'templates.contact.form.error_heading' | t }}</p>
+        <ul class="form-status__list">
+          {%- for field in form.errors -%}
+            <li>
+              <a href="#ContactForm-{{ field }}" class="form-status__link">
+                {{ form.errors.translated_fields[field] | capitalize }}
+                {{ form.errors.messages[field] }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {% # theme-check-disable UnusedAssign %}
+    {%- assign button_element = 'submit' -%}
+    {% # theme-check-enable UnusedAssign %}
+
+    {% content_for 'blocks' %}
+  {%- endform -%}
+</div>
+
+{% stylesheet %}
+  .contact-form__main {
+    min-width: 0;
+    width: 100%;
+  }
+
+  @media (min-width: 750px) {
+    .contact-form__main {
+      border-left: 1px solid var(--color-border);
+      padding-left: 4.8rem;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .contact-form__main {
+      padding-left: 6.4rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .contact-form__main {
+      padding-left: 8rem;
+    }
+  }
+
+  .contact-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    width: 100%;
+  }
+
+  .contact-form__form .theme-group--row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    width: 100%;
+  }
+
+  @media (max-width: 749px) {
+    .contact-form__form .theme-group--row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-status {
+    padding: 1.6rem 2rem;
+    border-radius: var(--radius-card, var(--corner-radius, 8px));
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .form-status--success {
+    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+    color: var(--color-text);
+  }
+
+  .form-status--error {
+    background: color-mix(in srgb, var(--color-danger) 10%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent);
+    color: var(--color-text);
+  }
+
+  .form-status__icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  .form-status__message {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+
+  .form-status__title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 0.8rem;
+  }
+
+  .form-status__list {
+    margin: 0;
+    padding-left: 2rem;
+    font-size: 1.3rem;
+  }
+
+  .form-status__link {
+    color: inherit;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact form content",
+  "tag": null,
+  "blocks": [
+    { "type": "input" },
+    { "type": "select" },
+    { "type": "textarea" },
+    { "type": "button" },
+    { "type": "text" },
+    { "type": "heading" },
+    { "type": "group" },
+    { "type": "surface" },
+    { "type": "checkbox" },
+    { "type": "divider" },
+    { "type": "spacer" },
+    { "type": "@app" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Contact form content",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "input",
+              "settings": {
+                "label": "Name",
+                "type": "text",
+                "autocomplete": "name",
+                "placeholder": "Name"
+              }
+            },
+            {
+              "type": "input",
+              "settings": {
+                "label": "Email",
+                "type": "email",
+                "autocomplete": "email",
+                "placeholder": "Email"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "select",
+              "settings": {
+                "label": "Subject",
+                "options": "General question\nOrder & shipping\nProduct support\nReturns & exchanges\nPartnership & business\nOther",
+                "placeholder": "Select a subject"
+              }
+            },
+            {
+              "type": "input",
+              "settings": {
+                "label": "Phone number",
+                "type": "tel",
+                "autocomplete": "tel",
+                "placeholder": "Phone number"
+              }
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "settings": {
+            "label": "Comment",
+            "placeholder": "Comment",
+            "rows": 6,
+            "hint": "Please provide as much detail as possible."
+          }
+        },
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "justify": "between",
+            "alignment": "center",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Inquiries are answered within 24–48 hours.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Send",
+                "style": "primary",
+                "icon": "arrow-right"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- if product.description != blank -%}
+  <div class="product__description-block" {{ block.shopify_attributes }}>
+    <div class="product__description-header">
+      {% content_for 'blocks' %}
+    </div>
+    <div class="product__description rte product__description--clamped" data-product-description>
+      {{ product.description }}
+    </div>
+    <button
+      type="button"
+      class="product__description-toggle"
+      data-description-toggle
+      aria-expanded="false"
+    >
+      <span data-toggle-text-more>
+        {{- 'products.product.read_more' | t | default: 'Read more' -}}
+      </span>
+      <span data-toggle-text-less hidden>
+        {{- 'products.product.read_less' | t | default: 'Read less' -}}
+      </span>
+      {% render 'icon', name: 'chevron-down' %}
+    </button>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Description",
+  "tag": null,
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "@app" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Description",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Description:"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

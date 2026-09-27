@@ -1,0 +1,166 @@
+<section
+  id="collection-bento-{{ section.id }}"
+  class="collection-bento-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--layout-width:{{ section.settings.page_width }}px;--layout-pt:{{ section.settings.padding_top }}px;--layout-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="collection-bento-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.collection-bento-layout{padding-block:var(--layout-pt) var(--layout-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.collection-bento-layout__inner{display:flex;flex-direction:column;width:min(calc(100% - 2 * var(--foundation-gutter-mobile)),var(--layout-width));margin:auto;gap:var(--space-5)}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Collection list bento",
+  "tag": "section",
+  "class": "collection-list-bento-section",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "grid" },
+    { "type": "button" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 900,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1300
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list bento",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Shop collections",
+            "level": "h2",
+            "size": "large"
+          }
+        },
+        {
+          "type": "grid",
+          "settings": {
+            "columns_desktop": 12,
+            "columns_tablet": 12,
+            "columns_mobile": "1"
+          },
+          "blocks": [
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 1,
+                "overlay_surface": "background"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Collection one",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 2,
+                "overlay_surface": "background"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Collection two",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 3,
+                "overlay_surface": "background"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Collection three",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 4,
+                "overlay_surface": "background"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Collection four",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Collections"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

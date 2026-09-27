@@ -1,0 +1,152 @@
+{%- comment -%}
+  -----------------------------------------------------------------------------
+  Overlay Component Primitive (React-style composable component for Liquid)
+  -----------------------------------------------------------------------------
+  Supports 4 reusable overlay primitives:
+    1. 'popover'   - Floating panel anchored to trigger (e.g. User account popover)
+    2. 'drawer'    - Off-canvas sheet sliding in from an edge (e.g. Cart, navigation)
+    3. 'modal'     - Centered dialog overlay (e.g. Quick view, confirmation)
+    4. 'dropdown'  - Anchored action menu list (e.g. Currency/locale, filter menu)
+
+  Backdrop features:
+    - Automatically renders an accessible backdrop for all 4 types.
+    - Default behavior: Closes on backdrop click.
+    - Override behavior: Pass `backdrop_dismiss: false` to prevent closing on backdrop click
+      (triggers visual feedback and dispatches 'overlay:backdrop-click').
+    - Custom backdrop: Pass `custom_backdrop` (HTML / Liquid string) to override the default backdrop.
+    - Custom backdrop class: Pass `backdrop_class` to apply custom styling.
+
+  Arguments:
+    - type: 'popover' | 'drawer' | 'modal' | 'dropdown' (default: 'popover')
+    - id: Unique DOM identifier (required)
+    - class: Additional CSS class(es) on root <theme-overlay>
+    - trigger_tag: 'button' | 'summary' | 'a' (default: 'button')
+    - trigger_class: Class(es) on the trigger element
+    - trigger_content: HTML/Liquid content for the trigger button
+    - trigger_attributes: Additional arbitrary HTML attributes for trigger
+    - content: HTML/Liquid content inside the overlay panel
+    - panel_class: Class(es) on the panel element
+    - panel_attributes: Additional arbitrary HTML attributes for panel
+    - backdrop_dismiss: boolean (default: true). Set false to override default close behavior.
+    - backdrop_class: Class(es) on the backdrop
+    - custom_backdrop: Custom HTML/Liquid to replace the default backdrop
+    - position: For popover/dropdown ('bottom-end', 'bottom-start', 'bottom-center', 'top-start', 'top-end').
+                For drawer ('right', 'left', 'top', 'bottom').
+                Default: 'bottom-end' for popover, 'right' for drawer, 'center' for modal.
+    - open: boolean (default: false). Initial open state.
+    - aria_label: Accessible label for the dialog / panel
+    - close_button: boolean (default: false for popover/dropdown, true for modal/drawer if not specified).
+    - close_button_class: Class(es) for the built-in close button
+    - custom_attributes: Arbitrary HTML attributes on the root <theme-overlay> element
+  -----------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- liquid
+  assign overlay_type = type | default: 'popover'
+  assign overlay_id = id | default: 'overlay-' | append: ''
+  if id == blank
+    assign random_number = 'now' | date: '%N' | modulo: 10000
+    assign overlay_id = 'overlay-' | append: random_number
+  endif
+
+  if backdrop_dismiss == null
+    assign should_backdrop_dismiss = true
+  else
+    assign should_backdrop_dismiss = backdrop_dismiss
+  endif
+
+  assign default_position = 'bottom-end'
+  if overlay_type == 'drawer'
+    assign default_position = 'right'
+  elsif overlay_type == 'modal'
+    assign default_position = 'center'
+  elsif overlay_type == 'dropdown'
+    assign default_position = 'bottom-start'
+  endif
+  assign overlay_position = position | default: default_position
+
+  assign render_close_btn = false
+  if close_button != null
+    assign render_close_btn = close_button
+  elsif overlay_type == 'modal' or overlay_type == 'drawer'
+    assign render_close_btn = true
+  endif
+-%}
+
+<theme-overlay
+  id="{{ overlay_id }}"
+  class="theme-overlay theme-overlay--{{ overlay_type }} theme-overlay--position-{{ overlay_position }}{% if open %} is-open{% endif %}{% if class != blank %} {{ class }}{% endif %}"
+  data-overlay-type="{{ overlay_type }}"
+  data-overlay-position="{{ overlay_position }}"
+  data-backdrop-dismiss="{% if should_backdrop_dismiss %}true{% else %}false{% endif %}"
+  {% if open %}
+    open
+  {% endif %}
+  {{ custom_attributes }}
+>
+  {%- comment -%} 1. Trigger (optional if trigger is rendered externally) {%- endcomment -%}
+  {%- if trigger_content != blank -%}
+    {%- assign tag_name = trigger_tag | default: 'button' -%}
+    <{{ tag_name }}
+      {% if tag_name == 'button' %}
+        type="button"
+      {% endif %}
+      id="{{ overlay_id }}-trigger"
+      class="theme-overlay__trigger{% if trigger_class != blank %} {{ trigger_class }}{% endif %}"
+      {% if trigger_aria_label != blank %}
+        aria-label="{{ trigger_aria_label | escape }}"
+      {% elsif aria_label != blank %}
+        aria-label="{{ aria_label | escape }}"
+      {% endif %}
+      aria-haspopup="{% if overlay_type == 'dropdown' %}menu{% else %}dialog{% endif %}"
+      aria-expanded="{% if open %}true{% else %}false{% endif %}"
+      aria-controls="{{ overlay_id }}-panel"
+      data-overlay-trigger
+      {{ trigger_attributes }}
+    >
+      {{ trigger_content }}
+    </{{ tag_name }}>
+  {%- endif -%}
+
+  {%- comment -%} 2. Backdrop (built-in or custom argument) {%- endcomment -%}
+  {%- if custom_backdrop != blank -%}
+    <div class="theme-overlay__backdrop-wrapper" data-overlay-custom-backdrop>
+      {{ custom_backdrop }}
+    </div>
+  {%- else -%}
+    {% render 'overlay-backdrop',
+      type: overlay_type,
+      class: backdrop_class,
+      backdrop_dismiss: should_backdrop_dismiss,
+      attributes: backdrop_attributes
+    %}
+  {%- endif -%}
+
+  {%- comment -%} 3. Panel / Dialog Content {%- endcomment -%}
+  <div
+    id="{{ overlay_id }}-panel"
+    class="theme-overlay__panel theme-overlay__panel--{{ overlay_type }}{% if panel_class != blank %} {{ panel_class }}{% endif %}"
+    role="{% if overlay_type == 'dropdown' %}menu{% else %}dialog{% endif %}"
+    aria-modal="{% if overlay_type == 'modal' or overlay_type == 'drawer' %}true{% else %}false{% endif %}"
+    {% if aria_label != blank %}
+      aria-label="{{ aria_label | escape }}"
+    {% endif %}
+    {% unless open %}
+      hidden
+    {% endunless %}
+    data-overlay-panel
+    {{ panel_attributes }}
+  >
+    {%- if render_close_btn -%}
+      <button
+        type="button"
+        class="theme-overlay__close-button button button--icon{% if close_button_class != blank %} {{ close_button_class }}{% endif %}"
+        data-overlay-close
+        aria-label="{{ 'accessibility.close' | t | default: 'Close' }}"
+      >
+        {% render 'icon', name: 'close' %}
+      </button>
+    {%- endif -%}
+    {{ content }}
+  </div>
+</theme-overlay>

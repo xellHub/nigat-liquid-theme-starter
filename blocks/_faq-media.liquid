@@ -1,0 +1,100 @@
+<div class="faq-media faq-media--{{ block.settings.aspect_ratio }}" {{ block.shopify_attributes }}>
+  <div class="faq-media__frame">
+    {% if block.settings.image != blank %}
+      {{
+        block.settings.image
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'lazy',
+          widths: '400, 600, 800, 1000, 1200, 1400',
+          sizes: '(min-width: 900px) 45vw, 95vw',
+          class: 'faq-media__image',
+          alt: block.settings.alt_text
+      }}
+    {% else %}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'faq-media__placeholder' }}
+    {% endif %}
+  </div>
+
+  {% if block.settings.show_accent and block.settings.accent_image != blank %}
+    <div class="faq-media__accent" aria-hidden="true">
+      {{
+        block.settings.accent_image
+        | image_url: width: 320
+        | image_tag: loading: 'lazy', class: 'faq-media__accent-image', alt: ''
+      }}
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .faq-media {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+  }
+  .faq-media__frame {
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    background: var(--color-surface);
+  }
+  .faq-media--portrait .faq-media__frame {
+    aspect-ratio: 4 / 5;
+  }
+  .faq-media--square .faq-media__frame {
+    aspect-ratio: 1;
+  }
+  .faq-media__image,
+  .faq-media__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .faq-media--auto .faq-media__image {
+    height: auto;
+  }
+  .faq-media__accent {
+    position: absolute;
+    right: calc(-1 * var(--space-6));
+    bottom: calc(-1 * var(--space-5));
+    width: clamp(8rem, 24%, 14rem);
+    color: var(--color-accent);
+    pointer-events: none;
+  }
+  .faq-media__accent-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ decorated media",
+  "tag": null,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt_text", "label": "Alternative text" },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" },
+        { "value": "auto", "label": "Natural" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accent",
+      "label": "Show decorative accent",
+      "default": false
+    },
+    { "type": "image_picker", "id": "accent_image", "label": "Accent image" }
+  ],
+  "presets": [{ "name": "FAQ decorated media" }]
+}
+{% endschema %}

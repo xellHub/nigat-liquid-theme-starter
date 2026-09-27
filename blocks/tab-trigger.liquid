@@ -1,0 +1,145 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<button
+  class="{{ block.settings.foundation_custom_class | escape }} theme-tab-trigger"
+  type="button"
+  role="tab"
+  aria-selected="{{ block.settings.default_open }}"
+  data-tab-trigger="{{ block.settings.target | handle }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  <span>{{ block.settings.label | escape }}</span>
+  {%- if block.settings.icon != 'none' %}{% render 'icon', name: block.settings.icon %}{% endif %}
+</button>
+{% stylesheet %}.theme-tab-trigger{display:inline-flex;min-height:var(--foundation-minimum-target-size);align-items:center;gap:var(--space-2);padding-inline:var(--space-3);border:0;border-block-end:var(--foundation-divider-width) solid transparent;color:var(--color-muted);background:transparent;font:inherit;cursor:pointer}.theme-tab-trigger[aria-selected=true]{border-color:var(--color-accent);color:var(--color-text)}.theme-tab-trigger .icon{width:1em;height:1em}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Tab trigger",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Tab"
+    },
+    {
+      "type": "text",
+      "id": "target",
+      "label": "Panel identifier",
+      "default": "tab-panel"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "arrow-right", "label": "Arrow right" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "none"
+    },
+    { "type": "checkbox", "id": "default_open", "label": "Selected by default", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tab trigger"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,208 @@
+{%- comment -%}
+  Renders a product card for grids.
+
+  Accepts:
+  - card_product: {Object} the product (required)
+  - image_ratio: {String} 'adapt' | 'square' | 'portrait' (optional, falls back to setting)
+  - show_vendor: {Boolean} (optional, falls back to setting)
+  - show_second_image: {Boolean} (optional, falls back to setting)
+  - sizes: {String} sizes attribute for the image (optional)
+  - lazy: {Boolean} lazy-load image (optional, default true)
+
+  Usage:
+  {% render 'product-card', card_product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = image_ratio | default: settings.card_image_ratio
+  assign show_vendor_flag = show_vendor | default: settings.card_show_vendor, allow_false: true
+  assign show_second = show_second_image | default: settings.card_show_second_image, allow_false: true
+  assign show_swatches_flag = show_swatches | default: false, allow_false: true
+  assign card_sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+
+  assign loading_attr = 'lazy'
+  if lazy == false
+    assign loading_attr = 'eager'
+  endif
+
+  assign aspect = 1
+  case ratio
+    when 'square'
+      assign aspect = 1
+    when 'portrait'
+      assign aspect = 0.75
+    when 'adapt'
+      assign aspect = card_product.featured_media.aspect_ratio | default: 1
+  endcase
+
+  assign has_second_image = false
+  if show_second and card_product.media.size > 1
+    assign has_second_image = true
+  endif
+-%}
+
+{%- if card_product and card_product != empty -%}
+  <div class="product-card" style="--card-aspect: {{ aspect }};">
+    <div class="product-card__media-wrap">
+      <a
+        href="{{ card_product.url }}"
+        class="product-card__link"
+        aria-labelledby="card-title-{{ card_product.id }}"
+      >
+        <div class="product-card__media media media--ratio">
+          {%- if card_product.featured_media -%}
+            {%- assign primary_alt = card_product.featured_media.alt | default: card_product.title -%}
+            {{
+              card_product.featured_media
+              | image_url: width: 800
+              | image_tag:
+                loading: loading_attr,
+                sizes: card_sizes,
+                widths: '165, 360, 533, 720, 940, 1066',
+                class: 'product-card__image product-card__image--primary',
+                alt: primary_alt
+            }}
+            {%- if has_second_image -%}
+              {%- assign secondary_alt = card_product.media[1].alt | default: card_product.title -%}
+              {{
+                card_product.media[1]
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: card_sizes,
+                  widths: '165, 360, 533, 720, 940, 1066',
+                  class: 'product-card__image product-card__image--secondary',
+                  alt: secondary_alt
+              }}
+            {%- endif -%}
+          {%- else -%}
+            <div class="placeholder-image">
+              {% render 'placeholder-image', variant: 'product_1' %}
+            </div>
+          {%- endif -%}
+
+          {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
+            {%- assign discount_percent = card_product.compare_at_price
+              | minus: card_product.price
+              | times: 100.0
+              | divided_by: card_product.compare_at_price
+              | round
+            -%}
+            <span class="product-card__badge badge badge--sale">
+              {{ discount_percent }}% {{ 'general.search.off' | t | default: 'Off' }}
+            </span>
+          {%- elsif card_product.available == false -%}
+            <span class="product-card__badge badge badge--sold-out">
+              {{- 'products.product.sold_out' | t -}}
+            </span>
+          {%- endif -%}
+        </div>
+      </a>
+
+      <button
+        type="button"
+        class="product-card__wishlist-btn"
+        data-floating-wishlist
+        data-wishlist-add-label="{{ 'products.product.add_to_wishlist' | t | escape }}"
+        data-wishlist-saved-label="{{ 'products.product.saved_to_wishlist' | t | escape }}"
+        data-product-id="{{ card_product.id }}"
+        data-variant-id="{{ card_product.selected_or_first_available_variant.id }}"
+        data-product-title="{{ card_product.title | escape }}"
+        aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+        title="{{ 'products.product.add_to_wishlist' | t }}"
+      >
+        {% render 'icon', name: 'heart' %}
+      </button>
+    </div>
+
+    <div class="product-card__info">
+      {%- if show_vendor_flag and card_product.vendor != blank -%}
+        <p class="product-card__vendor caption">{{ card_product.vendor | escape }}</p>
+      {%- endif -%}
+      <div class="product-card__title-row">
+        <h3 class="product-card__title" id="card-title-{{ card_product.id }}">
+          <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+        </h3>
+        {%- assign card_rating = card_product.metafields.reviews.rating.value -%}
+        {%- if card_rating != blank and card_rating.scale_max > 0 -%}
+          <span
+            class="product-card__rating"
+            aria-label="{{ 'products.product.rating_aria' | t: rating: card_rating.rating, scale: card_rating.scale_max }}"
+          >
+            <span class="product-card__rating-star" aria-hidden="true">&#9733;</span>
+            <span class="product-card__rating-score">
+              {{- card_rating.rating | round: 1 -}}/{{- card_rating.scale_max -}}
+            </span>
+          </span>
+        {%- endif -%}
+      </div>
+
+      {%- assign subtitle_parts = '' -%}
+      {%- for option in card_product.options_with_values -%}
+        {%- assign opt_name = option.name | downcase -%}
+        {%- if opt_name contains 'fit'
+          or opt_name contains 'color'
+          or opt_name contains 'colour'
+          or opt_name contains 'style'
+        -%}
+          {%- if subtitle_parts != '' -%}
+            {%- assign subtitle_parts = subtitle_parts | append: ' &middot; ' -%}
+          {%- endif -%}
+          {%- assign subtitle_parts = subtitle_parts | append: option.values[0] -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if subtitle_parts == blank and card_product.type != blank -%}
+        {%- assign subtitle_parts = card_product.type -%}
+      {%- endif -%}
+      {%- if subtitle_parts != blank -%}
+        <p class="product-card__subtitle caption">{{ subtitle_parts }}</p>
+      {%- endif -%}
+
+      <div class="product-card__price">
+        {% render 'price', product: card_product %}
+      </div>
+
+      {%- if show_swatches_flag and card_product.has_only_default_variant == false -%}
+        {%- for option in card_product.options_with_values -%}
+          {%- assign option_name = option.name | downcase -%}
+          {%- if option_name contains 'color'
+            or option_name contains 'colour'
+            or option_name contains 'style'
+          -%}
+            <div class="product-card__variants" aria-label="{{ option.name | escape }} options">
+              <span class="visually-hidden">{{ option.name | escape }}</span>
+              {%- for option_value in option.values limit: 5 -%}
+                {%- assign matched_variant = blank -%}
+                {%- for variant in card_product.variants -%}
+                  {%- if variant.available and variant.options contains option_value.name -%}
+                    {%- assign matched_variant = variant -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if matched_variant != blank -%}
+                  <a
+                    class="product-card__variant-swatch"
+                    href="{{ card_product.url }}?variant={{ matched_variant.id }}"
+                    aria-label="{{ option.name | escape }}: {{ option_value.name | escape }}"
+                    {% if option_value.swatch.color != blank %}
+                      style="--product-card-swatch: {{ option_value.swatch.color }};"
+                    {% endif %}
+                    ><span aria-hidden="true">{{ option_value.name | slice: 0 }}</span></a
+                  >
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if option.values.size > 5 -%}
+                <span
+                  class="product-card__variant-more"
+                  aria-label="{{ option.values.size | minus: 5 }} more {{ option.name | escape }} options"
+                  >+{{ option.values.size | minus: 5 -}}
+                </span>
+              {%- endif -%}
+            </div>
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

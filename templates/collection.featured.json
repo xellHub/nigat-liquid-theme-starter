@@ -1,0 +1,157 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "media": {
+          "type": "_hero-media",
+          "settings": {
+            "media_side": "right",
+            "scrim_tone": "dark",
+            "height": "small"
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "badge",
+              "settings": {
+                "label": "Editor's selection",
+                "style": "on-media"
+              }
+            },
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Featured releases",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media",
+                "max_width": 18
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Explore our editor's picks, signature silhouettes, and limited-batch arrivals.</p>",
+                "size": "large",
+                "color_role": "on_media",
+                "max_width": 48
+              }
+            },
+            "primary": {
+              "type": "button",
+              "settings": {
+                "label": "All products",
+                "link": "/collections/all",
+                "style": "primary",
+                "icon": "arrow-right"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "text",
+            "primary"
+          ]
+        }
+      },
+      "block_order": [
+        "media"
+      ],
+      "settings": {
+        "max_width": "full",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "page_width": 1400,
+        "padding_top": 48,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "content": {
+          "type": "_catalog-results",
+          "settings": {
+            "mode": "collection",
+            "items_per_page": 16,
+            "columns_desktop": 4,
+            "enable_sorting": true,
+            "enable_filtering": true
+          },
+          "blocks": {
+            "product-card": {
+              "type": "product-card",
+              "static": true,
+              "settings": {
+                "product": "{{ closest.product }}"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "settings": {
+                    "image": "{{ closest.product.featured_image }}",
+                    "link": "{{ closest.product.url }}",
+                    "alt": "{{ closest.product.title }}"
+                  }
+                },
+                "sale-badge": {
+                  "type": "badge",
+                  "settings": {
+                    "product": "{{ closest.product }}",
+                    "mode": "sale"
+                  }
+                },
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.product.title }}",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "rating": {
+                  "type": "rating",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "view-product": {
+                  "type": "button",
+                  "settings": {
+                    "label": "View product",
+                    "style": "link",
+                    "link": "{{ closest.product.url }}"
+                  }
+                }
+              },
+              "block_order": [
+                "image",
+                "sale-badge",
+                "title",
+                "price",
+                "rating",
+                "view-product"
+              ]
+            }
+          }
+        }
+      },
+      "block_order": [
+        "content"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "main"
+  ]
+}

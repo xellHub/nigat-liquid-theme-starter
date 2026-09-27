@@ -1,0 +1,376 @@
+<!doctype html>
+<html
+  lang="{{ request.locale.iso_code }}"
+  class="no-js"
+  data-focus-ring-style="{{ settings.foundation_focus_ring_style | escape }}"
+  data-primary-button-style="{{ settings.foundation_button_style | default: 'solid' | escape }}"
+  data-secondary-button-style="{{ settings.foundation_secondary_button_style | default: 'outline' | escape }}"
+  data-toast-position="{{ settings.foundation_toast_position | default: 'bottom-right' | escape }}"
+  data-toast-position-default="{{ settings.foundation_toast_position | default: 'bottom-right' | escape }}"
+  data-show-color-mode-switcher="{{ settings.foundation_show_color_mode_switcher }}"
+  data-show-palette-switcher="{{ settings.foundation_show_palette_switcher }}"
+  data-show-color-mode-switcher-default="{{ settings.foundation_show_color_mode_switcher }}"
+  data-show-palette-switcher-default="{{ settings.foundation_show_palette_switcher }}"
+  data-surface-treatment="{{ settings.foundation_surface_treatment | default: 'solid' | escape }}"
+  data-surface-treatment-default="{{ settings.foundation_surface_treatment | default: 'solid' | escape }}"
+>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta
+      name="theme-color"
+      content="{{ settings.palette_5_light.settings.background | default: '#ffffff' }}"
+      data-theme-color
+    >
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
+      >
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %}
+        &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' -}}
+      {%- endif -%}
+      {%- if current_page != 1 %}
+        &ndash; {{ 'general.meta.page' | t: page: current_page -}}
+      {%- endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+
+    {%- liquid
+      assign body_font = settings.font_body
+      assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic = body_font | font_modify: 'style', 'italic'
+      assign heading_font = settings.font_heading
+    -%}
+
+    {% style %}
+      {{ settings.font_body | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+      {{ settings.font_heading | font_face: font_display: 'swap' }}
+
+      html:root {
+        --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-body-weight: {{ body_font.weight }};
+        --font-heading-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+        --font-heading-weight: {{ heading_font.weight }};
+        --font-accent-family: var(--font-heading-family);
+        --font-accent-weight: var(--font-heading-weight);
+        --font-button-family: var(--font-body-family);
+        --font-button-weight: 600;
+        --font-body-scale: {{ settings.font_body_scale | divided_by: 100.0 }};
+        --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+        --line-height-body: {{ settings.body_line_height | divided_by: 100.0 }};
+        --line-height-heading: {{ settings.heading_line_height | divided_by: 100.0 }};
+        --tracking-body: calc({% case settings.type_density %}{% when 'compact' %}-0.01em{% when 'relaxed' %}0.015em{% else %}0em{% endcase %} + var(--foundation-body-tracking));
+        --page-width: {{ settings.page_width | divided_by: 10 }}rem;
+        --spacing-sections: {{ settings.spacing_sections | divided_by: 10.0 }}rem;
+        --section-flow-gap: clamp(var(--foundation-section-spacing-mobile, 4rem), 6vw, var(--foundation-section-spacing-desktop, 6.4rem));
+        --grid-gap: {{ settings.grid_gap | divided_by: 10.0 }}rem;
+        --corner-radius: {{ settings.corner_radius }}px;
+        --radius-card: {{ settings.card_corner_radius }}px;
+        --radius-button: {{ settings.button_corner_radius }}px;
+        --radius-input: {{ settings.input_corner_radius }}px;
+        --control-height: max({{ settings.control_height | divided_by: 10.0 }}rem, var(--foundation-minimum-target-size));
+        --card-border-width: {{ settings.card_border_width }}px;
+        --shadow-opacity: {{ settings.shadow_opacity | divided_by: 100.0 }};
+        --motion-duration: {% case settings.motion_intensity %}{% when 'none' %}0ms{% when 'subtle' %}calc(var(--foundation-transition-standard) * 0.6667){% else %}var(--foundation-transition-standard){% endcase %};
+        --motion-duration-fast: {% case settings.motion_intensity %}{% when 'none' %}0ms{% when 'subtle' %}calc(var(--foundation-transition-fast) * 0.75){% else %}var(--foundation-transition-fast){% endcase %};
+        --motion-ease: var(--foundation-motion-easing);
+        --foundation-gutter-mobile: {{ settings.foundation_gutter_mobile }}px;
+        --foundation-gutter-tablet: {{ settings.foundation_gutter_tablet }}px;
+        --foundation-gutter-desktop: {{ settings.foundation_gutter_desktop }}px;
+        --foundation-content-width-narrow: {{ settings.foundation_content_width_narrow }}px;
+        --foundation-reading-width: {{ settings.foundation_reading_width }}px;
+        --foundation-section-spacing-mobile: {{ settings.foundation_section_spacing_mobile }}px;
+        --foundation-section-spacing-desktop: {{ settings.foundation_section_spacing_desktop }}px;
+        --foundation-grid-columns-mobile: {{ settings.foundation_grid_columns_mobile }};
+        --foundation-grid-columns-desktop: {{ settings.foundation_grid_columns_desktop }};
+        --foundation-type-scale: {% case settings.foundation_type_scale %}{% when 'minor-third' %}1.2{% when 'perfect-fourth' %}1.333{% else %}1.25{% endcase %};
+        --foundation-base-font-size: {{ settings.foundation_base_font_size }}px;
+        --foundation-small-text-size: {{ settings.foundation_small_text_size }}px;
+        --foundation-display-scale: {{ settings.foundation_display_scale | divided_by: 100.0 }};
+        --foundation-body-tracking: {{ settings.foundation_body_tracking | divided_by: 1000.0 }}em;
+        --foundation-heading-tracking: {{ settings.foundation_heading_tracking | divided_by: 1000.0 }}em;
+        --heading-case: {{ settings.heading_case | default: settings.foundation_heading_case | default: 'none' }};
+        --button-case: {{ settings.button_case | default: settings.foundation_button_case | default: 'none' }};
+        --label-case: {{ settings.label_case | default: settings.foundation_label_case | default: 'uppercase' }};
+        --foundation-heading-case: var(--heading-case);
+        --foundation-button-case: var(--button-case);
+        --foundation-label-case: var(--label-case);
+        --foundation-label-tracking: {{ settings.foundation_label_tracking | divided_by: 1000.0 }}em;
+        --foundation-image-fit: {{ settings.foundation_image_fit }};
+        --foundation-image-radius: {{ settings.foundation_image_radius }}px;
+        --foundation-badge-radius: {{ settings.foundation_badge_radius }}px;
+        --foundation-modal-radius: {{ settings.foundation_modal_radius }}px;
+        --foundation-border-style: {{ settings.foundation_border_style }};
+        --foundation-border-opacity: {{ settings.foundation_border_opacity }}%;
+        --foundation-divider-width: {{ settings.foundation_divider_width }}px;
+        --foundation-shadow-blur: {{ settings.foundation_shadow_blur }}px;
+        --foundation-shadow-y-offset: {{ settings.foundation_shadow_y_offset }}px;
+        --foundation-surface-treatment: {{ settings.foundation_surface_treatment }};
+        --foundation-button-style: {{ settings.foundation_button_style }};
+        --foundation-secondary-button-style: {{ settings.foundation_secondary_button_style }};
+        --foundation-icon-button-size: {{ settings.foundation_icon_button_size }}px;
+        --foundation-input-padding-x: {{ settings.foundation_input_padding_x }}px;
+        --foundation-media-text-max-width: {{ settings.foundation_media_text_max_width }}px;
+        --foundation-header-height: {{ settings.foundation_header_height }}px;
+        --header-height: {{ settings.foundation_header_height }}px;
+        --announcement-height: 0px;
+        --header-total-height: calc(var(--header-height) + var(--announcement-height));
+        --foundation-drawer-width: {{ settings.foundation_drawer_width }}px;
+        --foundation-overlay-backdrop-opacity: {{ settings.foundation_overlay_backdrop_opacity }}%;
+        --foundation-overlay-backdrop-effect: {{ settings.foundation_overlay_backdrop_effect }};
+        --foundation-overlay-backdrop-color: {% if settings.foundation_overlay_backdrop_effect == 'dim' or settings.foundation_overlay_backdrop_effect == 'dim-blur' %}color-mix(in srgb, var(--color-shadow) var(--foundation-overlay-backdrop-opacity), transparent){% else %}transparent{% endif %};
+        --foundation-overlay-backdrop-filter: {% if settings.foundation_overlay_backdrop_effect == 'blur' or settings.foundation_overlay_backdrop_effect == 'dim-blur' %}blur(6px){% else %}none{% endif %};
+        --foundation-toast-position: {{ settings.foundation_toast_position }};
+        --foundation-button-padding-x: {{ settings.foundation_button_padding_x }}px;
+        --foundation-button-padding-y: {{ settings.foundation_button_padding_y }}px;
+        --foundation-focus-ring-width: {{ settings.foundation_focus_ring_width }}px;
+        --foundation-focus-ring-offset: {{ settings.foundation_focus_ring_offset }}px;
+        --foundation-focus-ring-style: {{ settings.foundation_focus_ring_style }};
+        --foundation-focus-outline-color: {% if settings.foundation_focus_ring_style == 'glow' %}transparent{% else %}var(--color-accent){% endif %};
+        --foundation-focus-ring-glow: {% if settings.foundation_focus_ring_style == 'glow' or settings.foundation_focus_ring_style == 'both' %}0 0 0 calc(var(--foundation-focus-ring-width) + var(--foundation-focus-ring-offset) + 2px) color-mix(in srgb, var(--color-accent) 35%, transparent){% else %}none{% endif %};
+        --foundation-transition-fast: {{ settings.foundation_transition_fast }}ms;
+        --foundation-transition-standard: {{ settings.foundation_transition_standard }}ms;
+        --foundation-motion-easing: {% case settings.foundation_motion_easing %}{% when 'linear' %}linear{% when 'ease' %}ease{% else %}cubic-bezier(0.16, 1, 0.3, 1){% endcase %};
+        --foundation-hover-lift: {{ settings.foundation_hover_lift }}px;
+        --foundation-minimum-target-size: {{ settings.foundation_minimum_target_size }}px;
+
+        /* Shared scales. Components consume these names; merchant settings set
+           the base values above rather than exposing a slider per component. */
+        --space-0: 0;
+        --space-1: 0.4rem;
+        --space-2: 0.8rem;
+        --space-3: 1.2rem;
+        --space-4: 1.6rem;
+        --space-5: 2.4rem;
+        --space-6: 3.2rem;
+        --space-7: 4.0rem;
+        --space-8: var(--spacing-sections);
+        --space-9: calc(var(--spacing-sections) * 1.5);
+        --space-10: calc(var(--spacing-sections) * 2);
+        --section-spacing: var(--spacing-sections);
+        --radius-xs: max(2px, calc(var(--corner-radius) / 3));
+        --radius-sm: max(4px, calc(var(--corner-radius) / 1.5));
+        --radius-md: var(--corner-radius);
+        --radius-lg: var(--radius-card);
+        --radius-xl: calc(var(--radius-card) + 0.4rem);
+        --radius-full: 9999px;
+        --radius-pill: var(--radius-full);
+        --radius-media: var(--foundation-image-radius);
+        --border-radius-button: var(--radius-button);
+        --motion-duration-normal: var(--motion-duration);
+        --motion-duration-slow: calc(var(--motion-duration) * 2);
+        --overlay-opacity: 0;
+        --slide-overlay: 0;
+        --container-wide: var(--page-width);
+        --footer-sub-overlay: 0;
+        --design-swatch: var(--color-accent);
+        --text-xs: calc(var(--foundation-small-text-size) * 0.85);
+        --text-sm: var(--foundation-small-text-size);
+        --text-lg: calc(var(--foundation-base-font-size) * var(--foundation-type-scale));
+        --text-xl: calc(var(--foundation-base-font-size) * var(--foundation-type-scale) * var(--foundation-type-scale));
+        --faq-pt: var(--foundation-section-spacing-desktop);
+        --faq-pb: var(--foundation-section-spacing-desktop);
+        --shadow-xs: 0 1px 2px color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 60%), transparent);
+        --shadow-sm: 0 calc(var(--foundation-shadow-y-offset) / 3) calc(var(--foundation-shadow-blur) * 0.4375) color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 100%), transparent);
+        --shadow-md: 0 var(--foundation-shadow-y-offset) var(--foundation-shadow-blur) color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 130%), transparent);
+        --shadow-lg: 0 calc(var(--foundation-shadow-y-offset) * 1.6667) calc(var(--foundation-shadow-blur) * 1.5) color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 160%), transparent);
+        --shadow-drawer: -8px 0 40px color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 160%), transparent);
+        --shadow-modal: 0 calc(var(--foundation-shadow-y-offset) * 2) calc(var(--foundation-shadow-blur) * 2) color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 180%), transparent);
+        --shadow-card: {% if settings.card_style == 'elevated' %}var(--shadow-md){% elsif settings.shadow_opacity > 0 %}var(--shadow-sm){% else %}none{% endif %};
+        --shadow-button: {% if settings.shadow_opacity > 0 %}var(--shadow-xs){% else %}none{% endif %};
+
+        /* Z-Index Enum Tokens */
+        --z-under: -1;
+        --z-base: 0;
+        --z-raised: 1;
+        --z-elevated: 2;
+        --z-controls: 3;
+        --z-sticky-local: 4;
+        --z-floating: 5;
+        --z-dropdown: 10;
+        --z-header: 30;
+        --z-nav: 50;
+        --z-sticky-bar: 100;
+        --z-overlay: 1000;
+        --z-drawer-backdrop: 9000;
+        --z-drawer: 9500;
+        --z-modal: 99999;
+        --z-toast: 100000;
+      }
+
+      {% for scheme in settings.color_schemes %}
+        html[data-color-scheme="{{ scheme.id }}"],
+        .color-{{ scheme.id }} {
+          --color-background: {{ scheme.settings.background }};
+          --color-background-gradient: {{ scheme.settings.background_gradient | default: 'none' }};
+          --color-surface: {{ scheme.settings.surface }};
+          --color-surface-raised: {{ scheme.settings.surface_raised }};
+          --color-text: {{ scheme.settings.text }};
+          --color-muted: {{ scheme.settings.muted }};
+          --color-border: {{ scheme.settings.border }};
+          --color-surface-text: {{ scheme.settings.text }};
+          --color-surface-muted: {{ scheme.settings.muted }};
+          --color-surface-border: {{ scheme.settings.border }};
+          --color-shadow: {{ scheme.settings.shadow }};
+          --color-accent: {{ scheme.settings.accent }};
+          --color-accent-text: {{ scheme.settings.accent_foreground }};
+          --color-button: {{ scheme.settings.button }};
+          --color-button-text: {{ scheme.settings.button_label }};
+          --color-secondary-button-text: {{ scheme.settings.secondary_button_label }};
+          --color-announcement: {{ scheme.settings.announcement }};
+          --color-announcement-text: {{ scheme.settings.announcement_text }};
+          --color-footer: {{ scheme.settings.footer }};
+          --color-footer-text: {{ scheme.settings.footer_text }};
+          --color-success: {{ scheme.settings.success }};
+          --color-warning: {{ scheme.settings.warning }};
+          --color-danger: {{ scheme.settings.danger }};
+          --color-info: {{ scheme.settings.info }};
+          --color-primary: {{ scheme.settings.accent }};
+          --color-primary-contrast: {{ scheme.settings.accent_foreground }};
+          --color-text-muted: {{ scheme.settings.muted }};
+          --color-background-secondary: {{ scheme.settings.surface }};
+          /* Media foreground and scrims inherit the stable foundation tokens. */
+          --color-status-success-surface: color-mix(in srgb, {{ scheme.settings.success }} 12%, {{ scheme.settings.background }});
+          --color-status-warning-surface: color-mix(in srgb, {{ scheme.settings.warning }} 12%, {{ scheme.settings.background }});
+          --color-status-danger-surface: color-mix(in srgb, {{ scheme.settings.danger }} 12%, {{ scheme.settings.background }});
+          --color-status-info-surface: color-mix(in srgb, {{ scheme.settings.info }} 12%, {{ scheme.settings.background }});
+          --shadow-xs: 0 1px 2px color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 60%), transparent);
+          --shadow-sm: 0 calc(var(--foundation-shadow-y-offset) / 3) calc(var(--foundation-shadow-blur) * 0.4375) color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 100%), transparent);
+          --shadow-md: 0 var(--foundation-shadow-y-offset) var(--foundation-shadow-blur) color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 130%), transparent);
+          --shadow-lg: 0 calc(var(--foundation-shadow-y-offset) * 1.6667) calc(var(--foundation-shadow-blur) * 1.5) color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 160%), transparent);
+          --shadow-drawer: -8px 0 40px color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 160%), transparent);
+          --shadow-modal: 0 calc(var(--foundation-shadow-y-offset) * 2) calc(var(--foundation-shadow-blur) * 2) color-mix(in srgb, {{ scheme.settings.shadow }} calc(var(--shadow-opacity) * 180%), transparent);
+          --shadow-card: {% if settings.card_style == 'elevated' %}var(--shadow-md){% elsif settings.shadow_opacity > 0 %}var(--shadow-sm){% else %}none{% endif %};
+          --shadow-button: {% if settings.shadow_opacity > 0 %}var(--shadow-xs){% else %}none{% endif %};
+        }
+      {% endfor %}
+    {% endstyle %}
+
+    <script>
+      (() => {
+        const paletteKey = 'nigat-palette';
+        const modeKey = 'nigat-color-mode';
+        const palettes = {
+          palette_1: { light: {{ settings.palette_1_light.id | json }}, dark: {{ settings.palette_1_dark.id | json }} },
+          palette_2: { light: {{ settings.palette_2_light.id | json }}, dark: {{ settings.palette_2_dark.id | json }} },
+          palette_3: { light: {{ settings.palette_3_light.id | json }}, dark: {{ settings.palette_3_dark.id | json }} },
+          palette_4: { light: {{ settings.palette_4_light.id | json }}, dark: {{ settings.palette_4_dark.id | json }} },
+          palette_5: { light: {{ settings.palette_5_light.id | json }}, dark: {{ settings.palette_5_dark.id | json }} }
+        };
+        let savedPalette = null;
+        let savedMode = null;
+        try {
+          savedPalette = localStorage.getItem(paletteKey);
+          savedMode = localStorage.getItem(modeKey) || localStorage.getItem('nigat-color-scheme');
+        } catch (_) {}
+        const palette = palettes[savedPalette] ? savedPalette : {{ settings.default_palette | json }};
+        const preferredMode = {{ settings.default_color_mode | json }};
+        const mode = savedMode === 'light' || savedMode === 'dark'
+          ? savedMode
+          : preferredMode === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : preferredMode;
+        document.documentElement.dataset.palette = palette;
+        document.documentElement.dataset.colorMode = mode;
+        document.documentElement.dataset.colorScheme = palettes[palette][mode];
+        document.documentElement.dataset.cardStyle = {{ settings.card_style | json }};
+      })();
+    </script>
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace(
+        'no-js',
+        'js'
+      );
+    </script>
+
+    {% render 'image-config' %}
+    {%- if false -%}{% render 'responsive-image', image: blank %}{%- endif -%}
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <a class="skip-to-content" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <script>
+      (() => {
+        const a = document.querySelector('.announcement-bar-section, .announcement-layout');
+        const h = document.querySelector('[data-header], .header-section, .header-layout');
+        const hasA = Boolean(
+          a && a.offsetHeight > 0 && !a.hasAttribute('hidden') && a.offsetParent !== null
+        );
+        const aH = hasA ? a.offsetHeight : 0;
+        const hH =
+          h && h.offsetHeight > 0
+            ? h.offsetHeight
+            : parseInt(
+                getComputedStyle(document.documentElement).getPropertyValue(
+                  '--foundation-header-height'
+                )
+              ) || 64;
+        document.documentElement.style.setProperty('--announcement-height', `${aH}px`);
+        document.documentElement.style.setProperty('--header-height', `${hH}px`);
+        document.documentElement.style.setProperty('--header-total-height', `${hH + aH}px`);
+      })();
+    </script>
+
+    <main id="MainContent" class="main-content space-y-section" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    </ul>
+
+    <div class="site-toast" data-site-toast role="status" aria-live="polite" hidden>
+      <span class="site-toast__icon" data-site-toast-icon>{% render 'icon', name: 'heart' %}</span>
+      <span class="site-toast__msg" data-site-toast-msg></span>
+    </div>
+
+    {% render 'header-search-banner' %}
+
+    <quick-view-controller
+      data-load-error="{{ 'products.product.quick_view_error' | t | escape }}"
+      data-add-error="{{ 'products.product.quick_add_error' | t | escape }}"
+    >
+      {% assign quick_view_label = 'products.product.quick_view' | t %}
+      {% capture quick_view_content %}
+        <p data-quick-view-status role="status" hidden>{{ 'products.product.quick_view_loading' | t }}</p>
+        <div data-quick-view-content></div>
+        <p data-quick-view-error role="alert" hidden></p>
+        <a data-quick-view-fallback href="#" hidden>{{ 'products.product.view_full_details' | t }}</a>
+      {% endcapture %}
+      {% render 'overlay', type: 'modal', id: 'QuickViewOverlay', class: 'theme-overlay--quick-view', aria_label: quick_view_label, content: quick_view_content, close_button: true %}
+    </quick-view-controller>
+
+    {% section 'cart-drawer' %}
+
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  </body>
+</html>

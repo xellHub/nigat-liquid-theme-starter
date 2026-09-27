@@ -1,0 +1,134 @@
+{%- liquid
+  assign current_step = block.settings.step_index | default: 1
+-%}
+<div class="is__step" data-step-index="{{ block.id }}" {{ block.shopify_attributes }}>
+  <template data-step-media-template>
+    <div class="is__media-item">
+      {% if block.settings.image != blank %}
+        {% assign step_alt = 'STEP ' | append: current_step %}
+        {{
+          block.settings.image
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            widths: '400, 600, 800, 1000, 1200',
+            class: 'is__showcase-img',
+            alt: step_alt
+        }}
+      {% else %}
+        {% assign step_title = 'STEP ' | append: current_step %}
+        {% render 'interactive-steps-demo-svg',
+          type: 'showcase',
+          step_index: current_step,
+          title: step_title
+        %}
+      {% endif %}
+    </div>
+  </template>
+  <div class="is__step-header">
+    <div class="is__step-eyebrow">
+      <span class="is__step-bullet" aria-hidden="true"></span>
+      <span class="is__step-number">STEP {{ current_step }}</span>
+    </div>
+  </div>
+  <div class="is__step-body-grid">
+    <div class="is__step-content-col" id="is-body-{{ block.id }}">
+      {% content_for 'blocks' %}
+    </div>
+    <div class="is__step-pill-col">
+      <span
+        class="is__step-pill"
+        aria-hidden="true"
+        {% if block.settings.thumbnail_tilt != 0 and block.settings.thumbnail_tilt != blank %}
+          style="--step-pill-tilt: {{ block.settings.thumbnail_tilt }}deg;"
+        {% endif %}
+      >
+        {% assign pill_img = block.settings.thumbnail | default: block.settings.image %}
+        {% if pill_img != blank -%}
+          {{-
+            pill_img
+            | image_url: width: 240
+            | image_tag: loading: 'lazy', class: 'is__pill-img', alt: ''
+          -}}
+        {%- else -%}
+          {%- render 'interactive-steps-demo-svg',
+            type: 'pill',
+            step_index: current_step,
+            title: ''
+          -%}
+        {%- endif %}
+      </span>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Interactive step",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "image" },
+    { "type": "divider" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "step_index",
+      "label": "Demo image index",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    { "type": "image_picker", "id": "image", "label": "Showcase image" },
+    { "type": "image_picker", "id": "thumbnail", "label": "Pill thumbnail" },
+    {
+      "type": "range",
+      "id": "thumbnail_tilt",
+      "label": "Thumbnail tilt angle",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "default": 0,
+      "info": "0 inherits the section default thumbnail tilt"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive step",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Cleansers",
+            "level": "h3",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Start with a gentle purifying cleanser while protecting the skin's moisture barrier.</p>",
+            "color_role": "muted"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop Cleansers",
+            "style": "primary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

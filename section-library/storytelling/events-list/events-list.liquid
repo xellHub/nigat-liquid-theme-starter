@@ -1,0 +1,287 @@
+<section
+  id="EventsListLayout-{{ section.id }}"
+  class="events-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--events-width:{{ section.settings.page_width }}px;--events-pt:{{ section.settings.padding_top }}px;--events-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="events-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.events-layout{padding-block:var(--events-pt) var(--events-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.events-layout__inner{display:flex;width:min(calc(100% - 2 * var(--foundation-gutter-mobile)),var(--events-width));margin:auto;flex-direction:column;gap:var(--space-6)}.events-layout__inner>.theme-group:first-child{justify-content:space-between}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Events list",
+  "tag": "section",
+  "class": "section-events-list",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "_events-stack" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Events list",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "end",
+            "gap": "4"
+          },
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "gap": "2"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Upcoming events",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Discover upcoming masterclasses, workshops, tastings, and dinners.</p>",
+                    "color_role": "muted"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "View all events",
+                "style": "link",
+                "icon": "arrow-right"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_events-stack",
+          "settings": {
+            "card_surface": "surface",
+            "card_border": true,
+            "card_radius": 16,
+            "card_shadow": "subtle",
+            "hover_lift": true,
+            "stack_gap": 24,
+            "button_style": "outline"
+          },
+          "blocks": [
+            {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "08 Oct",
+                "day": "Thursday",
+                "time": "03:30 – 06:30",
+                "demo_variant": "pasta"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Pasta From Scratch",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "MASTERCLASS",
+                    "style": "subtle"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Learn how to mix, knead, roll, and shape fresh pasta by hand before enjoying your creations with two simple seasonal sauces.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "08 Oct",
+                "day": "Thursday",
+                "time": "11:00 – 13:00",
+                "demo_variant": "supper"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Colorful Seasonal Supper",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "SEASONAL DINNER",
+                    "style": "subtle"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Join Chef Mara Vale for an intimate seasonal dinner exploring bold flavors, vibrant produce, and creative combinations designed for sharing.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "15 Oct",
+                "day": "Thursday",
+                "time": "14:00 – 17:00",
+                "demo_variant": "workshop"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Ceramic Hand-Building Workshop",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "STUDIO CRAFT",
+                    "style": "subtle"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Explore tactile clay techniques, pinching, and coiling methods to craft your own sculptural tableware and custom vessels.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "22 Oct",
+                "day": "Thursday",
+                "time": "18:00 – 20:30",
+                "demo_variant": "tasting"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Natural Wine & Small Bites Tasting",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "CELLAR SERIES",
+                    "style": "subtle"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sample six biodynamic natural wines paired with artisanal cheeses, cold-pressed olive oils, and cured delicacies from heritage producers.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Storytelling"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

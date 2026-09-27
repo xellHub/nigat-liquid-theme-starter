@@ -1,0 +1,225 @@
+<tr class="comparison-table__row" {{ block.shopify_attributes }}>
+  <th scope="row" class="comparison-table__cell comparison-table__cell--feature-label">
+    {% content_for 'blocks' %}
+    {%- if block.blocks.size == 0 -%}
+      <span>Feature</span>
+    {%- endif -%}
+  </th>
+  {% for i in (1..5) %}
+    {% liquid
+      assign type_key = 'col_' | append: i | append: '_type'
+      assign cell_type = block.settings[type_key] | default: 'check'
+    %}
+    <td class="comparison-table__cell comparison-table__cell--data{% if i == 1 %} comparison-table__cell--candidate-highlight{% endif %}">
+      {% case cell_type %}
+        {% when 'check' -%}
+          <span class="comparison-table__icon comparison-table__icon--check" aria-label="Supported">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+        {% when 'cross' -%}
+          <span
+            class="comparison-table__icon comparison-table__icon--cross"
+            aria-label="Not supported"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </span>
+        {% when 'dash' -%}
+          <span
+            class="comparison-table__icon comparison-table__icon--dash"
+            aria-label="Neutral or none"
+            >—</span
+          >
+        {% when 'blank' -%}
+          <span class="comparison-table__icon comparison-table__icon--blank" aria-hidden="true"
+            >&nbsp;</span
+          >
+      {% endcase %}
+    </td>
+  {% endfor %}
+</tr>
+{% schema %}
+{
+  "name": "Comparison row",
+  "blocks": [{ "type": "text" }, { "type": "heading" }, { "type": "badge" }, { "type": "icon" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Column 1 Value"
+    },
+    {
+      "type": "select",
+      "id": "col_1_type",
+      "label": "Col 1 value type",
+      "options": [
+        {
+          "value": "check",
+          "label": "Checkmark (✓)"
+        },
+        {
+          "value": "cross",
+          "label": "Cross (✕)"
+        },
+        {
+          "value": "dash",
+          "label": "Dash (—)"
+        },
+        {
+          "value": "blank",
+          "label": "Blank (Empty)"
+        }
+      ],
+      "default": "check"
+    },
+    {
+      "type": "header",
+      "content": "Column 2 Value"
+    },
+    {
+      "type": "select",
+      "id": "col_2_type",
+      "label": "Col 2 value type",
+      "options": [
+        {
+          "value": "check",
+          "label": "Checkmark (✓)"
+        },
+        {
+          "value": "cross",
+          "label": "Cross (✕)"
+        },
+        {
+          "value": "dash",
+          "label": "Dash (—)"
+        },
+        {
+          "value": "blank",
+          "label": "Blank (Empty)"
+        }
+      ],
+      "default": "check"
+    },
+    {
+      "type": "header",
+      "content": "Column 3 Value"
+    },
+    {
+      "type": "select",
+      "id": "col_3_type",
+      "label": "Col 3 value type",
+      "options": [
+        {
+          "value": "check",
+          "label": "Checkmark (✓)"
+        },
+        {
+          "value": "cross",
+          "label": "Cross (✕)"
+        },
+        {
+          "value": "dash",
+          "label": "Dash (—)"
+        },
+        {
+          "value": "blank",
+          "label": "Blank (Empty)"
+        }
+      ],
+      "default": "blank"
+    },
+    {
+      "type": "header",
+      "content": "Column 4 Value"
+    },
+    {
+      "type": "select",
+      "id": "col_4_type",
+      "label": "Col 4 value type",
+      "options": [
+        {
+          "value": "check",
+          "label": "Checkmark (✓)"
+        },
+        {
+          "value": "cross",
+          "label": "Cross (✕)"
+        },
+        {
+          "value": "dash",
+          "label": "Dash (—)"
+        },
+        {
+          "value": "blank",
+          "label": "Blank (Empty)"
+        }
+      ],
+      "default": "blank"
+    },
+    {
+      "type": "header",
+      "content": "Column 5 Value"
+    },
+    {
+      "type": "select",
+      "id": "col_5_type",
+      "label": "Col 5 value type",
+      "options": [
+        {
+          "value": "check",
+          "label": "Checkmark (✓)"
+        },
+        {
+          "value": "cross",
+          "label": "Cross (✕)"
+        },
+        {
+          "value": "dash",
+          "label": "Dash (—)"
+        },
+        {
+          "value": "blank",
+          "label": "Blank (Empty)"
+        }
+      ],
+      "default": "blank"
+    }
+  ],
+  "tag": null,
+  "presets": [
+    {
+      "name": "Comparison row",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Sensitive skin</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

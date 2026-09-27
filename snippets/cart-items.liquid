@@ -1,0 +1,161 @@
+{%- comment -%}
+  Renders the cart contents (line items + footer).
+  Shared between the cart drawer and the cart page.
+
+  Accepts:
+  - context: {String} 'drawer' or 'page' (optional, default 'page')
+  - supplemental_content: {String} captured editable drawer blocks (optional)
+{%- endcomment -%}
+{% # theme-check-disable ValidScopedCSSClass %}
+
+{%- assign ctx = context | default: 'page' -%}
+
+{%- if ctx == 'drawer' -%}
+  {%- if cart == empty -%}
+    <div class="cart-drawer__main cart-drawer__main--empty">
+      <div class="cart-drawer__empty-state">
+        <div class="cart-drawer__empty-icon">
+          {% render 'icon', name: 'cart' %}
+        </div>
+        <p class="cart-drawer__empty-text">{{ 'cart.general.empty' | t }}</p>
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="button button--primary theme-button theme-button--primary theme-button--medium cart-drawer__continue-btn"
+          data-drawer-close
+        >
+          {{ 'cart.general.continue_shopping' | t }}
+        </a>
+      </div>
+    </div>
+    {%- if supplemental_content != blank -%}
+      <div class="cart-drawer__supplemental" data-cart-supplemental>{{ supplemental_content }}</div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="cart-drawer__main">
+      <ul class="cart__items cart-drawer__items" role="list" data-cart-line-items>
+        {%- for item in cart.items -%}
+          {% render 'cart-item', item: item, forloop: forloop, image_sizes: '80px', form_id: 'cart-drawer-form' %}
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- if supplemental_content != blank -%}
+      <div class="cart-drawer__supplemental" data-cart-supplemental>{{ supplemental_content }}</div>
+    {%- endif -%}
+
+    <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form" class="cart-drawer__form">
+      <footer class="cart-drawer__footer" data-cart-footer>
+        <div class="cart-drawer__discount" data-cart-discount>
+          <details class="cart-drawer__discount-details" data-discount-details>
+            <summary class="cart-drawer__discount-summary">
+              <span class="cart-drawer__discount-summary-title">
+                <svg
+                  class="icon icon-tag"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+                <span>{{ 'cart.general.discount_code' | t }}</span>
+              </span>
+              {% render 'icon', name: 'chevron-down' %}
+            </summary>
+            <div class="cart-drawer__discount-body">
+              <div class="cart-drawer__discount-input-group">
+                <input
+                  type="text"
+                  name="discount"
+                  class="cart-drawer__discount-input"
+                  placeholder="{{ 'cart.general.enter_code' | t }}"
+                  aria-label="{{ 'cart.general.enter_code' | t }}"
+                  data-discount-input
+                  autocomplete="off"
+                >
+                <button
+                  type="button"
+                  class="button button--secondary theme-button theme-button--secondary theme-button--medium cart-drawer__discount-apply"
+                  data-discount-apply
+                >
+                  {{ 'cart.general.apply_discount' | t }}
+                </button>
+              </div>
+              <p class="cart-drawer__discount-note">{{ 'cart.general.gift_card_note' | t }}</p>
+            </div>
+          </details>
+
+          <div class="cart-drawer__discount-tag" data-discount-tag hidden>
+            <span class="cart-drawer__discount-tag-icon">{% render 'icon', name: 'check' %}</span>
+            <span class="cart-drawer__discount-tag-text" data-discount-name></span>
+            <button
+              type="button"
+              class="cart-drawer__discount-tag-remove button button--icon theme-button"
+              data-discount-remove
+              aria-label="{{ 'cart.general.remove_coupon' | t }}"
+            >
+              {% render 'icon', name: 'close' %}
+            </button>
+          </div>
+        </div>
+
+        {% render 'cart-summary', ctx: 'drawer' %}
+
+        <p class="cart__taxes cart-drawer__taxes caption">
+          {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+        </p>
+
+        <button
+          type="submit"
+          name="checkout"
+          class="button button--primary button--full theme-button theme-button--primary theme-button--medium cart__checkout cart-drawer__checkout"
+          data-checkout-btn
+        >
+          <span>{{ 'cart.general.checkout' | t }}</span>
+          <span class="cart__checkout-spinner" hidden aria-hidden="true"></span>
+          {% render 'icon', name: 'arrow-right' %}
+        </button>
+      </footer>
+    </form>
+  {%- endif -%}
+
+{%- else -%}
+  {%- if cart == empty -%}
+    <div class="cart__empty">
+      <p class="cart__empty-text">{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+        {{ 'cart.general.continue_shopping' | t }}
+      </a>
+    </div>
+  {%- else -%}
+    <form action="{{ routes.cart_url }}" method="post" id="cart-{{ ctx }}-form" class="cart__form">
+      <ul class="cart__items" role="list" data-cart-line-items>
+        {%- for item in cart.items -%}
+          {% render 'cart-item', item: item, forloop: forloop, image_sizes: '90px' %}
+        {%- endfor -%}
+      </ul>
+
+      <div class="cart__footer" data-cart-footer>
+        {% render 'cart-summary', ctx: 'page' %}
+
+        <p class="cart__taxes caption">{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+
+        <button
+          type="submit"
+          name="checkout"
+          class="button button--primary button--full cart__checkout"
+          data-checkout-btn
+        >
+          <span>{{ 'cart.general.checkout' | t }}</span>
+          <span class="cart__checkout-spinner" hidden aria-hidden="true"></span>
+          {% render 'icon', name: 'arrow-right' %}
+        </button>
+      </div>
+    </form>
+  {%- endif -%}
+{%- endif -%}
+{% # theme-check-enable ValidScopedCSSClass %}

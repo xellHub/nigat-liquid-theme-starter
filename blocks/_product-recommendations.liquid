@@ -1,0 +1,28 @@
+{%- if recommendations.performed? and recommendations.products_count > 0 -%}
+  <ul class="product-recommendations__grid" role="list" {{ block.shopify_attributes }}>
+    {%- assign seen_recommendations = ',' -%}
+    {%- for candidate in recommendations.products -%}
+      {%- assign candidate_key = candidate.id | append: ',' | prepend: ',' -%}
+      {%- unless candidate.id == product.id or candidate.available == false or seen_recommendations contains candidate_key -%}
+        {%- assign seen_recommendations = seen_recommendations | append: candidate.id | append: ',' -%}
+        {%- assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: forloop.index -%}
+        <li>{% content_for 'block', type: 'product-card', id: 'product-card', closest.product: candidate, card_instance: card_instance %}</li>
+      {%- endunless -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-recommendations__grid { display: grid; grid-template-columns: repeat(var(--recommendation-columns, 4), minmax(0, 1fr)); gap: var(--grid-gap); padding: 0; list-style: none; }
+  @media (max-width: 749px) { .product-recommendations__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Recommendation products",
+  "tag": null,
+  "blocks": [{"type":"product-card"}],
+  "settings": [],
+  "presets": [{"name":"Recommendation products","blocks":[{"type":"product-card","id":"product-card","static":true,"settings":{"product":"{{ closest.product }}"},"blocks":[{"type":"image","settings":{"image":"{{ closest.product.featured_image }}","link":"{{ closest.product.url }}","alt":"{{ closest.product.title }}"}},{"type":"heading","settings":{"text":"{{ closest.product.title }}","level":"h3","size":"small"}},{"type":"price","settings":{"product":"{{ closest.product }}"}},{"type":"button","settings":{"label":"View product","style":"link","link":"{{ closest.product.url }}"}}]}]}]
+}
+{% endschema %}

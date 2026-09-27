@@ -1,0 +1,81 @@
+{%- capture upsell_cards -%}
+  {%- for candidate in block.settings.products -%}
+    {%- assign in_cart = false -%}
+    {%- for item in cart.items -%}
+      {%- if item.product_id == candidate.id -%}
+        {%- assign in_cart = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if candidate.available and in_cart == false -%}
+      {%- assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: forloop.index -%}
+      <li class="cart-upsell__item">
+        {% content_for 'block', type: 'product-card', id: 'upsell-card', closest.product: candidate, card_instance: card_instance %}
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{% if upsell_cards != blank or request.design_mode %}
+  <div class="cart-upsell" {{ block.shopify_attributes }}>
+    <div class="cart-upsell__intro">{% content_for 'blocks' %}</div>
+    {% if upsell_cards != blank %}
+      <ul class="cart-upsell__list" role="list">{{ upsell_cards }}</ul>
+    {% endif %}
+  </div>
+{% endif %}
+{% stylesheet %}
+  .cart-upsell {
+    display: grid;
+    gap: var(--space-3);
+    color: var(--color-text);
+  }
+  .cart-upsell__intro {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .cart-upsell__intro:empty { display: none; }
+  .cart-upsell__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cart-upsell__item { min-width: 0; }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Cart upsell",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "badge" },
+    { "type": "button" },
+    { "type": "product-card" }
+  ],
+  "settings": [
+    { "type": "product_list", "id": "products", "label": "Products", "limit": 6 }
+  ],
+  "presets": [
+    {
+      "name": "Cart upsell",
+      "blocks": [
+        { "type": "heading", "settings": { "text": "You may also like", "level": "h3", "size": "small" } },
+        {
+          "id": "upsell-card",
+          "type": "product-card",
+          "static": true,
+          "settings": { "product": "{{ closest.product }}", "image_aspect_ratio": "square" },
+          "blocks": [
+            { "type": "image", "settings": { "image": "{{ closest.product.featured_image }}", "link": "{{ closest.product.url }}", "alt": "{{ closest.product.title }}" } },
+            { "type": "heading", "settings": { "text": "{{ closest.product.title }}", "level": "h3", "size": "small" } },
+            { "type": "price", "settings": { "product": "{{ closest.product }}" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

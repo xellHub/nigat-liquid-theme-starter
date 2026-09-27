@@ -1,0 +1,191 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<a
+  class="{{ block.settings.foundation_custom_class | escape }} theme-icon-button theme-icon-button--{{ block.settings.size }}"
+  href="{{ block.settings.link | default: '#' }}"
+  aria-label="{{ block.settings.label | escape }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'icon', name: block.settings.icon -%}
+</a>
+{% stylesheet %}
+  .theme-icon-button {
+    display: inline-grid;
+    width: var(--foundation-icon-button-size);
+    height: var(--foundation-icon-button-size);
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+  .theme-icon-button--small {
+    width: var(--foundation-minimum-target-size);
+    height: var(--foundation-minimum-target-size);
+  }
+  .theme-icon-button--large {
+    width: calc(var(--foundation-icon-button-size) + var(--space-2));
+    height: calc(var(--foundation-icon-button-size) + var(--space-2));
+  }
+  .theme-icon-button .icon {
+    width: 45%;
+    height: 45%;
+  }
+  .theme-icon-button:focus-visible {
+    outline: var(--foundation-focus-ring-width) solid var(--color-accent);
+    outline-offset: var(--foundation-focus-ring-offset);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Icon button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Accessible label",
+      "default": "Open link"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "arrow-right",
+          "label": "Arrow right"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        }
+      ],
+      "default": "arrow-right"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon button"
+    }
+  ]
+}
+{% endschema %}

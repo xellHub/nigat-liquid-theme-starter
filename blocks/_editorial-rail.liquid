@@ -1,0 +1,249 @@
+{%- liquid
+  assign card_size = block.settings.card_size | default: 118
+  assign card_radius = block.settings.card_radius | default: 18
+  assign card_gap = block.settings.card_gap | default: 14
+  assign image_fit = block.settings.image_fit | default: 'contain'
+  assign initial_index = 0
+-%}
+
+<div
+  class="eh__bottom-bar"
+  id="EditorialRail-{{ block.id }}"
+  data-eh-rail-block
+  style="
+    --eh-card-size: {{ card_size }}px;
+    --eh-card-radius: {{ card_radius }}px;
+    --eh-card-gap: {{ card_gap }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <div
+    class="eh__rail"
+    aria-label="{{ block.settings.accessibility_label | default: 'Featured product selections' | escape }}"
+    data-eh-rail
+  >
+    {%- assign slide_idx = 0 -%}
+    {%- for b in section.blocks -%}
+      {%- if b.type == '_editorial-slide' -%}
+        {%- liquid
+          assign slide_card_img = b.settings.image
+          assign is_cover = false
+          if image_fit == 'cover' or b.settings.is_cover
+            assign is_cover = true
+          endif
+        -%}
+        <div
+          class="eh__card{% if is_cover %} eh__card--cover{% endif %}{% if slide_idx == initial_index %} is-active{% endif %}"
+          data-eh-index="{{ slide_idx }}"
+          tabindex="0"
+          role="button"
+          aria-label="{{ b.settings.card_label | default: 'Featured item' | escape }}"
+          aria-current="{% if slide_idx == initial_index %}true{% else %}false{% endif %}"
+        >
+          <div class="eh__card-media">
+            {%- if slide_card_img != blank -%}
+              {% render 'responsive-image',
+                image: slide_card_img,
+                max_width: 160,
+                widths: '80, 120, 160',
+                sizes: '118px',
+                class: 'eh__card-img',
+                alt: b.settings.card_label,
+                loading: 'eager',
+                no_wrapper: true
+              %}
+            {%- else -%}
+              {%- assign hero_placeholder_index = slide_idx | modulo: 3 | plus: 1 -%}
+              {%- assign hero_placeholder_key = 'hero_' | append: hero_placeholder_index -%}
+              {%- assign placeholder_id_prefix = section.id | append: '-' | append: b.id | append: '-thumbnail' -%}
+              {% render 'placeholder-image', variant: hero_placeholder_key, class: 'eh__card-img', id_prefix: placeholder_id_prefix %}
+            {%- endif -%}
+          </div>
+        </div>
+        {%- assign slide_idx = slide_idx | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .eh__bottom-bar {
+    grid-row: 2;
+    grid-column: 1;
+    align-self: end;
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: clamp(28px, 4vh, 60px);
+    padding-bottom: 4px;
+  }
+  .eh__rail {
+    display: flex;
+    align-items: center;
+    gap: var(--eh-card-gap, var(--grid-gap, 14px));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 14px 8px;
+    margin-block: -8px;
+  }
+  .eh__rail::-webkit-scrollbar {
+    display: none;
+  }
+  .eh__card {
+    position: relative;
+    flex: 0 0 var(--eh-card-size, clamp(96px, 8vw, 118px));
+    width: var(--eh-card-size, clamp(96px, 8vw, 118px));
+    height: var(--eh-card-size, clamp(96px, 8vw, 118px));
+    border-radius: var(--eh-card-radius, var(--radius-card, 18px));
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    box-shadow: 0 8px 22px
+      color-mix(in srgb, var(--color-text) calc(var(--shadow-opacity, 0.1) * 2500%), transparent);
+    overflow: hidden;
+    cursor: pointer;
+    scroll-snap-align: start;
+    user-select: none;
+    transition:
+      transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 0.25s ease,
+      box-shadow 0.32s ease,
+      opacity 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transform: scale(0.88);
+    transform-origin: center center;
+    z-index: 1;
+    text-decoration: none;
+  }
+  .eh__card:hover:not(.is-active) {
+    opacity: 1;
+    transform: scale(0.94) translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-primary, var(--color-accent)) 40%, var(--color-border));
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--color-text) 38%, transparent);
+  }
+  .eh__card.is-active {
+    opacity: 1;
+    border-color: var(--color-primary, var(--color-accent));
+    transform: scale(1.18);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-text) 58%, transparent);
+    z-index: 4;
+  }
+  .eh__card-media {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .eh__card-media .theme-image-loader {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--eh-card-radius, var(--radius-card, 18px)) - 4px);
+    overflow: hidden;
+    background: transparent;
+  }
+  .eh__card-media img,
+  .eh__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      transform 0.3s ease,
+      opacity 0.35s ease;
+  }
+  .eh__card--cover .eh__card-media {
+    padding: 0;
+  }
+  .eh__card--cover .eh__card-media img,
+  .eh__card--cover .eh__card-img {
+    object-fit: cover;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Navigation rail",
+  "tag": null,
+  "blocks": [
+    { "type": "button" },
+    { "type": "icon-button" },
+    { "type": "badge" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "card_size",
+      "label": "Thumbnail button size",
+      "min": 80,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 118
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Thumbnail image fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain (fit whole image)"
+        },
+        {
+          "value": "cover",
+          "label": "Cover (fill card area)"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Featured product selections"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Navigation rail"
+    }
+  ]
+}
+{% endschema %}

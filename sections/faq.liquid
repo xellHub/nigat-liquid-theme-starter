@@ -1,0 +1,188 @@
+<section
+  id="Faq-{{ section.id }}"
+  class="faq-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--faq-layout-width: {{ section.settings.page_width }}px; --faq-layout-pt: {{ section.settings.padding_top }}px; --faq-layout-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="faq-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+
+{% stylesheet %}
+  .faq-layout {
+    padding-block: var(--faq-layout-pt) var(--faq-layout-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+
+  .faq-layout__inner {
+    display: flex;
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--faq-layout-width));
+    margin-inline: auto;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section-faq",
+  "blocks": [
+    {
+      "type": "accordion-items"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "media-text"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 900,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1300
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ with media",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "alignment": "center",
+            "gap": "2"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Everything you need to know",
+                "level": "h2",
+                "size": "inherit"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Thoughtfully answered to make your experience seamless.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "media-text",
+          "blocks": [
+            {
+              "type": "_faq-media"
+            },
+            {
+              "type": "accordion-items",
+              "blocks": [
+                {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": true
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "id": "trigger",
+                      "static": true,
+                      "settings": {
+                        "text": "How long does delivery take?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>In-stock items usually dispatch within 24–48 hours. Delivery timelines are shown at checkout based on your location.</p>"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "id": "trigger",
+                      "static": true,
+                      "settings": {
+                        "text": "What is your return policy?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We offer a 30-day return policy for unused items in original packaging. Return shipping is complimentary for store credit or exchanges.</p>"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Text & Editorial"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  }
+}
+{% endschema %}

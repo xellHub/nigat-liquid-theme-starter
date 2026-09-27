@@ -1,0 +1,463 @@
+{% liquid
+  assign height_class = 'image-banner--' | append: block.settings.height
+  assign position_class = 'image-banner--pos-' | append: block.settings.content_position
+  assign align_class = 'image-banner--' | append: block.settings.text_alignment
+  assign overlay = block.settings.image_overlay_opacity | default: 0 | divided_by: 100.0
+%}
+<div
+  id="ImageBanner-{{ block.id }}"
+  class="image-banner color-inverse {{ height_class }} {{ align_class }} {{ position_class }}"
+  style="--overlay-opacity:{{ overlay }};"
+  {{ block.shopify_attributes }}
+>
+  <div class="image-banner__media">
+    {% if block.settings.video != blank %}
+      {{
+        block.settings.video
+        | video_tag:
+          image_size: '3000x',
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          playsinline: true,
+          class: 'image-banner__video'
+      }}
+    {% elsif block.settings.video_url != blank %}
+      {% if block.settings.video_url.type == 'youtube' -%}
+        <iframe
+          src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?autoplay=1&mute=1&loop=1&playlist={{ block.settings.video_url.id }}&controls=0&showinfo=0&rel=0&playsinline=1"
+          class="image-banner__video image-banner__video--iframe"
+          title="Background video"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      {% elsif block.settings.video_url.type == 'vimeo' -%}
+        <iframe
+          src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}?autoplay=1&muted=1&loop=1&background=1&autopause=0"
+          class="image-banner__video image-banner__video--iframe"
+          title="Background video"
+          allow="autoplay; fullscreen"
+          allowfullscreen
+        ></iframe>
+      {%- endif %}
+    {% elsif block.settings.image != blank %}
+      {{
+        block.settings.image
+        | image_url: width: 3000
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '100vw',
+          widths: '375, 750, 1100, 1500, 1900, 2400, 3000',
+          class: 'image-banner__image',
+          alt: block.settings.image.alt
+        | default: 'Architectural Living'
+      }}
+    {% else %}
+      <img
+        src="{{ 'slideshow-hero-1.jpg' | asset_url }}"
+        alt="Architectural Living"
+        width="2000"
+        height="1200"
+        loading="eager"
+        fetchpriority="high"
+        class="image-banner__image"
+      >
+    {% endif %}
+    <div class="image-banner__overlay" aria-hidden="true"></div>
+  </div>
+  <div class="image-banner__content page-width">
+    <div class="image-banner__text">{% content_for 'blocks' %}</div>
+  </div>
+</div>
+<style>
+  #ImageBanner-{{ block.id }} {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--fullscreen {
+    min-height: calc(100vh - var(--header-total-height, calc(var(--header-height, 6rem) + var(--announcement-height, 0px))));
+    min-height: calc(100dvh - var(--header-total-height, calc(var(--header-height, 6rem) + var(--announcement-height, 0px))));
+  }
+
+  .image-banner__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-base);
+    overflow: hidden;
+  }
+
+  .image-banner__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .image-banner__video--iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 177.78vh;
+    min-width: 100%;
+    height: 56.25vw;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border: 0;
+  }
+
+  #ImageBanner-{{ block.id }} .image-banner__content {
+    display: flex;
+    width: 100%;
+    position: relative;
+    z-index: var(--z-raised);
+    padding-block: clamp(3.5rem, 6vw, 7rem);
+  }
+
+  /* 9-point vertical flex alignment */
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-left,
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-center,
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-right {
+    align-items: flex-start;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-left,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-center,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-right {
+    align-items: center;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-left,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-center,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-right {
+    align-items: flex-end;
+  }
+
+  /* 9-point horizontal justification inside content container */
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-left .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-left .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-left .image-banner__content {
+    justify-content: flex-start;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-center .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-center .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-center .image-banner__content {
+    justify-content: center;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-right .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-right .image-banner__content,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-right .image-banner__content {
+    justify-content: flex-end;
+  }
+
+  /* Text box alignment */
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-left .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-left .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-left .image-banner__text {
+    margin-right: auto;
+    margin-left: 0;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-center .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-center .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-center .image-banner__text {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  #ImageBanner-{{ block.id }}.image-banner--pos-top-right .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-middle-right .image-banner__text,
+  #ImageBanner-{{ block.id }}.image-banner--pos-bottom-right .image-banner__text {
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  /* Explicit text_alignment overrides if set */
+  #ImageBanner-{{ block.id }}.image-banner--left .image-banner__text {
+    text-align: left;
+    align-items: flex-start;
+  }
+  #ImageBanner-{{ block.id }}.image-banner--center .image-banner__text {
+    text-align: center;
+    align-items: center;
+  }
+  #ImageBanner-{{ block.id }}.image-banner--right .image-banner__text {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  /* Editorial & Typography Styles */
+  #ImageBanner-{{ block.id }} .image-banner__heading--editorial-italic {
+    font-family: var(--font-heading-family);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  #ImageBanner-{{ block.id }} .image-banner__heading--sans {
+    font-family: var(--font-body-family);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .image-banner__buttons {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    align-items: center;
+    margin-top: 0.8rem;
+  }
+
+  #ImageBanner-{{ block.id }} .image-banner--pos-top-left .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-middle-left .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-bottom-left .image-banner__buttons,
+  #ImageBanner-{{ block.id }}.image-banner--left .image-banner__buttons {
+    justify-content: flex-start;
+    align-self: flex-start;
+  }
+
+  #ImageBanner-{{ block.id }} .image-banner--pos-top-center .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-middle-center .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-bottom-center .image-banner__buttons,
+  #ImageBanner-{{ block.id }}.image-banner--center .image-banner__buttons {
+    justify-content: center;
+    align-self: center;
+  }
+
+  #ImageBanner-{{ block.id }} .image-banner--pos-top-right .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-middle-right .image-banner__buttons,
+  #ImageBanner-{{ block.id }} .image-banner--pos-bottom-right .image-banner__buttons,
+  #ImageBanner-{{ block.id }}.image-banner--right .image-banner__buttons {
+    justify-content: flex-end;
+    align-self: flex-end;
+  }
+
+  /* Button style variants */
+  .button--pill {
+    border-radius: var(--radius-button, 999px);
+    padding-inline: 2.8rem;
+  }
+
+  .button--outline {
+    background-color: transparent !important;
+    border: 1.5px solid currentColor !important;
+    color: currentColor !important;
+  }
+
+  .button--outline:hover {
+    background-color: currentColor !important;
+    color: var(--color-background) !important;
+  }
+
+  .button--outline_pill {
+    border-radius: var(--radius-button, 999px);
+    padding-inline: 2.8rem;
+    background-color: transparent !important;
+    border: 1.5px solid currentColor !important;
+    color: currentColor !important;
+  }
+
+  .button--outline_pill:hover {
+    background-color: currentColor !important;
+    color: var(--color-background) !important;
+  }
+</style>
+{% stylesheet %}
+  .image-banner .theme-heading,
+  .image-banner .theme-text {
+    color: inherit;
+  }
+  .image-banner .theme-button {
+    margin-top: var(--space-2);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Image banner media",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "badge"
+    },
+    {
+      "type": "spacer"
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image_banner.settings.image.label"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:sections.image_banner.settings.video.label",
+      "info": "t:sections.image_banner.settings.video.info"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "t:sections.image_banner.settings.video_url.label",
+      "info": "t:sections.image_banner.settings.video_url.info"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:sections.image_banner.settings.height.label",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.image_banner.settings.height.options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.image_banner.settings.height.options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.image_banner.settings.height.options.large"
+        },
+        {
+          "value": "fullscreen",
+          "label": "t:sections.image_banner.settings.height.options.fullscreen"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "t:sections.image_banner.settings.image_overlay_opacity.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Content Alignment & Positioning"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "middle-left",
+          "label": "Middle left"
+        },
+        {
+          "value": "middle-center",
+          "label": "Middle center"
+        },
+        {
+          "value": "middle-right",
+          "label": "Middle right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.image_banner.settings.text_alignment.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.image_banner.settings.text_alignment.options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.image_banner.settings.text_alignment.options.center"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.image_banner.settings.text_alignment.options.right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner media",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Image banner",
+            "level": "h1",
+            "size": "display",
+            "alignment": "center",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Give customers a clear reason to explore.</p>",
+            "size": "large",
+            "alignment": "center",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop now"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{%- comment -%}
+  Renders a product or variant price, handling sale and "from" prices.
+
+  Accepts:
+  - product: {Object} product or variant (required) — uses .price, .compare_at_price
+  - use_variant: {Boolean} use product.selected_or_first_available_variant (optional)
+  - show_unit_price: {Boolean} render unit price if present (optional, default true)
+  - class: {String} extra CSS classes (optional)
+
+  Usage:
+  {% render 'price', product: product, use_variant: true %}
+{%- endcomment -%}
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  elsif placeholder
+    assign target = null
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+
+  assign money_price = price | money
+
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign show_unit = show_unit_price | default: true
+  assign display_compare = true
+  if show_compare_at == false
+    assign display_compare = false
+  endif
+-%}
+
+<div class="price {% if on_sale %}price--on-sale{% endif %} {% unless available %}price--sold-out{% endunless %} {{ class }}">
+  <div class="price__container">
+    {%- comment -%} Show "From" for products with variant price range {%- endcomment -%}
+    {%- if product.price_varies and product.compare_at_price_varies == false -%}
+      <span class="price__from visually-hidden">{{ 'products.product.price.from' | t }}</span>
+    {%- endif -%}
+
+    {%- if on_sale -%}
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      {% if display_compare -%}
+        <s class="price-item price-item--regular">{{ compare_at_price | money }}</s>
+      {%- endif %}
+      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="price-item price-item--sale">{{ money_price }}</span>
+    {%- else -%}
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="price-item price-item--regular">{{ money_price }}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if show_unit and target.unit_price_measurement -%}
+    <div class="price__unit">
+      <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      {{ target.unit_price | money }}
+      <span aria-hidden="true">/</span>
+      {%- if target.unit_price_measurement.reference_value != 1 -%}
+        {{- target.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{ target.unit_price_measurement.reference_unit }}
+    </div>
+  {%- endif -%}
+</div>

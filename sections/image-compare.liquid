@@ -1,0 +1,161 @@
+<section
+  id="ImageCompare-{{ section.id }}"
+  class="image-compare-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--compare-width: {{ section.settings.page_width }}px; --compare-pt: {{ section.settings.padding_top }}px; --compare-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="image-compare-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}
+  .image-compare-layout {
+    padding-block: var(--compare-pt) var(--compare-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+  .image-compare-layout__inner {
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--compare-width));
+    margin-inline: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image compare",
+  "tag": "section",
+  "class": "image-compare-section",
+  "blocks": [
+    { "type": "media-text" },
+    { "type": "_image-compare" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image compare",
+      "blocks": [
+        {
+          "type": "media-text",
+          "settings": {
+            "media_position": "end",
+            "ratio": "media-wide"
+          },
+          "blocks": [
+            {
+              "type": "_image-compare",
+              "blocks": [
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Before"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "After"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "settings": {
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Side by side comparison"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Find your perfect fit",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Discover the best of both worlds with our tailored and relaxed silhouettes.</p>"
+                  }
+                },
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "View all",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop now",
+                        "link": "/collections/all",
+                        "style": "secondary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Storytelling"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

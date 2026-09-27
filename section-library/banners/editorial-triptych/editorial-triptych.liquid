@@ -1,0 +1,162 @@
+<section
+  id="EditorialTriptychLayout-{{ section.id }}"
+  class="editorial-triptych-layout{% if section.settings.full_width %} editorial-triptych-layout--full{% endif %} section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--triptych-width:{{ section.settings.page_width }}px;--triptych-pt:{{ section.settings.padding_top }}px;--triptych-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="editorial-triptych-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.editorial-triptych-layout{padding-block:var(--triptych-pt) var(--triptych-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.editorial-triptych-layout__inner{width:min(100%,var(--triptych-width));margin:auto}.editorial-triptych-layout--full .editorial-triptych-layout__inner{width:100%;max-width:none}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Editorial triptych",
+  "tag": "section",
+  "class": "section-editorial-triptych",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_editorial-triptych" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 900,
+      "max": 1920,
+      "step": 20,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial triptych",
+      "blocks": [
+        {
+          "type": "_editorial-triptych",
+          "settings": {
+            "desktop_height": "700px",
+            "mobile_height": "480px",
+            "overlay_opacity": 25
+          },
+          "blocks": [
+            {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 1
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The ultimate body care.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop body care",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 2
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The ultimate skin retouch.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop skin retouch",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 3
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Serum for sensitive.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop serum",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

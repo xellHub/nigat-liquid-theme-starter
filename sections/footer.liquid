@@ -1,0 +1,154 @@
+<footer
+  id="Footer-{{ section.id }}"
+  class="footer-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--footer-pt:{{ section.settings.padding_top }}px;--footer-pb:{{ section.settings.padding_bottom }}px;"
+>
+  {% content_for 'blocks' %}
+</footer>
+{% stylesheet %}.footer-layout{padding-block:var(--footer-pt) var(--footer-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.footer-layout:has(.footer-subscribe),.footer-layout:has(.footer--with-subscribe){padding-top:0;}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "footer-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "blocks": [
+    {
+      "type": "_footer-subscribe"
+    },
+    {
+      "type": "_footer-content"
+    },
+    {
+      "type": "_footer-column"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "category": "Information & Utility",
+      "blocks": [
+        {
+          "type": "_footer-content",
+          "blocks": [
+            {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "menu",
+                "menu": "footer"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Shop",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "menu",
+                "menu": "main-menu"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Quick Links",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "customer_care"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Customer Care",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "company"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Company",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

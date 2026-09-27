@@ -1,0 +1,33 @@
+{
+  "description": "Soft, spacious preview identity; merge into a temporary copy of config/settings_data.json.",
+  "settings": {
+    "font_heading": "montserrat_n7",
+    "font_body": "inter_n4",
+    "font_body_scale": 105,
+    "font_heading_scale": 115,
+    "body_line_height": 170,
+    "heading_line_height": 125,
+    "page_width": 1400,
+    "spacing_sections": 88,
+    "corner_radius": 16,
+    "card_corner_radius": 24,
+    "button_corner_radius": 16,
+    "input_corner_radius": 12,
+    "grid_gap": 32,
+    "card_style": "elevated"
+  },
+  "color_schemes": {
+    "bare-light": {
+      "background": "#fffaf6",
+      "surface": "#f8f0eb",
+      "surface_raised": "#ffffff",
+      "text": "#302425",
+      "muted": "#66585a",
+      "border": "#e6d6d3",
+      "accent": "#8f4159",
+      "accent_foreground": "#ffffff",
+      "button": "#8f4159",
+      "button_label": "#ffffff"
+    }
+  }
+}

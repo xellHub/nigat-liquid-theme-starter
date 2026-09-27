@@ -1,0 +1,63 @@
+<section
+  id="size-guide-{{ section.id }}"
+  class="size-guide-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+  "name": "Size guide",
+  "tag": "section",
+  "class": "section-size-guide",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_size-guide-content" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.size_guide.presets.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Sizing & Measurements",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Compare your body measurements against our size charts below to choose your ideal fit.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        },
+        {
+          "type": "_size-guide-content"
+        }
+      ],
+      "category": "Information & Utility"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

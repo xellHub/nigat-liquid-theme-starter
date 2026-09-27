@@ -1,0 +1,76 @@
+{% capture announcement_messages %}{% content_for 'blocks' %}{% endcapture %}
+{% assign announcement_revision = announcement_messages | strip_html | handle %}
+<announcement-rotator
+  id="AnnouncementRotator-{{ block.id }}"
+  class="announcement-rotator"
+  data-autoplay="{{ block.settings.autoplay }}"
+  data-speed="{{ block.settings.speed | times: 1000 }}"
+  data-dismiss-key="announcement-{{ section.id }}-{{ block.id }}-{{ announcement_revision }}"
+  data-play-label="{{ 'general.announcement.play' | t | escape }}"
+  data-pause-label="{{ 'general.announcement.pause' | t | escape }}"
+  aria-live="off"
+  {{ block.shopify_attributes }}
+>
+  <div class="announcement-rotator__messages" data-announcement-messages>{{ announcement_messages }}</div>
+  <div class="announcement-rotator__controls">
+    {% if block.settings.autoplay %}
+      <button type="button" data-announcement-pause aria-pressed="false" aria-label="{{ 'general.announcement.pause' | t }}">{% render 'icon', name: 'pause' %}</button>
+    {% endif %}
+    {% if block.settings.dismissible %}
+      <button type="button" data-announcement-dismiss aria-label="{{ 'general.announcement.dismiss' | t }}">{% render 'icon', name: 'close' %}</button>
+    {% endif %}
+  </div>
+</announcement-rotator>
+{% stylesheet %}
+  .announcement-rotator {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .announcement-rotator__messages.is-ready { display: grid; place-items: center; }
+  .announcement-rotator__messages.is-ready > * {
+    grid-area: 1 / 1;
+    text-align: center;
+  }
+  .announcement-rotator__messages > [hidden] {
+    display: none;
+  }
+  .announcement-rotator__controls { display: none; gap: var(--space-1); }
+  .announcement-rotator.is-ready .announcement-rotator__controls { display: inline-flex; }
+  .announcement-rotator__controls button { display: grid; place-items: center; width: var(--foundation-minimum-target-size); min-height: var(--foundation-minimum-target-size); border: 0; background: transparent; color: var(--color-text); cursor: pointer; }
+  .announcement-rotator__controls .icon { width: 1.6rem; height: 1.6rem; }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Announcement rotator",
+  "tag": null,
+  "blocks": [{ "type": "text" }, { "type": "link" }],
+  "settings": [
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-rotate", "default": true },
+    { "type": "checkbox", "id": "dismissible", "label": "Allow dismissal", "default": false },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change message every",
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement rotator",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": { "text": "<p>Welcome to our store</p>", "alignment": "center" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

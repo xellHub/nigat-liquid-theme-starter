@@ -1,0 +1,27 @@
+<p class="product__vendor caption" {{ block.shopify_attributes }}>
+  {%- if product.vendor != blank -%}
+    {{ product.vendor | escape }}
+  {%- else -%}
+    {{ block.settings.custom_text | default: 'Custom Fit Hoodie' | escape }}
+  {%- endif -%}
+</p>
+
+{% schema %}
+{
+  "name": "Vendor",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_text",
+      "label": "t:sections.main_product.blocks.vendor.settings.custom_text.label",
+      "default": "Custom Fit Hoodie"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vendor"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,285 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-media-text theme-media-text--layout-{{ block.settings.layout }} theme-media-text--position-{{ block.settings.media_position }} theme-media-text--ratio-{{ block.settings.ratio }} theme-media-text--align-{{ block.settings.alignment }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .theme-media-text {
+    display: grid;
+    gap: var(--grid-gap);
+  }
+  .theme-media-text--layout-split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .theme-media-text--layout-split.theme-media-text--ratio-media-wide {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+  .theme-media-text--layout-split.theme-media-text--ratio-media-60 {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  }
+  .theme-media-text--layout-split.theme-media-text--ratio-content-wide {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+  .theme-media-text--layout-split.theme-media-text--position-end.theme-media-text--ratio-media-wide {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+  .theme-media-text--layout-split.theme-media-text--position-end.theme-media-text--ratio-media-60 {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr);
+  }
+  .theme-media-text--layout-split.theme-media-text--position-end.theme-media-text--ratio-content-wide {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+  .theme-media-text--layout-stack {
+    grid-template-columns: 1fr;
+  }
+  .theme-media-text--align-center {
+    align-items: center;
+  }
+  .theme-media-text--align-start {
+    align-items: start;
+  }
+  .theme-media-text--align-end {
+    align-items: end;
+  }
+  .theme-media-text--position-end > :first-child {
+    order: 2;
+  }
+  @media (max-width: 749px) {
+    .theme-media-text--layout-split {
+      grid-template-columns: 1fr;
+    }
+    .theme-media-text--position-end > :first-child {
+      order: initial;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Media with text",
+  "tag": null,
+  "blocks": [
+    { "type": "image" },
+    { "type": "video" },
+    { "type": "_faq-media" },
+    { "type": "accordion-items" },
+    { "type": "_image-compare" },
+    { "type": "group" },
+    { "type": "card" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "split",
+          "label": "Split"
+        },
+        {
+          "value": "stack",
+          "label": "Stacked"
+        }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Column ratio",
+      "options": [
+        {
+          "value": "equal",
+          "label": "Equal"
+        },
+        {
+          "value": "media-wide",
+          "label": "Media wider"
+        },
+        {
+          "value": "media-60",
+          "label": "Media 60 / content 40"
+        },
+        {
+          "value": "content-wide",
+          "label": "Content wider"
+        }
+      ],
+      "default": "equal"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "group",
+          "settings": {
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "eyebrow"
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Pair media with a message"
+              }
+            },
+            {
+              "type": "text"
+            },
+            {
+              "type": "button"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

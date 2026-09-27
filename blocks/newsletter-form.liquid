@@ -1,0 +1,202 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-newsletter-form"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% form 'customer', class: 'theme-newsletter-form__form' %}
+    {% # theme-check-disable UnusedAssign %}
+    {%- assign button_element = 'submit' -%}
+    {% # theme-check-enable UnusedAssign %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="theme-newsletter-form__fields">{% content_for 'blocks' %}</div>
+    {% if form.posted_successfully? %}
+      <p class="theme-newsletter-form__message" role="status">
+        {% render 'icon', name: 'check' %}
+        {{ 'general.newsletter_form.confirmation' | t }}
+      </p>
+    {% elsif form.errors %}
+      <p class="theme-newsletter-form__message" role="alert">
+        {{ form.errors.translated_fields.email | capitalize }}
+        {{ form.errors.messages.email }}
+      </p>
+    {% endif %}
+  {% endform %}
+</div>
+
+{% stylesheet %}
+  .theme-newsletter-form {
+    width: 100%;
+  }
+  .theme-newsletter-form__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .theme-newsletter-form__fields {
+    display: flex;
+    width: min(100%, var(--foundation-content-width-narrow));
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .theme-newsletter-form__fields > .theme-field {
+    flex: 1;
+  }
+  .theme-newsletter-form__message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--color-text);
+  }
+  @container (max-width: 520px) {
+    .theme-newsletter-form__fields {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .theme-newsletter-form__fields > .theme-button {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter form",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "input"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "checkbox"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter form",
+      "blocks": [
+        {
+          "type": "input",
+          "settings": {
+            "label": "Email",
+            "type": "email",
+            "autocomplete": "email"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Subscribe",
+            "style": "primary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

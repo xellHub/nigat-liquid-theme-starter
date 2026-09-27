@@ -1,0 +1,274 @@
+<section
+  id="contact-form-{{ section.id }}"
+  class="contact-form-layout contact-form section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  {% render 'section-background', section_id: section.id %}
+
+  <div class="page-width">
+    <div class="contact-form__grid">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .contact-form-layout {
+    padding-top: var(--padding-top, 64px);
+    padding-bottom: var(--padding-bottom, 64px);
+  }
+
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (min-width: 750px) {
+    .contact-form__grid:has(.contact-form__aside) {
+      grid-template-columns: 3fr 7fr;
+      gap: var(--space-8);
+    }
+  }
+
+  @media (min-width: 990px) {
+    .contact-form__grid:has(.contact-form__aside) {
+      grid-template-columns: 3fr 7fr;
+      gap: clamp(4.8rem, 6vw, 8rem);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "section",
+  "class": "contact-form-section",
+  "blocks": [
+    { "type": "_contact-form-aside" },
+    { "type": "_contact-form-content" },
+    { "type": "group" },
+    { "type": "surface" },
+    { "type": "card" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact_form.presets.name",
+      "blocks": [
+        {
+          "type": "_contact-form-aside",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Contact us",
+                "level": "h1",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Choose a subject, then describe the issue in your own words. We'll use the email address you provide to follow up.</p>"
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "gap": "3",
+                "padding": "5",
+                "surface": "surface",
+                "border": "on"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Before you send",
+                    "level": "h4",
+                    "size": "small"
+                  }
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "mail",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": [
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Add links, order numbers, and enough detail for our team to locate the issue promptly.</p>"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "clock",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": [
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Inquiries are reviewed and answered within 24–48 business hours.</p>"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Prefer email? Send directly to <a href=\"mailto:support@example.com\">support@example.com</a>.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Frequently asked questions",
+                    "link": "/pages/faq",
+                    "style": "link",
+                    "icon": "arrow-right"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "_contact-form-content",
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "input",
+                  "settings": {
+                    "label": "Name",
+                    "type": "text",
+                    "autocomplete": "name",
+                    "placeholder": "Name"
+                  }
+                },
+                {
+                  "type": "input",
+                  "settings": {
+                    "label": "Email",
+                    "type": "email",
+                    "autocomplete": "email",
+                    "placeholder": "Email"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "select",
+                  "settings": {
+                    "label": "Subject",
+                    "options": "General question\nOrder & shipping\nProduct support\nReturns & exchanges\nPartnership & business\nOther",
+                    "placeholder": "Select a subject"
+                  }
+                },
+                {
+                  "type": "input",
+                  "settings": {
+                    "label": "Phone number",
+                    "type": "tel",
+                    "autocomplete": "tel",
+                    "placeholder": "Phone number"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "textarea",
+              "settings": {
+                "label": "Comment",
+                "placeholder": "Comment",
+                "rows": 6,
+                "hint": "Please provide as much detail as possible."
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "justify": "between",
+                "alignment": "center",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Inquiries are answered within 24–48 hours.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Send",
+                    "style": "primary",
+                    "icon": "arrow-right"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Information & Utility"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

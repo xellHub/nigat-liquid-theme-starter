@@ -1,0 +1,181 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "product-resource": {
+          "type": "_product-resource",
+          "settings": {},
+          "blocks": {
+            "title": {
+              "type": "_product-title",
+              "settings": {}
+            },
+            "price": {
+              "type": "_product-price",
+              "settings": {
+                "show_rating": true
+              }
+            },
+            "variant_picker": {
+              "type": "_product-variant-picker",
+              "settings": {}
+            },
+            "quantity": {
+              "type": "_product-quantity",
+              "settings": {}
+            },
+            "buy_buttons": {
+              "type": "_product-buy-buttons",
+              "settings": {
+                "show_dynamic_checkout": true
+              }
+            },
+            "description": {
+              "type": "_product-info",
+              "settings": {
+                "source": "description"
+              },
+              "blocks": {
+                "trigger": {
+                  "type": "heading",
+                  "static": true,
+                  "settings": {
+                    "text": "Description",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              }
+            },
+            "reviews": {
+              "type": "_product-reviews",
+              "settings": {}
+            }
+          },
+          "block_order": [
+            "title",
+            "price",
+            "variant_picker",
+            "quantity",
+            "buy_buttons",
+            "description",
+            "reviews"
+          ]
+        }
+      },
+      "block_order": [
+        "product-resource"
+      ],
+      "settings": {}
+    },
+    "related": {
+      "type": "recommended-products",
+      "settings": {
+        "limit": 4,
+        "columns_desktop": 4,
+        "intent": "related"
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "You may also like",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        "items": {
+          "type": "_product-recommendations",
+          "settings": {},
+          "blocks": {
+            "product-card": {
+              "type": "product-card",
+              "static": true,
+              "settings": {
+                "product": "{{ closest.product }}"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "settings": {
+                    "image": "{{ closest.product.featured_image }}",
+                    "link": "{{ closest.product.url }}",
+                    "alt": "{{ closest.product.title }}"
+                  }
+                },
+                "sale-badge": {
+                  "type": "badge",
+                  "settings": {
+                    "product": "{{ closest.product }}",
+                    "mode": "sale"
+                  }
+                },
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.product.title }}",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "rating": {
+                  "type": "rating",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "view-product": {
+                  "type": "button",
+                  "settings": {
+                    "label": "View product",
+                    "style": "link",
+                    "link": "{{ closest.product.url }}"
+                  }
+                },
+                "vendor": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "{{ closest.product.vendor }}",
+                    "color_role": "muted"
+                  }
+                },
+                "swatches": {
+                  "type": "product-swatches",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                }
+              },
+              "block_order": [
+                "image",
+                "sale-badge",
+                "vendor",
+                "title",
+                "price",
+                "rating",
+                "swatches",
+                "view-product"
+              ]
+            }
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "items"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "related"
+  ]
+}

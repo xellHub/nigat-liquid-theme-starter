@@ -1,0 +1,516 @@
+{%- liquid
+  assign overlay_opacity = block.settings.overlay_opacity | default: 35 | divided_by: 100.0
+  assign alignment = block.settings.alignment | default: 'center'
+-%}
+
+<div
+  class="footer-subscribe"
+  id="FooterSubscribe-{{ block.id }}"
+  data-footer-subscribe
+  style="--footer-sub-overlay: {{ overlay_opacity }};"
+  {{ block.shopify_attributes }}
+>
+  <div class="footer-subscribe__media" aria-hidden="true">
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          widths: '600, 900, 1200, 1600, 2000, 2400',
+          sizes: '100vw',
+          class: 'footer-subscribe__media-img',
+          alt: 'Stay Connected'
+      }}
+    {%- else -%}
+      <img
+        src="{{ 'footer-subscribe.jpg' | asset_url }}"
+        alt="Stay Connected"
+        class="footer-subscribe__media-img"
+        loading="lazy"
+        width="2000"
+        height="800"
+      >
+    {%- endif -%}
+    <div class="footer-subscribe__overlay"></div>
+  </div>
+
+  <div class="footer-subscribe__content page-width footer-subscribe__content--{{ alignment }}">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .footer-subscribe {
+    position: relative;
+    width: 100%;
+    min-height: clamp(420px, 45vw, 540px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(6.4rem, 9vw, 10rem) 2.4rem;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .footer-subscribe__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .footer-subscribe__media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .footer-subscribe__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-color: var(--color-background);
+    filter: brightness(0.8) contrast(1.05) sepia(0.12);
+  }
+
+  .footer-subscribe__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(14, 14, 14, calc(var(--footer-sub-overlay, 0.35) * 0.8)) 0%,
+      rgba(10, 10, 10, calc(var(--footer-sub-overlay, 0.35) * 1.2)) 100%
+    );
+    pointer-events: none;
+  }
+
+  .footer-subscribe__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 64rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.4rem;
+  }
+
+  .footer-subscribe__content--left {
+    align-items: flex-start;
+    text-align: left;
+    margin-inline: 0 auto;
+  }
+  .footer-subscribe__content--left .footer-subscribe__heading,
+  .footer-subscribe__content--left .footer-subscribe__subheading,
+  .footer-subscribe__content--left .theme-heading,
+  .footer-subscribe__content--left .theme-text {
+    margin-inline: 0 auto;
+    text-align: left;
+  }
+  .footer-subscribe__content--left .footer-subscribe__form-wrap,
+  .footer-subscribe__content--left .theme-newsletter-form {
+    margin-inline: 0 auto;
+  }
+
+  .footer-subscribe__content--center {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+  .footer-subscribe__content--center .footer-subscribe__heading,
+  .footer-subscribe__content--center .footer-subscribe__subheading,
+  .footer-subscribe__content--center .theme-heading,
+  .footer-subscribe__content--center .theme-text {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .footer-subscribe__content--center .theme-heading .theme-heading__text {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .footer-subscribe__content--center .footer-subscribe__form-wrap,
+  .footer-subscribe__content--center .theme-newsletter-form {
+    margin-inline: auto;
+  }
+
+  .footer-subscribe__content--right {
+    align-items: flex-end;
+    text-align: right;
+    margin-inline: auto 0;
+  }
+  .footer-subscribe__content--right .footer-subscribe__heading,
+  .footer-subscribe__content--right .footer-subscribe__subheading,
+  .footer-subscribe__content--right .theme-heading,
+  .footer-subscribe__content--right .theme-text {
+    margin-inline: auto 0;
+    text-align: right;
+  }
+  .footer-subscribe__content--right .footer-subscribe__form-wrap,
+  .footer-subscribe__content--right .theme-newsletter-form {
+    margin-inline: auto 0;
+  }
+
+  .footer-subscribe__content .theme-eyebrow,
+  .footer-subscribe__eyebrow {
+    font-family: var(--font-body-family);
+    font-size: clamp(1.25rem, 1.4vw, 1.45rem);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: color-mix(in srgb, var(--color-on-media) 94%, transparent);
+    margin: 0;
+    text-shadow: 0 1px 4px color-mix(in srgb, var(--color-text) 45%, transparent);
+  }
+
+  .footer-subscribe__content .theme-heading .theme-heading__text,
+  .footer-subscribe__heading {
+    font-family: var(--font-heading-family);
+    font-style: normal;
+    font-weight: var(--font-heading-weight, 400);
+    font-size: clamp(3.2rem, 5.2vw, 5.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--color-on-media);
+    margin: 0 auto;
+    max-width: 58rem;
+    text-shadow: 0 2px 10px color-mix(in srgb, var(--color-text) 45%, transparent);
+  }
+
+  .footer-subscribe__content .theme-text,
+  .footer-subscribe__content .theme-text p,
+  .footer-subscribe__subheading {
+    font-family: var(--font-body-family);
+    font-size: clamp(1.4rem, 1.6vw, 1.55rem);
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--color-on-media) 92%, transparent);
+    margin: 0.2rem 0 0.8rem;
+    max-width: 52rem;
+    text-shadow: 0 1px 4px color-mix(in srgb, var(--color-text) 40%, transparent);
+  }
+
+  .footer-subscribe__content .theme-newsletter-form,
+  .footer-subscribe__form-wrap {
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields,
+  .footer-subscribe__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field {
+    width: 100%;
+    gap: 0;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field input,
+  input[type='email'].footer-subscribe__input,
+  input.footer-subscribe__input,
+  .footer-subscribe__input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--color-surface);
+    border: 1.5px solid color-mix(in srgb, var(--color-surface-text) 24%, transparent);
+    border-radius: var(--radius-button, 4px);
+    padding: 1.4rem 2rem;
+    font-family: var(--font-body-family);
+    font-size: 1.45rem;
+    color: var(--color-surface-text) !important;
+    text-align: left;
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--color-text) 12%, transparent);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field input::placeholder,
+  input[type='email'].footer-subscribe__input::placeholder,
+  input.footer-subscribe__input::placeholder,
+  .footer-subscribe__input::placeholder {
+    color: var(
+      --color-surface-muted,
+      color-mix(in srgb, var(--color-surface-text) 65%, transparent)
+    ) !important;
+    opacity: 1 !important;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field input:focus,
+  input[type='email'].footer-subscribe__input:focus,
+  input.footer-subscribe__input:focus,
+  .footer-subscribe__input:focus {
+    outline: none;
+    background-color: var(--color-surface);
+    border-color: var(--color-accent) !important;
+    box-shadow:
+      0 0 0 2px var(--color-accent),
+      0 4px 16px color-mix(in srgb, var(--color-text) 16%, transparent);
+    color: var(--color-surface-text) !important;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-field input:-webkit-autofill,
+  input[type='email'].footer-subscribe__input:-webkit-autofill,
+  input[type='email'].footer-subscribe__input:-webkit-autofill:hover,
+  input[type='email'].footer-subscribe__input:-webkit-autofill:focus,
+  input.footer-subscribe__input:-webkit-autofill,
+  input.footer-subscribe__input:-webkit-autofill:hover,
+  input.footer-subscribe__input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-surface-text) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-button,
+  .footer-subscribe__button {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--color-button, var(--color-accent));
+    color: var(--color-button-text, var(--color-accent-text));
+    border: 1px solid var(--color-button, var(--color-accent));
+    border-radius: var(--radius-button, 4px);
+    padding: 1.4rem 2.4rem;
+    font-family: var(--font-body-family);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 14px
+      color-mix(in srgb, var(--color-text) calc(var(--shadow-opacity, 0.1) * 900%), transparent);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.15s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-button:hover,
+  .footer-subscribe__button:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--color-button, var(--color-accent)) 88%,
+      var(--color-text)
+    );
+    color: var(--color-button-text, var(--color-accent-text));
+    border-color: color-mix(
+      in srgb,
+      var(--color-button, var(--color-accent)) 88%,
+      var(--color-text)
+    );
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px
+      color-mix(in srgb, var(--color-text) calc(var(--shadow-opacity, 0.1) * 1400%), transparent);
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-button:active,
+  .footer-subscribe__button:active {
+    transform: translateY(0);
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-button .theme-button__icon,
+  .footer-subscribe__button-arrow {
+    display: inline-block;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .footer-subscribe__content .theme-newsletter-form__fields .theme-button:hover .theme-button__icon,
+  .footer-subscribe__button:hover .footer-subscribe__button-arrow {
+    transform: translateX(4px);
+  }
+
+  .footer-subscribe__content .theme-text--small,
+  .footer-subscribe__content .theme-text:last-child,
+  .footer-subscribe__note {
+    font-family: var(--font-body-family);
+    font-size: 1.25rem;
+    color: color-mix(in srgb, var(--color-on-media) 85%, transparent);
+    margin: 0.4rem 0 0;
+    text-shadow: 0 1px 3px color-mix(in srgb, var(--color-text) 40%, transparent);
+  }
+
+  .footer-subscribe__status {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 1.2rem 0 0;
+    padding: 1.2rem 1.6rem;
+    border-radius: var(--radius-button, 4px);
+    font-size: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    text-align: center;
+  }
+
+  .footer-subscribe__status--success {
+    background: color-mix(in srgb, var(--color-success) 25%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-success) 60%, transparent);
+    color: var(--color-on-media);
+    backdrop-filter: blur(8px);
+  }
+
+  .footer-subscribe__status--error {
+    background: color-mix(in srgb, var(--color-danger) 25%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-danger) 60%, transparent);
+    color: var(--color-on-media);
+    backdrop-filter: blur(8px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer subscribe",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "eyebrow"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "newsletter-form"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "spacer"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 35
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer subscribe",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "A More Thoughtful Way to Live",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Be the first to discover new collections, thoughtful design ideas, and curated pieces for your space.</p>",
+            "alignment": "center",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "newsletter-form",
+          "blocks": [
+            {
+              "type": "input",
+              "settings": {
+                "label": "Email",
+                "type": "email",
+                "autocomplete": "email"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "SUBSCRIBE",
+                "style": "primary",
+                "icon": "arrow-right"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>We respect your inbox — only meaningful updates, always.</p>",
+            "size": "small",
+            "alignment": "center",
+            "color_role": "on_media"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

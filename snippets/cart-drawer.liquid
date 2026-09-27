@@ -1,0 +1,52 @@
+{%- comment -%}
+  The slide-out cart drawer. Rendered once in the layout / header.
+  Powered by the reusable composable overlay primitive.
+  Button styling is shared with blocks/button.liquid.
+{%- endcomment -%}
+{% # theme-check-disable ValidScopedCSSClass %}
+
+{%- capture drawer_content -%}
+  <header class="cart-drawer__header">
+    <div class="cart-drawer__header-title-group">
+      <h2 class="cart-drawer__title">{{ 'cart.general.title' | t }}</h2>
+      <span class="cart-drawer__count-badge{% if cart == empty %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+    </div>
+    <button
+      type="button"
+      class="cart-drawer__close button button--icon theme-button"
+      data-overlay-close
+      data-drawer-close
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      {% render 'icon', name: 'close' %}
+    </button>
+  </header>
+
+  <div class="cart-drawer__content" data-cart-items>
+    {% render 'cart-items', context: 'drawer', supplemental_content: supplemental_content %}
+  </div>
+{%- endcapture -%}
+
+{%- assign cart_drawer_title = 'cart.general.title' | t -%}
+
+<cart-drawer
+  class="cart-drawer{% if cart == empty %} cart-drawer--empty{% endif %}"
+  id="CartDrawer"
+  data-drawer
+>
+  {% render 'overlay',
+    type: 'drawer',
+    id: 'CartDrawerOverlay',
+    class: 'cart-drawer__overlay-root',
+    panel_class: 'cart-drawer__inner',
+    panel_attributes: 'data-drawer-panel',
+    backdrop_class: 'cart-drawer__overlay',
+    backdrop_attributes: 'data-drawer-close',
+    content: drawer_content,
+    aria_label: cart_drawer_title,
+    position: 'right',
+    close_button: false,
+    backdrop_dismiss: true
+  %}
+</cart-drawer>
+{% # theme-check-enable ValidScopedCSSClass %}

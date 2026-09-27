@@ -1,0 +1,38 @@
+{%- assign navigation = block.settings.menu -%}
+{%- if navigation != blank and navigation.links.size > 0 -%}
+  <nav class="collection-navigation" aria-label="{{ 'collections.general.subcategories' | t }}" {{ block.shopify_attributes }}>
+    {% content_for 'blocks' %}
+    <ul class="collection-navigation__list" role="list">
+      {%- for link in navigation.links -%}
+        <li>
+          <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- if link.links.size > 0 -%}
+            <ul role="list">
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}" {% if child.current %}aria-current="page"{% endif %}>{{ child.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .collection-navigation { margin-block-end: var(--space-6); }
+  .collection-navigation__list { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); padding: 0; list-style: none; }
+  .collection-navigation ul ul { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: 0; list-style: none; }
+  .collection-navigation a { color: var(--color-text); text-underline-offset: .2em; }
+  .collection-navigation a[aria-current="page"] { color: var(--color-accent); text-decoration: underline; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection navigation",
+  "tag": null,
+  "blocks": [{"type":"heading"},{"type":"text"}],
+  "settings": [{"type":"link_list","id":"menu","label":"Subcategory menu"}],
+  "presets": [{"name":"Collection navigation"}]
+}
+{% endschema %}

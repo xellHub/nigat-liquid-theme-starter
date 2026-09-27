@@ -1,0 +1,158 @@
+<div class="lss__slide" data-slide data-slide-index="0" {{ block.shopify_attributes }}>
+  <div class="lss__peek-tab" data-peek-tab aria-hidden="true">
+    <span class="lss__peek-number" data-peek-number>1</span>
+    {% if block.settings.accessibility_label != blank %}
+      <span class="lss__peek-tag">{{ block.settings.accessibility_label | escape }}</span>
+    {% endif %}
+  </div>
+  <div class="lss__peek-overlay" aria-hidden="true"></div>
+  <div class="lss__layer-bg">
+    {% if block.settings.background_image != blank -%}
+      {{-
+        block.settings.background_image
+        | image_url: width: 2000
+        | image_tag: loading: 'lazy', widths: '800, 1200, 1600, 2000', sizes: '100vw', alt: ''
+      -}}
+    {%- endif %}
+    <div class="lss__bg-overlay"></div>
+  </div>
+  <div class="lss__slide-inner">
+    <div class="lss__copy-wrap">
+      {% content_for 'blocks' %}
+    </div>
+    <div class="lss__layers-media">
+      <div class="lss__layer-primary">
+        {% if block.settings.primary_image != blank -%}
+          {{-
+            block.settings.primary_image
+            | image_url: width: 1000
+            | image_tag:
+              loading: 'lazy',
+              widths: '400, 700, 1000',
+              sizes: '(min-width: 900px) 40vw, 80vw',
+              alt: block.settings.accessibility_label
+            | default: ''
+          -}}
+        {%- else %}
+          <div class="lss__placeholder-wrap">
+            {{ 'product-apparel-1' | placeholder_svg_tag: 'lss__placeholder' }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="lss__layer-accent">
+        {% if block.settings.accent_image != blank -%}
+          {{-
+            block.settings.accent_image
+            | image_url: width: 600
+            | image_tag:
+              loading: 'lazy',
+              widths: '250, 400, 600',
+              sizes: '(min-width: 900px) 20vw, 40vw',
+              alt: ''
+          -}}
+        {%- else %}
+          <div class="lss__placeholder-wrap">
+            {{ 'collection-1' | placeholder_svg_tag: 'lss__placeholder' }}
+          </div>
+        {% endif -%}
+        {%- if block.settings.accessibility_label != blank -%}
+          <span class="lss__accent-tag">{{ block.settings.accessibility_label | escape }}</span>
+        {%- endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Layered slide",
+  "tag": null,
+  "blocks": [
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "icon" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "primary_image",
+      "label": "Focal hero media (Layer 2)"
+    },
+    {
+      "type": "image_picker",
+      "id": "accent_image",
+      "label": "Offset detail media (Layer 3)"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Slide tag / accessibility label",
+      "default": "Signature Edit"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Atmospheric background (Layer 1)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layered slide",
+      "settings": {
+        "accessibility_label": "Signature Edit"
+      },
+      "blocks": [
+        {
+          "type": "eyebrow",
+          "settings": {
+            "text": "New Edition"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Curated Form & Function",
+            "size": "large"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Architectural proportions meet enduring, tactile materials.</p>"
+          }
+        },
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop collection",
+                "style": "primary"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Discover details",
+                "style": "secondary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

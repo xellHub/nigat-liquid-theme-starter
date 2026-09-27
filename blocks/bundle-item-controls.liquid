@@ -1,0 +1,39 @@
+{%- assign bundle_product = block.settings.product | default: product -%}
+{%- assign selected_variant = bundle_product.selected_or_first_available_variant -%}
+{%- assign bundle_control_id = section.id | append: '-' | append: block.id | append: '-' | append: bundle_product.id -%}
+<div class="bundle-item-controls" {{ block.shopify_attributes }}>
+  <label class="bundle-item-controls__selection">
+    <input type="checkbox" data-bundle-select checked>
+    <span>{{ 'products.bundle.include' | t: title: bundle_product.title | escape }}</span>
+  </label>
+  <div class="bundle-item-controls__fields">
+    {%- unless bundle_product.has_only_default_variant -%}
+      <label for="BundleVariant-{{ bundle_control_id }}">{{ 'products.bundle.variant' | t }}</label>
+      <select id="BundleVariant-{{ bundle_control_id }}" data-bundle-variant>
+        {%- for variant in bundle_product.variants -%}
+          <option value="{{ variant.id }}" data-price="{{ variant.price }}" data-min="{{ variant.quantity_rule.min | default: 1 }}" data-max="{{ variant.quantity_rule.max }}" data-step="{{ variant.quantity_rule.increment | default: 1 }}" {% if variant == selected_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+            {{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+          </option>
+        {%- endfor -%}
+      </select>
+    {%- endunless -%}
+    <label for="BundleQuantity-{{ bundle_control_id }}">{{ 'products.product.quantity' | t }}</label>
+    <input id="BundleQuantity-{{ bundle_control_id }}" type="number" data-bundle-quantity min="{{ selected_variant.quantity_rule.min | default: 1 }}" step="{{ selected_variant.quantity_rule.increment | default: 1 }}" {% if selected_variant.quantity_rule.max != blank %}max="{{ selected_variant.quantity_rule.max }}"{% endif %} value="{{ selected_variant.quantity_rule.min | default: 1 }}" inputmode="numeric">
+  </div>
+</div>
+
+{% stylesheet %}
+  .bundle-item-controls { display: grid; gap: var(--space-3); }
+  .bundle-item-controls__selection { display: flex; align-items: center; gap: var(--space-2); }
+  .bundle-item-controls__fields { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-2); }
+  .bundle-item-controls__fields select, .bundle-item-controls__fields input { width: 100%; min-height: var(--foundation-minimum-target-size); padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius-input); color: var(--color-text); background: var(--color-surface); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.frequently_bought_together.blocks.controls.name",
+  "tag": null,
+  "settings": [{"type":"product","id":"product","label":"t:sections.frequently_bought_together.blocks.controls.product"}],
+  "presets": [{"name":"t:sections.frequently_bought_together.blocks.controls.name"}]
+}
+{% endschema %}

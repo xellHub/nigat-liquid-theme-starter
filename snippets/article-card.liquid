@@ -1,0 +1,232 @@
+{%- comment -%}
+  Renders an editorial article card.
+
+  Accepts:
+  - article: {Object} Shopify article drop (optional)
+  - is_featured: {Boolean} Whether this card is styled as a hero/featured item (default: false)
+  - show_image: {Boolean} Show featured image (default: true)
+  - image_ratio: {String} 'landscape' (3/2) | 'square' (1/1) | 'portrait' (4/5) | 'wide' (16/9) | 'adapt' (default: 'landscape')
+  - show_tags: {Boolean} Show category/tag badge (default: true)
+  - show_date: {Boolean} Show publication date (default: true)
+  - show_author: {Boolean} Show author name (default: true)
+  - show_reading_time: {Boolean} Show estimated reading time (default: true)
+  - show_excerpt: {Boolean} Show article excerpt (default: true)
+  - is_placeholder: {Boolean} Force placeholder preview mode (default: false)
+  - placeholder_index: {Number} 1..6 (default: 1)
+  - lazy: {Boolean} Lazy-load image (default: true)
+
+  Usage:
+  {% render 'article-card', article: article, is_featured: false %}
+{%- endcomment -%}
+
+{%- liquid
+  assign show_img = show_image | default: true, allow_false: true
+  assign ratio = image_ratio | default: 'landscape'
+  assign date_flag = show_date | default: true, allow_false: true
+  assign author_flag = show_author | default: true, allow_false: true
+  assign reading_time_flag = show_reading_time | default: true, allow_false: true
+  assign excerpt_flag = show_excerpt | default: true, allow_false: true
+  assign tags_flag = show_tags | default: true, allow_false: true
+  assign loading_attr = 'lazy'
+  if lazy == false
+    assign loading_attr = 'eager'
+  endif
+
+  assign aspect_css = '3 / 2'
+  case ratio
+    when 'square'
+      assign aspect_css = '1 / 1'
+    when 'portrait'
+      assign aspect_css = '4 / 5'
+    when 'wide'
+      assign aspect_css = '16 / 9'
+    when 'adapt'
+      if article and article.image
+        assign aspect_css = article.image.aspect_ratio | default: '3 / 2'
+      else
+        assign aspect_css = '3 / 2'
+      endif
+  endcase
+
+  assign is_mock = false
+  if is_placeholder or article == blank or article == empty
+    assign is_mock = true
+  endif
+-%}
+
+{%- if is_mock -%}
+  {%- liquid
+    assign p_idx = placeholder_index | default: 1
+    case p_idx
+      when 1
+        assign mock_title = 'The Art of Slow Living: Curating Spaces with Thoughtful Intention'
+        assign mock_tag = 'Design'
+        assign mock_author = 'Elena Vance'
+        assign mock_excerpt = 'Discover how natural lighting, tactile organic materials, and minimalist compositions create serene modern sanctuaries.'
+        assign mock_svg = 'blog_1'
+      when 2
+        assign mock_title = 'Sustainable Architecture: Crafting Timeless Urban Sanctuaries'
+        assign mock_tag = 'Architecture'
+        assign mock_author = 'Marcus Cole'
+        assign mock_excerpt = 'Exploring the harmonic balance between modern modular construction, reclaimed woods, and passive environmental design.'
+        assign mock_svg = 'blog_2'
+      when 3
+        assign mock_title = 'Tactile Textures: A Guide to Natural Linen, Wool, and Clay'
+        assign mock_tag = 'Craft'
+        assign mock_author = 'Sophia Lin'
+        assign mock_excerpt = 'An in-depth guide into raw natural fibres and artisanal ceramics that elevate daily rituals and home comfort.'
+        assign mock_svg = 'blog_3'
+      else
+        assign mock_title = 'Form & Function: Everyday Objects Designed for Longevity'
+        assign mock_tag = 'Living'
+        assign mock_author = 'Editorial Team'
+        assign mock_excerpt = 'Why investing in fewer, beautifully manufactured objects leads to greater harmony and lasting value.'
+        assign mock_svg = 'blog_1'
+    endcase
+  -%}
+
+  <article class="article-card article-card--placeholder{% if is_featured %} article-card--featured{% endif %}">
+    {%- if show_img -%}
+      <div class="article-card__media-wrapper" style="--article-aspect: {{ aspect_css }};">
+        <div class="article-card__media placeholder-image">
+          {% render 'placeholder-image', variant: mock_svg %}
+        </div>
+        {%- if tags_flag and mock_tag != blank -%}
+          <span class="article-card__badge">{{ mock_tag }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="article-card__content">
+      <div class="article-card__meta">
+        {%- if date_flag -%}
+          <time class="article-card__date" datetime="{{ 'now' | date: '%Y-%m-%d' }}">
+            {{ 'now' | date: '%B %-d, %Y' }}
+          </time>
+        {%- endif -%}
+
+        {%- if reading_time_flag -%}
+          {%- if date_flag -%}
+            <span class="article-card__meta-separator" aria-hidden="true">&bull;</span>
+          {%- endif -%}
+          <span class="article-card__reading-time">
+            {% render 'icon', name: 'clock' %}
+            {{ 'blogs.article.reading_time' | t: count: 4 }}
+          </span>
+        {%- endif -%}
+
+        {%- if author_flag and mock_author != blank -%}
+          {%- if date_flag or reading_time_flag -%}
+            <span class="article-card__meta-separator" aria-hidden="true">&bull;</span>
+          {%- endif -%}
+          <span class="article-card__author">
+            {{- 'blogs.article.by_author' | t: author: mock_author -}}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <h3 class="article-card__title{% if is_featured %} article-card__title--featured{% endif %}">
+        <a href="#">{{ mock_title }}</a>
+      </h3>
+
+      {%- if excerpt_flag and mock_excerpt != blank -%}
+        <p class="article-card__excerpt">{{ mock_excerpt }}</p>
+      {%- endif -%}
+
+      <div class="article-card__footer">
+        <a href="#" class="article-card__read-more link">
+          <span>{{ 'blogs.article.read_more' | t }}</span>
+          {% render 'icon', name: 'arrow-right' %}
+        </a>
+      </div>
+    </div>
+  </article>
+
+{%- else -%}
+  {%- liquid
+    assign words = article.content | default: article.excerpt_or_content | strip_html | split: ' ' | size
+    assign read_time = words | divided_by: 200 | at_least: 1
+    assign card_sizes = '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+    if is_featured
+      assign card_sizes = '(min-width: 990px) 60vw, 100vw'
+    endif
+  -%}
+
+  <article class="article-card{% if is_featured %} article-card--featured{% endif %}">
+    {%- if show_img and article.image -%}
+      {%- assign article_card_alt = article.image.alt | default: article.title -%}
+      <div class="article-card__media-wrapper" style="--article-aspect: {{ aspect_css }};">
+        <a href="{{ article.url }}" class="article-card__media" tabindex="-1" aria-hidden="true">
+          {{
+            article.image
+            | image_url: width: 1200
+            | image_tag:
+              loading: loading_attr,
+              sizes: card_sizes,
+              widths: '350, 500, 750, 900, 1200',
+              class: 'article-card__image',
+              alt: article_card_alt
+          }}
+        </a>
+        {%- if tags_flag and article.tags.size > 0 -%}
+          <a
+            href="{{ blog.url }}/tagged/{{ article.tags.first | handle }}"
+            class="article-card__badge"
+          >
+            {{ article.tags.first }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="article-card__content">
+      <div class="article-card__meta">
+        {%- if date_flag -%}
+          <time class="article-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+            {{ article.published_at | date: '%B %-d, %Y' }}
+          </time>
+        {%- endif -%}
+
+        {%- if reading_time_flag -%}
+          {%- if date_flag -%}
+            <span class="article-card__meta-separator" aria-hidden="true">&bull;</span>
+          {%- endif -%}
+          <span class="article-card__reading-time">
+            {% render 'icon', name: 'clock' %}
+            {{ 'blogs.article.reading_time' | t: count: read_time }}
+          </span>
+        {%- endif -%}
+
+        {%- if author_flag and article.author != blank -%}
+          {%- if date_flag or reading_time_flag -%}
+            <span class="article-card__meta-separator" aria-hidden="true">&bull;</span>
+          {%- endif -%}
+          <span class="article-card__author">
+            {{- 'blogs.article.by_author' | t: author: article.author -}}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <h3 class="article-card__title{% if is_featured %} article-card__title--featured{% endif %}">
+        <a href="{{ article.url }}">{{ article.title | escape }}</a>
+      </h3>
+
+      {%- if excerpt_flag and article.excerpt_or_content != blank -%}
+        <p class="article-card__excerpt">
+          {{ article.excerpt_or_content | strip_html | truncatewords: 24 }}
+        </p>
+      {%- endif -%}
+
+      <div class="article-card__footer">
+        <a
+          href="{{ article.url }}"
+          class="article-card__read-more link"
+          aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}"
+        >
+          <span>{{ 'blogs.article.read_more' | t }}</span>
+          {% render 'icon', name: 'arrow-right' %}
+        </a>
+      </div>
+    </div>
+  </article>
+{%- endif -%}

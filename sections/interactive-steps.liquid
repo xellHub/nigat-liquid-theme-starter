@@ -1,0 +1,185 @@
+<section
+  id="InteractiveStepsLayout-{{ section.id }}"
+  class="interactive-steps-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--steps-width:{{ section.settings.page_width }}px;--steps-pt:{{ section.settings.padding_top }}px;--steps-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="interactive-steps-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.interactive-steps-layout{padding-block:var(--steps-pt) var(--steps-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.interactive-steps-layout__inner{display:flex;width:min(calc(100% - 2 * var(--foundation-gutter-mobile)),var(--steps-width));margin:auto;flex-direction:column;gap:var(--space-6)}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Interactive steps",
+  "tag": "section",
+  "class": "section-interactive-steps",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "_interactive-steps" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive steps",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "How to care for glowing skin.",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "_interactive-steps",
+          "settings": {
+            "image_position": "left",
+            "always_expand": true,
+            "stretch_to_image": true,
+            "media_aspect_ratio": "portrait",
+            "enable_image_tilt": true,
+            "image_tilt": -3,
+            "pill_tilt": -2,
+            "enable_3d_tilt": true,
+            "active_step_default": 1
+          },
+          "blocks": [
+            {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 1
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Cleansers",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Start with a gentle purifying cleanser to remove impurities while preserving your natural skin moisture barrier.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Cleansers",
+                    "style": "primary"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 2
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Serums",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Target specific skin concerns with concentrated botanical actives and deeply penetrating hydration.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Serums",
+                    "style": "primary"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 3
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Toners",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Achieve glowing skin with our toners as part of your skincare routine. Scientifically formulated for optimal results.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Toners",
+                    "style": "primary"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Storytelling"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

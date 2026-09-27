@@ -1,0 +1,50 @@
+<product-recommendations
+  id="product-recommendations-{{ section.id }}"
+  class="product-recommendations section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-limit="{{ section.settings.limit }}"
+  data-intent="{{ section.settings.intent }}"
+  data-url="{{ routes.product_recommendations_url }}"
+  data-ready="{{ recommendations.performed? }}"
+  style="--recommendation-columns: {{ section.settings.columns_desktop }};"
+>
+  {%- liquid
+    assign valid_recommendations = 0
+    assign seen_recommendations = ','
+    for candidate in recommendations.products
+      assign candidate_key = candidate.id | append: ',' | prepend: ','
+      unless candidate.id == product.id or candidate.available == false or seen_recommendations contains candidate_key
+        assign valid_recommendations = valid_recommendations | plus: 1
+        assign seen_recommendations = seen_recommendations | append: candidate.id | append: ','
+      endunless
+    endfor
+  -%}
+  {%- if recommendations.performed? and valid_recommendations > 0 -%}
+    <div class="product-recommendations__inner">
+      {% content_for 'blocks' %}
+    </div>
+  {%- endif -%}
+</product-recommendations>
+
+{% stylesheet %}
+  .product-recommendations { display: block; min-height: 1px; background: var(--color-background); color: var(--color-text); }
+  .product-recommendations__inner { width: min(calc(100% - 2 * var(--foundation-gutter-mobile)), var(--page-width)); margin-inline: auto; padding-block: var(--spacing-sections); }
+  .product-recommendations__inner > * + * { margin-block-start: var(--space-5); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "disabled_on": {"groups":["header","footer"]},
+  "blocks": [{"type":"heading"},{"type":"text"},{"type":"_product-recommendations"}],
+  "settings": [
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"bare-light"},
+    {"type":"select","id":"intent","label":"Recommendation type","options":[{"value":"related","label":"Related"},{"value":"complementary","label":"Complementary"}],"default":"related"},
+    {"type":"range","id":"limit","label":"Products","min":1,"max":10,"step":1,"default":4},
+    {"type":"range","id":"columns_desktop","label":"Desktop columns","min":2,"max":5,"step":1,"default":4}
+  ],
+  "presets": [{"name":"Product recommendations","blocks":[{"type":"heading","settings":{"text":"You may also like","level":"h2","size":"large"}},{"type":"_product-recommendations","blocks":[{"type":"product-card","id":"product-card","static":true,"settings":{"product":"{{ closest.product }}"},"blocks":[{"type":"image","settings":{"image":"{{ closest.product.featured_image }}","link":"{{ closest.product.url }}","alt":"{{ closest.product.title }}"}},{"type":"heading","settings":{"text":"{{ closest.product.title }}","level":"h3","size":"small"}},{"type":"price","settings":{"product":"{{ closest.product }}"}},{"type":"button","settings":{"label":"View product","style":"link","link":"{{ closest.product.url }}"}}]}]}]}]
+}
+{% endschema %}

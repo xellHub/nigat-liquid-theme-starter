@@ -1,0 +1,621 @@
+<section
+  id="collection-editorial-{{ section.id }}"
+  class="collection-editorial-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--layout-width:{{ section.settings.page_width }}px;--layout-pt:{{ section.settings.padding_top }}px;--layout-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="collection-editorial-layout__inner">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .collection-editorial-layout {
+    position: relative;
+    padding-block: var(--layout-pt) var(--layout-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+    overflow-x: clip;
+  }
+
+  .collection-editorial-layout__inner {
+    display: grid;
+    grid-template-columns: minmax(28rem, clamp(32rem, 30cqw, 42rem)) minmax(0, 1fr);
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--layout-width));
+    margin-inline: auto;
+    gap: clamp(var(--space-6), 4.5cqw, var(--space-9));
+    align-items: start;
+  }
+
+  /* Sticky narrative sidebar (the first child group block) */
+  .collection-editorial-layout__inner > *:first-child {
+    position: sticky;
+    top: calc(var(--header-total-height, var(--header-height, 6rem)) + var(--space-6));
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-4);
+    z-index: var(--z-elevated, 2);
+  }
+
+  /* Editorial narrative typography tuning */
+  .collection-editorial-layout .theme-eyebrow {
+    letter-spacing: var(--foundation-label-tracking, 0.08em);
+    font-size: var(--foundation-small-text-size, 1.3rem);
+    font-weight: var(--font-body-weight, 500);
+    text-transform: var(--foundation-label-case, uppercase);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .collection-editorial-layout .theme-heading {
+    margin: 0;
+    padding: 0;
+  }
+
+  .collection-editorial-layout .theme-heading__text {
+    font-family: var(--font-heading-family);
+    font-size: clamp(3.2rem, 3.6cqw, 4.8rem);
+    font-weight: var(--font-heading-weight, 700);
+    line-height: var(--line-height-heading, 1.12);
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    max-width: 16ch;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .collection-editorial-layout .theme-text {
+    font-family: var(--font-body-family);
+    font-size: clamp(1.5rem, 1.2cqw, 1.7rem);
+    line-height: var(--line-height-body, 1.6);
+    color: var(--color-muted);
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  /* Carousel navigation controls relocated into sticky sidebar */
+  .collection-editorial-layout .theme-carousel__controls {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-block-start: clamp(var(--space-6), 4vh, var(--space-8));
+    padding: 0;
+    width: auto;
+  }
+
+  .collection-editorial-layout .theme-carousel__button {
+    display: inline-grid;
+    place-items: center;
+    width: 4.8rem;
+    height: 4.8rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-border) 80%, var(--color-text) 20%);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    box-shadow: var(--shadow-xs);
+    transition:
+      background-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
+      border-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
+      transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
+      box-shadow var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
+  }
+
+  .collection-editorial-layout .theme-carousel__button svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    stroke-width: 2px;
+  }
+
+  .collection-editorial-layout .theme-carousel__button:not(:disabled):hover {
+    background: var(--color-surface-raised);
+    border-color: var(--color-text);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .collection-editorial-layout .theme-carousel__button:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  .collection-editorial-layout .theme-carousel__button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Carousel track layout - bleeds to window edge via negative right margin */
+  .collection-editorial-layout .theme-carousel {
+    position: relative;
+    width: auto;
+    min-width: 0;
+    margin-inline-end: calc(
+      -1 * max(var(--foundation-gutter-mobile, 2rem), calc((100vw - var(--layout-width)) / 2))
+    );
+    margin-inline-end: calc(
+      -1 * max(var(--foundation-gutter-mobile, 2rem), calc((100cqw - var(--layout-width)) / 2))
+    );
+  }
+
+  .collection-editorial-layout .theme-carousel__track {
+    display: flex;
+    gap: var(--space-5);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-block: var(--space-2) var(--space-4);
+    padding-inline-end: max(var(--space-6), calc((100vw - var(--layout-width)) / 2));
+    padding-inline-end: max(var(--space-6), calc((100cqw - var(--layout-width)) / 2));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collection-editorial-layout .theme-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collection-editorial-layout .theme-carousel__track > * {
+    min-width: 28rem;
+    flex: 0 0 clamp(28rem, 24vw, 38rem);
+    scroll-snap-align: start;
+  }
+
+  /* Elevated editorial collection cards */
+  .collection-editorial-layout .theme-collection-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-card, 16px);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
+    transition:
+      transform var(--motion-duration-normal, 250ms)
+        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1)),
+      box-shadow var(--motion-duration-normal, 250ms)
+        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1)),
+      border-color var(--motion-duration-normal, 250ms)
+        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1));
+  }
+
+  .collection-editorial-layout .theme-collection-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--color-border) 60%, var(--color-text) 20%);
+  }
+
+  .collection-editorial-layout .theme-collection-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .collection-editorial-layout .theme-collection-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-radius: calc(var(--radius-card, 16px) - 1px) calc(var(--radius-card, 16px) - 1px) 0 0;
+  }
+
+  .collection-editorial-layout .theme-collection-card__image,
+  .collection-editorial-layout .theme-collection-card__media svg,
+  .collection-editorial-layout .theme-collection-card__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--motion-duration-normal, 400ms)
+      var(--motion-ease, cubic-bezier(0.2, 0, 0.2, 1));
+  }
+
+  .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__image,
+  .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__media svg {
+    transform: scale(1.045);
+  }
+
+  .collection-editorial-layout .theme-collection-card__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    margin-top: auto;
+    background: var(--color-surface-raised);
+  }
+
+  .collection-editorial-layout .theme-collection-card__title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.8rem, 1.4cqw, 2.2rem);
+    font-weight: var(--font-heading-weight, 600);
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  .collection-editorial-layout .theme-collection-card__title sup {
+    font-family: var(--font-body-family);
+    font-size: var(--text-sm, 1.4rem);
+    font-weight: var(--font-body-weight, 400);
+    color: var(--color-muted);
+    line-height: 1;
+    vertical-align: baseline;
+    top: 0;
+  }
+
+  .collection-editorial-layout .theme-collection-card__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.2rem;
+    height: 4.2rem;
+    min-width: 4.2rem;
+    border-radius: var(--radius-full, 9999px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    transition:
+      background-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
+      color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
+      transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
+  }
+
+  .collection-editorial-layout .theme-collection-card__arrow svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    transform: rotate(-45deg);
+    transition: transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
+  }
+
+  .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__arrow {
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+
+  .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__arrow svg {
+    transform: rotate(-45deg) translate(2px, -2px);
+  }
+
+  /* Responsive breakpoints */
+  @container (max-width: 860px) {
+    .collection-editorial-layout__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .collection-editorial-layout__inner > *:first-child {
+      position: static;
+      top: auto;
+    }
+
+    .collection-editorial-layout .theme-carousel {
+      margin-inline-end: calc(-1 * var(--foundation-gutter-mobile, 2rem));
+    }
+
+    .collection-editorial-layout .theme-carousel__controls {
+      margin-block-start: var(--space-4);
+    }
+
+    .collection-editorial-layout .theme-carousel__track {
+      padding-inline-end: var(--foundation-gutter-mobile, 2rem);
+    }
+
+    .collection-editorial-layout .theme-carousel__track > * {
+      min-width: 26rem;
+      flex: 0 0 78cqw;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .collection-editorial-layout__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .collection-editorial-layout__inner > *:first-child {
+      position: static;
+      top: auto;
+    }
+
+    .collection-editorial-layout .theme-carousel {
+      margin-inline-end: calc(-1 * var(--foundation-gutter-mobile, 2rem));
+    }
+
+    .collection-editorial-layout .theme-carousel__controls {
+      margin-block-start: var(--space-4);
+    }
+
+    .collection-editorial-layout .theme-carousel__track {
+      padding-inline-end: var(--foundation-gutter-mobile, 2rem);
+    }
+
+    .collection-editorial-layout .theme-carousel__track > * {
+      min-width: 26rem;
+      flex: 0 0 78vw;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const initEditorialSection = () => {
+      const section = document.getElementById('collection-editorial-{{ section.id }}');
+      if (!section) return;
+
+      const sidebar = section.querySelector('.collection-editorial-layout__inner > *:first-child');
+      const carousel = section.querySelector('.theme-carousel');
+      if (!sidebar || !carousel) return;
+
+      const controls =
+        carousel.querySelector('.theme-carousel__controls') ||
+        section.querySelector('.theme-carousel__controls');
+      if (controls && controls.parentElement !== sidebar) {
+        sidebar.appendChild(controls);
+      }
+
+      const track = carousel.querySelector('.theme-carousel__track');
+      if (!controls || !track) return;
+
+      const prev = controls.querySelector('[data-carousel-previous]');
+      const next = controls.querySelector('[data-carousel-next]');
+      if (!prev || !next) return;
+
+      const updateControls = () => {
+        prev.disabled = track.scrollLeft <= 6;
+        next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 6;
+      };
+
+      if (!carousel.dataset.initialized) {
+        carousel.dataset.initialized = 'true';
+        const scrollStep = (direction) => {
+          const item = track.firstElementChild;
+          const gap = Number.parseFloat(getComputedStyle(track).gap) || 20;
+          const stepSize = (item ? item.offsetWidth : track.clientWidth * 0.75) + gap;
+          track.scrollBy({ left: direction * stepSize, behavior: 'smooth' });
+        };
+        prev.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollStep(-1);
+        });
+        next.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollStep(1);
+        });
+      }
+
+      track.addEventListener('scroll', updateControls, { passive: true });
+      window.addEventListener('resize', updateControls, { passive: true });
+      updateControls();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initEditorialSection);
+    } else {
+      initEditorialSection();
+    }
+
+    document.addEventListener('shopify:section:load', (event) => {
+      if (
+        event.target &&
+        event.target.contains(document.getElementById('collection-editorial-{{ section.id }}'))
+      ) {
+        initEditorialSection();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection list editorial",
+  "tag": "section",
+  "class": "collection-list-editorial-section",
+  "blocks": [
+    { "type": "group" },
+    { "type": "carousel" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 900,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list editorial",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "type": "eyebrow",
+              "settings": {
+                "text": "Care For Your Skin"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Natural self care products",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>We create safe products that really work and are designed to make you feel good</p>",
+                "color_role": "muted"
+              }
+            }
+          ]
+        },
+        {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 2,
+            "show_navigation": true
+          },
+          "blocks": [
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 1
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The Sweetest Thing",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "18 items",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 2
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tools & Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "16 items",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 3
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Skincare Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "23 items",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 4
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Natural Essentials",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "12 items",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Collections"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

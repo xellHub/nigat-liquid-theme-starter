@@ -1,0 +1,290 @@
+<section
+  id="custom-section-{{ section.id }}"
+  class="custom-section section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--custom-section-width: {{ section.settings.page_width }}px; --custom-section-top: {{ section.settings.padding_top }}px; --custom-section-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="custom-section__inner">{% content_for 'blocks' %}</div>
+</section>
+
+{% stylesheet %}
+  .custom-section { padding-block: var(--custom-section-top) var(--custom-section-bottom); color: var(--color-text); background: var(--color-background); }
+  .custom-section__inner { width: min(calc(100% - 2 * var(--foundation-gutter-mobile)), var(--custom-section-width)); margin-inline: auto; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Custom section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "group"
+    },
+    {
+      "type": "grid"
+    },
+    {
+      "type": "surface"
+    },
+    {
+      "type": "media-text"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "video"
+    },
+    {
+      "type": "icon-with-text"
+    },
+    {
+      "type": "logo-item"
+    },
+    {
+      "type": "newsletter-form"
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "spacer"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text — image left",
+      "blocks": [
+        {
+          "type": "media-text",
+          "settings": {
+            "media_position": "start"
+          },
+          "blocks": [
+            {
+              "type": "image"
+            },
+            {
+              "type": "group",
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tell your story",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Share what makes your brand distinctive.</p>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Image with text — image right",
+      "blocks": [
+        {
+          "type": "media-text",
+          "settings": {
+            "media_position": "end"
+          },
+          "blocks": [
+            {
+              "type": "image"
+            },
+            {
+              "type": "group",
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tell your story",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Share what makes your brand distinctive.</p>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Brand story",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Our story",
+                "level": "h2"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Introduce the people and ideas behind your store.</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Value props",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Why shop with us",
+            "level": "h2"
+          }
+        },
+        {
+          "type": "grid",
+          "settings": {
+            "columns_desktop": 3
+          },
+          "blocks": [
+            {
+              "type": "icon-with-text"
+            },
+            {
+              "type": "icon-with-text"
+            },
+            {
+              "type": "icon-with-text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Newsletter and promo",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Stay in touch",
+                "level": "h2"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Get updates from our store.</p>"
+              }
+            },
+            {
+              "type": "newsletter-form"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logo list",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Our partners",
+            "level": "h2"
+          }
+        },
+        {
+          "type": "grid",
+          "settings": {
+            "columns_desktop": 4
+          },
+          "blocks": [
+            {
+              "type": "logo-item"
+            },
+            {
+              "type": "logo-item"
+            },
+            {
+              "type": "logo-item"
+            },
+            {
+              "type": "logo-item"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

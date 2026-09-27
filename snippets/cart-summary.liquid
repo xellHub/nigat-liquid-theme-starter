@@ -1,0 +1,49 @@
+{%- comment -%}
+  Renders the cart order summary (subtotal, shipping, discounts, total).
+  Accepts:
+  - ctx: {String} 'drawer' or 'page' (optional, defaults to 'drawer')
+{%- endcomment -%}
+
+<div class="cart-drawer__summary{% if ctx != 'drawer' %} cart__summary{% endif %}">
+  <h3 class="cart-drawer__summary-title">{{ 'cart.general.order_summary' | t }}</h3>
+
+  <div class="cart-drawer__summary-row">
+    <span class="cart-drawer__summary-label">{{ 'cart.general.subtotal' | t }}</span>
+    <span class="cart-drawer__summary-value" data-cart-subtotal>
+      {{- cart.items_subtotal_price | default: cart.total_price | money -}}
+    </span>
+  </div>
+
+  <div class="cart-drawer__summary-row">
+    <span class="cart-drawer__summary-label">{{ 'cart.general.estimated_shipping' | t }}</span>
+    <span class="cart-drawer__summary-value cart-drawer__summary-value--muted" data-cart-shipping>
+      {%- if settings.cart_estimated_shipping != blank -%}
+        {{ settings.cart_estimated_shipping }}
+      {%- else -%}
+        {{ 'cart.general.calculated_at_checkout' | t }}
+      {%- endif -%}
+    </span>
+  </div>
+
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul
+      class="cart__discounts{% if ctx == 'drawer' %} cart-drawer__discounts{% endif %}"
+      role="list"
+    >
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li class="cart__discount caption">
+          {{ discount.title }} (-{{ discount.total_allocated_amount | money }})
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
+    <span class="cart-drawer__summary-label cart-drawer__summary-label--total">
+      {{- 'cart.general.total' | t -}}
+    </span>
+    <span class="cart-drawer__summary-value cart-drawer__summary-value--total" data-cart-total>
+      {{- cart.total_price | money -}}
+    </span>
+  </div>
+</div>

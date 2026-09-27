@@ -1,0 +1,280 @@
+<section
+  id="MarqueeShowcase-{{ section.id }}"
+  class="marquee-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--marquee-height-desktop: {{ section.settings.height_desktop }}px; --marquee-height-mobile: {{ section.settings.height_mobile }}px; --marquee-pt: {{ section.settings.padding_top }}px; --marquee-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="marquee-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+
+{% stylesheet %}
+  .marquee-layout {
+    padding-block: var(--marquee-pt) var(--marquee-pb);
+    margin-bottom: 0;
+    color: var(--color-text);
+    background: var(--color-background);
+  }
+
+  .marquee-layout__inner {
+    position: relative;
+    height: var(--marquee-height-desktop);
+    --marquee-item-height: var(--marquee-height-desktop);
+    overflow: hidden;
+  }
+
+  .marquee-layout__inner > .theme-marquee,
+  .marquee-layout__inner > .theme-marquee-track {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .marquee-layout__inner > .theme-group {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: var(--z-overlay);
+    width: clamp(28rem, 32vw, 42rem);
+    min-height: 100%;
+    justify-content: center;
+    padding: var(--space-6);
+    color: var(--color-text);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-lg);
+    transform: translate(-50%, -50%);
+  }
+
+  @media (max-width: 768px) {
+    .marquee-layout__inner {
+      height: var(--marquee-height-mobile);
+      --marquee-item-height: var(--marquee-height-mobile);
+    }
+    .marquee-layout__inner > .theme-group {
+      width: 78vw;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Marquee showcase",
+  "tag": "section",
+  "class": "marquee-showcase-section",
+  "blocks": [
+    { "type": "marquee" },
+    { "type": "group" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 320,
+      "max": 560,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 420
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 240,
+      "max": 420,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile height",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Top spacing",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Marquee Controls"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 120,
+      "step": 2,
+      "unit": "s",
+      "label": "Scroll loop duration",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "left", "label": "Left (forward)" },
+        { "value": "right", "label": "Right (reverse)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap between items",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Image Items"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "landscape", "label": "Landscape (16:9)" },
+        { "value": "standard", "label": "Standard (4:3)" },
+        { "value": "natural", "label": "Natural" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "select",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "subtle", "label": "Subtle" },
+        { "value": "rounded", "label": "Rounded" },
+        { "value": "card", "label": "Card" },
+        { "value": "pill", "label": "Pill" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Text Items"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "display", "label": "Display (Huge)" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "label": "Text style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Letter case",
+      "options": [
+        { "value": "none", "label": "Natural" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "separator",
+      "label": "Separator between items",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "dot", "label": "Dot (•)" },
+        { "value": "star", "label": "Star (★)" },
+        { "value": "dash", "label": "Dash (—)" },
+        { "value": "slash", "label": "Slash (/)" }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee showcase",
+      "settings": {
+        "speed": 32,
+        "direction": "left",
+        "pause_on_hover": true,
+        "gap": "none",
+        "image_aspect_ratio": "portrait",
+        "image_radius": "none"
+      },
+      "blocks": [
+        {
+          "type": "marquee",
+          "settings": {
+            "speed": 32,
+            "direction": "left",
+            "gap": "none",
+            "image_aspect_ratio": "portrait",
+            "image_radius": "none"
+          },
+          "blocks": [
+            { "type": "image" },
+            { "type": "image" },
+            { "type": "image" },
+            { "type": "image" },
+            { "type": "image" },
+            { "type": "image" }
+          ]
+        }
+      ],
+      "category": "Storytelling"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  }
+}
+{% endschema %}

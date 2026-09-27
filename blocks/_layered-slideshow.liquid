@@ -1,0 +1,996 @@
+{%- style -%}
+  #LayeredSlideshow-{{ block.id }} {
+    --lss-bg: var(--color-background);
+    --lss-card-bg: var(--color-surface);
+    --lss-text: var(--color-text);
+    --lss-button-bg: var(--color-button);
+    --lss-button-text: var(--color-button-text);
+    --lss-accent-bg: var(--color-surface-raised);
+    --lss-card-radius: var(--radius-card, {{ block.settings.card_radius | default: 24 }}px);
+    --lss-stage-height: {{ block.settings.desktop_height | default: 620 }}px;
+    --lss-peek-width: clamp(48px, 4.5vw, 64px);
+    --total-slides: 3;
+    --lss-pt: 0;
+    --lss-pb: 0;
+    background-color: var(--lss-bg);
+    padding-top: var(--lss-pt);
+    padding-bottom: var(--lss-pb);
+    color: var(--lss-text);
+  }
+
+  html[data-color-mode="dark"] #LayeredSlideshow-{{ block.id }} {
+    --lss-card-bg: var(--color-surface);
+    --lss-text: var(--color-text);
+    --lss-button-bg: var(--color-button, var(--color-accent));
+    --lss-button-text: var(--color-button-text, var(--color-accent-text));
+    --lss-accent-bg: color-mix(in srgb, var(--color-surface) 80%, var(--color-text) 20%);
+  }
+
+  #LayeredSlideshow-{{ block.id }} *,
+  #LayeredSlideshow-{{ block.id }} *::before,
+  #LayeredSlideshow-{{ block.id }} *::after {
+    box-sizing: border-box;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__container {
+    width: min(100% - 32px, var(--layered-width, 1400px));
+    margin: 0 auto;
+  }
+
+  /* Fixed Stage Container */
+  #LayeredSlideshow-{{ block.id }} .lss__stage {
+    position: relative;
+    width: 100%;
+    min-height: var(--lss-stage-height);
+    background-color: var(--lss-card-bg);
+    border-radius: var(--lss-card-radius);
+    overflow: hidden;
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--lss-text) calc(var(--shadow-opacity) * 40%), transparent);
+    border: 1px solid color-mix(in srgb, var(--lss-text) 8%, transparent);
+  }
+
+  /* Layered Slides Deck - Works with .lss__slide or ANY child block */
+  #LayeredSlideshow-{{ block.id }} .lss__slide,
+  #LayeredSlideshow-{{ block.id }} .lss__stage > *:not(.lss__nav):not(script):not(style) {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: calc(100% - (var(--total-slides, 1) - 1) * var(--lss-peek-width, 56px));
+    left: 0;
+    overflow: hidden;
+    background-color: var(--lss-card-bg);
+    border-left: 1px solid color-mix(in srgb, var(--lss-text) 14%, transparent);
+    box-shadow: -8px 0 28px color-mix(in srgb, var(--lss-text) calc(var(--shadow-opacity, 0.15) * 35%), transparent);
+    transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: left;
+    display: block;
+    cursor: default;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:first-child,
+  #LayeredSlideshow-{{ block.id }} .lss__stage > *:not(.lss__nav):not(script):not(style):first-child {
+    border-left: none;
+    box-shadow: none;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active),
+  #LayeredSlideshow-{{ block.id }} .lss__stage > *:not(.lss__nav):not(script):not(style):not(.is-active) {
+    cursor: pointer;
+  }
+
+  /* Inactive Slide Content Concealment for ANY child block */
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active) > *:not(.lss__peek-tab):not(.lss__peek-overlay):not(.lss__layer-bg) {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide.is-active > *:not(.lss__peek-tab):not(.lss__peek-overlay),
+  #LayeredSlideshow-{{ block.id }}:not([data-initialized="true"]) .lss__slide:first-child > *:not(.lss__peek-tab):not(.lss__peek-overlay) {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.4s ease 0.15s;
+  }
+
+  #LayeredSlideshow-{{ block.id }}:not([data-initialized="true"]) .lss__slide:first-child .lss__peek-overlay,
+  #LayeredSlideshow-{{ block.id }}:not([data-initialized="true"]) .lss__slide:first-child .lss__peek-tab {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Inactive Slide Peek Overlay */
+  #LayeredSlideshow-{{ block.id }} .lss__peek-overlay {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--lss-card-bg) 82%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, background-color 0.2s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active) .lss__peek-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active):hover .lss__peek-overlay {
+    background: color-mix(in srgb, var(--lss-card-bg) 65%, transparent);
+  }
+
+  /* Inactive Slide Peek Tab (Left strip with slide number and vertical tag) */
+  #LayeredSlideshow-{{ block.id }} .lss__peek-tab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--lss-peek-width, 56px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 32px 4px;
+    gap: 20px;
+    z-index: 5;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active) .lss__peek-tab {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__peek-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--lss-text) 8%, transparent);
+    color: var(--lss-text);
+    font-family: var(--font-heading-family);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide:not(.is-active):hover .lss__peek-number {
+    background: var(--lss-text);
+    color: var(--lss-card-bg);
+    transform: scale(1.08);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__peek-tag {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--lss-text) 70%, transparent);
+    white-space: nowrap;
+  }
+
+  /* Slide Atmospheric Background Layer */
+  #LayeredSlideshow-{{ block.id }} .lss__layer-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__layer-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.04);
+    transition: transform 0.8s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide.is-active .lss__layer-bg img {
+    transform: scale(1);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--lss-card-bg) 94%, transparent) 0%, color-mix(in srgb, var(--lss-card-bg) 60%, transparent) 100%);
+    z-index: 2;
+  }
+
+  /* Slide Content Grid Layout */
+  #LayeredSlideshow-{{ block.id }} .lss__slide-inner {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: clamp(24px, 4vw, 56px);
+    padding-bottom: clamp(72px, 8vw, 96px);
+    width: 100%;
+    min-height: var(--lss-stage-height);
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease 0.15s;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide.is-active .lss__slide-inner {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (min-width: 900px) {
+    #LayeredSlideshow-{{ block.id }} .lss__slide-inner {
+      grid-template-columns: {% if block.settings.media_position == 'left' %}1.1fr 1fr{% else %}1fr 1.1fr{% endif %};
+      gap: clamp(32px, 4vw, 64px);
+    }
+
+    #LayeredSlideshow-{{ block.id }} .lss__copy-wrap {
+      {% if block.settings.media_position == 'left' %}
+        grid-column: 2;
+      {% else %}
+        grid-column: 1;
+      {% endif %}
+    }
+
+    #LayeredSlideshow-{{ block.id }} .lss__layers-media {
+      {% if block.settings.media_position == 'left' %}
+        grid-column: 1;
+        grid-row: 1;
+      {% else %}
+        grid-column: 2;
+      {% endif %}
+    }
+  }
+
+  /* Editorial Copy Layer */
+  #LayeredSlideshow-{{ block.id }} .lss__copy-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-4, 16px);
+    color: var(--lss-text);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--control-height, 44px);
+    padding: 10px 26px;
+    font-family: var(--font-body-family);
+    font-size: 15px;
+    font-weight: var(--font-button-weight, 600);
+    text-decoration: none;
+    line-height: 1;
+    border-radius: var(--radius-button, 9999px);
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    cursor: pointer;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__button--primary {
+    background-color: var(--lss-button-bg);
+    color: var(--lss-button-text);
+    border: 1px solid var(--lss-button-bg);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__button--secondary {
+    background-color: transparent;
+    color: var(--lss-text);
+    border: 1px solid color-mix(in srgb, var(--lss-text) 24%, transparent);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__button--secondary:hover {
+    border-color: var(--lss-text);
+    background-color: color-mix(in srgb, var(--lss-text) 4%, transparent);
+  }
+
+  /* Overlapping Media Stage */
+  #LayeredSlideshow-{{ block.id }} .lss__layers-media {
+    position: relative;
+    width: 100%;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Primary Focal Media Layer (Layer 2) */
+  #LayeredSlideshow-{{ block.id }} .lss__layer-primary {
+    position: relative;
+    z-index: 2;
+    width: 82%;
+    max-width: 440px;
+    aspect-ratio: 4 / 3;
+    background-color: var(--lss-accent-bg);
+    border-radius: var(--radius-card, 18px);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--lss-text) calc(var(--shadow-opacity) * 50%), transparent);
+    overflow: hidden;
+    transform: translateX(-5%);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide.is-active .lss__layer-primary {
+    transform: translateX(0);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__layer-primary img,
+  #LayeredSlideshow-{{ block.id }} .lss__layer-primary svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Accent Offset Media Layer (Layer 3) */
+  #LayeredSlideshow-{{ block.id }} .lss__layer-accent {
+    position: absolute;
+    right: 4%;
+    bottom: -10px;
+    z-index: 3;
+    width: 48%;
+    max-width: 250px;
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-card, 16px);
+    box-shadow: 0 20px 48px color-mix(in srgb, var(--lss-text) calc(var(--shadow-opacity) * 70%), transparent);
+    border: 3px solid var(--color-surface);
+    overflow: hidden;
+    transform: translateY(12px) scale(0.96);
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__slide.is-active .lss__layer-accent {
+    transform: translateY(0) scale(1);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__layer-accent img,
+  #LayeredSlideshow-{{ block.id }} .lss__layer-accent svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__accent-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    z-index: 4;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-shadow) 70%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--color-accent-text);
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    font-weight: var(--font-body-weight, 600);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Placeholder Styling */
+  #LayeredSlideshow-{{ block.id }} .lss__placeholder-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--lss-accent-bg);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__placeholder-wrap svg {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+  }
+
+  /* Navigation Bar - Fixed relative to outermost stage (zero layout shift) */
+  #LayeredSlideshow-{{ block.id }} .lss__nav {
+    position: absolute;
+    bottom: 24px;
+    left: clamp(24px, 4vw, 56px);
+    right: clamp(24px, 4vw, 56px);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--lss-text) 30%, transparent);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__dot.is-active {
+    background: var(--lss-text);
+    border-color: var(--lss-text);
+    width: 28px;
+    border-radius: 14px;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__arrows {
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__arrow-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--lss-text) 18%, transparent);
+    background: color-mix(in srgb, var(--lss-card-bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--lss-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__arrow-btn:hover {
+    border-color: var(--lss-text);
+    background: var(--lss-card-bg);
+    transform: scale(1.05);
+  }
+
+  #LayeredSlideshow-{{ block.id }} .lss__arrow-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+{%- endstyle -%}
+
+<div
+  id="LayeredSlideshow-{{ block.id }}"
+  class="layered-slideshow-section"
+  data-section-id="{{ block.id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="lss__container">
+    <div
+      class="lss__stage"
+      data-slideshow
+      data-autoplay="{{ block.settings.autoplay }}"
+      data-autoplay-speed="{{ block.settings.autoplay_speed }}"
+    >
+      {% content_for 'blocks' %}
+      <div class="lss__nav" aria-label="Slideshow navigation" data-layered-nav>
+        <div class="lss__dots" data-layered-dots></div>
+        <div class="lss__arrows">
+          <button type="button" class="lss__arrow-btn" data-slide-prev aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m15 18-6-6 6-6"/>
+            </svg></button
+          ><button type="button" class="lss__arrow-btn" data-slide-next aria-label="Next slide">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (() => {
+    const root = document.getElementById('LayeredSlideshow-{{ block.id }}');
+    if (!root || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+
+    const stage = root.querySelector('[data-slideshow]');
+    if (!stage) return;
+
+    const slides = [...stage.children].filter(
+      (el) => !el.matches('.lss__nav, script, style, template')
+    );
+    const nav = stage.querySelector('[data-layered-nav]');
+    const dotsWrap = stage.querySelector('[data-layered-dots]');
+    const prevBtn = stage.querySelector('[data-slide-prev]');
+    const nextBtn = stage.querySelector('[data-slide-next]');
+
+    const total = slides.length;
+    stage.style.setProperty('--total-slides', String(total));
+
+    if (total === 0) return;
+    if (total < 2 && nav) {
+      nav.hidden = true;
+    }
+
+    let activeIndex = 0;
+    let autoplayTimer = null;
+    const isAutoplay = stage.dataset.autoplay === 'true';
+    const intervalMs = (Number.parseFloat(stage.dataset.autoplaySpeed) || 5) * 1000;
+
+    // Initialize slides and build dot navigation
+    if (dotsWrap) dotsWrap.innerHTML = '';
+    slides.forEach((slide, index) => {
+      slide.classList.add('lss__slide');
+      slide.dataset.slide = '';
+      slide.dataset.slideIndex = String(index);
+      slide.style.zIndex = String(index + 1);
+
+      // Ensure peek tab and number exist for any arbitrary child block
+      let peekTab = slide.querySelector('.lss__peek-tab');
+      if (!peekTab) {
+        peekTab = document.createElement('div');
+        peekTab.className = 'lss__peek-tab';
+        peekTab.setAttribute('aria-hidden', 'true');
+        const num = document.createElement('span');
+        num.className = 'lss__peek-number';
+        num.dataset.peekNumber = '';
+        num.textContent = String(index + 1);
+        peekTab.append(num);
+        slide.prepend(peekTab);
+      } else {
+        const peekNumber = peekTab.querySelector('[data-peek-number]');
+        if (peekNumber) peekNumber.textContent = String(index + 1);
+      }
+
+      // Ensure peek overlay exists for any arbitrary child block
+      if (!slide.querySelector('.lss__peek-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.className = 'lss__peek-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        slide.prepend(overlay);
+      }
+
+      // Clicking an inactive slide directly activates it
+      slide.addEventListener('click', (e) => {
+        if (slide.classList.contains('is-active')) return;
+        if (e.target.closest('a, button, input, select, textarea')) return;
+        showSlide(index);
+        startAutoplay();
+      });
+
+      if (dotsWrap && total >= 2) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'lss__dot' + (index === 0 ? ' is-active' : '');
+        dot.dataset.slideDot = String(index);
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        dot.setAttribute('aria-current', String(index === 0));
+        dotsWrap.append(dot);
+      }
+    });
+
+    const dots = dotsWrap ? [...dotsWrap.querySelectorAll('[data-slide-dot]')] : [];
+
+    const updateSlidePositions = (idx) => {
+      const isMobile = window.innerWidth <= 749;
+      const peekWidth = isMobile ? 40 : Math.min(Math.max(window.innerWidth * 0.045, 48), 64);
+      stage.style.setProperty('--lss-peek-width', `${peekWidth}px`);
+
+      slides.forEach((slide, k) => {
+        const isActive = k === idx;
+        slide.classList.toggle('is-active', isActive);
+        slide.classList.toggle('is-before', k < idx);
+        slide.classList.toggle('is-after', k > idx);
+        slide.setAttribute('aria-hidden', String(!isActive));
+
+        if (k <= idx) {
+          slide.style.left = `${k * peekWidth}px`;
+        } else {
+          slide.style.left = `calc(100% - ${(total - k) * peekWidth}px)`;
+        }
+      });
+
+      // Update dots
+      dots.forEach((dot, i) => {
+        const isActive = i === idx;
+        dot.classList.toggle('is-active', isActive);
+        dot.setAttribute('aria-current', String(isActive));
+      });
+    };
+
+    const showSlide = (idx) => {
+      if (total <= 1) return;
+      activeIndex = (idx + total) % total;
+      updateSlidePositions(activeIndex);
+    };
+
+    const startAutoplay = () => {
+      if (
+        !isAutoplay ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        total <= 1
+      )
+        return;
+      stopAutoplay();
+      autoplayTimer = window.setInterval(() => {
+        showSlide(activeIndex + 1);
+      }, intervalMs);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayTimer) {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    };
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = Number.parseInt(dot.dataset.slideDot, 10);
+        showSlide(idx);
+        startAutoplay();
+      });
+    });
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        showSlide(activeIndex - 1);
+        startAutoplay();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        showSlide(activeIndex + 1);
+        startAutoplay();
+      });
+    }
+
+    // Keyboard navigation
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        showSlide(activeIndex - 1);
+        startAutoplay();
+      } else if (e.key === 'ArrowRight') {
+        showSlide(activeIndex + 1);
+        startAutoplay();
+      }
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    stage.addEventListener(
+      'touchstart',
+      (e) => {
+        touchStartX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+
+    stage.addEventListener(
+      'touchend',
+      (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const diffX = touchStartX - touchEndX;
+        if (Math.abs(diffX) > 45) {
+          if (diffX > 0) {
+            showSlide(activeIndex + 1);
+          } else {
+            showSlide(activeIndex - 1);
+          }
+          startAutoplay();
+        }
+      },
+      { passive: true }
+    );
+
+    stage.addEventListener('mouseenter', stopAutoplay);
+    stage.addEventListener('mouseleave', startAutoplay);
+
+    // Initial layout calculation
+    updateSlidePositions(0);
+
+    // Resize listener to recalculate clamp / peek widths
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        updateSlidePositions(activeIndex);
+      }, 100);
+    });
+
+    // Shopify Theme Editor synchronization
+    document.addEventListener('shopify:block:select', (e) => {
+      const selected = e.target;
+      if (selected && stage.contains(selected)) {
+        stopAutoplay();
+        const idx = slides.findIndex(
+          (s) => s === selected || s.contains(selected) || selected.contains(s)
+        );
+        if (idx !== -1) showSlide(idx);
+      }
+    });
+
+    startAutoplay();
+  })();
+</script>
+{% schema %}
+{
+  "name": "Layered slideshow",
+  "tag": null,
+  "blocks": [
+    { "type": "_layered-slide" },
+    { "type": "media-text" },
+    { "type": "card" },
+    { "type": "group" },
+    { "type": "surface" },
+    { "type": "image" },
+    { "type": "quote" },
+    { "type": "testimonial" },
+    { "type": "product-card" },
+    { "type": "collection-card" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Stage desktop height",
+      "min": 480,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 620
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position (desktop)",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Stage corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "header",
+      "content": "Slideshow Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Fallback (when no slides added)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layered slideshow",
+      "blocks": [
+        {
+          "type": "_layered-slide",
+          "settings": {
+            "accessibility_label": "Signature Fit"
+          },
+          "blocks": [
+            {
+              "type": "eyebrow",
+              "settings": {
+                "text": "Autumn / Winter Edit"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Architectural Proportions",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Layered silhouettes crafted from tactile wool, structured cotton, and clean lines.</p>"
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop collection",
+                    "style": "primary"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "View lookbook",
+                    "style": "secondary"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "_layered-slide",
+          "settings": {
+            "accessibility_label": "100% Wool"
+          },
+          "blocks": [
+            {
+              "type": "eyebrow",
+              "settings": {
+                "text": "Material Focus"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Tactile Modernism",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Pieces designed to develop warmth, character, and comfort over time.</p>"
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Explore fabrics",
+                    "style": "primary"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "All outerwear",
+                    "style": "secondary"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "_layered-slide",
+          "settings": {
+            "accessibility_label": "Pure Linen"
+          },
+          "blocks": [
+            {
+              "type": "eyebrow",
+              "settings": {
+                "text": "Living Form"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Quiet Luxury in Motion",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Tailored silhouettes shaped from certified organic flax and hand-finished details.</p>"
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Explore lookbook",
+                    "style": "primary"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Read story",
+                    "style": "secondary"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

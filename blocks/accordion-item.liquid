@@ -1,0 +1,140 @@
+<details
+  class="theme-accordion"
+  {% if block.settings.open_by_default %}
+    open
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  <summary class="theme-accordion__summary">
+    {% content_for 'block', type: 'heading', id: 'trigger' %}
+    <span class="theme-accordion__icon-wrap" aria-hidden="true">
+      {% render 'icon',
+        name: 'chevron-down',
+        class: 'theme-accordion__icon theme-accordion__icon--chevron'
+      %}
+      {% render 'icon', name: 'plus', class: 'theme-accordion__icon theme-accordion__icon--plus' %}
+    </span>
+  </summary>
+  <div class="theme-accordion__content">
+    {% content_for 'blocks' %}
+  </div>
+</details>
+
+{% stylesheet %}
+  .theme-accordion {
+    width: 100%;
+    border-block-end: var(--foundation-divider-width) solid var(--color-border);
+  }
+  .theme-accordion__summary {
+    display: flex;
+    min-height: var(--foundation-minimum-target-size);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    cursor: pointer;
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+  }
+  .theme-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+  .theme-accordion__summary .theme-heading {
+    width: auto;
+    flex: 1 1 auto;
+  }
+  .theme-accordion__summary .theme-heading__text {
+    max-width: none;
+  }
+  .theme-accordion__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .theme-accordion__icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    transition: transform var(--motion-duration-fast) var(--motion-ease);
+  }
+  .theme-accordion__icon--plus {
+    display: none;
+  }
+  .theme-accordion[open] .theme-accordion__icon--chevron {
+    transform: rotate(180deg);
+  }
+  .theme-accordion[open] .theme-accordion__icon--plus {
+    transform: rotate(45deg);
+  }
+  .theme-accordion__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-block-end: var(--space-5);
+  }
+  .theme-accordion__text {
+    font-family: var(--font-body-family);
+    font-size: calc(1.6rem * var(--font-body-scale));
+    line-height: var(--line-height-body);
+    color: var(--color-muted);
+  }
+  .theme-accordion__text p {
+    margin: 0;
+  }
+  .theme-accordion__text p + p {
+    margin-top: var(--space-2);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion item",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion item",
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "trigger",
+          "static": true,
+          "settings": { "text": "Frequently asked question", "level": "h3", "size": "inherit" }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Provide answers to frequently asked questions to help customers make informed decisions.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

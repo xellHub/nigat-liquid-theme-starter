@@ -1,0 +1,26 @@
+{%- comment -%}
+  Editorial demo photography for Collection List Editorial.
+  Replaces vector SVGs with high-resolution photography.
+
+  Accepts:
+  - item_index: 1..4
+  - card_title: string (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = item_index | default: 1 | plus: 0
+  if idx < 1 or idx > 4
+    assign idx = 1
+  endif
+  assign asset_name = 'collection-editorial-' | append: idx | append: '.jpg'
+  assign img_alt = card_title | default: 'Collection item'
+-%}
+
+<img
+  src="{{ asset_name | asset_url }}"
+  alt="{{ img_alt | escape }}"
+  class="theme-collection-card__image cle__image"
+  loading="lazy"
+  width="800"
+  height="800"
+>

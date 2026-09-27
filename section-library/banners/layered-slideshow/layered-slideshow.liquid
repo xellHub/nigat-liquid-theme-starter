@@ -1,0 +1,236 @@
+<section
+  id="LayeredSlideshowLayout-{{ section.id }}"
+  class="layered-slideshow-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--layered-width:{{ section.settings.page_width }}px;--layered-pt:{{ section.settings.padding_top }}px;--layered-pb:{{ section.settings.padding_bottom }}px;"
+>
+  {% content_for 'blocks' %}
+</section>
+{% stylesheet %}.layered-slideshow-layout{padding-block:var(--layered-pt) var(--layered-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Layered slideshow",
+  "tag": "section",
+  "class": "layered-slideshow-section",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_layered-slideshow" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Page width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layered slideshow",
+      "blocks": [
+        {
+          "type": "_layered-slideshow",
+          "settings": {
+            "desktop_height": 620,
+            "media_position": "right",
+            "card_radius": 24,
+            "autoplay": false,
+            "autoplay_speed": 5
+          },
+          "blocks": [
+            {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "Signature Fit"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Autumn / Winter Edit"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Architectural Proportions",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Layered silhouettes crafted from tactile wool, structured cotton, and clean lines.</p>"
+                  }
+                },
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop collection",
+                        "style": "primary"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "View lookbook",
+                        "style": "secondary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "100% Wool"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Material Focus"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tactile Modernism",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Pieces designed to develop warmth, character, and comfort over time.</p>"
+                  }
+                },
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Explore fabrics",
+                        "style": "primary"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "All outerwear",
+                        "style": "secondary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "Pure Linen"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Living Form"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Quiet Luxury in Motion",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Tailored silhouettes shaped from certified organic flax and hand-finished details.</p>"
+                  }
+                },
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Explore lookbook",
+                        "style": "primary"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Read story",
+                        "style": "secondary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

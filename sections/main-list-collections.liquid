@@ -1,0 +1,65 @@
+<section
+  id="main-list-collections-{{ section.id }}"
+  class="main-list-collections-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--resource-width: {{ section.settings.page_width }}px; --resource-pt: {{ section.settings.padding_top }}px; --resource-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="main-list-collections-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}
+  .main-list-collections-layout {
+    padding-block: var(--resource-pt) var(--resource-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+  .main-list-collections-layout__inner {
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--resource-width));
+    margin-inline: auto;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Collections index",
+  "tag": "section",
+  "class": "main-list-collections-wrapper",
+  "blocks": [{ "type": "_collection-index" }],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 900,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ]
+}
+{% endschema %}

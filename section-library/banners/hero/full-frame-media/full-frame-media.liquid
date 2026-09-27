@@ -1,0 +1,142 @@
+<section
+  id="ImageBannerLayout-{{ section.id }}"
+  class="image-banner-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--banner-width:{{ section.settings.page_width }}px;--banner-pt:{{ section.settings.padding_top }}px;--banner-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="image-banner-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.image-banner-layout{padding-block:var(--banner-pt) var(--banner-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.image-banner-layout__inner{width:min(100%,var(--banner-width));margin:auto}.image-banner-layout:has(.image-banner--fullscreen){box-sizing:border-box;min-height:calc(100vh - var(--header-total-height, calc(var(--header-height, 6rem) + var(--announcement-height, 0px))));min-height:calc(100dvh - var(--header-total-height, calc(var(--header-height, 6rem) + var(--announcement-height, 0px))));display:flex;flex-direction:column}.image-banner-layout:has(.image-banner--fullscreen) .image-banner-layout__inner{flex:1;display:flex;flex-direction:column}.image-banner-layout:has(.image-banner--fullscreen) .image-banner--fullscreen{flex:1}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "section",
+  "class": "image-banner-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_image-banner" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Maximum width",
+      "min": 960,
+      "max": 1920,
+      "step": 40,
+      "unit": "px",
+      "default": 1920
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner",
+      "blocks": [
+        {
+          "type": "_image-banner",
+          "settings": {
+            "height": "medium",
+            "image_overlay_opacity": 0,
+            "content_position": "middle-center",
+            "text_alignment": "center"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Image banner",
+                "level": "h1",
+                "size": "display",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Give customers a clear reason to explore.</p>",
+                "size": "large",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop now"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    },
+    {
+      "name": "Hero banner (bottom aligned)",
+      "blocks": [
+        {
+          "type": "_image-banner",
+          "settings": {
+            "height": "fullscreen",
+            "image_overlay_opacity": 20,
+            "content_position": "bottom-left",
+            "text_alignment": "left"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Meet your new favorites",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Explore collection"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ]
+}
+{% endschema %}

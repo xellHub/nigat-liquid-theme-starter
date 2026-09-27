@@ -1,0 +1,66 @@
+<div class="product__share" {{ block.shopify_attributes }}>
+  <span class="product__share-label caption">
+    {{- block.settings.label | default: 'Share' | escape -}}
+  </span>
+  <ul class="social-icons" role="list">
+    {%- if settings.social_instagram != blank -%}
+      <li>
+        <a
+          href="{{ settings.social_instagram }}"
+          class="social-icons__link"
+          aria-label="{{ 'general.social.links.instagram' | t }}"
+          rel="noopener"
+          target="_blank"
+        >
+          {%- render 'icon', name: 'instagram' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_facebook != blank -%}
+      <li>
+        <a
+          href="{{ settings.social_facebook }}"
+          class="social-icons__link"
+          aria-label="{{ 'general.social.links.facebook' | t }}"
+          rel="noopener"
+          target="_blank"
+        >
+          {%- render 'icon', name: 'facebook' -%}
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_x != blank -%}
+      <li>
+        <a
+          href="{{ settings.social_x }}"
+          class="social-icons__link"
+          aria-label="{{ 'general.social.links.x' | t }}"
+          rel="noopener"
+          target="_blank"
+        >
+          {%- render 'icon', name: 'x' -%}
+        </a>
+      </li>
+    {%- endif -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Share",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:sections.main_product.blocks.share.settings.label.label",
+      "default": "Share"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Share"
+    }
+  ]
+}
+{% endschema %}

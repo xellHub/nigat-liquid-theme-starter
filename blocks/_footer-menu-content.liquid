@@ -1,0 +1,90 @@
+<div class="section-extension section-extension--footer-menu" {{ block.shopify_attributes }}>
+  {%- comment -%} Footer Menu section: renders a navigation or policy menu for the footer group. {%- endcomment -%}
+
+  <div
+    class="footer-menu {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% elsif block.settings.color_scheme != blank %}color-{{ block.settings.color_scheme.id }}{% else %}color-inverse{% endif %}"
+    style="--padding-top: {{ block.settings.padding_top | default: 16 }}px; --padding-bottom: {{ block.settings.padding_bottom | default: 16 }}px;"
+  >
+    <div class="page-width">
+      {% content_for 'blocks' %}
+      {%- if block.settings.menu != blank and block.settings.menu.links.size > 0 -%}
+        <ul class="footer-menu__list" role="list" aria-label="Footer navigation">
+          {%- for link in block.settings.menu.links -%}
+            <li class="footer-menu__item">
+              <a href="{{ link.url }}" class="footer-menu__link">
+                {{ link.title | escape }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Footer menu content",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "link" },
+    { "type": "button" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.footer.settings.menu.label",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "t:common.padding.header"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer menu content",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Quick links",
+            "level": "h4",
+            "size": "small"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

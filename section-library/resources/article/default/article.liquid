@@ -1,0 +1,27 @@
+<section
+  id="main-article-{{ section.id }}"
+  class="main-article-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "main-article-wrapper",
+  "blocks": [
+    {
+      "type": "_article-resource"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ]
+}
+{% endschema %}

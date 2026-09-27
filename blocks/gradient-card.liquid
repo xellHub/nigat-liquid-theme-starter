@@ -1,0 +1,355 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+
+{%- liquid
+  assign surface_class = 'theme-gradient-card--' | append: block.settings.surface
+  assign media_pos = block.settings.media_position | default: 'end'
+  assign hover_class = ''
+  if block.settings.hover_effect == 'lift'
+    assign hover_class = 'theme-gradient-card--hover-lift'
+  elsif block.settings.hover_effect == 'shadow'
+    assign hover_class = 'theme-gradient-card--hover-shadow'
+  endif
+-%}
+
+<article
+  id="GradientCard-{{ block.id }}"
+  class="{{ block.settings.foundation_custom_class | escape }} theme-gradient-card {{ surface_class }} theme-gradient-card--media-{{ media_pos }} {{ hover_class }}"
+  style="{% if block.settings.card_background != blank %}--gradient-card-bg:{{ block.settings.card_background }};{% endif %}{% if block.settings.text_color != blank %}--gradient-card-text:{{ block.settings.text_color }};{% endif %}{% if block.settings.card_radius != blank %}--gradient-card-radius:{{ block.settings.card_radius }}px;{% endif %}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility | default: 'all' }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top | default: 'none' }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom | default: 'none' }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</article>
+
+{% stylesheet %}
+  .theme-gradient-card {
+    --gradient-card-bg: color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%);
+    --gradient-card-text: var(--color-text);
+    --gradient-card-radius: var(--radius-card);
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: clamp(34rem, 40vw, 44rem);
+    overflow: hidden;
+    border-radius: var(--gradient-card-radius);
+    color: var(--gradient-card-text);
+    background: var(--gradient-card-bg);
+    box-sizing: border-box;
+  }
+
+  .theme-gradient-card--surface {
+    --gradient-card-bg: var(--color-surface);
+  }
+
+  .theme-gradient-card--raised {
+    --gradient-card-bg: var(--color-surface-raised);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .theme-gradient-card--accent {
+    --gradient-card-bg: color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%);
+  }
+
+  .theme-gradient-card--hover-lift {
+    transition:
+      transform var(--motion-duration-fast) var(--motion-ease),
+      box-shadow var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .theme-gradient-card--hover-lift:hover {
+    transform: translateY(calc(var(--foundation-hover-lift) * -1));
+    box-shadow: var(--shadow-md);
+  }
+
+  .theme-gradient-card--hover-shadow {
+    transition: box-shadow var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .theme-gradient-card--hover-shadow:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Media styling and positioning */
+  .theme-gradient-card .theme-image {
+    position: absolute;
+    inset-block: 0;
+    z-index: 1;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .theme-gradient-card--media-end .theme-image {
+    inset-inline-end: 0;
+    width: clamp(48%, 56%, 64%);
+  }
+
+  .theme-gradient-card--media-start .theme-image {
+    inset-inline-start: 0;
+    width: clamp(48%, 56%, 64%);
+  }
+
+  .theme-gradient-card .theme-image img,
+  .theme-gradient-card .theme-image .placeholder-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background: transparent;
+  }
+
+  /* Directional gradient mask over the image */
+  .theme-gradient-card--media-end .theme-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      var(--gradient-card-bg) 0%,
+      var(--gradient-card-bg) 18%,
+      color-mix(in srgb, var(--gradient-card-bg) 92%, transparent) 36%,
+      color-mix(in srgb, var(--gradient-card-bg) 50%, transparent) 58%,
+      transparent 88%
+    );
+  }
+
+  .theme-gradient-card--media-start .theme-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      270deg,
+      var(--gradient-card-bg) 0%,
+      var(--gradient-card-bg) 18%,
+      color-mix(in srgb, var(--gradient-card-bg) 92%, transparent) 36%,
+      color-mix(in srgb, var(--gradient-card-bg) 50%, transparent) 58%,
+      transparent 88%
+    );
+  }
+
+  /* Content area styling */
+  .theme-gradient-card > .theme-group {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: min(38rem, 58%);
+    min-width: 0;
+    padding: clamp(var(--space-5), 4vw, var(--space-8));
+    gap: var(--space-3);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .theme-gradient-card--media-start > .theme-group {
+    margin-inline-start: auto;
+  }
+
+  .theme-gradient-card > *:not(.theme-image):not(.foundation-block-anchor) {
+    position: relative;
+    z-index: 3;
+  }
+
+  @container (max-width: 749px) {
+    .theme-gradient-card {
+      min-height: 36rem;
+    }
+
+    .theme-gradient-card .theme-image {
+      width: 68%;
+      opacity: 0.9;
+    }
+
+    .theme-gradient-card > .theme-group {
+      max-width: 82%;
+      padding: var(--space-5);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gradient card",
+  "tag": null,
+  "blocks": [
+    { "type": "image" },
+    { "type": "group" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "icon" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Surface role",
+      "options": [
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "surface", "label": "Surface" },
+        { "value": "raised", "label": "Raised" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Custom background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Custom text color"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        { "value": "end", "label": "Right" },
+        { "value": "start", "label": "Left" }
+      ],
+      "default": "end"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "hover_effect",
+      "label": "Hover effect",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "lift", "label": "Lift" },
+        { "value": "shadow", "label": "Shadow" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        { "value": "all", "label": "All devices" },
+        { "value": "mobile", "label": "Mobile only" },
+        { "value": "desktop", "label": "Desktop only" }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gradient card",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "direction": "column",
+            "alignment": "start",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "eyebrow",
+              "settings": {
+                "text": "The Vacation Shop"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Sun & Coastal Accessories",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Hand-finished travel bags, artisanal sunglasses, and beachside essentials for long summer escapes.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Accessories",
+                "link": "/collections/all",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "settings": {
+            "placeholder_variant": "lifestyle_1"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

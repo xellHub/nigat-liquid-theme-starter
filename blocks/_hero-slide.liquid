@@ -1,0 +1,229 @@
+{%- liquid
+  assign loading = 'lazy'
+  assign fetch_priority = 'auto'
+  if settings.foundation_image_loading == 'eager-hero' and section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+<article
+  class="hero-slide hero-slide--{{ block.settings.height }} hero-slide--{{ block.settings.content_position }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="hero-slide__media">
+    {%- if block.settings.media_type == 'video' -%}
+      {% content_for 'block', type: 'video', id: 'hero-video' %}
+    {%- elsif block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 2600
+        | image_tag:
+          loading: loading,
+          fetchpriority: fetch_priority,
+          widths: '750, 1100, 1600, 2200, 2600',
+          sizes: '100vw',
+          class: 'hero-slide__image',
+          alt: block.settings.image.alt
+      }}
+    {%- else -%}
+      {%- liquid
+        assign hero_fallback = 'hero-cream-sofa.jpg'
+        if block.settings.content_position == 'end'
+          assign hero_fallback = 'hero-blue-barstool.jpg'
+        elsif block.id contains 'icon' or block.id contains '3'
+          assign hero_fallback = 'editorial-triptych-1.jpg'
+        endif
+      -%}
+      <img
+        src="{{ hero_fallback | asset_url }}"
+        alt="{{ block.settings.heading | default: 'Hero slide image' | escape }}"
+        width="2000"
+        height="1200"
+        loading="{{ loading }}"
+        fetchpriority="{{ fetch_priority }}"
+        class="hero-slide__image"
+      >
+    {%- endif -%}
+  </div>
+  <div class="hero-slide__scrim" aria-hidden="true"></div>
+  <div class="hero-slide__inner">
+    <div class="hero-slide__content">{% content_for 'blocks' %}</div>
+  </div>
+</article>
+
+{% stylesheet %}
+  .hero-slide {
+    position: relative;
+    display: flex;
+    min-height: 72rem;
+    overflow: hidden;
+    color: var(--color-on-media);
+    background: var(--color-surface);
+  }
+  .hero-slide--small {
+    min-height: 60rem;
+  }
+  .hero-slide--large {
+    min-height: 84rem;
+  }
+  .hero-slide--fullscreen {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+  }
+  .hero-slide__media,
+  .hero-slide__scrim {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-slide__media {
+    z-index: var(--z-base);
+  }
+  .hero-slide__media .theme-video,
+  .hero-slide__media .theme-video__media { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; object-fit: cover; }
+  .hero-slide__image,
+  .hero-slide__placeholder,
+  .hero-slide__placeholder svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-slide__scrim {
+    z-index: var(--z-raised);
+    background: linear-gradient(
+      90deg,
+      var(--color-media-overlay),
+      color-mix(in srgb, var(--color-media-overlay) 36%, transparent) 58%,
+      transparent
+    );
+    pointer-events: none;
+  }
+  .hero-slide--end .hero-slide__scrim {
+    background: linear-gradient(
+      270deg,
+      var(--color-media-overlay),
+      color-mix(in srgb, var(--color-media-overlay) 36%, transparent) 58%,
+      transparent
+    );
+  }
+  .hero-slide__inner {
+    position: relative;
+    z-index: var(--z-elevated);
+    display: flex;
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--page-width));
+    min-height: inherit;
+    align-items: center;
+    margin-inline: auto;
+    padding-block: var(--foundation-section-spacing-desktop);
+  }
+  .hero-slide--end .hero-slide__inner {
+    justify-content: flex-end;
+  }
+  .hero-slide__content {
+    display: flex;
+    width: min(100%, var(--foundation-media-text-max-width));
+    flex-flow: row wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .hero-slide__content > :not(.theme-button) {
+    flex-basis: 100%;
+  }
+  @container (max-width: 749px) {
+    .hero-slide,
+    .hero-slide--small,
+    .hero-slide--large {
+      min-height: 64rem;
+    }
+    .hero-slide--fullscreen {
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
+    }
+    .hero-slide__scrim,
+    .hero-slide--end .hero-slide__scrim {
+      background: linear-gradient(
+        180deg,
+        transparent,
+        color-mix(in srgb, var(--color-media-overlay) 28%, transparent) 34%,
+        var(--color-media-overlay)
+      );
+    }
+    .hero-slide__inner,
+    .hero-slide--end .hero-slide__inner {
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding-block: var(--foundation-section-spacing-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero slide",
+  "tag": null,
+  "blocks": [
+    { "type": "badge" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "spacer" },
+    { "type": "video" }
+  ],
+  "settings": [
+    { "type": "select", "id": "media_type", "label": "Media type", "options": [{"value":"image","label":"Image"},{"value":"video","label":"Video"}], "default": "image" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "100vh (Fullscreen)" }
+      ],
+      "default": "fullscreen"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero slide",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Made for the moments between",
+            "level": "h1",
+            "size": "display",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+            "size": "large",
+            "color_role": "on_media"
+          }
+        },
+        { "type": "button", "settings": { "label": "Explore collection", "style": "outline" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

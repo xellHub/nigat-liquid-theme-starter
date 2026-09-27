@@ -1,0 +1,281 @@
+<div class="resource-extension resource-extension--main-blog" {{ block.shopify_attributes }}>
+  {%- comment -%} Editorial blog post listing. {%- endcomment -%}
+
+  {%- liquid
+    assign posts_per_page = block.settings.posts_per_page | default: 9
+  -%}
+
+  {%- paginate blog.articles by posts_per_page -%}
+    <section
+      class="main-blog section {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}"
+      style="--columns-desktop: {{ block.settings.columns_desktop }}; --padding-top: {{ block.settings.padding_top }}px; --padding-bottom: {{ block.settings.padding_bottom }}px;"
+    >
+      <div class="page-width">
+        <header class="blog-header">
+          <h1 class="blog-header__title h1">{{ blog.title | escape }}</h1>
+
+          {%- if blog.all_tags.size > 0 and block.settings.show_tags -%}
+            <nav class="blog-tags-nav" aria-label="{{ 'blogs.blog.filter_by_tag' | t }}">
+              <a
+                href="{{ blog.url }}"
+                class="blog-tags-nav__link{% if current_tags == blank %} blog-tags-nav__link--active{% endif %}"
+                {% if current_tags == blank %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{ 'blogs.blog.all_topics' | t }}
+              </a>
+              {%- for tag in blog.all_tags -%}
+                {%- liquid
+                  assign is_active = false
+                  if current_tags contains tag
+                    assign is_active = true
+                  endif
+                -%}
+                <a
+                  href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                  class="blog-tags-nav__link{% if is_active %} blog-tags-nav__link--active{% endif %}"
+                  {% if is_active %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{ tag }}
+                </a>
+              {%- endfor -%}
+            </nav>
+          {%- endif -%}
+        </header>
+
+        {%- if blog.articles.size > 0 -%}
+          {%- liquid
+            assign show_hero = false
+            if block.settings.show_featured_post and paginate.current_page == 1 and current_tags == blank
+              assign show_hero = true
+            endif
+          -%}
+
+          {%- if show_hero -%}
+            <div class="blog-hero-featured">
+              {% render 'article-card',
+                article: blog.articles.first,
+                is_featured: true,
+                show_image: true,
+                image_ratio: 'wide',
+                show_tags: block.settings.show_tags,
+                show_date: block.settings.show_date,
+                show_author: block.settings.show_author,
+                show_reading_time: block.settings.show_reading_time,
+                show_excerpt: block.settings.show_excerpt,
+                lazy: false
+              %}
+            </div>
+
+            {%- if blog.articles.size > 1 -%}
+              <ul class="blog-grid" role="list">
+                {%- for article in blog.articles offset: 1 -%}
+                  <li class="blog-grid__item">
+                    {% render 'article-card',
+                      article: article,
+                      is_featured: false,
+                      show_image: true,
+                      image_ratio: block.settings.image_ratio,
+                      show_tags: block.settings.show_tags,
+                      show_date: block.settings.show_date,
+                      show_author: block.settings.show_author,
+                      show_reading_time: block.settings.show_reading_time,
+                      show_excerpt: block.settings.show_excerpt
+                    %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+          {%- else -%}
+            <ul class="blog-grid" role="list">
+              {%- for article in blog.articles -%}
+                <li class="blog-grid__item">
+                  {% render 'article-card',
+                    article: article,
+                    is_featured: false,
+                    show_image: true,
+                    image_ratio: block.settings.image_ratio,
+                    show_tags: block.settings.show_tags,
+                    show_date: block.settings.show_date,
+                    show_author: block.settings.show_author,
+                    show_reading_time: block.settings.show_reading_time,
+                    show_excerpt: block.settings.show_excerpt
+                  %}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            <div class="blog-pagination">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+
+        {%- else -%}
+          <div class="blog-empty-state">
+            {%- if current_tags != blank -%}
+              <p class="blog-empty-state__message">{{ 'blogs.blog.empty' | t }}</p>
+              <a href="{{ blog.url }}" class="button button--secondary">
+                {{- 'blogs.blog.view_all' | t -}}
+              </a>
+            {%- else -%}
+              <ul class="blog-grid" role="list">
+                {%- for i in (1..3) -%}
+                  <li class="blog-grid__item">
+                    {% render 'article-card',
+                      is_placeholder: true,
+                      placeholder_index: i,
+                      show_image: true,
+                      image_ratio: block.settings.image_ratio,
+                      show_tags: block.settings.show_tags,
+                      show_date: block.settings.show_date,
+                      show_author: block.settings.show_author,
+                      show_reading_time: block.settings.show_reading_time,
+                      show_excerpt: block.settings.show_excerpt
+                    %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="blog-resource__blocks">
+          {% content_for 'blocks' %}
+        </div>
+      </div>
+    </section>
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Blog resource",
+  "tag": null,
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "button" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_post",
+      "label": "t:sections.main_blog.settings.show_featured_post.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "t:sections.main_blog.settings.show_tags.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "t:sections.main_blog.settings.show_date.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "t:sections.main_blog.settings.show_author.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reading_time",
+      "label": "t:sections.main_blog.settings.show_reading_time.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:sections.main_blog.settings.show_excerpt.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.main_blog.settings.image_ratio.label",
+      "options": [
+        {
+          "value": "landscape",
+          "label": "t:sections.main_blog.settings.image_ratio.options.landscape"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main_blog.settings.image_ratio.options.square"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main_blog.settings.image_ratio.options.portrait"
+        },
+        {
+          "value": "wide",
+          "label": "t:sections.main_blog.settings.image_ratio.options.wide"
+        },
+        {
+          "value": "adapt",
+          "label": "t:sections.main_blog.settings.image_ratio.options.adapt"
+        }
+      ],
+      "default": "landscape"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "t:sections.main_blog.settings.columns_desktop.label",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "label": "t:sections.main_blog.settings.posts_per_page.label",
+      "default": 9
+    },
+    {
+      "type": "header",
+      "content": "t:common.padding.header"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog resource"
+    }
+  ]
+}
+{% endschema %}

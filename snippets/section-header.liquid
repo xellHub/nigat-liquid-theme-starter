@@ -1,0 +1,80 @@
+{%- comment -%}
+  Section Header Component — Unified reusable header across all theme & library sections.
+  Usage:
+    {% render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      heading_tag: 'h2',
+      heading_size: 'medium',
+      subheading: section.settings.subheading,
+      alignment: section.settings.header_alignment,
+      link_label: section.settings.link_label,
+      link_url: section.settings.link_url,
+      controls_html: custom_controls_markup
+    %}
+{%- endcomment -%}
+
+{%- liquid
+  assign target = block | default: section
+  assign eyebrow_text = eyebrow | default: target.settings.eyebrow | default: ''
+  assign heading_text = heading | default: target.settings.heading | default: target.settings.title | default: ''
+  assign subheading_text = subheading | default: target.settings.subheading | default: target.settings.description | default: target.settings.subtext | default: target.settings.text | default: ''
+  assign tag = heading_tag | default: target.settings.heading_tag | default: 'h2'
+  assign size = heading_size | default: target.settings.heading_size | default: 'medium'
+  assign align = alignment | default: target.settings.header_alignment | default: target.settings.heading_alignment | default: target.settings.content_alignment | default: target.settings.alignment | default: 'left'
+  assign action_label = link_label | default: target.settings.link_label | default: target.settings.view_all_label | default: ''
+  assign action_url = link_url | default: target.settings.link_url | default: target.settings.view_all_link | default: target.settings.view_all_url | default: ''
+-%}
+
+{%- if heading_text != blank
+  or eyebrow_text != blank
+  or subheading_text != blank
+  or action_label != blank
+  or controls_html != blank
+-%}
+  <div class="section-header section-header--{{ align }} {{ class }}">
+    <div class="section-header__content">
+      {%- if eyebrow_text != blank -%}
+        <p class="section-header__eyebrow">
+          {{ eyebrow_text | escape }}
+        </p>
+      {%- endif -%}
+
+      {%- if heading_text != blank -%}
+        <{{ tag }} class="section-header__heading section-header__heading--{{ size }}">
+          {%- if heading_text contains '<' -%}
+            {{ heading_text }}
+          {%- else -%}
+            {{ heading_text | escape }}
+          {%- endif -%}
+        </{{ tag }}>
+      {%- endif -%}
+
+      {%- if subheading_text != blank -%}
+        <div class="section-header__subheading rte">
+          {%- if subheading_text contains '<p>' -%}
+            {{ subheading_text }}
+          {%- else -%}
+            <p>{{ subheading_text | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if action_label != blank or controls_html != blank -%}
+      <div class="section-header__actions">
+        {%- if action_label != blank and action_url != blank -%}
+          <a href="{{ action_url }}" class="section-header__link">
+            <span>{{ action_label | escape }}</span>
+            {% render 'icon', name: 'arrow-right' %}
+          </a>
+        {%- endif -%}
+        {%- if controls_html != blank -%}
+          <div class="section-header__controls">
+            {{ controls_html }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

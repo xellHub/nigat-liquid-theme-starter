@@ -1,0 +1,39 @@
+{%- comment -%}
+  Stock photography for Interactive Steps Showcase
+  Replaces vector SVGs with high-resolution skincare photography.
+
+  Accepts:
+  - type: 'showcase' | 'pill'
+  - step_index: 1 | 2 | 3
+  - title: string
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = step_index | default: 1 | plus: 0
+  if idx < 1 or idx > 3
+    assign idx = 1
+  endif
+  assign asset_name = 'interactive-step-' | append: idx | append: '.jpg'
+  assign img_alt = title | default: 'Skincare step'
+-%}
+
+{%- if type == 'pill' -%}
+  <img
+    src="{{ asset_name | asset_url }}"
+    alt=""
+    role="presentation"
+    class="is__pill-img"
+    loading="lazy"
+    width="240"
+    height="120"
+  >
+{%- else -%}
+  <img
+    src="{{ asset_name | asset_url }}"
+    alt="{{ img_alt | escape }}"
+    class="is__showcase-img"
+    loading="lazy"
+    width="1000"
+    height="1000"
+  >
+{%- endif -%}

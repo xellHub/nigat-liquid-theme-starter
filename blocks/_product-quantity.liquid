@@ -1,0 +1,54 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign quantity_min = current_variant.quantity_rule.min | default: 1 -%}
+{%- assign quantity_increment = current_variant.quantity_rule.increment | default: 1 -%}
+<div class="product__quantity" data-product-quantity {{ block.shopify_attributes }}>
+  <label for="product-quantity-{{ section.id }}" class="product__quantity-label">
+    {{- 'products.product.quantity' | t -}}
+  </label>
+  <quantity-input class="quantity">
+    <button
+      type="button"
+      class="quantity__button"
+      name="minus"
+      aria-label="{{ 'accessibility.decrease_quantity' | t: product: product.title }}"
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      {% render 'icon', name: 'minus' %}
+    </button>
+    <input
+      type="number"
+      id="product-quantity-{{ section.id }}"
+      class="quantity__input"
+      name="quantity"
+      value="{{ quantity_min }}"
+      min="{{ quantity_min }}"
+      step="{{ quantity_increment }}"
+      {% if current_variant.quantity_rule.max != blank %}max="{{ current_variant.quantity_rule.max }}"{% endif %}
+      form="product-form-{{ section.id }}"
+      aria-label="{{ 'accessibility.quantity_field' | t: product: product.title }}"
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+    <button
+      type="button"
+      class="quantity__button"
+      name="plus"
+      aria-label="{{ 'accessibility.increase_quantity' | t: product: product.title }}"
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      {% render 'icon', name: 'plus' %}
+    </button>
+  </quantity-input>
+</div>
+
+{% schema %}
+{
+  "name": "Quantity",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Quantity"
+    }
+  ]
+}
+{% endschema %}

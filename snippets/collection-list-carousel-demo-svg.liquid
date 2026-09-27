@@ -1,0 +1,159 @@
+{%- comment -%}
+  Demo SVGs for Collection List Carousel
+  Matches editorial fashion photography in agent-image/from-tinker/collection-list/collecion-list-galley/image.png
+
+  Accepts:
+  - item_index: 1..4
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = item_index | default: 1 | plus: 0
+-%}
+
+{%- if idx == 1 -%}
+  {%- comment -%} Tops: Electric blue blazer & orange charm against sunny sky {%- endcomment -%}
+  <svg
+    viewBox="0 0 500 625"
+    preserveAspectRatio="xMidYMid slice"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="clc__image"
+  >
+    <defs>
+      <linearGradient id="c1-sky" x1="250" y1="0" x2="250" y2="400" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#4a7eb8" />
+        <stop offset="50%" stop-color="#699ed8" />
+        <stop offset="100%" stop-color="#8dbcf0" />
+      </linearGradient>
+      <linearGradient id="c1-blazer" x1="100" y1="320" x2="400" y2="625" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#1948cc" />
+        <stop offset="40%" stop-color="#143cb0" />
+        <stop offset="100%" stop-color="#0e2a80" />
+      </linearGradient>
+    </defs>
+    <!-- Sunny Blue Sky -->
+    <rect width="500" height="625" fill="url(#c1-sky)" />
+    <!-- Architectural diagonal bridge structure -->
+    <path d="M0 0 L500 0 L500 120 L0 240 Z" fill="#30353c" opacity="0.6" />
+    <line x1="0" y1="235" x2="500" y2="115" stroke="#ffffff" stroke-width="4" opacity="0.8" />
+    <!-- Model Head & Windblown Hair -->
+    <ellipse cx="230" cy="270" rx="65" ry="85" fill="#e5baa0" />
+    <path d="M140 220 C150 140 310 140 320 220 C330 320 310 380 290 400 L170 400 C150 380 130 320 140 220 Z" fill="#38251a" />
+    <path d="M175 240 C190 225 270 225 285 240 C280 280 180 280 175 240 Z" fill="#e5baa0" />
+    <!-- Bangs & Windblown Hair strands -->
+    <path d="M165 220 L195 275 L225 230 L255 270 L285 225" stroke="#38251a" stroke-width="6" stroke-linecap="round" />
+    <!-- Orange charm necklace -->
+    <path d="M205 355 Q230 385 255 355" stroke="#e8a87c" stroke-width="2" fill="none" />
+    <circle cx="230" cy="375" r="7" fill="#ff5e14" />
+    <!-- Electric Blue Blazer -->
+    <path d="M30 430 L160 360 L230 400 L300 360 L470 430 L500 625 L0 625 Z" fill="url(#c1-blazer)" />
+    <!-- Wide Lapels -->
+    <path d="M160 360 L140 480 L230 550 L210 430 Z" fill="#255ae6" />
+    <path d="M300 360 L320 480 L230 550 L250 430 Z" fill="#255ae6" />
+  </svg>
+
+{%- elsif idx == 2 -%}
+  {%- comment -%} Accessories: Green blazer with pastel pink chain earring {%- endcomment -%}
+  <svg
+    viewBox="0 0 500 625"
+    preserveAspectRatio="xMidYMid slice"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="clc__image"
+  >
+    <defs>
+      <linearGradient id="c2-sky" x1="250" y1="0" x2="250" y2="400" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#5580aa" />
+        <stop offset="100%" stop-color="#80a7cb" />
+      </linearGradient>
+      <linearGradient id="c2-blazer" x1="150" y1="460" x2="400" y2="625" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#1b7837" />
+        <stop offset="100%" stop-color="#125426" />
+      </linearGradient>
+    </defs>
+    <!-- Sky & Urban bridge -->
+    <rect width="500" height="625" fill="url(#c2-sky)" />
+    <path d="M200 0 C280 120 280 240 220 380 L180 380 C240 240 240 120 160 0 Z" fill="#354452" opacity="0.6" />
+    <!-- Profile & Hair in Shadow -->
+    <path d="M160 420 C180 260 260 210 330 220 C420 230 460 340 430 460 C380 540 280 520 220 500 Z" fill="#2b1a13" />
+    <!-- Sunlit Face contour -->
+    <path d="M270 290 C310 290 340 330 325 410 C310 490 270 510 240 500 Z" fill="#dfab90" />
+    <!-- Shadow diagonally crossing face -->
+    <path d="M270 290 L330 420 L270 510 L240 500 Z" fill="#7a4b37" opacity="0.5" />
+    <!-- Statement Acrylic Chain Link Earring (Pink) -->
+    <!-- Link 1 -->
+    <rect x="264" y="340" width="18" height="34" rx="9" fill="none" stroke="#f6d3d9" stroke-width="7" />
+    <!-- Link 2 interlocked -->
+    <rect x="260" y="365" width="22" height="42" rx="11" fill="none" stroke="#f1b5c2" stroke-width="7" />
+    <!-- Green Blazer collar -->
+    <path d="M120 540 L260 480 L440 540 L480 625 L80 625 Z" fill="url(#c2-blazer)" />
+  </svg>
+
+{%- elsif idx == 3 -%}
+  {%- comment -%} Bottoms: Green tailored suit trousers & blush pink baguette handbag {%- endcomment -%}
+  <svg
+    viewBox="0 0 500 625"
+    preserveAspectRatio="xMidYMid slice"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="clc__image"
+  >
+    <defs>
+      <linearGradient id="c3-street" x1="250" y1="0" x2="250" y2="625" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#3d4943" />
+        <stop offset="100%" stop-color="#28322c" />
+      </linearGradient>
+      <linearGradient id="c3-suit" x1="160" y1="120" x2="400" y2="625" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#1da049" />
+        <stop offset="50%" stop-color="#147535" />
+        <stop offset="100%" stop-color="#0c4f22" />
+      </linearGradient>
+      <linearGradient id="c3-bag" x1="390" y1="420" x2="490" y2="520" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f6ced7" />
+        <stop offset="100%" stop-color="#e5a8b6" />
+      </linearGradient>
+    </defs>
+    <!-- Pavement & Dramatic Sunbeam shadows -->
+    <rect width="500" height="625" fill="url(#c3-street)" />
+    <path d="M0 0 L180 0 L40 625 L0 625 Z" fill="#5b6961" opacity="0.35" />
+    <path d="M120 0 L340 0 L180 625 L60 625 Z" fill="#5b6961" opacity="0.4" />
+
+    <!-- Green Blazer (upper crop) -->
+    <path d="M160 120 L270 120 L320 220 L130 220 Z" fill="url(#c3-suit)" />
+    <!-- Tailored Green Wide-leg Trousers -->
+    <!-- Left Leg -->
+    <path d="M140 220 L240 220 L210 625 L110 625 Z" fill="url(#c3-suit)" />
+    <line x1="175" y1="230" x2="160" y2="625" stroke="#125426" stroke-width="2" />
+    <!-- Right Leg -->
+    <path d="M240 220 L330 220 L300 625 L210 625 Z" fill="url(#c3-suit)" />
+    <line x1="285" y1="230" x2="255" y2="625" stroke="#125426" stroke-width="2" />
+
+    <!-- Model Hand holding Bag Strap -->
+    <ellipse cx="378" cy="195" rx="14" ry="20" fill="#dfab90" />
+    <!-- Woven Strap -->
+    <path d="M375 195 C360 260 330 360 325 430" stroke="#f6ced7" stroke-width="5" stroke-linecap="round" fill="none" />
+    <path d="M382 195 C395 280 435 380 445 440" stroke="#f6ced7" stroke-width="5" stroke-linecap="round" fill="none" />
+
+    <!-- Blush Pink Baguette Handbag -->
+    <rect x="325" y="425" width="135" height="75" rx="14" transform="rotate(18 325 425)" fill="url(#c3-bag)" stroke="#df9fae" stroke-width="1.5" />
+    <!-- Flap seam line -->
+    <line x1="332" y1="445" x2="455" y2="485" stroke="#df9fae" stroke-width="1.8" />
+  </svg>
+
+{%- else -%}
+  {%- comment -%} Outerwear look {%- endcomment -%}
+  <svg
+    viewBox="0 0 500 625"
+    preserveAspectRatio="xMidYMid slice"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="clc__image"
+  >
+    <rect width="500" height="625" fill="#e8e2d8" />
+    <ellipse cx="250" cy="200" rx="55" ry="75" fill="#3a271d" />
+    <ellipse cx="250" cy="210" rx="42" ry="55" fill="#dfab90" />
+    <!-- Camel wool coat -->
+    <path d="M100 290 L250 250 L400 290 L440 625 L60 625 Z" fill="#a47d53" />
+    <path d="M250 250 L200 420 L250 540 L300 420 Z" fill="#8f6942" />
+  </svg>
+{%- endif -%}

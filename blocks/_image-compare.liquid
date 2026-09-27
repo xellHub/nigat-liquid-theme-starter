@@ -1,0 +1,355 @@
+{%- liquid
+  assign compare_ratio = '3 / 4'
+  if block.settings.image_before != blank
+    assign compare_ratio = block.settings.image_before.aspect_ratio
+  elsif block.settings.image_after != blank
+    assign compare_ratio = block.settings.image_after.aspect_ratio
+  endif
+-%}
+<div
+  id="ImageCompareBlock-{{ block.id }}"
+  class="image-compare image-compare--{{ block.settings.aspect_ratio | default: 'adapt' }} image-compare--height-{{ block.settings.slider_height | default: 'adapt' }} image-compare--fit-{{ block.settings.image_fit | default: 'cover' }}"
+  style="--compare-position: {{ block.settings.initial_position }}%; --compare-radius: {{ block.settings.radius }}px; --compare-aspect-ratio: {{ compare_ratio }};"
+  {{ block.shopify_attributes }}
+>
+  <div class="image-compare__layer image-compare__layer--base">
+    {% if block.settings.image_after != blank %}
+      {{
+        block.settings.image_after
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'lazy',
+          widths: '400, 700, 1000, 1400',
+          sizes: '(min-width: 900px) 65vw, 95vw'
+      }}
+    {% else %}
+      <img
+        src="{{ 'image-compare-after.jpg' | asset_url }}"
+        alt="After"
+        width="1200"
+        height="1600"
+        loading="lazy"
+        class="image-compare__img"
+      >
+    {% endif %}
+  </div>
+  <div class="image-compare__layer image-compare__layer--reveal">
+    {% if block.settings.image_before != blank %}
+      {{
+        block.settings.image_before
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'lazy',
+          widths: '400, 700, 1000, 1400',
+          sizes: '(min-width: 900px) 65vw, 95vw'
+      }}
+    {% else %}
+      <img
+        src="{{ 'image-compare-before.jpg' | asset_url }}"
+        alt="Before"
+        width="1200"
+        height="1600"
+        loading="lazy"
+        class="image-compare__img"
+      >
+    {% endif %}
+  </div>
+  <div class="image-compare__divider" aria-hidden="true">
+    <button
+      type="button"
+      class="image-compare__handle"
+      role="slider"
+      aria-valuenow="{{ block.settings.initial_position | default: 50 }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-label="{{ block.settings.accessibility_label | escape }}"
+      tabindex="0"
+    >
+      {% render 'icon', name: 'arrows-left-right' %}
+    </button>
+  </div>
+  <div class="image-compare__badges">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+{% stylesheet %}
+  .image-compare {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--compare-radius, var(--radius-media));
+    background: var(--color-surface);
+    user-select: none;
+    touch-action: pan-y;
+  }
+  .image-compare--height-adapt {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+  }
+  .image-compare--height-small {
+    height: clamp(38rem, 48vw, 56rem);
+    max-height: min(56rem, 72vh);
+    min-height: 32rem;
+    aspect-ratio: auto;
+  }
+  .image-compare--height-medium {
+    height: clamp(50rem, 64vw, 78rem);
+    max-height: min(78rem, 85vh);
+    min-height: 42rem;
+    aspect-ratio: auto;
+  }
+  .image-compare--height-large {
+    height: clamp(62rem, 78vw, 94rem);
+    max-height: min(94rem, 92vh);
+    min-height: 52rem;
+    aspect-ratio: auto;
+  }
+  .image-compare--height-xlarge {
+    height: clamp(74rem, 88vw, 112rem);
+    max-height: min(112rem, 96vh);
+    min-height: 60rem;
+    aspect-ratio: auto;
+  }
+  .image-compare--adapt {
+    aspect-ratio: var(--compare-aspect-ratio, 3 / 4);
+  }
+  .image-compare--landscape {
+    aspect-ratio: 4 / 3;
+  }
+  .image-compare--square {
+    aspect-ratio: 1;
+  }
+  .image-compare--portrait {
+    aspect-ratio: 3 / 4;
+  }
+  .image-compare--tall {
+    aspect-ratio: 2 / 3;
+  }
+  .image-compare--wide {
+    aspect-ratio: 16 / 9;
+  }
+  .image-compare--fit-cover .image-compare__layer img,
+  .image-compare--fit-cover .image-compare__placeholder {
+    object-fit: cover;
+  }
+  .image-compare--fit-contain .image-compare__layer img,
+  .image-compare--fit-contain .image-compare__placeholder {
+    object-fit: contain;
+  }
+  .image-compare__layer {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .image-compare__layer img,
+  .image-compare__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+  }
+  .image-compare__layer--base {
+    z-index: 1;
+    background: var(--color-surface-raised);
+  }
+  .image-compare__layer--reveal {
+    z-index: 2;
+    clip-path: inset(0 calc(100% - var(--compare-position)) 0 0);
+    background: var(--color-surface);
+  }
+  .image-compare__badges {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: var(--space-3);
+    pointer-events: none;
+  }
+  .image-compare__badges > * {
+    pointer-events: auto;
+  }
+  .image-compare__divider {
+    position: absolute;
+    inset-block: 0;
+    left: var(--compare-position);
+    z-index: 4;
+    width: var(--foundation-divider-width);
+    background: var(--color-surface-raised);
+    transform: translateX(-50%);
+    pointer-events: none;
+    box-shadow: var(--shadow-sm);
+  }
+  .image-compare__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: var(--foundation-minimum-target-size);
+    height: var(--foundation-minimum-target-size);
+    border: 0;
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-md);
+    transform: translate(-50%, -50%);
+    place-items: center;
+    cursor: ew-resize;
+    pointer-events: auto;
+  }
+  .image-compare__handle svg {
+    width: 2rem;
+  }
+  .image-compare__handle:focus-visible {
+    outline: var(--foundation-focus-ring-width) solid var(--color-accent);
+    outline-offset: var(--foundation-focus-ring-offset);
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const root = document.getElementById('ImageCompareBlock-{{ block.id }}');
+    if (!root || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+    const handle = root.querySelector('.image-compare__handle');
+    let currentPos = {{ block.settings.initial_position | default: 50 }};
+    const setPosition = (value) => {
+      currentPos = Math.max(0, Math.min(100, value));
+      root.style.setProperty('--compare-position', `${currentPos}%`);
+      if (handle) {
+        handle.setAttribute('aria-valuenow', Math.round(currentPos));
+      }
+    };
+    if (handle) {
+      handle.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          setPosition(currentPos - 2);
+        } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          setPosition(currentPos + 2);
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          setPosition(0);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          setPosition(100);
+        }
+      });
+    }
+    const onPointerMove = (event) => {
+      const bounds = root.getBoundingClientRect();
+      const position = ((event.clientX - bounds.left) / bounds.width) * 100;
+      setPosition(position);
+    };
+    root.addEventListener('pointerdown', (event) => {
+      onPointerMove(event);
+      const onMove = (e) => onPointerMove(e);
+      const onUp = () => {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Image comparison",
+  "tag": null,
+  "blocks": [{ "type": "badge" }, { "type": "text" }, { "type": "@app" }],
+  "settings": [
+    { "type": "image_picker", "id": "image_before", "label": "Before image" },
+    { "type": "image_picker", "id": "image_after", "label": "After image" },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "landscape", "label": "Landscape (4:3)" },
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "tall", "label": "Tall (2:3)" },
+        { "value": "wide", "label": "Wide (16:9)" }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "select",
+      "id": "slider_height",
+      "label": "Slider height",
+      "options": [
+        { "value": "adapt", "label": "Height of images (Adapt to image)" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "Extra large" }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Cover (fill area, crop to fit)" },
+        { "value": "contain", "label": "Contain (fit whole image without cropping)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "initial_position",
+      "label": "Initial position",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Image comparison slider"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image comparison",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "label": "Before"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "label": "After"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+{%- assign swatch_product = block.settings.product -%}
+{%- if swatch_product != blank and swatch_product.has_only_default_variant == false -%}
+  {%- for option in swatch_product.options_with_values -%}
+    {%- assign option_name = option.name | downcase -%}
+    {%- if option_name contains 'color' or option_name contains 'colour' -%}
+      <div class="theme-product-swatches" role="group" aria-label="{{ option.name | escape }}" {{ block.shopify_attributes }}>
+        {%- for option_value in option.values limit: block.settings.max_swatches -%}
+          {%- assign value_name = option_value.name | default: option_value -%}
+          {%- assign matched_variant = blank -%}
+          {%- for variant in swatch_product.variants -%}
+            {%- if variant.available and variant.options contains value_name -%}
+              {%- assign matched_variant = variant -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if matched_variant != blank -%}
+            <a
+              class="theme-product-swatches__link"
+              href="{{ swatch_product.url }}?variant={{ matched_variant.id }}"
+              aria-label="{{ option.name | escape }}: {{ value_name | escape }}"
+              title="{{ value_name | escape }}"
+              {% if option_value.swatch.color != blank %}style="--product-swatch-color: {{ option_value.swatch.color }};"{% endif %}
+            ><span aria-hidden="true">{% if option_value.swatch.color == blank %}{{ value_name | slice: 0 }}{% endif %}</span></a>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if option.values.size > block.settings.max_swatches -%}
+          <span class="theme-product-swatches__more">+{{ option.values.size | minus: block.settings.max_swatches }}</span>
+        {%- endif -%}
+      </div>
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{% stylesheet %}
+  .theme-product-swatches { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+  .theme-product-swatches__link { display: grid; width: var(--foundation-minimum-target-size); height: var(--foundation-minimum-target-size); border: 1px solid var(--color-border); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-text); place-items: center; text-decoration: none; }
+  .theme-product-swatches__link::before { width: 2rem; height: 2rem; border: 1px solid var(--color-border); border-radius: var(--radius-pill); background: var(--product-swatch-color, var(--color-surface-raised)); content: ''; grid-area: 1 / 1; }
+  .theme-product-swatches__link span { font-size: var(--text-xs); grid-area: 1 / 1; position: relative; }
+  .theme-product-swatches__link:focus-visible { outline: var(--foundation-focus-ring-width) solid var(--foundation-focus-outline-color); outline-offset: var(--foundation-focus-ring-offset); }
+  .theme-product-swatches__more { color: var(--color-muted); font-size: var(--text-sm); }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Product swatches",
+  "tag": null,
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "range", "id": "max_swatches", "label": "Maximum swatches", "min": 2, "max": 8, "step": 1, "default": 5 }
+  ],
+  "presets": [{ "name": "Product swatches", "settings": { "product": "{{ closest.product }}" } }]
+}
+{% endschema %}

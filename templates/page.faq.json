@@ -1,0 +1,235 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "page_width": 1300,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "faq-intro": {
+          "type": "group",
+          "settings": {
+            "alignment": "center",
+            "gap": "2"
+          },
+          "blocks": {
+            "faq-intro-heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Everything You Need to Know",
+                "level": "h2",
+                "size": "medium"
+              }
+            },
+            "faq-intro-text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Thoughtfully answered to make your experience seamless.</p>"
+              }
+            }
+          },
+          "block_order": [
+            "faq-intro-heading",
+            "faq-intro-text"
+          ]
+        },
+        "faq-layout": {
+          "type": "media-text",
+          "settings": {
+            "media_position": "start"
+          },
+          "blocks": {
+            "faq-media": {
+              "type": "_faq-media",
+              "settings": {
+                "aspect_ratio": "portrait"
+              }
+            },
+            "faq-content": {
+              "type": "accordion-items",
+              "blocks": {
+                "item_1": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": true
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>In-stock items usually dispatch within 24–48 hours. Delivery timelines are shown at checkout based on your location.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "How long does delivery take?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "item_2": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We offer a 30-day return policy for unused items in original packaging. Return shipping is complimentary for store credit or exchanges.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "What is your return policy?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "item_3": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes! Our in-house design specialists are available via live chat or email to assist with dimensions, color palettes, and material choices.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Can I get styling or product help?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "item_4": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Every piece includes our 5-year structural warranty covering materials, frame construction, and craftsmanship defects.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "What warranty is included?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "item_5": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>All transactions are protected with industry-standard 256-bit SSL encryption. We never store complete credit card information.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Is checkout secure?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "item_6": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Dust gently with a clean dry microfiber cloth. Spot clean fabric or leather with a mild pH-neutral solution, avoiding direct heat or moisture.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "How do I care for my products?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                }
+              },
+              "block_order": [
+                "item_1",
+                "item_2",
+                "item_3",
+                "item_4",
+                "item_5",
+                "item_6"
+              ]
+            }
+          },
+          "block_order": [
+            "faq-media",
+            "faq-content"
+          ]
+        }
+      },
+      "block_order": [
+        "faq-intro",
+        "faq-layout"
+      ]
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}

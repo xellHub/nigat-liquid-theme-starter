@@ -1,0 +1,36 @@
+{% if shop.enabled_payment_types.size > 0 or request.design_mode %}
+<div class="product__guarantee" {{ block.shopify_attributes }}>
+  <div class="product__guarantee-header">
+    {% content_for 'blocks' %}
+  </div>
+  {% if shop.enabled_payment_types.size > 0 %}
+    <div class="product__payment-badges" role="list" aria-label="{{ 'products.product.payment_methods' | t }}">
+      {% for payment_type in shop.enabled_payment_types %}
+        <span class="product__payment-badge" role="listitem">{{ payment_type | payment_type_svg_tag }}</span>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Payment methods",
+  "tag": null,
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "badge" }, { "type": "@app" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Payment methods",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Payment methods"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

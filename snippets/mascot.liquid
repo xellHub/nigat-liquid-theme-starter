@@ -1,0 +1,217 @@
+{%- comment -%}
+  Renders friendly, non-scary vector mascot illustrations for search and catalog empty states.
+
+  Accepts:
+  - name: {String} 'search', 'catalog', or 'filter' (default: 'catalog')
+  - class: {String} optional CSS classes
+{%- endcomment -%}
+
+{%- liquid
+  assign mascot_name = name | default: 'catalog'
+  assign mascot_class = 'search-mascot search-mascot--' | append: mascot_name
+  if class
+    assign mascot_class = mascot_class | append: ' ' | append: class
+  endif
+-%}
+
+{%- case mascot_name -%}
+  {%- when 'search' -%}
+    {%- comment -%} Friendly Explorer Mascot with magnifying glass looking for items {%- endcomment -%}
+    <svg
+      class="{{ mascot_class }}"
+      viewBox="0 0 160 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <!-- Ground shadow -->
+      <ellipse cx="76" cy="132" rx="44" ry="5" fill="currentColor" fill-opacity="0.07"/>
+
+      <!-- Floating Sparkles -->
+      <path d="M26 42L28 34L36 32L28 30L26 22L24 30L16 32L24 34L26 42Z" fill="var(--color-accent)" fill-opacity="0.65"/>
+      <circle cx="138" cy="36" r="2.5" fill="var(--color-accent)" fill-opacity="0.5"/>
+      <path d="M136 78L137.5 73L142.5 71.5L137.5 70L136 65L134.5 70L129.5 71.5L134.5 73L136 78Z" fill="var(--color-accent)" fill-opacity="0.45"/>
+
+      <!-- Mascot Body: Friendly rounded buddy -->
+      <!-- Left Ear -->
+      <path d="M50 36C44 26 33 30 35 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+      <path d="M47 36C44 31 38 33 39 41" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- Right Ear -->
+      <path d="M102 36C108 26 119 30 117 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+      <path d="M105 36C108 31 114 33 113 41" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- Main Body Pill -->
+      <rect x="42" y="32" width="68" height="86" rx="34" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <!-- Belly Accent Soft Tint -->
+      <path d="M54 78C54 66 64 56 76 56C88 56 98 66 98 78C98 94 88 106 76 106C64 106 54 94 54 78Z" fill="color-mix(in srgb, var(--color-accent) 10%, transparent)"/>
+
+      <!-- Mascot Face: Sweet gentle smiling expression -->
+      <!-- Left Eye: Friendly twinkly dot with light reflection -->
+      <circle cx="64" cy="62" r="4.5" fill="currentColor"/>
+      <circle cx="65.5" cy="60.5" r="1.5" fill="var(--color-background)"/>
+
+      <!-- Right Eye: Friendly twinkly dot with light reflection -->
+      <circle cx="88" cy="62" r="4.5" fill="currentColor"/>
+      <circle cx="89.5" cy="60.5" r="1.5" fill="var(--color-background)"/>
+
+      <!-- Cheeks: Soft warm blush (not red, gentle tone) -->
+      <ellipse cx="56" cy="68" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.25"/>
+      <ellipse cx="96" cy="68" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.25"/>
+
+      <!-- Cute Gentle Smile (curved arc) -->
+      <path d="M71 68C73 72 79 72 81 68" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Feet -->
+      <rect x="52" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <rect x="84" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+
+      <!-- Left Arm resting sweetly -->
+      <path d="M43 76C36 82 36 94 45 95" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+      <!-- Right Arm holding magnifying glass -->
+      <path d="M109 76C114 80 119 86 117 92" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+      <!-- Magnifying Glass -->
+      <g transform="translate(108, 62) rotate(-18)">
+        <!-- Glass lens frame -->
+        <circle cx="16" cy="16" r="15" fill="color-mix(in srgb, var(--color-accent) 18%, var(--color-background))" stroke="currentColor" stroke-width="3"/>
+        <!-- Glass lens shine -->
+        <path d="M8 12C10 8 16 6 22 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 3"/>
+        <!-- Cute sparkle in lens -->
+        <circle cx="16" cy="16" r="3" fill="var(--color-accent)" fill-opacity="0.6"/>
+        <!-- Handle -->
+        <path d="M27 27L40 40" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+  {%- when 'filter' -%}
+    {%- comment -%} Friendly Helper Mascot with Filter Controls {%- endcomment -%}
+    <svg
+      class="{{ mascot_class }}"
+      viewBox="0 0 160 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <!-- Ground shadow -->
+      <ellipse cx="80" cy="132" rx="44" ry="5" fill="currentColor" fill-opacity="0.07"/>
+
+      <!-- Floating Sparkles -->
+      <path d="M28 34L29.5 29L34.5 27.5L29.5 26L28 21L26.5 26L21.5 27.5L26.5 29L28 34Z" fill="var(--color-accent)" fill-opacity="0.5"/>
+      <path d="M134 38L136 30L144 28L136 26L134 18L132 26L124 28L132 30L134 38Z" fill="var(--color-accent)" fill-opacity="0.6"/>
+
+      <!-- Mascot Body -->
+      <!-- Left Ear -->
+      <path d="M54 36C48 26 37 30 39 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+      <!-- Right Ear -->
+      <path d="M106 36C112 26 123 30 121 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+
+      <!-- Main Body -->
+      <rect x="46" y="32" width="68" height="86" rx="34" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <!-- Belly Accent -->
+      <path d="M58 78C58 66 68 56 80 56C92 56 102 66 102 78C102 94 92 106 80 106C68 106 58 94 58 78Z" fill="color-mix(in srgb, var(--color-accent) 10%, transparent)"/>
+
+      <!-- Mascot Face -->
+      <circle cx="68" cy="62" r="4.5" fill="currentColor"/>
+      <circle cx="69.5" cy="60.5" r="1.5" fill="var(--color-background)"/>
+      <circle cx="92" cy="62" r="4.5" fill="currentColor"/>
+      <circle cx="93.5" cy="60.5" r="1.5" fill="var(--color-background)"/>
+
+      <!-- Soft Blush -->
+      <ellipse cx="60" cy="68" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.25"/>
+      <ellipse cx="100" cy="68" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.25"/>
+
+      <!-- Encouraging Smile -->
+      <path d="M75 68C77 72 83 72 85 68" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Feet -->
+      <rect x="56" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <rect x="88" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+
+      <!-- Left Hand holding mini slider -->
+      <path d="M47 80C36 84 28 88 28 98" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <!-- Right Hand holding mini slider -->
+      <path d="M113 80C124 84 132 88 132 98" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+      <!-- Floating Filter Sliders Graphic -->
+      <g transform="translate(18, 76)">
+        <line x1="0" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="6" cy="12" r="3.5" fill="var(--color-accent)" stroke="currentColor" stroke-width="2"/>
+      </g>
+      <g transform="translate(126, 76)">
+        <line x1="0" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="10" cy="12" r="3.5" fill="var(--color-accent)" stroke="currentColor" stroke-width="2"/>
+      </g>
+    </svg>
+
+  {%- else -%}
+    {%- comment -%} Default 'catalog' Welcoming Shopping Companion Mascot {%- endcomment -%}
+    <svg
+      class="{{ mascot_class }}"
+      viewBox="0 0 160 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <!-- Ground shadow -->
+      <ellipse cx="80" cy="132" rx="46" ry="5" fill="currentColor" fill-opacity="0.07"/>
+
+      <!-- Floating Welcome Sparkles & Star -->
+      <path d="M24 38L26 30L34 28L26 26L24 18L22 26L14 28L22 30L24 38Z" fill="var(--color-accent)" fill-opacity="0.65"/>
+      <path d="M136 44L137.5 39L142.5 37.5L137.5 36L136 31L134.5 36L129.5 37.5L134.5 39L136 44Z" fill="var(--color-accent)" fill-opacity="0.5"/>
+      <circle cx="132" cy="72" r="2.5" fill="var(--color-accent)" fill-opacity="0.4"/>
+
+      <!-- Mascot Body -->
+      <!-- Left Ear -->
+      <path d="M54 36C48 26 37 30 39 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+      <path d="M51 36C48 31 42 33 43 41" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- Right Ear -->
+      <path d="M106 36C112 26 123 30 121 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="color-mix(in srgb, var(--color-accent) 15%, var(--color-background))"/>
+      <path d="M109 36C112 31 118 33 117 41" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- Main Body -->
+      <rect x="46" y="32" width="68" height="86" rx="34" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <!-- Soft Belly Accent -->
+      <path d="M58 78C58 66 68 56 80 56C92 56 102 66 102 78C102 94 92 106 80 106C68 106 58 94 58 78Z" fill="color-mix(in srgb, var(--color-accent) 10%, transparent)"/>
+
+      <!-- Mascot Face: Happy, warm smiling eyes -->
+      <!-- Left Eye (happy smiling arc) -->
+      <path d="M63 61C65 57 71 57 73 61" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <!-- Right Eye (happy smiling arc) -->
+      <path d="M87 61C89 57 95 57 97 61" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Soft warm blush -->
+      <ellipse cx="60" cy="67" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.3"/>
+      <ellipse cx="100" cy="67" rx="4" ry="2.5" fill="var(--color-accent)" fill-opacity="0.3"/>
+
+      <!-- Friendly Happy Smile -->
+      <path d="M74 67C76 72 84 72 86 67" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Feet -->
+      <rect x="56" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+      <rect x="88" y="114" width="16" height="12" rx="6" fill="var(--color-background)" stroke="currentColor" stroke-width="3"/>
+
+      <!-- Right Arm: Friendly waving gesture -->
+      <path d="M113 74C122 70 128 60 134 52" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <!-- Little waving hand -->
+      <circle cx="135" cy="50" r="4.5" fill="var(--color-background)" stroke="currentColor" stroke-width="2.5"/>
+
+      <!-- Left Arm holding shopping tote bag -->
+      <path d="M47 74C40 80 34 88 34 98" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+      <!-- Cute Shopping Tote Bag -->
+      <g transform="translate(20, 88)">
+        <!-- Bag body -->
+        <rect x="4" y="8" width="22" height="24" rx="4" fill="color-mix(in srgb, var(--color-accent) 16%, var(--color-background))" stroke="currentColor" stroke-width="2.5"/>
+        <!-- Bag handle -->
+        <path d="M10 8V5C10 3 12 1 15 1C18 1 20 3 20 5V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <!-- Star accent on bag -->
+        <path d="M15 17L16 19L18 19.5L16 20.5L15 22.5L14 20.5L12 19.5L14 19L15 17Z" fill="var(--color-accent)"/>
+      </g>
+    </svg>
+{%- endcase -%}

@@ -1,0 +1,236 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign card_shade = 'subtle'
+  assign card_border = 'auto'
+  assign card_shadow = 'none'
+  if block.settings.surface == 'raised'
+    assign card_shade = 'raised'
+    assign card_shadow = 'auto'
+  elsif block.settings.surface == 'transparent'
+    assign card_shade = 'canvas'
+    assign card_border = 'off'
+  endif
+-%}
+<article
+  class="{{ block.settings.foundation_custom_class | escape }} theme-card theme-card--{{ block.settings.surface }} theme-card--{{ block.settings.layout }} theme-card--media-{{ block.settings.media_position }} theme-card--align-{{ block.settings.content_alignment }} theme-card--hover-{{ block.settings.hover_effect }} theme-surface theme-surface--{{ card_shade }} theme-surface--border-{{ card_border }} theme-surface--shadow-{{ card_shadow }}"
+  style="--surface-padding:var(--space-5);--surface-radius:var(--radius-card)"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</article>
+{% stylesheet %}.theme-card{display:flex;min-width:0;gap:var(--space-3);overflow:hidden}.theme-card--vertical{flex-direction:column}.theme-card--horizontal{align-items:center;flex-direction:row}.theme-card--horizontal>*{min-width:0;flex:1}.theme-card--transparent{--surface-padding:0}.theme-card--media-end>.theme-image{order:2}.theme-card--align-center{align-items:center;text-align:center}.theme-card--align-end{align-items:flex-end;text-align:right}.theme-card--hover-lift:hover{transform:translateY(calc(var(--foundation-hover-lift) * -1));box-shadow:var(--shadow-md)}.theme-card--hover-shadow:hover{box-shadow:var(--shadow-md)}@container(max-width:640px){.theme-card--horizontal{align-items:stretch;flex-direction:column}}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Card",
+  "tag": null,
+  "blocks": [
+    { "type": "image" },
+    { "type": "badge" },
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "price" },
+    { "type": "rating" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "icon" },
+    { "type": "group" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Surface",
+      "options": [
+        {
+          "value": "surface",
+          "label": "Surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised"
+        },
+        {
+          "value": "transparent",
+          "label": "Transparent"
+        }
+      ],
+      "default": "surface"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "hover_effect",
+      "label": "Hover effect",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "lift", "label": "Lift" },
+        { "value": "shadow", "label": "Shadow" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Card",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Card heading",
+            "size": "small",
+            "level": "h3"
+          }
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button",
+          "settings": {
+            "style": "link",
+            "icon": "arrow-right"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

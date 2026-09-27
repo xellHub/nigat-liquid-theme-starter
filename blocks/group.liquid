@@ -1,0 +1,507 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign group_gap = 'var(--space-4)'
+  case block.settings.gap
+    when '2'
+      assign group_gap = 'var(--space-2)'
+    when '3'
+      assign group_gap = 'var(--space-3)'
+    when '5'
+      assign group_gap = 'var(--space-5)'
+    when '6'
+      assign group_gap = 'var(--space-6)'
+    when 'custom'
+      assign group_gap = block.settings.custom_gap | append: 'px'
+  endcase
+
+  assign group_padding = '0'
+  case block.settings.padding
+    when '3'
+      assign group_padding = 'var(--space-3)'
+    when '5'
+      assign group_padding = 'var(--space-5)'
+    when '7'
+      assign group_padding = 'var(--space-7)'
+    when 'custom'
+      assign group_padding = block.settings.custom_padding | append: 'px'
+  endcase
+
+  assign group_shade = 'canvas'
+  assign group_border = block.settings.border
+  assign group_shadow = 'none'
+  if block.settings.surface == 'surface'
+    assign group_shade = 'subtle'
+  elsif block.settings.surface == 'raised'
+    assign group_shade = 'raised'
+    assign group_shadow = 'auto'
+  elsif block.settings.border == 'auto'
+    assign group_border = 'off'
+  endif
+
+  assign group_radius = 'var(--radius-card)'
+  if block.settings.radius == 'none'
+    assign group_radius = '0px'
+  elsif block.settings.radius == 'custom'
+    assign group_radius = block.settings.custom_radius | append: 'px'
+  endif
+
+  assign group_max_width = '100%'
+  if block.settings.max_width == 'reading'
+    assign group_max_width = 'var(--foundation-reading-width)'
+  elsif block.settings.max_width == 'narrow'
+    assign group_max_width = 'calc(var(--foundation-reading-width) * 0.75)'
+  elsif block.settings.max_width == 'custom'
+    assign group_max_width = block.settings.custom_max_width | append: 'px'
+  endif
+-%}
+
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-group theme-group--{{ block.settings.direction }} theme-group--align-{{ block.settings.alignment }} theme-group--justify-{{ block.settings.justify }} theme-group--wrap-{{ block.settings.wrap }} theme-surface theme-surface--{{ group_shade }} theme-surface--border-{{ group_border }} theme-surface--shadow-{{ group_shadow }}"
+  style="--group-gap:{{ group_gap }};--group-max-width:{{ group_max_width }};--surface-padding:{{ group_padding }};--surface-radius:{{ group_radius }};--surface-border-width:{{ block.settings.border_width }}px;{% if block.settings.background != blank %}--surface-background:{{ block.settings.background }};{% endif %}{% if block.settings.border_color != blank %}--surface-border-color:{{ block.settings.border_color }};{% endif %}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .theme-group {
+    display: flex;
+    width: min(100%, var(--group-max-width, 100%));
+    gap: var(--group-gap, var(--space-4));
+  }
+  .theme-group--column {
+    flex-direction: column;
+  }
+  .theme-group--row {
+    flex-direction: row;
+  }
+  .theme-group--align-start {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .theme-group--align-center {
+    align-items: center;
+    text-align: center;
+  }
+  .theme-group--align-end {
+    align-items: flex-end;
+    text-align: right;
+  }
+  .theme-group--align-stretch {
+    align-items: stretch;
+  }
+  .theme-group--align-stretch > * {
+    width: 100%;
+  }
+  .theme-group--justify-start {
+    justify-content: flex-start;
+  }
+  .theme-group--justify-center {
+    justify-content: center;
+  }
+  .theme-group--justify-end {
+    justify-content: flex-end;
+  }
+  .theme-group--justify-between {
+    justify-content: space-between;
+  }
+  .theme-group--wrap-wrap {
+    flex-wrap: wrap;
+  }
+  .theme-group--wrap-nowrap {
+    flex-wrap: nowrap;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Group",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "quote" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "icon-button" },
+    { "type": "icon" },
+    { "type": "image" },
+    { "type": "video" },
+    { "type": "price" },
+    { "type": "badge" },
+    { "type": "rating" },
+    { "type": "countdown" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "accordion-item" },
+    { "type": "feature-item" },
+    { "type": "testimonial" },
+    { "type": "icon-with-text" },
+    { "type": "logo-item" },
+    { "type": "stat" },
+    { "type": "collection-card" },
+    { "type": "product-card" },
+    { "type": "group" },
+    { "type": "marquee" },
+    { "type": "card" },
+    { "type": "surface" },
+    { "type": "input" },
+    { "type": "select" },
+    { "type": "checkbox" },
+    { "type": "newsletter-form" },
+    { "type": "tab-trigger" },
+    { "type": "tab-panel" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "Stack"
+        },
+        {
+          "value": "row",
+          "label": "Row"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap token",
+      "options": [
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "3",
+          "label": "Small"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "5",
+          "label": "Large"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "custom_gap",
+      "label": "Custom gap",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Padding token",
+      "options": [
+        {
+          "value": "0",
+          "label": "None"
+        },
+        {
+          "value": "3",
+          "label": "Small"
+        },
+        {
+          "value": "5",
+          "label": "Medium"
+        },
+        {
+          "value": "7",
+          "label": "Large"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "range",
+      "id": "custom_padding",
+      "label": "Custom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Surface",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "surface",
+          "label": "Surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised"
+        }
+      ],
+      "default": "none"
+    },
+    { "type": "color", "id": "background", "label": "Custom background" },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "Border",
+      "options": [
+        { "value": "auto", "label": "Automatic" },
+        { "value": "on", "label": "On" },
+        { "value": "off", "label": "Off" }
+      ],
+      "default": "auto"
+    },
+    { "type": "color", "id": "border_color", "label": "Custom border color" },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "radius",
+      "label": "Radius",
+      "options": [
+        { "value": "token", "label": "Theme default" },
+        { "value": "none", "label": "None" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "token"
+    },
+    {
+      "type": "range",
+      "id": "custom_radius",
+      "label": "Custom radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "justify",
+      "label": "Content distribution",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" },
+        { "value": "between", "label": "Space between" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "wrap",
+      "label": "Wrapping",
+      "options": [
+        { "value": "wrap", "label": "Wrap" },
+        { "value": "nowrap", "label": "No wrap" }
+      ],
+      "default": "wrap"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Maximum width",
+      "options": [
+        { "value": "full", "label": "Full" },
+        { "value": "reading", "label": "Reading" },
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "label": "Custom maximum width",
+      "min": 240,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 720
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Group"
+    },
+    {
+      "name": "Content stack",
+      "settings": {
+        "direction": "column",
+        "gap": "3"
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Content heading",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

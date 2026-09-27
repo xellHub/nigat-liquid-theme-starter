@@ -1,0 +1,230 @@
+{%- liquid
+  assign badge_product = block.settings.product
+  assign badge_variant = badge_product.selected_or_first_available_variant
+  assign badge_label = block.settings.label
+  assign show_badge = true
+  case block.settings.mode
+    when 'sale'
+      if badge_variant != blank and badge_variant.compare_at_price > badge_variant.price and badge_variant.available
+        assign badge_label = 'Sale'
+      else
+        assign show_badge = false
+      endif
+    when 'new'
+      if badge_product.tags contains 'new' or badge_product.tags contains 'New'
+        assign badge_label = 'New'
+      else
+        assign show_badge = false
+      endif
+    when 'low_stock'
+      if badge_product.has_only_default_variant and badge_variant.available and badge_variant.inventory_management == 'shopify' and badge_variant.inventory_policy == 'deny' and badge_variant.inventory_quantity > 0 and badge_variant.inventory_quantity <= block.settings.low_stock_threshold
+        assign badge_label = 'Low stock'
+      else
+        assign show_badge = false
+      endif
+  endcase
+-%}
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{% if show_badge %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-badge theme-badge--{{ block.settings.style }}"
+  {% if block.settings.style == 'custom' %}
+    style="--badge-background:{{ block.settings.custom_background | default: 'var(--color-accent)' }};--badge-text:{{ block.settings.custom_text | default: 'var(--color-accent-text)' }};"
+  {% endif %}
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {{ badge_label | escape }}
+</div>
+{% endif %}
+
+{% stylesheet %}
+  .theme-badge {
+    display: inline-flex;
+    width: fit-content;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid transparent;
+    border-radius: var(--foundation-badge-radius);
+    font-family: var(--font-accent-family, var(--font-body-family));
+    font-size: calc(1.2rem * var(--font-body-scale));
+    font-weight: var(--font-accent-weight, var(--font-button-weight));
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: var(--label-case, uppercase);
+  }
+  .theme-badge--accent {
+    color: var(--color-accent-text);
+    background: var(--color-accent);
+  }
+  .theme-badge--subtle {
+    color: var(--color-text);
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  .theme-badge--on-media {
+    color: var(--color-on-media);
+    background: color-mix(in srgb, var(--color-media-overlay) 72%, transparent);
+    border-color: color-mix(in srgb, var(--color-on-media) 24%, transparent);
+  }
+  .theme-badge--custom {
+    color: var(--badge-text);
+    background: var(--badge-background);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Badge",
+  "tag": null,
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product for automatic badge" },
+    {
+      "type": "select", "id": "mode", "label": "Badge mode", "default": "manual",
+      "options": [
+        { "value": "manual", "label": "Manual label" },
+        { "value": "sale", "label": "Sale" },
+        { "value": "new", "label": "New tag" },
+        { "value": "low_stock", "label": "Low stock" }
+      ]
+    },
+    { "type": "range", "id": "low_stock_threshold", "label": "Low stock threshold", "min": 1, "max": 20, "step": 1, "default": 5 },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "New"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "on-media",
+          "label": "On media"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "accent"
+    },
+    { "type": "color", "id": "custom_background", "label": "Custom background" },
+    { "type": "color", "id": "custom_text", "label": "Custom text" },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Badge"
+    },
+    {
+      "name": "Media badge",
+      "settings": {
+        "style": "on-media"
+      }
+    }
+  ]
+}
+{% endschema %}

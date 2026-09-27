@@ -1,0 +1,914 @@
+{%- comment -%}
+  Live design controls dialog for previewing theme tokens and appearance.
+  Moved to snippet plumbing to decouple form controls from theme block tree.
+{%- endcomment -%}
+<dialog
+  class="design-controls__dialog"
+  id="DesignControls-{{ block_id }}"
+  data-design-controls-dialog
+  aria-labelledby="DesignControlsTitle-{{ block_id }}"
+>
+  <div class="design-controls__header">
+    <div>
+      <p class="design-controls__eyebrow">Live preview</p>
+      <h2 id="DesignControlsTitle-{{ block_id }}">Design controls</h2>
+    </div>
+    <button
+      type="button"
+      class="design-controls__close button button--icon"
+      data-design-controls-close
+      aria-label="Close design controls"
+    >
+      ×
+    </button>
+  </div>
+
+  <div class="design-controls__body">
+    <fieldset class="design-controls__group">
+      <legend>Appearance</legend>
+      <div class="design-controls__choices" role="group" aria-label="Color mode">
+        <button type="button" data-design-mode="light">Light</button>
+        <button type="button" data-design-mode="dark">Dark</button>
+      </div>
+      <div class="design-controls__palette-grid" role="group" aria-label="Color palette">
+        {%- for index in (1..5) -%}
+          {%- assign palette_key = 'palette_' | append: index -%}
+          {%- assign palette_name_key = palette_key | append: '_name' -%}
+          {%- assign palette_light_key = palette_key | append: '_light' -%}
+          {%- assign palette_light_scheme = settings[palette_light_key] -%}
+          <button type="button" data-design-palette="{{ palette_key }}">
+            <span
+              class="design-controls__swatch"
+              style="--design-swatch: {{ palette_light_scheme.settings.accent }}"
+            ></span>
+            {{ settings[palette_name_key] | escape }}
+          </button>
+        {%- endfor -%}
+      </div>
+    </fieldset>
+
+    <fieldset class="design-controls__group">
+      <legend>Color</legend>
+      <div class="design-controls__color-grid">
+        <label
+          >Canvas
+          <input
+            type="color"
+            data-design-color="background"
+            value="{{ settings.palette_5_light.settings.background }}"
+        ></label>
+        <label
+          >Text
+          <input
+            type="color"
+            data-design-color="text"
+            value="{{ settings.palette_5_light.settings.text }}"
+        ></label>
+        <label
+          >Accent
+          <input
+            type="color"
+            data-design-color="accent"
+            value="{{ settings.palette_5_light.settings.accent }}"
+        ></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="design-controls__group">
+      <legend>Layout</legend>
+      <label class="design-controls__range"
+        >Grid gap <output data-design-output="grid-gap">{{ settings.grid_gap }}px</output
+        ><input
+          type="range"
+          min="0.8"
+          max="5.6"
+          step="0.4"
+          value="{{ settings.grid_gap | divided_by: 10.0 }}"
+          data-design-token="--grid-gap"
+          data-design-unit="rem"
+          data-design-label="grid-gap"
+      ></label>
+    </fieldset>
+
+    <fieldset class="design-controls__group">
+      <legend>Shape &amp; elevation</legend>
+      <label class="design-controls__range"
+        >Base radius <output data-design-output="radius">{{ settings.corner_radius }}px</output
+        ><input
+          type="range"
+          min="0"
+          max="32"
+          step="2"
+          value="{{ settings.corner_radius }}"
+          data-design-token="--corner-radius"
+          data-design-unit="px"
+          data-design-label="radius"
+      ></label>
+      <label class="design-controls__range"
+        >Card radius
+        <output data-design-output="card-radius">{{ settings.card_corner_radius }}px</output
+        ><input
+          type="range"
+          min="0"
+          max="48"
+          step="2"
+          value="{{ settings.card_corner_radius }}"
+          data-design-token="--radius-card"
+          data-design-unit="px"
+          data-design-label="card-radius"
+      ></label>
+      <label class="design-controls__range"
+        >Button radius
+        <output data-design-output="button-radius">{{ settings.button_corner_radius }}px</output
+        ><input
+          type="range"
+          min="0"
+          max="48"
+          step="2"
+          value="{{ settings.button_corner_radius }}"
+          data-design-token="--radius-button"
+          data-design-unit="px"
+          data-design-label="button-radius"
+      ></label>
+      <label class="design-controls__range"
+        >Elevation <output data-design-output="elevation">{{ settings.shadow_opacity }}%</output
+        ><input
+          type="range"
+          min="0"
+          max="30"
+          step="2"
+          value="{{ settings.shadow_opacity }}"
+          data-design-token="--shadow-opacity"
+          data-design-unit="ratio"
+          data-design-label="elevation"
+      ></label>
+    </fieldset>
+
+    <fieldset class="design-controls__group">
+      <legend>Typography &amp; motion</legend>
+      <label class="design-controls__range"
+        >Body scale <output data-design-output="body-scale">{{ settings.font_body_scale }}%</output
+        ><input
+          type="range"
+          min="90"
+          max="120"
+          step="5"
+          value="{{ settings.font_body_scale }}"
+          data-design-token="--font-body-scale"
+          data-design-unit="ratio"
+          data-design-label="body-scale"
+      ></label>
+      <label class="design-controls__range"
+        >Heading scale
+        <output data-design-output="heading-scale">{{ settings.font_heading_scale }}%</output
+        ><input
+          type="range"
+          min="90"
+          max="150"
+          step="5"
+          value="{{ settings.font_heading_scale }}"
+          data-design-token="--font-heading-scale"
+          data-design-unit="ratio"
+          data-design-label="heading-scale"
+      ></label>
+      <label class="design-controls__select"
+        >Heading case
+        <select data-design-token="--heading-case" data-design-label="heading-case">
+          <option
+            value="none"
+            {% if settings.heading_case == 'none' %}
+              selected
+            {% endif %}
+          >
+            None
+          </option>
+          <option
+            value="uppercase"
+            {% if settings.heading_case == 'uppercase' %}
+              selected
+            {% endif %}
+          >
+            Uppercase
+          </option>
+          <option
+            value="capitalize"
+            {% if settings.heading_case == 'capitalize' %}
+              selected
+            {% endif %}
+          >
+            Capitalize
+          </option>
+        </select></label
+      >
+      <label class="design-controls__select"
+        >Button case
+        <select data-design-token="--button-case" data-design-label="button-case">
+          <option
+            value="none"
+            {% if settings.button_case == 'none' %}
+              selected
+            {% endif %}
+          >
+            None
+          </option>
+          <option
+            value="uppercase"
+            {% if settings.button_case == 'uppercase' %}
+              selected
+            {% endif %}
+          >
+            Uppercase
+          </option>
+          <option
+            value="capitalize"
+            {% if settings.button_case == 'capitalize' %}
+              selected
+            {% endif %}
+          >
+            Capitalize
+          </option>
+        </select></label
+      >
+      <label class="design-controls__select"
+        >Label case
+        <select data-design-token="--label-case" data-design-label="label-case">
+          <option
+            value="none"
+            {% if settings.label_case == 'none' %}
+              selected
+            {% endif %}
+          >
+            None
+          </option>
+          <option
+            value="uppercase"
+            {% if settings.label_case == 'uppercase' %}
+              selected
+            {% endif %}
+          >
+            Uppercase
+          </option>
+          <option
+            value="capitalize"
+            {% if settings.label_case == 'capitalize' %}
+              selected
+            {% endif %}
+          >
+            Capitalize
+          </option>
+        </select></label
+      >
+      <label class="design-controls__select"
+        >Motion
+        <select data-design-motion>
+          <option
+            value="0"
+            {% if settings.motion_intensity == 'none' %}
+              selected
+            {% endif %}
+          >
+            None
+          </option>
+          <option
+            value="160"
+            {% if settings.motion_intensity == 'subtle' %}
+              selected
+            {% endif %}
+          >
+            Subtle
+          </option>
+          <option
+            value="240"
+            {% if settings.motion_intensity == 'standard' %}
+              selected
+            {% endif %}
+          >
+            Standard
+          </option>
+        </select></label
+      >
+    </fieldset>
+
+    <details class="design-controls__details">
+      <summary>Foundation · geometry</summary>
+      <div class="design-controls__details-body">
+        <label class="design-controls__range"
+          >Narrow content
+          <output data-design-output="foundation_content_width_narrow">
+            {{- settings.foundation_content_width_narrow }}px</output
+          ><input
+            type="range"
+            min="560"
+            max="960"
+            step="20"
+            value="{{ settings.foundation_content_width_narrow }}"
+            data-design-foundation="foundation_content_width_narrow"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Reading measure
+          <output data-design-output="foundation_reading_width">
+            {{- settings.foundation_reading_width }}px</output
+          ><input
+            type="range"
+            min="480"
+            max="840"
+            step="20"
+            value="{{ settings.foundation_reading_width }}"
+            data-design-foundation="foundation_reading_width"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Mobile gutter
+          <output data-design-output="foundation_gutter_mobile">
+            {{- settings.foundation_gutter_mobile }}px</output
+          ><input
+            type="range"
+            min="12"
+            max="40"
+            step="2"
+            value="{{ settings.foundation_gutter_mobile }}"
+            data-design-foundation="foundation_gutter_mobile"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Tablet gutter
+          <output data-design-output="foundation_gutter_tablet">
+            {{- settings.foundation_gutter_tablet }}px</output
+          ><input
+            type="range"
+            min="16"
+            max="56"
+            step="4"
+            value="{{ settings.foundation_gutter_tablet }}"
+            data-design-foundation="foundation_gutter_tablet"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Desktop gutter
+          <output data-design-output="foundation_gutter_desktop">
+            {{- settings.foundation_gutter_desktop }}px</output
+          ><input
+            type="range"
+            min="24"
+            max="96"
+            step="4"
+            value="{{ settings.foundation_gutter_desktop }}"
+            data-design-foundation="foundation_gutter_desktop"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Mobile section space
+          <output data-design-output="foundation_section_spacing_mobile">
+            {{- settings.foundation_section_spacing_mobile }}px</output
+          ><input
+            type="range"
+            min="24"
+            max="96"
+            step="4"
+            value="{{ settings.foundation_section_spacing_mobile }}"
+            data-design-foundation="foundation_section_spacing_mobile"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Desktop section space
+          <output data-design-output="foundation_section_spacing_desktop">
+            {{- settings.foundation_section_spacing_desktop }}px</output
+          ><input
+            type="range"
+            min="32"
+            max="160"
+            step="4"
+            value="{{ settings.foundation_section_spacing_desktop }}"
+            data-design-foundation="foundation_section_spacing_desktop"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Mobile columns
+          <output data-design-output="foundation_grid_columns_mobile">
+            {{- settings.foundation_grid_columns_mobile -}}</output
+          ><input
+            type="range"
+            min="1"
+            max="3"
+            step="1"
+            value="{{ settings.foundation_grid_columns_mobile }}"
+            data-design-foundation="foundation_grid_columns_mobile"
+        ></label>
+        <label class="design-controls__range"
+          >Desktop columns
+          <output data-design-output="foundation_grid_columns_desktop">
+            {{- settings.foundation_grid_columns_desktop -}}</output
+          ><input
+            type="range"
+            min="2"
+            max="6"
+            step="1"
+            value="{{ settings.foundation_grid_columns_desktop }}"
+            data-design-foundation="foundation_grid_columns_desktop"
+        ></label>
+      </div>
+    </details>
+
+    <details class="design-controls__details">
+      <summary>Foundation · typography</summary>
+      <div class="design-controls__details-body">
+        <label class="design-controls__select"
+          >Type scale
+          <select data-design-foundation="foundation_type_scale">
+            <option value="minor-third">Minor third</option>
+            <option value="major-third" selected>Major third</option>
+            <option value="perfect-fourth">Perfect fourth</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Base size
+          <output data-design-output="foundation_base_font_size">
+            {{- settings.foundation_base_font_size }}px</output
+          ><input
+            type="range"
+            min="14"
+            max="20"
+            step="1"
+            value="{{ settings.foundation_base_font_size }}"
+            data-design-foundation="foundation_base_font_size"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Small text
+          <output data-design-output="foundation_small_text_size">
+            {{- settings.foundation_small_text_size }}px</output
+          ><input
+            type="range"
+            min="11"
+            max="16"
+            step="1"
+            value="{{ settings.foundation_small_text_size }}"
+            data-design-foundation="foundation_small_text_size"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Display scale
+          <output data-design-output="foundation_display_scale">
+            {{- settings.foundation_display_scale }}%</output
+          ><input
+            type="range"
+            min="100"
+            max="180"
+            step="5"
+            value="{{ settings.foundation_display_scale }}"
+            data-design-foundation="foundation_display_scale"
+            data-design-unit="%"
+        ></label>
+        <label class="design-controls__range"
+          >Body tracking
+          <output data-design-output="foundation_body_tracking">
+            {{- settings.foundation_body_tracking }}‰</output
+          ><input
+            type="range"
+            min="-20"
+            max="40"
+            step="5"
+            value="{{ settings.foundation_body_tracking }}"
+            data-design-foundation="foundation_body_tracking"
+            data-design-unit="‰"
+        ></label>
+        <label class="design-controls__range"
+          >Heading tracking
+          <output data-design-output="foundation_heading_tracking">
+            {{- settings.foundation_heading_tracking }}‰</output
+          ><input
+            type="range"
+            min="-40"
+            max="20"
+            step="5"
+            value="{{ settings.foundation_heading_tracking }}"
+            data-design-foundation="foundation_heading_tracking"
+            data-design-unit="‰"
+        ></label>
+        <label class="design-controls__select"
+          >Heading case
+          <select data-design-foundation="foundation_heading_case">
+            <option value="none">None</option>
+            <option value="uppercase">Uppercase</option>
+            <option value="capitalize">Capitalize</option>
+          </select></label
+        >
+        <label class="design-controls__select"
+          >Button case
+          <select data-design-foundation="foundation_button_case">
+            <option value="none" selected>None</option>
+            <option value="uppercase">Uppercase</option>
+            <option value="capitalize">Capitalize</option>
+          </select></label
+        >
+        <label class="design-controls__select"
+          >Label case
+          <select data-design-foundation="foundation_label_case">
+            <option value="none">None</option>
+            <option value="uppercase" selected>Uppercase</option>
+            <option value="capitalize">Capitalize</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Label tracking
+          <output data-design-output="foundation_label_tracking">
+            {{- settings.foundation_label_tracking }}‰</output
+          ><input
+            type="range"
+            min="0"
+            max="160"
+            step="10"
+            value="{{ settings.foundation_label_tracking }}"
+            data-design-foundation="foundation_label_tracking"
+            data-design-unit="‰"
+        ></label>
+      </div>
+    </details>
+
+    <details class="design-controls__details">
+      <summary>Foundation · surfaces &amp; controls</summary>
+      <div class="design-controls__details-body">
+        <label class="design-controls__select"
+          >Border style
+          <select data-design-foundation="foundation_border_style">
+            <option value="none">None</option>
+            <option value="solid" selected>Solid</option>
+            <option value="dashed">Dashed</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Border opacity
+          <output data-design-output="foundation_border_opacity">
+            {{- settings.foundation_border_opacity }}%</output
+          ><input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value="{{ settings.foundation_border_opacity }}"
+            data-design-foundation="foundation_border_opacity"
+            data-design-unit="%"
+        ></label>
+        <label class="design-controls__range"
+          >Divider width
+          <output data-design-output="foundation_divider_width">
+            {{- settings.foundation_divider_width }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="4"
+            step="1"
+            value="{{ settings.foundation_divider_width }}"
+            data-design-foundation="foundation_divider_width"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Badge radius
+          <output data-design-output="foundation_badge_radius">
+            {{- settings.foundation_badge_radius }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value="{{ settings.foundation_badge_radius }}"
+            data-design-foundation="foundation_badge_radius"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Image radius
+          <output data-design-output="foundation_image_radius">
+            {{- settings.foundation_image_radius }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="48"
+            step="2"
+            value="{{ settings.foundation_image_radius }}"
+            data-design-foundation="foundation_image_radius"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Modal radius
+          <output data-design-output="foundation_modal_radius">
+            {{- settings.foundation_modal_radius }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="48"
+            step="2"
+            value="{{ settings.foundation_modal_radius }}"
+            data-design-foundation="foundation_modal_radius"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Shadow blur
+          <output data-design-output="foundation_shadow_blur">
+            {{- settings.foundation_shadow_blur }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="80"
+            step="2"
+            value="{{ settings.foundation_shadow_blur }}"
+            data-design-foundation="foundation_shadow_blur"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Shadow y-offset
+          <output data-design-output="foundation_shadow_y_offset">
+            {{- settings.foundation_shadow_y_offset }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="48"
+            step="2"
+            value="{{ settings.foundation_shadow_y_offset }}"
+            data-design-foundation="foundation_shadow_y_offset"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__select"
+          >Surface treatment
+          <select data-design-foundation="foundation_surface_treatment">
+            <option value="flat">Flat</option>
+            <option value="solid" selected>Solid</option>
+            <option value="glass">Glass</option>
+          </select></label
+        >
+        <label class="design-controls__select"
+          >Primary button
+          <select data-design-foundation="foundation_button_style">
+            <option value="solid" selected>Solid</option>
+            <option value="outline">Outline</option>
+            <option value="soft">Soft</option>
+          </select></label
+        >
+        <label class="design-controls__select"
+          >Secondary button
+          <select data-design-foundation="foundation_secondary_button_style">
+            <option value="solid">Solid</option>
+            <option value="outline" selected>Outline</option>
+            <option value="ghost">Ghost</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Button x-padding
+          <output data-design-output="foundation_button_padding_x">
+            {{- settings.foundation_button_padding_x }}px</output
+          ><input
+            type="range"
+            min="12"
+            max="48"
+            step="2"
+            value="{{ settings.foundation_button_padding_x }}"
+            data-design-foundation="foundation_button_padding_x"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Button y-padding
+          <output data-design-output="foundation_button_padding_y">
+            {{- settings.foundation_button_padding_y }}px</output
+          ><input
+            type="range"
+            min="8"
+            max="24"
+            step="2"
+            value="{{ settings.foundation_button_padding_y }}"
+            data-design-foundation="foundation_button_padding_y"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Icon target
+          <output data-design-output="foundation_icon_button_size">
+            {{- settings.foundation_icon_button_size }}px</output
+          ><input
+            type="range"
+            min="32"
+            max="64"
+            step="4"
+            value="{{ settings.foundation_icon_button_size }}"
+            data-design-foundation="foundation_icon_button_size"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Input x-padding
+          <output data-design-output="foundation_input_padding_x">
+            {{- settings.foundation_input_padding_x }}px</output
+          ><input
+            type="range"
+            min="8"
+            max="32"
+            step="2"
+            value="{{ settings.foundation_input_padding_x }}"
+            data-design-foundation="foundation_input_padding_x"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Focus ring width
+          <output data-design-output="foundation_focus_ring_width">
+            {{- settings.foundation_focus_ring_width }}px</output
+          ><input
+            type="range"
+            min="1"
+            max="6"
+            step="1"
+            value="{{ settings.foundation_focus_ring_width }}"
+            data-design-foundation="foundation_focus_ring_width"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Focus ring offset
+          <output data-design-output="foundation_focus_ring_offset">
+            {{- settings.foundation_focus_ring_offset }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="8"
+            step="1"
+            value="{{ settings.foundation_focus_ring_offset }}"
+            data-design-foundation="foundation_focus_ring_offset"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__select"
+          >Focus ring
+          <select data-design-foundation="foundation_focus_ring_style">
+            <option value="outline" selected>Outline</option>
+            <option value="glow">Glow</option>
+            <option value="both">Outline and glow</option>
+          </select></label
+        >
+      </div>
+    </details>
+
+    <details class="design-controls__details">
+      <summary>Foundation · media &amp; navigation</summary>
+      <div class="design-controls__details-body">
+        <label class="design-controls__select"
+          >Image fit
+          <select data-design-foundation="foundation_image_fit">
+            <option value="cover" selected>Cover</option>
+            <option value="contain">Contain</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Media text width
+          <output data-design-output="foundation_media_text_max_width">
+            {{- settings.foundation_media_text_max_width }}px</output
+          ><input
+            type="range"
+            min="320"
+            max="800"
+            step="20"
+            value="{{ settings.foundation_media_text_max_width }}"
+            data-design-foundation="foundation_media_text_max_width"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Header height
+          <output data-design-output="foundation_header_height">
+            {{- settings.foundation_header_height }}px</output
+          ><input
+            type="range"
+            min="48"
+            max="120"
+            step="4"
+            value="{{ settings.foundation_header_height }}"
+            data-design-foundation="foundation_header_height"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Drawer width
+          <output data-design-output="foundation_drawer_width">
+            {{- settings.foundation_drawer_width }}px</output
+          ><input
+            type="range"
+            min="300"
+            max="640"
+            step="20"
+            value="{{ settings.foundation_drawer_width }}"
+            data-design-foundation="foundation_drawer_width"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Backdrop opacity
+          <output data-design-output="foundation_overlay_backdrop_opacity">
+            {{- settings.foundation_overlay_backdrop_opacity }}%</output
+          ><input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value="{{ settings.foundation_overlay_backdrop_opacity }}"
+            data-design-foundation="foundation_overlay_backdrop_opacity"
+            data-design-unit="%"
+        ></label>
+        <label class="design-controls__select"
+          >Backdrop effect
+          <select data-design-foundation="foundation_overlay_backdrop_effect">
+            <option value="none">None</option>
+            <option value="dim" selected>Dim</option>
+            <option value="blur">Blur</option>
+            <option value="dim-blur">Dim and blur</option>
+          </select></label
+        >
+        <label class="design-controls__select"
+          >Toast position
+          <select data-design-foundation="foundation_toast_position">
+            <option value="top-right">Top right</option>
+            <option value="top-center">Top center</option>
+            <option value="bottom-right" selected>Bottom right</option>
+            <option value="bottom-center">Bottom center</option>
+          </select></label
+        >
+      </div>
+    </details>
+
+    <details class="design-controls__details">
+      <summary>Foundation · motion &amp; accessibility</summary>
+      <div class="design-controls__details-body">
+        <label class="design-controls__range"
+          >Fast transition
+          <output data-design-output="foundation_transition_fast">
+            {{- settings.foundation_transition_fast }}ms</output
+          ><input
+            type="range"
+            min="0"
+            max="300"
+            step="20"
+            value="{{ settings.foundation_transition_fast }}"
+            data-design-foundation="foundation_transition_fast"
+            data-design-unit="ms"
+        ></label>
+        <label class="design-controls__range"
+          >Standard transition
+          <output data-design-output="foundation_transition_standard">
+            {{- settings.foundation_transition_standard }}ms</output
+          ><input
+            type="range"
+            min="0"
+            max="600"
+            step="20"
+            value="{{ settings.foundation_transition_standard }}"
+            data-design-foundation="foundation_transition_standard"
+            data-design-unit="ms"
+        ></label>
+        <label class="design-controls__select"
+          >Motion easing
+          <select data-design-foundation="foundation_motion_easing">
+            <option value="linear">Linear</option>
+            <option value="ease">Ease</option>
+            <option value="spring" selected>Spring</option>
+          </select></label
+        >
+        <label class="design-controls__range"
+          >Hover lift
+          <output data-design-output="foundation_hover_lift">
+            {{- settings.foundation_hover_lift }}px</output
+          ><input
+            type="range"
+            min="0"
+            max="12"
+            step="1"
+            value="{{ settings.foundation_hover_lift }}"
+            data-design-foundation="foundation_hover_lift"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__range"
+          >Minimum target
+          <output data-design-output="foundation_minimum_target_size">
+            {{- settings.foundation_minimum_target_size }}px</output
+          ><input
+            type="range"
+            min="32"
+            max="56"
+            step="4"
+            value="{{ settings.foundation_minimum_target_size }}"
+            data-design-foundation="foundation_minimum_target_size"
+            data-design-unit="px"
+        ></label>
+        <label class="design-controls__check"
+          ><input
+            type="checkbox"
+            {% if settings.foundation_show_color_mode_switcher %}checked{% endif %}
+            data-design-foundation="foundation_show_color_mode_switcher"
+          >
+          Show color-mode switcher</label
+        >
+        <label class="design-controls__check"
+          ><input
+            type="checkbox"
+            {% if settings.foundation_show_palette_switcher %}checked{% endif %}
+            data-design-foundation="foundation_show_palette_switcher"
+          >
+          Show palette switcher</label
+        >
+      </div>
+    </details>
+  </div>
+
+  <div class="design-controls__footer">
+    <button type="button" class="button button--secondary" data-design-reset>Reset preview</button>
+    <p>Preview changes apply to this tab only.</p>
+  </div>
+</dialog>

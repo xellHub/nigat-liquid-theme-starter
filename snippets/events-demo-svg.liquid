@@ -1,0 +1,481 @@
+{%- comment -%}
+  Events Demo SVG illustrations
+  Provides bespoke fallback illustrations matching the reference design in agent-image/from-tinker/events/image.png
+  Variants:
+  - 'pasta' : Hands rolling out golden pasta dough with tagliatelle ribbons and flour on teal/coral backdrop
+  - 'supper': Vibrant gourmet dinner plates with roasted seasonal squash, beetroot puree, chimichurri, and cutlery
+{%- endcomment -%}
+
+{%- case variant -%}
+  {%- when 'pasta' -%}
+    <svg
+      class="events-card__media-svg"
+      viewBox="0 0 600 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Fresh pasta making masterclass"
+      preserveAspectRatio="xMidYMid slice"
+      style="width:100%;height:100%;display:block;"
+    >
+      <defs>
+        <radialGradient id="pasta-bg-glow" cx="40%" cy="45%" r="70%">
+          <stop offset="0%" stop-color="#3FAFB8"/>
+          <stop offset="65%" stop-color="#268F98"/>
+          <stop offset="100%" stop-color="#1B6D74"/>
+        </radialGradient>
+        <linearGradient id="coral-flour-plate" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FF6B57"/>
+          <stop offset="100%" stop-color="#E24A35"/>
+        </linearGradient>
+        <linearGradient id="dough-grad" x1="20%" y1="20%" x2="80%" y2="80%">
+          <stop offset="0%" stop-color="#FFEC9E"/>
+          <stop offset="60%" stop-color="#F9D462"/>
+          <stop offset="100%" stop-color="#E5BC3B"/>
+        </linearGradient>
+        <linearGradient id="wood-pin" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#CCA071"/>
+          <stop offset="40%" stop-color="#E8C59A"/>
+          <stop offset="70%" stop-color="#B88A58"/>
+          <stop offset="100%" stop-color="#94683C"/>
+        </linearGradient>
+        <linearGradient id="skin-tone" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E7A883"/>
+          <stop offset="70%" stop-color="#CB8A66"/>
+          <stop offset="100%" stop-color="#B06F4D"/>
+        </linearGradient>
+        <filter id="dough-shadow" x="-10%" y="-10%" width="130%" height="130%">
+          <feDropShadow dx="2" dy="8" stdDeviation="10" flood-color="#0E4247" flood-opacity="0.35"/>
+        </filter>
+      </defs>
+
+      <!-- Background teal table -->
+      <rect width="600" height="500" fill="url(#pasta-bg-glow)"/>
+
+      <!-- Coral dusted corner surface -->
+      <path d="M0,0 L260,0 C220,160 140,240 0,280 Z" fill="url(#coral-flour-plate)" opacity="0.9"/>
+      <!-- Scattered flour particles -->
+      <circle cx="120" cy="80" r="12" fill="#FFFFFF" opacity="0.35"/>
+      <circle cx="160" cy="140" r="8" fill="#FFFFFF" opacity="0.3"/>
+      <circle cx="80" cy="190" r="14" fill="#FFFFFF" opacity="0.25"/>
+      <circle cx="210" cy="90" r="6" fill="#FFFFFF" opacity="0.4"/>
+      <circle cx="45" cy="130" r="9" fill="#FFFFFF" opacity="0.3"/>
+
+      <!-- Flattened pasta dough sheet -->
+      <path d="M280,110 C390,90 530,130 580,210 C620,280 570,390 480,430 C410,460 310,430 260,370 C210,310 210,230 240,170 C250,140 265,120 280,110 Z" fill="url(#dough-grad)" filter="url(#dough-shadow)"/>
+
+      <!-- Tagliatelle ribbon coils on lower left -->
+      <g transform="translate(40, 220)">
+        <!-- Loose pasta nest ribbons -->
+        <path d="M120,40 Q150,10 180,50 T130,120 Q80,100 90,60 T140,40" stroke="#F5C94D" stroke-width="14" stroke-linecap="round" fill="none" filter="url(#dough-shadow)"/>
+        <path d="M90,70 Q60,110 100,150 T160,130 Q190,90 150,70 T80,80" stroke="#FFE78F" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M110,100 Q140,170 190,140 T170,80 Q130,60 110,110" stroke="#E3B432" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M60,110 Q90,160 140,160 T180,110 Q160,50 110,90" stroke="#FAD968" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <path d="M130,130 Q100,190 60,170 T40,120 Q50,70 100,100" stroke="#EBBF3D" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <path d="M80,150 Q130,210 170,180 T150,120" stroke="#FFF0A8" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M150,160 Q120,220 90,200 T70,160" stroke="#DDA821" stroke-width="7" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Rolling pin angled across top dough -->
+      <g transform="rotate(-24 380 180)">
+        <!-- Shadow of rolling pin -->
+        <rect x="195" y="168" width="370" height="42" rx="21" fill="#000000" opacity="0.25"/>
+        <!-- Main wooden roller cylinder -->
+        <rect x="200" y="155" width="360" height="46" rx="23" fill="url(#wood-pin)"/>
+        <!-- Handle left -->
+        <rect x="130" y="168" width="75" height="20" rx="10" fill="#94683C"/>
+      </g>
+
+      <!-- Chef hands rolling dough -->
+      <!-- Left hand -->
+      <g transform="translate(300, 95) rotate(15)">
+        <path d="M40,10 C55,10 70,25 75,45 C80,65 70,85 55,95 C40,100 20,90 10,75 C0,55 5,25 25,12 Z" fill="url(#skin-tone)"/>
+        <!-- Fingers pressing on pin -->
+        <rect x="20" y="55" width="14" height="42" rx="7" fill="#CB8A66" transform="rotate(8 20 55)"/>
+        <rect x="36" y="58" width="14" height="45" rx="7" fill="#CB8A66" transform="rotate(4 36 58)"/>
+        <rect x="52" y="55" width="14" height="43" rx="7" fill="#CB8A66" transform="rotate(-2 52 55)"/>
+        <rect x="68" y="48" width="13" height="38" rx="6.5" fill="#B06F4D" transform="rotate(-8 68 48)"/>
+      </g>
+
+      <!-- Right hand -->
+      <g transform="translate(450, 110) rotate(-10)">
+        <path d="M30,5 C48,5 65,18 70,38 C75,58 65,78 50,88 C35,93 15,85 8,70 C0,50 8,18 25,7 Z" fill="url(#skin-tone)"/>
+        <rect x="15" y="50" width="14" height="42" rx="7" fill="#CB8A66" transform="rotate(6 15 50)"/>
+        <rect x="31" y="53" width="14" height="45" rx="7" fill="#CB8A66" transform="rotate(2 31 53)"/>
+        <rect x="47" y="50" width="14" height="43" rx="7" fill="#CB8A66" transform="rotate(-4 47 50)"/>
+      </g>
+
+      <!-- Eggshell detail in lower corner -->
+      <g transform="translate(60, 410) rotate(20)">
+        <path d="M10,25 Q20,5 35,8 Q48,12 45,30 Q40,42 25,40 Q12,38 10,25 Z" fill="#F4EFEA" stroke="#DDD2C7" stroke-width="2"/>
+        <path d="M38,20 Q48,22 55,35 Q50,48 38,42 Z" fill="#E8DED3"/>
+      </g>
+
+      <!-- Glossy tomato / oil bottle accent lower right -->
+      <circle cx="560" cy="460" r="35" fill="#D81F1F" opacity="0.9"/>
+      <ellipse cx="550" cy="445" rx="14" ry="7" fill="#FFFFFF" opacity="0.4" transform="rotate(-25 550 445)"/>
+    </svg>
+
+  {%- when 'supper' -%}
+    <svg
+      class="events-card__media-svg"
+      viewBox="0 0 600 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Colorful seasonal supper dinner plate"
+      preserveAspectRatio="xMidYMid slice"
+      style="width:100%;height:100%;display:block;"
+    >
+      <defs>
+        <radialGradient id="supper-bg-teal" cx="60%" cy="40%" r="70%">
+          <stop offset="0%" stop-color="#3CAFB8"/>
+          <stop offset="80%" stop-color="#228992"/>
+          <stop offset="100%" stop-color="#18676E"/>
+        </radialGradient>
+        <linearGradient id="supper-pink-plate" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FCE6EC"/>
+          <stop offset="100%" stop-color="#F2BAC9"/>
+        </linearGradient>
+        <radialGradient id="beet-puree" cx="45%" cy="45%" r="55%">
+          <stop offset="0%" stop-color="#8E1763"/>
+          <stop offset="70%" stop-color="#640A44"/>
+          <stop offset="100%" stop-color="#47032F"/>
+        </radialGradient>
+        <linearGradient id="cream-plate" x1="10%" y1="10%" x2="90%" y2="90%">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="100%" stop-color="#EDE8DF"/>
+        </linearGradient>
+        <linearGradient id="squash-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FF9F1C"/>
+          <stop offset="70%" stop-color="#E87600"/>
+          <stop offset="100%" stop-color="#B85500"/>
+        </linearGradient>
+        <filter id="plate-shadow" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="4" dy="10" stdDeviation="12" flood-color="#0A363A" flood-opacity="0.38"/>
+        </filter>
+      </defs>
+
+      <!-- Background teal table -->
+      <rect width="600" height="500" fill="url(#supper-bg-teal)"/>
+
+      <!-- Ceramic plate 1 (Pink beetroot swirl) on lower-left -->
+      <g transform="translate(180, 360)" filter="url(#plate-shadow)">
+        <circle cx="0" cy="0" r="140" fill="url(#supper-pink-plate)" stroke="#E5A6B8" stroke-width="4"/>
+        <circle cx="0" cy="0" r="110" fill="#E89FB3" opacity="0.35"/>
+        <!-- Swirled beet & goat cheese sauce -->
+        <path d="M-60,-30 C-30,-70 50,-60 70,-10 C90,40 30,70 -20,60 C-70,50 -90,0 -60,-30 Z" fill="url(#beet-puree)"/>
+        <!-- Cream / yogurt drizzle swirl -->
+        <path d="M-40,-15 C-20,-45 40,-35 50,0 C60,35 15,50 -10,40" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.85"/>
+        <!-- Roasted seeds and herbs -->
+        <circle cx="-15" cy="10" r="4" fill="#EFC368"/>
+        <circle cx="10" cy="15" r="3.5" fill="#587D38"/>
+        <circle cx="2" cy="-5" r="3" fill="#FFE29E"/>
+        <circle cx="20" cy="-18" r="4" fill="#EFC368"/>
+        <circle cx="-25" cy="-2" r="3" fill="#3D5A25"/>
+      </g>
+
+      <!-- Ceramic plate 2 (Main entree) on right -->
+      <g transform="translate(420, 260)" filter="url(#plate-shadow)">
+        <circle cx="0" cy="0" r="145" fill="url(#cream-plate)" stroke="#D8D0C3" stroke-width="3"/>
+        <circle cx="0" cy="0" r="120" fill="#E5DFD1" opacity="0.4"/>
+
+        <!-- Roasted delicata squash crescent -->
+        <path d="M-20,-60 C40,-70 80,-30 85,20 C90,65 50,90 10,85 C55,60 50,-10 -20,-60 Z" fill="url(#squash-gold)"/>
+        <!-- Char marks on squash -->
+        <path d="M20,-45 C35,-35 45,-20 48,-5" stroke="#682F00" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M48,-5 C52,15 48,35 30,55" stroke="#522400" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+        <!-- Radicchio / red cabbage wedges -->
+        <path d="M-60,-20 C-35,-50 0,-40 -5,-10 C-10,20 -45,15 -60,-20 Z" fill="#6A1B3B"/>
+        <path d="M-50,-15 C-35,-35 -10,-30 -15,-10" stroke="#D1839F" stroke-width="2" fill="none"/>
+
+        <!-- Roasted chickpeas & grains pile -->
+        <g transform="translate(-10, 10)">
+          <circle cx="-25" cy="10" r="7" fill="#E0A34E"/>
+          <circle cx="-10" cy="20" r="7.5" fill="#CB8E3A"/>
+          <circle cx="5" cy="12" r="6.5" fill="#DE9E46"/>
+          <circle cx="-18" cy="25" r="6" fill="#B37829"/>
+          <circle cx="-35" cy="22" r="7" fill="#DE9E46"/>
+          <circle cx="15" cy="28" r="6.5" fill="#C98934"/>
+        </g>
+
+        <!-- Fresh pea greens & herbs -->
+        <path d="M-40,30 Q-20,10 -10,35 Q0,20 15,35" stroke="#3D7B2E" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <circle cx="-25" cy="22" r="4" fill="#5BA248"/>
+        <circle cx="5" cy="26" r="3.5" fill="#5BA248"/>
+      </g>
+
+      <!-- Green herb oil / chimichurri dipping bowl lower-right -->
+      <g transform="translate(390, 420)" filter="url(#plate-shadow)">
+        <circle cx="0" cy="0" r="45" fill="#FBF3D5" stroke="#E6DBB5" stroke-width="3"/>
+        <circle cx="0" cy="0" r="35" fill="#5B8332"/>
+        <circle cx="-5" cy="-5" r="30" fill="#75A642"/>
+        <circle cx="5" cy="5" r="25" fill="#88BC4F"/>
+        <!-- Herb flecks & chili oil droplets -->
+        <circle cx="-12" cy="-8" r="2.5" fill="#3D5A1F"/>
+        <circle cx="4" cy="-14" r="2" fill="#E63920"/>
+        <circle cx="14" cy="2" r="3" fill="#3D5A1F"/>
+        <circle cx="-2" cy="10" r="2.5" fill="#E63920"/>
+      </g>
+
+      <!-- Elegant silver fork placed beside plate -->
+      <g transform="translate(520, 360) rotate(-40)">
+        <!-- Fork stem -->
+        <path d="M0,0 L0,120" stroke="#DDD" stroke-width="5" stroke-linecap="round"/>
+        <!-- Fork head & tines -->
+        <path d="M-8,-10 L8,-10 L6,-35 L-6,-35 Z" fill="#E8E8E8"/>
+        <line x1="-6" y1="-35" x2="-6" y2="-12" stroke="#FFF" stroke-width="1.5"/>
+        <line x1="-2" y1="-35" x2="-2" y2="-12" stroke="#FFF" stroke-width="1.5"/>
+        <line x1="2" y1="-35" x2="2" y2="-12" stroke="#FFF" stroke-width="1.5"/>
+        <line x1="6" y1="-35" x2="6" y2="-12" stroke="#FFF" stroke-width="1.5"/>
+      </g>
+
+      <!-- Host hand serving or placing the entree plate at top right -->
+      <g transform="translate(440, 40) rotate(-15)">
+        <!-- Arm cuff -->
+        <path d="M0,0 L50,-10 L70,30 L20,40 Z" fill="#3E7748"/>
+        <!-- Hand reaching -->
+        <path d="M30,30 C45,35 60,45 62,65 C64,85 52,100 40,110 C28,115 15,105 10,90 C5,70 12,45 30,30 Z" fill="#E7A883"/>
+        <rect x="22" y="70" width="13" height="36" rx="6.5" fill="#CB8A66" transform="rotate(10 22 70)"/>
+        <rect x="36" y="73" width="13" height="38" rx="6.5" fill="#CB8A66" transform="rotate(4 36 73)"/>
+      </g>
+    </svg>
+
+  {%- when 'workshop' -%}
+    <svg
+      class="events-card__media-svg"
+      viewBox="0 0 600 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Ceramic hand-building workshop"
+      preserveAspectRatio="xMidYMid slice"
+      style="width:100%;height:100%;display:block;"
+    >
+      <defs>
+        <radialGradient id="workshop-bg-glow" cx="45%" cy="40%" r="75%">
+          <stop offset="0%" stop-color="#DE8966"/>
+          <stop offset="65%" stop-color="#BD6441"/>
+          <stop offset="100%" stop-color="#8E4225"/>
+        </radialGradient>
+        <linearGradient id="terracotta-clay" x1="15%" y1="10%" x2="85%" y2="90%">
+          <stop offset="0%" stop-color="#F29E7D"/>
+          <stop offset="60%" stop-color="#D97552"/>
+          <stop offset="100%" stop-color="#A84C2D"/>
+        </linearGradient>
+        <linearGradient id="cream-glaze" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFFDF9"/>
+          <stop offset="70%" stop-color="#EDE4D6"/>
+          <stop offset="100%" stop-color="#D9CCBA"/>
+        </linearGradient>
+        <linearGradient id="sage-slip" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#93A895"/>
+          <stop offset="100%" stop-color="#677D69"/>
+        </linearGradient>
+        <linearGradient id="wood-tool" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#D1A779"/>
+          <stop offset="50%" stop-color="#B38656"/>
+          <stop offset="100%" stop-color="#8F6236"/>
+        </linearGradient>
+        <filter id="vase-shadow" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="3" dy="10" stdDeviation="12" flood-color="#4E2010" flood-opacity="0.36"/>
+        </filter>
+      </defs>
+
+      <!-- Warm terracotta studio background -->
+      <rect width="600" height="500" fill="url(#workshop-bg-glow)"/>
+
+      <!-- Workbench round wooden surface -->
+      <ellipse cx="300" cy="440" rx="340" ry="150" fill="#2E1911" opacity="0.3"/>
+      <ellipse cx="300" cy="430" rx="320" ry="140" fill="#42251B" opacity="0.4"/>
+
+      <!-- Splattered clay drops and textures -->
+      <circle cx="90" cy="110" r="14" fill="#F7E6D7" opacity="0.3"/>
+      <circle cx="140" cy="70" r="8" fill="#F7E6D7" opacity="0.25"/>
+      <circle cx="510" cy="90" r="11" fill="#F7E6D7" opacity="0.28"/>
+      <circle cx="480" cy="140" r="6" fill="#F7E6D7" opacity="0.35"/>
+
+      <!-- Sculptural terracotta jug / vase on right -->
+      <g transform="translate(350, 150)" filter="url(#vase-shadow)">
+        <!-- Vase shadow base -->
+        <ellipse cx="50" cy="275" rx="75" ry="18" fill="#2B150D" opacity="0.4"/>
+        <!-- Main body -->
+        <path d="M5,260 C-15,190 10,130 30,80 L70,80 C90,130 115,190 95,260 C90,272 10,272 5,260 Z" fill="url(#terracotta-clay)"/>
+        <!-- Dipped cream glaze overlay -->
+        <path d="M5,260 C-15,190 10,130 30,80 L70,80 C90,130 115,190 95,260 C65,268 40,250 5,260 Z" fill="url(#cream-glaze)" opacity="0.88"/>
+        <!-- Neck and flared rim -->
+        <ellipse cx="50" cy="80" rx="22" ry="7" fill="#C96B49"/>
+        <ellipse cx="50" cy="80" rx="16" ry="5" fill="#692C17"/>
+        <!-- Sculpted loop handle -->
+        <path d="M18,95 C-25,120 -30,190 8,215" stroke="url(#terracotta-clay)" stroke-width="14" stroke-linecap="round" fill="none"/>
+        <path d="M18,95 C-25,120 -30,190 8,215" stroke="#E89271" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+        <!-- Tactile ribbed indentations -->
+        <path d="M10,165 Q50,180 90,165" stroke="#A84C2D" stroke-width="2.5" fill="none" opacity="0.6"/>
+        <path d="M14,195 Q50,210 86,195" stroke="#A84C2D" stroke-width="2.5" fill="none" opacity="0.6"/>
+        <path d="M18,225 Q50,240 82,225" stroke="#A84C2D" stroke-width="2.5" fill="none" opacity="0.6"/>
+      </g>
+
+      <!-- Hand-pinched ceramic bowl in center-left -->
+      <g transform="translate(130, 260)" filter="url(#vase-shadow)">
+        <ellipse cx="80" cy="145" rx="85" ry="20" fill="#2B150D" opacity="0.35"/>
+        <!-- Outer bowl form -->
+        <path d="M0,70 C10,140 150,140 160,70 C160,55 0,55 0,70 Z" fill="url(#sage-slip)"/>
+        <!-- Inner bowl depth -->
+        <ellipse cx="80" cy="70" rx="80" ry="26" fill="#4F6451"/>
+        <ellipse cx="80" cy="72" rx="72" ry="20" fill="#7D957F"/>
+        <!-- Wabi-sabi pinched rim highlight -->
+        <path d="M2,68 C25,60 55,62 80,68 C105,74 135,66 158,70" stroke="#FFF7ED" stroke-width="3" fill="none" opacity="0.75"/>
+      </g>
+
+      <!-- Wooden ceramic rib tool on lower right -->
+      <g transform="translate(430, 390) rotate(-28)">
+        <path d="M0,0 C30,-12 80,5 95,25 C105,40 90,65 70,65 C40,65 10,40 0,0 Z" fill="url(#wood-tool)" filter="url(#vase-shadow)"/>
+        <!-- Finger grip hole -->
+        <ellipse cx="50" cy="30" rx="10" ry="6" fill="#3D2012" opacity="0.65"/>
+      </g>
+
+      <!-- Crafting wire loop tool on left -->
+      <g transform="translate(90, 410) rotate(18)">
+        <!-- Wooden handle -->
+        <rect x="0" y="0" width="90" height="12" rx="6" fill="url(#wood-tool)"/>
+        <!-- Brass ferrule -->
+        <rect x="85" y="-1" width="16" height="14" rx="2" fill="#E2BD68"/>
+        <!-- Wire loop -->
+        <path d="M100,6 Q130,-15 135,6 Q130,27 100,6" stroke="#DDD" stroke-width="3" fill="none"/>
+      </g>
+    </svg>
+
+  {%- when 'tasting' -%}
+    <svg
+      class="events-card__media-svg"
+      viewBox="0 0 600 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Natural wine and food tasting"
+      preserveAspectRatio="xMidYMid slice"
+      style="width:100%;height:100%;display:block;"
+    >
+      <defs>
+        <radialGradient id="tasting-bg-glow" cx="50%" cy="35%" r="75%">
+          <stop offset="0%" stop-color="#4E1D36"/>
+          <stop offset="60%" stop-color="#311022"/>
+          <stop offset="100%" stop-color="#1B0713"/>
+        </radialGradient>
+        <linearGradient id="wine-ruby" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#C2255C"/>
+          <stop offset="45%" stop-color="#8E123F"/>
+          <stop offset="100%" stop-color="#540822"/>
+        </linearGradient>
+        <linearGradient id="board-wood" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#44281E"/>
+          <stop offset="60%" stop-color="#331D15"/>
+          <stop offset="100%" stop-color="#24130D"/>
+        </linearGradient>
+        <linearGradient id="cheese-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFF2CE"/>
+          <stop offset="70%" stop-color="#FCE197"/>
+          <stop offset="100%" stop-color="#E8C363"/>
+        </linearGradient>
+        <linearGradient id="bottle-glass" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#2E4A35"/>
+          <stop offset="40%" stop-color="#46684F"/>
+          <stop offset="80%" stop-color="#1C2E21"/>
+        </linearGradient>
+        <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="4" dy="12" stdDeviation="14" flood-color="#0E030A" flood-opacity="0.55"/>
+        </filter>
+      </defs>
+
+      <!-- Dark ambient wine cellar background -->
+      <rect width="600" height="500" fill="url(#tasting-bg-glow)"/>
+
+      <!-- Olive wood serving board on right -->
+      <g transform="translate(240, 240)" filter="url(#glass-shadow)">
+        <path d="M0,60 C40,-10 220,-30 330,40 C360,60 350,180 300,210 C220,250 40,230 0,160 Z" fill="url(#board-wood)"/>
+        <!-- Board handle -->
+        <path d="M320,60 L380,50 C395,47 400,62 390,75 L335,90 Z" fill="url(#board-wood)"/>
+        <circle cx="375" cy="65" r="7" fill="#1B0713"/>
+
+        <!-- Aged gouda cheese wedge -->
+        <g transform="translate(100, 50)">
+          <path d="M0,50 L90,10 L110,65 L15,100 Z" fill="url(#cheese-gold)"/>
+          <path d="M0,50 L90,10 L75,-5 L-10,32 Z" fill="#FFEBB0"/>
+          <path d="M90,10 L110,65 L125,50 L105,-5 Z" fill="#D9AD41"/>
+          <!-- Cheese holes -->
+          <ellipse cx="45" cy="55" rx="6" ry="4" fill="#E0B752" opacity="0.8"/>
+          <ellipse cx="80" cy="40" rx="5" ry="3.5" fill="#E0B752" opacity="0.8"/>
+        </g>
+
+        <!-- Fresh purple olives and rosemary -->
+        <g transform="translate(70, 120)">
+          <ellipse cx="0" cy="0" rx="14" ry="10" fill="#2C1A29" transform="rotate(-15)"/>
+          <ellipse cx="-4" cy="-3" rx="4" ry="2" fill="#886483" opacity="0.7"/>
+          <ellipse cx="22" cy="6" rx="13" ry="11" fill="#3D2034" transform="rotate(25)"/>
+          <ellipse cx="14" cy="18" rx="13" ry="9" fill="#261220" transform="rotate(-35)"/>
+          <!-- Rosemary sprig -->
+          <path d="M-15,30 Q20,10 60,-5" stroke="#48633B" stroke-width="3" fill="none"/>
+          <path d="M0,22 L-8,14 M12,16 L8,6 M26,11 L32,0 M40,6 L48,-6" stroke="#688C56" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Artisanal crackers -->
+        <rect x="200" y="100" width="45" height="45" rx="5" fill="#DEB887" transform="rotate(15 200 100)"/>
+        <circle cx="215" cy="115" r="1.5" fill="#9C6B37"/>
+        <circle cx="230" cy="120" r="1.5" fill="#9C6B37"/>
+        <circle cx="220" cy="130" r="1.5" fill="#9C6B37"/>
+      </g>
+
+      <!-- Heritage wine bottle on left -->
+      <g transform="translate(90, 80)" filter="url(#glass-shadow)">
+        <rect x="25" y="0" width="24" height="60" rx="3" fill="url(#bottle-glass)"/>
+        <!-- Capsule foil -->
+        <rect x="24" y="0" width="26" height="25" fill="#C2255C"/>
+        <!-- Shoulder -->
+        <path d="M25,60 C10,95 0,130 0,165 L74,165 C74,130 64,95 49,60 Z" fill="url(#bottle-glass)"/>
+        <!-- Body -->
+        <rect x="0" y="165" width="74" height="230" rx="4" fill="url(#bottle-glass)"/>
+        <!-- Minimalist craft label -->
+        <rect x="4" y="210" width="66" height="110" rx="2" fill="#FBF8F2"/>
+        <rect x="14" y="235" width="46" height="3" fill="#261220"/>
+        <rect x="20" y="246" width="34" height="2" fill="#886483"/>
+        <rect x="26" y="280" width="22" height="20" rx="10" fill="#C2255C" opacity="0.85"/>
+      </g>
+
+      <!-- Wine glass with natural wine in foreground -->
+      <g transform="translate(190, 110)" filter="url(#glass-shadow)">
+        <!-- Base of glass -->
+        <ellipse cx="60" cy="360" rx="44" ry="10" fill="#FFFFFF" opacity="0.25"/>
+        <ellipse cx="60" cy="360" rx="40" ry="7" fill="#FFFFFF" opacity="0.4"/>
+        <!-- Stem -->
+        <rect x="58" y="220" width="4" height="140" fill="#FFFFFF" opacity="0.5"/>
+        <!-- Bowl -->
+        <path d="M10,70 C5,160 30,225 60,225 C90,225 115,160 110,70 Z" fill="#FFFFFF" opacity="0.12" stroke="#FFFFFF" stroke-width="1.5"/>
+        <!-- Wine inside bowl -->
+        <path d="M16,130 C12,175 32,218 60,218 C88,218 108,175 104,130 C90,138 30,138 16,130 Z" fill="url(#wine-ruby)"/>
+        <!-- Wine surface ellipse -->
+        <ellipse cx="60" cy="132" rx="44" ry="12" fill="#E64980" opacity="0.9"/>
+        <ellipse cx="60" cy="132" rx="36" ry="8" fill="#9E123F"/>
+        <!-- Glass rim highlight -->
+        <ellipse cx="60" cy="70" rx="48" ry="10" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <!-- Vertical reflection on bowl -->
+        <path d="M22,90 C18,130 25,170 38,195" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.45"/>
+      </g>
+    </svg>
+
+  {%- else -%}
+    <svg
+      class="events-card__media-svg"
+      viewBox="0 0 600 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Event showcase"
+      preserveAspectRatio="xMidYMid slice"
+      style="width:100%;height:100%;display:block;"
+    >
+      <rect width="600" height="500" fill="#F4EFEB"/>
+      <circle cx="300" cy="250" r="120" fill="#E3DDD6"/>
+      <path d="M260,230 L340,230 L300,290 Z" fill="#C8BEB3"/>
+    </svg>
+{%- endcase -%}

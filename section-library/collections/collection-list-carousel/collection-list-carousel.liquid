@@ -1,0 +1,224 @@
+<section
+  id="CollectionListCarousel-{{ section.id }}"
+  class="collection-list-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--collection-list-width: {{ section.settings.page_width }}px; --collection-list-pt: {{ section.settings.padding_top }}px; --collection-list-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="collection-list-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}
+  .collection-list-layout {
+    padding-block: var(--collection-list-pt) var(--collection-list-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+  .collection-list-layout__inner {
+    position: relative;
+    display: flex;
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--collection-list-width));
+    margin-inline: auto;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .collection-list-layout__inner > .theme-group--row {
+    align-items: center;
+    justify-content: space-between;
+    padding-inline-end: calc((2 * var(--foundation-minimum-target-size)) + (3 * var(--space-2)));
+  }
+  .collection-list-layout__inner > .theme-carousel .theme-carousel__controls {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Collection list carousel",
+  "tag": "section",
+  "class": "collection-list-carousel-section",
+  "blocks": [
+    { "type": "group" },
+    { "type": "carousel" },
+    { "type": "heading" },
+    { "type": "link" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width",
+      "default": 1360
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top spacing",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list carousel",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "center",
+            "gap": "3"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Our <em>special</em> collections",
+                "level": "h2",
+                "size": "custom",
+                "custom_size": 26,
+                "alignment": "left"
+              }
+            },
+            {
+              "type": "link",
+              "settings": {
+                "label": "EXPLORE ALL",
+                "link": "/collections",
+                "icon": "none"
+              }
+            }
+          ]
+        },
+        {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 4
+          },
+          "blocks": [
+            {
+              "type": "collection-card",
+              "settings": {
+                "placeholder_index": 1
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tops",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "10",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "placeholder_index": 2
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "22",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "placeholder_index": 3
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Bottoms",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "15",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "collection-card",
+              "settings": {
+                "placeholder_index": 4
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Outerwear",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                {
+                  "type": "badge",
+                  "settings": {
+                    "label": "8",
+                    "style": "subtle"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Collections"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

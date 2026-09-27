@@ -1,0 +1,1172 @@
+{% liquid
+  assign layout_mode = block.settings.layout | default: 'carousel'
+  assign slide_h = block.settings.slide_height | default: 'medium'
+  assign controls_lay = block.settings.controls_layout | default: 'header'
+  if layout_mode == 'slideshow' and block.settings.controls_layout == blank
+    assign controls_lay = 'split'
+  endif
+  assign indicator_style = block.settings.indicator_style | default: 'dots'
+  assign indicator_pos = block.settings.indicator_position | default: 'center'
+%}
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+
+<div
+  id="ThemeCarousel-{{ block.id }}"
+  class="{{ block.settings.foundation_custom_class | escape }} theme-carousel theme-carousel--{{ layout_mode }} theme-carousel--height-{{ slide_h }} theme-carousel--controls-{{ controls_lay }}"
+  style="--carousel-columns: {{ block.settings.columns_desktop | default: 3 }}; --carousel-columns-tablet: {{ block.settings.columns_tablet | default: 2 }}; --carousel-columns-mobile: {{ block.settings.columns_mobile | default: 1 }}; --carousel-radius: {{ block.settings.card_radius | default: 28 }}px;"
+  data-layout="{{ layout_mode }}"
+  data-autoplay="{{ block.settings.autoplay | default: false }}"
+  data-autoplay-speed="{{ block.settings.autoplay_speed | default: 5 | times: 1000 }}"
+  data-loop="{{ block.settings.loop | default: true }}"
+  data-indicator-style="{{ indicator_style }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility | default: 'all' }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top | default: 'none' }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom | default: 'none' }}"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Carousel"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.show_navigation and controls_lay == 'header' -%}
+    <div class="theme-carousel__controls theme-carousel__controls--header">
+      <button
+        type="button"
+        class="theme-carousel__button"
+        data-carousel-previous
+        aria-label="Previous items"
+      >
+        {% render 'icon', name: 'chevron-left' %}
+      </button>
+      <button
+        type="button"
+        class="theme-carousel__button"
+        data-carousel-next
+        aria-label="Next items"
+      >
+        {% render 'icon', name: 'chevron-right' %}
+      </button>
+    </div>
+  {%- endif -%}
+
+  <div class="theme-carousel__viewport" data-carousel-viewport>
+    <div class="theme-carousel__track" id="carousel-track-{{ block.id }}" tabindex="0">
+      {% content_for 'blocks' %}
+    </div>
+
+    {%- if block.settings.show_navigation and controls_lay == 'split' -%}
+      <button
+        type="button"
+        class="theme-carousel__arrow theme-carousel__arrow--prev"
+        data-carousel-previous
+        aria-label="Previous slide"
+      >
+        {% render 'icon', name: 'chevron-left' %}
+      </button>
+      <button
+        type="button"
+        class="theme-carousel__arrow theme-carousel__arrow--next"
+        data-carousel-next
+        aria-label="Next slide"
+      >
+        {% render 'icon', name: 'chevron-right' %}
+      </button>
+    {%- endif -%}
+  </div>
+
+  {%- if block.settings.show_indicators or controls_lay == 'bottom_bar' -%}
+    <div class="theme-carousel__bottom-bar theme-carousel__bottom-bar--{{ indicator_pos }}">
+      {%- if block.settings.show_navigation and controls_lay == 'bottom_bar' -%}
+        <button
+          type="button"
+          class="theme-carousel__button"
+          data-carousel-previous
+          aria-label="Previous slide"
+        >
+          {% render 'icon', name: 'chevron-left' %}
+        </button>
+      {%- endif -%}
+
+      {%- if block.settings.show_indicators -%}
+        <div
+          class="theme-carousel__indicators"
+          data-carousel-indicators
+          data-style="{{ indicator_style }}"
+        ></div>
+      {%- endif -%}
+
+      {%- if block.settings.show_navigation and controls_lay == 'bottom_bar' -%}
+        <button
+          type="button"
+          class="theme-carousel__button"
+          data-carousel-next
+          aria-label="Next slide"
+        >
+          {% render 'icon', name: 'chevron-right' %}
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .theme-carousel {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: var(--space-4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-carousel__viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .theme-carousel__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .theme-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mode: Carousel (multi-column cards) */
+  .theme-carousel--carousel .theme-carousel__track {
+    gap: var(--grid-gap);
+    padding-block-end: var(--space-2);
+  }
+
+  .theme-carousel--carousel .theme-carousel__track > * {
+    min-width: 24rem;
+    flex: 0 0
+      calc((100% - ((var(--carousel-columns) - 1) * var(--grid-gap))) / var(--carousel-columns));
+    scroll-snap-align: start;
+  }
+
+  @container (max-width: 989px) {
+    .theme-carousel--carousel .theme-carousel__track > * {
+      flex-basis: calc(
+        (100% - ((var(--carousel-columns-tablet) - 1) * var(--grid-gap))) /
+          var(--carousel-columns-tablet)
+      );
+    }
+  }
+
+  @container (max-width: 749px) {
+    .theme-carousel--carousel .theme-carousel__track > * {
+      flex-basis: calc(
+        (100% - ((var(--carousel-columns-mobile) - 1) * var(--grid-gap))) /
+          var(--carousel-columns-mobile)
+      );
+    }
+  }
+
+  /* Mode: Slideshow (full-frame single slide) */
+  .theme-carousel--slideshow .theme-carousel__track {
+    gap: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .theme-carousel--slideshow .theme-carousel__track > * {
+    min-width: 100%;
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+
+  .theme-carousel--slideshow.theme-carousel--height-small .theme-carousel__viewport {
+    min-height: 48rem;
+  }
+  .theme-carousel--slideshow.theme-carousel--height-medium .theme-carousel__viewport {
+    min-height: 64rem;
+  }
+  .theme-carousel--slideshow.theme-carousel--height-large .theme-carousel__viewport {
+    min-height: 80rem;
+  }
+  .theme-carousel--slideshow.theme-carousel--height-fullscreen .theme-carousel__viewport {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Mode: Inset (inset card slide) */
+  .theme-carousel--inset .theme-carousel__track {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--grid-gap, clamp(14px, 2vw, 24px));
+    padding-inline: calc(50vw - min(43vw, 620px));
+    padding-block: 8px 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .theme-carousel--inset .theme-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .theme-carousel--inset .theme-carousel__track > * {
+    flex: 0 0 min(86vw, 1240px);
+    min-width: min(86vw, 1240px);
+    max-width: min(86vw, 1240px);
+    scroll-snap-align: center;
+    border-radius: var(--carousel-radius, 28px);
+    overflow: hidden;
+    box-sizing: border-box;
+    background: var(--color-surface);
+  }
+
+  .theme-carousel--inset .theme-media-text {
+    width: 100%;
+    height: 100%;
+    min-height: clamp(380px, 48vw, 530px);
+    align-items: center;
+    border-radius: var(--carousel-radius, 28px);
+    overflow: hidden;
+  }
+
+  .theme-carousel--inset .theme-media-text > .theme-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-4, 16px);
+    padding: clamp(28px, 4.5vw, 64px) clamp(24px, 5vw, 72px);
+    box-sizing: border-box;
+  }
+
+  .theme-carousel--inset .theme-media-text > .theme-image {
+    height: 100%;
+    width: 100%;
+    min-height: clamp(260px, 36vw, 480px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-carousel--inset .theme-media-text > .theme-image img,
+  .theme-carousel--inset .theme-media-text > .theme-image .placeholder-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .theme-carousel--inset .theme-carousel__track {
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+    .theme-carousel--inset .theme-carousel__track > * {
+      flex: 0 0 calc(100vw - 32px);
+      min-width: calc(100vw - 32px);
+      max-width: calc(100vw - 32px);
+      scroll-snap-align: start;
+    }
+  }
+
+  /* Controls: Header layout */
+  .theme-carousel__controls--header {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  /* Standard Navigation Buttons */
+  .theme-carousel__button {
+    display: grid;
+    width: var(--foundation-minimum-target-size);
+    height: var(--foundation-minimum-target-size);
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+    background: transparent;
+    cursor: pointer;
+    place-items: center;
+    transition:
+      background-color var(--motion-duration-fast) var(--motion-ease),
+      transform var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .theme-carousel__button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    transform: scale(1.05);
+  }
+
+  .theme-carousel__button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .theme-carousel__button svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  /* Controls: Split Arrows (Left & Right Sides) */
+  .theme-carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: grid;
+    width: 4.8rem;
+    height: 4.8rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-background) 80%, transparent);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    place-items: center;
+    transition:
+      background-color var(--motion-duration-fast) var(--motion-ease),
+      transform var(--motion-duration-fast) var(--motion-ease),
+      opacity var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .theme-carousel__arrow:hover:not(:disabled) {
+    background: var(--color-background);
+    transform: translateY(-50%) scale(1.06);
+  }
+
+  .theme-carousel__arrow:disabled {
+    opacity: 0.2;
+    cursor: default;
+  }
+
+  .theme-carousel__arrow--prev {
+    left: var(--space-4);
+  }
+
+  .theme-carousel__arrow--next {
+    right: var(--space-4);
+  }
+
+  /* Bottom Bar & Indicators */
+  .theme-carousel__bottom-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    z-index: 2;
+  }
+
+  .theme-carousel__bottom-bar--center {
+    justify-content: center;
+  }
+  .theme-carousel__bottom-bar--left {
+    justify-content: flex-start;
+  }
+  .theme-carousel__bottom-bar--right {
+    justify-content: flex-end;
+  }
+
+  .theme-carousel__indicators {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Dots */
+  .theme-carousel__dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-carousel__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition:
+      width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.25s ease;
+  }
+
+  .theme-carousel__dot:hover {
+    background-color: color-mix(in srgb, var(--color-text) 50%, transparent);
+  }
+
+  .theme-carousel__dot.is-active {
+    width: 28px;
+    background-color: var(--color-accent, var(--color-text));
+  }
+
+  /* Lines */
+  .theme-carousel__lines {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-carousel__line {
+    width: 32px;
+    height: 3px;
+    border-radius: 2px;
+    background-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+  }
+
+  .theme-carousel__line.is-active {
+    background-color: var(--color-accent, var(--color-text));
+  }
+
+  /* Counter */
+  .theme-carousel__counter-sep {
+    margin-inline: 4px;
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-carousel__track {
+      scroll-behavior: auto;
+    }
+    .theme-carousel__dot,
+    .theme-carousel__line {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const root = document.getElementById('ThemeCarousel-{{ block.id }}');
+    if (!root || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+
+    const track = root.querySelector('.theme-carousel__track');
+    if (!track) return;
+
+    const slides = [...track.children].filter(
+      (el) => !el.matches('script, style, template, .foundation-block-anchor')
+    );
+    if (slides.length === 0) return;
+
+    const previousButtons = root.querySelectorAll('[data-carousel-previous]');
+    const nextButtons = root.querySelectorAll('[data-carousel-next]');
+    const indicatorHost = root.querySelector('[data-carousel-indicators]');
+    const indicatorStyle = root.dataset.indicatorStyle || 'dots';
+    const isLoop = root.dataset.loop === 'true';
+    const isAutoplay = root.dataset.autoplay === 'true';
+    const autoplaySpeed = parseInt(root.dataset.autoplaySpeed || '5000', 10);
+
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    let dots = [];
+    let isNavigating = false;
+    let navTimeout;
+
+    function updateControls() {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (!isLoop) {
+        previousButtons.forEach((btn) => {
+          btn.disabled = track.scrollLeft <= 6 || currentIndex === 0;
+        });
+        nextButtons.forEach((btn) => {
+          btn.disabled =
+            currentIndex >= slides.length - 1 ||
+            (maxScroll > 6 && track.scrollLeft >= maxScroll - 6);
+        });
+      }
+      dots.forEach((dot, i) => {
+        const active = i === currentIndex;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-selected', String(active));
+      });
+      const counterCurrent = root.querySelector('[data-counter-current]');
+      if (counterCurrent) {
+        counterCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
+      }
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('is-active', i === currentIndex);
+      });
+    }
+
+    function goTo(index) {
+      if (isLoop) {
+        currentIndex = (index + slides.length) % slides.length;
+      } else {
+        currentIndex = Math.max(0, Math.min(index, slides.length - 1));
+      }
+      const target = slides[currentIndex];
+      if (target) {
+        isNavigating = true;
+        clearTimeout(navTimeout);
+        navTimeout = setTimeout(() => {
+          isNavigating = false;
+        }, 600);
+
+        const layout = root.dataset.layout || 'carousel';
+        if (layout === 'carousel') {
+          const trackPaddingLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+          const targetLeft = target.offsetLeft - track.offsetLeft - trackPaddingLeft;
+          track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+        } else if (layout === 'slideshow') {
+          const targetLeft = target.offsetLeft - track.offsetLeft;
+          track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+        } else {
+          // Inset or centered
+          const targetLeft =
+            target.offsetLeft -
+            track.offsetLeft -
+            Math.max(0, (track.clientWidth - target.offsetWidth) / 2);
+          track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+        }
+      }
+      updateControls();
+    }
+
+    function move(dir) {
+      if (slides.length <= 1) return;
+      if (root.dataset.layout === 'carousel') {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        if (isLoop) {
+          if (dir > 0 && (track.scrollLeft >= maxScroll - 6 || currentIndex >= slides.length - 1)) {
+            goTo(0);
+            return;
+          }
+          if (dir < 0 && (track.scrollLeft <= 6 || currentIndex === 0)) {
+            goTo(slides.length - 1);
+            return;
+          }
+        }
+        const item = slides[0];
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const scrollStep = (item?.offsetWidth || track.clientWidth * 0.8) + gap;
+        track.scrollBy({ left: dir * scrollStep, behavior: 'smooth' });
+      } else {
+        goTo(currentIndex + dir);
+      }
+    }
+
+    // Build indicators
+    if (indicatorHost && slides.length > 1) {
+      if (indicatorStyle === 'counter') {
+        indicatorHost.innerHTML =
+          '<span data-counter-current>01</span><span class="theme-carousel__counter-sep">/</span><span>' +
+          String(slides.length).padStart(2, '0') +
+          '</span>';
+      } else {
+        const holder = document.createElement('div');
+        holder.className = 'theme-carousel__' + (indicatorStyle === 'lines' ? 'lines' : 'dots');
+        holder.setAttribute('role', 'tablist');
+        slides.forEach((_, i) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'theme-carousel__' + (indicatorStyle === 'lines' ? 'line' : 'dot');
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          dot.setAttribute('aria-selected', String(i === 0));
+          if (i === 0) dot.classList.add('is-active');
+          dot.addEventListener('click', () => goTo(i));
+          holder.appendChild(dot);
+        });
+        indicatorHost.appendChild(holder);
+        dots = [...holder.children];
+      }
+    }
+
+    previousButtons.forEach((btn) => btn.addEventListener('click', () => move(-1)));
+    nextButtons.forEach((btn) => btn.addEventListener('click', () => move(1)));
+
+    // Scroll position sync
+    let scrollTimeout;
+    track.addEventListener(
+      'scroll',
+      () => {
+        if (isNavigating) return;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const maxScroll = track.scrollWidth - track.clientWidth;
+          if (track.scrollLeft <= 6) {
+            currentIndex = 0;
+            updateControls();
+            return;
+          }
+          if (maxScroll > 6 && track.scrollLeft >= maxScroll - 6) {
+            currentIndex = slides.length - 1;
+            updateControls();
+            return;
+          }
+
+          const layout = root.dataset.layout || 'carousel';
+          const trackRect = track.getBoundingClientRect();
+          let closestIdx = 0;
+          let minDistance = Infinity;
+
+          if (layout === 'carousel') {
+            const trackPaddingLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+            const trackStart = trackRect.left + trackPaddingLeft;
+            slides.forEach((slide, i) => {
+              const rect = slide.getBoundingClientRect();
+              const dist = Math.abs(rect.left - trackStart);
+              if (dist < minDistance) {
+                minDistance = dist;
+                closestIdx = i;
+              }
+            });
+          } else {
+            const trackCenter = trackRect.left + trackRect.width / 2;
+            slides.forEach((slide, i) => {
+              const rect = slide.getBoundingClientRect();
+              const slideCenter = rect.left + rect.width / 2;
+              const dist = Math.abs(trackCenter - slideCenter);
+              if (dist < minDistance) {
+                minDistance = dist;
+                closestIdx = i;
+              }
+            });
+          }
+          currentIndex = closestIdx;
+          updateControls();
+        }, 60);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      'resize',
+      () => {
+        updateControls();
+      },
+      { passive: true }
+    );
+
+    // Autoplay
+    function startAutoplay() {
+      if (
+        !isAutoplay ||
+        slides.length <= 1 ||
+        matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        autoplayTimer
+      )
+        return;
+      autoplayTimer = setInterval(() => {
+        if (isLoop || currentIndex < slides.length - 1) {
+          goTo(currentIndex + 1);
+        } else {
+          goTo(0);
+        }
+      }, autoplaySpeed);
+    }
+
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    if (isAutoplay) {
+      startAutoplay();
+      root.addEventListener('pointerenter', stopAutoplay);
+      root.addEventListener('pointerleave', startAutoplay);
+      root.addEventListener('focusin', stopAutoplay);
+      root.addEventListener('focusout', startAutoplay);
+    }
+
+    // Theme editor select
+    document.addEventListener('shopify:block:select', (e) => {
+      const selected = e.target;
+      if (selected && track.contains(selected)) {
+        stopAutoplay();
+        const slideIdx = slides.findIndex(
+          (s) => s === selected || s.contains(selected) || selected.contains(s)
+        );
+        if (slideIdx !== -1) goTo(slideIdx);
+      }
+    });
+
+    updateControls();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Carousel & slideshow",
+  "tag": null,
+  "blocks": [
+    { "type": "quote" },
+    { "type": "collection-card" },
+    { "type": "product-card" },
+    { "type": "card" },
+    { "type": "gradient-card" },
+    { "type": "_material-collection-card" },
+    { "type": "_slideshow-full-slide" },
+    { "type": "_slideshow-inset-slide" },
+    { "type": "_hero-slide" },
+    { "type": "testimonial" },
+    { "type": "image" },
+    { "type": "group" },
+    { "type": "media-text" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout mode",
+      "options": [
+        { "value": "carousel", "label": "Multi-item carousel" },
+        { "value": "slideshow", "label": "Full-frame slideshow" },
+        { "value": "inset", "label": "Inset slideshow" }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "select",
+      "id": "slide_height",
+      "label": "Slide height (slideshow & inset)",
+      "options": [
+        { "value": "adapt", "label": "Natural / Adapt" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "100vh (Fullscreen)" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop columns (carousel)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Tablet columns (carousel)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns (carousel)",
+      "options": [
+        { "value": "1", "label": "One" },
+        { "value": "2", "label": "Two" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius (inset)",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Navigation & controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "controls_layout",
+      "label": "Arrows layout",
+      "options": [
+        { "value": "header", "label": "Top right / Header" },
+        { "value": "split", "label": "Split (Sides)" },
+        { "value": "bottom_bar", "label": "Bottom bar" }
+      ],
+      "default": "header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_indicators",
+      "label": "Show indicators / pagination",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "indicator_style",
+      "label": "Indicator style",
+      "options": [
+        { "value": "dots", "label": "Dots" },
+        { "value": "lines", "label": "Lines" },
+        { "value": "counter", "label": "Counter" }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "select",
+      "id": "indicator_position",
+      "label": "Indicator position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Playback & motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slide every",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop continuously",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carousel"
+    },
+    {
+      "name": "Slideshow",
+      "settings": {
+        "layout": "slideshow",
+        "slide_height": "fullscreen",
+        "controls_layout": "split",
+        "show_navigation": true,
+        "show_indicators": true
+      },
+      "blocks": [
+        {
+          "type": "_slideshow-full-slide",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Minimal & Modern",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Discover thoughtfully designed essentials made to last a lifetime.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Now",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_slideshow-full-slide",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Designed to Inspire",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Sustainable materials, honest production, and enduring quality built to last.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Discover",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Inset slideshow",
+      "settings": {
+        "layout": "inset",
+        "slide_height": "medium",
+        "card_radius": 28,
+        "controls_layout": "split",
+        "show_navigation": false,
+        "show_indicators": true
+      },
+      "blocks": [
+        {
+          "type": "media-text",
+          "settings": {
+            "layout": "split",
+            "media_position": "end",
+            "ratio": "equal",
+            "alignment": "center"
+          },
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "alignment": "start",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Blend Beauty In You"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Get the skin you want to feel",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Now",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "image"
+            }
+          ]
+        },
+        {
+          "type": "media-text",
+          "settings": {
+            "layout": "split",
+            "media_position": "end",
+            "ratio": "equal",
+            "alignment": "center"
+          },
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "alignment": "start",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Pure Plant Active Botanicals"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Elevate your daily ritual",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Now",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "image"
+            }
+          ]
+        },
+        {
+          "type": "media-text",
+          "settings": {
+            "layout": "split",
+            "media_position": "end",
+            "ratio": "equal",
+            "alignment": "center"
+          },
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "alignment": "start",
+                "gap": "3"
+              },
+              "blocks": [
+                {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Timeless Formulations"
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Mindful care for your skin",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Now",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "image"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,88 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "media": {
+          "type": "_hero-media",
+          "settings": {
+            "media_side": "right",
+            "scrim_tone": "dark",
+            "height": "medium"
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "badge",
+              "settings": {
+                "label": "Our story",
+                "style": "on-media"
+              }
+            },
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted with intention, designed for living",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media",
+                "max_width": 18
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We believe in creating modern everyday essentials with clean aesthetics, durable craftsmanship, and sustainable ethics.</p>",
+                "size": "large",
+                "color_role": "on_media",
+                "max_width": 48
+              }
+            },
+            "primary": {
+              "type": "button",
+              "settings": {
+                "label": "Explore collection",
+                "link": "/collections/all",
+                "style": "primary",
+                "icon": "arrow-right"
+              }
+            }
+          },
+          "block_order": ["eyebrow", "heading", "text", "primary"]
+        }
+      },
+      "block_order": ["media"],
+      "settings": {
+        "max_width": "full",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "manifesto": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Our Brand Manifesto",
+            "level": "h2",
+            "size": "medium",
+            "alignment": "center"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Founded with a passion for functional minimalism, our mission is to eliminate clutter and provide timeless, enduring essentials that simplify and elevate your day-to-day lifestyle.</p>",
+            "alignment": "center"
+          }
+        }
+      },
+      "block_order": ["heading", "text"],
+      "settings": {
+        "alignment": "center",
+        "color_scheme": "background"
+      }
+    }
+  },
+  "order": ["hero", "manifesto"]
+}

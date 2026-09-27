@@ -1,0 +1,87 @@
+{%- comment -%}
+  Renders the product form with add-to-cart and dynamic checkout.
+
+  Accepts:
+  - product: {Object} the product (required)
+  - section_id: {String} the section id (required)
+  - block: {Object} the block (for shopify_attributes)
+
+  Usage:
+  {% render 'buy-buttons', product: product, section_id: section.id, block: block %}
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'product-form-' | append: section_id
+-%}
+
+<product-form class="product-form" data-section-id="{{ section_id }}" data-error-message="{{ 'products.product.quick_add_error' | t | escape }}">
+  {%- form 'product',
+    product,
+    id: product_form_id,
+    class: 'product-form__form',
+    data-type: 'add-to-cart-form'
+  -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ current_variant.id }}"
+      data-variant-id
+      {% if current_variant.available == false %}
+        disabled
+      {% endif %}
+    >
+
+    <div class="product-form__buttons">
+      {%- comment -%} Quantity is owned by the sibling quantity block and associated by form ID. {%- endcomment -%}
+      <div class="product-form__row product-form__row--primary">
+        <button
+          type="submit"
+          name="add"
+          class="button button--primary product-form__submit"
+          {% if current_variant.available == false %}
+            disabled
+          {% endif %}
+          data-add-to-cart
+        >
+          <span data-add-to-cart-text>
+            {%- if current_variant.available -%}
+              {{ 'products.product.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+          </span>
+          <span class="product-form__spinner" hidden aria-hidden="true"></span>
+        </button>
+      </div>
+
+      {%- if block.settings.show_dynamic_checkout != false -%}
+        <div class="product-form__row product-form__row--checkout">
+          {{ form | payment_button }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-form__error" data-cart-error role="alert" hidden></div>
+  {%- endform -%}
+</product-form>
+{%- unless product.has_only_default_variant -%}
+  <noscript>
+    <style>
+      #{{ product_form_id }}, .main-product[data-product-instance="{{ section_id }}"] .product__quantity { display: none; }
+    </style>
+    <form action="{{ routes.cart_add_url }}" method="post" class="product-form__noscript">
+      <label for="NoScriptVariant-{{ section_id }}">{{ 'products.product.choose_options' | t }}</label>
+      <select id="NoScriptVariant-{{ section_id }}" name="id" required>
+        {%- for variant in product.variants -%}
+          <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+            {{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+          </option>
+        {%- endfor -%}
+      </select>
+      <label for="NoScriptQuantity-{{ section_id }}">{{ 'products.product.quantity' | t }}</label>
+      <input id="NoScriptQuantity-{{ section_id }}" type="number" name="quantity" min="{{ current_variant.quantity_rule.min | default: 1 }}" step="{{ current_variant.quantity_rule.increment | default: 1 }}" {% if current_variant.quantity_rule.max != blank %}max="{{ current_variant.quantity_rule.max }}"{% endif %} value="{{ current_variant.quantity_rule.min | default: 1 }}" required>
+      <button type="submit" class="button button--primary">{{ 'products.product.add_to_cart' | t }}</button>
+    </form>
+  </noscript>
+{%- endunless -%}

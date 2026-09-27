@@ -1,0 +1,140 @@
+<aside class="contact-form__aside" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</aside>
+
+{% stylesheet %}
+  .contact-form__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    min-width: 0;
+    width: 100%;
+  }
+
+  @media (min-width: 750px) {
+    .contact-form__aside {
+      position: sticky;
+      top: 10rem;
+      align-self: start;
+    }
+  }
+
+  .contact-form__aside .theme-heading {
+    margin: 0;
+  }
+
+  .contact-form__aside .theme-text {
+    margin: 0;
+    color: var(--color-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact form aside",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "group" },
+    { "type": "surface" },
+    { "type": "card" },
+    { "type": "icon-with-text" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "badge" },
+    { "type": "divider" },
+    { "type": "spacer" },
+    { "type": "@app" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Contact form aside",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Contact us",
+            "level": "h1",
+            "size": "large"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Choose a subject, then describe the issue in your own words. We'll use the email address you provide to follow up.</p>"
+          }
+        },
+        {
+          "type": "group",
+          "settings": {
+            "direction": "column",
+            "gap": "3",
+            "padding": "5",
+            "surface": "surface",
+            "border": "on"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Before you send",
+                "level": "h4",
+                "size": "small"
+              }
+            },
+            {
+              "type": "icon-with-text",
+              "settings": {
+                "icon": "mail",
+                "media_position": "side",
+                "alignment": "left"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Add links, order numbers, and enough detail for our team to locate the issue promptly.</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "icon-with-text",
+              "settings": {
+                "icon": "clock",
+                "media_position": "side",
+                "alignment": "left"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Inquiries are reviewed and answered within 24–48 business hours.</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Prefer email? Send directly to <a href=\"mailto:support@example.com\">support@example.com</a>.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Frequently asked questions",
+                "link": "/pages/faq",
+                "style": "link",
+                "icon": "arrow-right"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

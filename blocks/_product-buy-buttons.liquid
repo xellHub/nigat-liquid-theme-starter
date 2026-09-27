@@ -1,0 +1,25 @@
+<div {{ block.shopify_attributes }}>
+  {% render 'buy-buttons', product: product, section_id: section.id, block: block %}
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Buy buttons",
+  "tag": null,
+  "blocks": [{ "type": "badge" }, { "type": "text" }, { "type": "button" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "t:sections.main_product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Buy buttons"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,185 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign rating_product = block.settings.product | default: closest.product | default: product
+  assign rating_data = rating_product.metafields.reviews.rating.value
+  assign rating_value = rating_data.rating
+  assign rating_scale = rating_data.scale_max
+  if rating_product == blank
+    assign rating_value = block.settings.rating
+    assign rating_scale = 5
+  endif
+  if rating_value != blank and rating_scale > 0
+    assign normalized_rating = rating_value | times: 5.0 | divided_by: rating_scale | round | at_most: 5
+  endif
+-%}
+{% if rating_value != blank and rating_scale > 0 %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-rating theme-rating--{{ block.settings.color_role }}"
+  role="img"
+  aria-label="{{ 'products.product.rating_aria' | t: rating: rating_value, scale: rating_scale }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% unless block.settings.display == 'number' -%}
+    <span class="theme-rating__stars" aria-hidden="true">
+      {%- for index in (1..5) -%}
+        {%- if index <= normalized_rating -%}
+          {%- render 'icon', name: 'star' -%}
+        {%- else -%}
+          {%- render 'icon', name: 'star-empty' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+  {%- endunless %}
+  {% unless block.settings.display == 'stars' -%}
+    <span class="theme-rating__number">{{ rating_value }}/{{ rating_scale }}</span>
+  {%- endunless %}
+</div>
+{% endif %}
+{% stylesheet %}.theme-rating,.theme-rating__stars{display:inline-flex;align-items:center;gap:var(--space-1)}.theme-rating{color:var(--color-accent)}.theme-rating--text{color:var(--color-text)}.theme-rating--muted{color:var(--color-muted)}.theme-rating .icon{width:1.6rem;height:1.6rem}.theme-rating__number{font-size:var(--text-sm)}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Rating",
+  "tag": null,
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "range",
+      "id": "rating",
+      "label": "Fallback rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display",
+      "options": [
+        { "value": "stars", "label": "Stars" },
+        { "value": "number", "label": "Number" },
+        { "value": "both", "label": "Stars and number" }
+      ],
+      "default": "stars"
+    },
+    {
+      "type": "select",
+      "id": "color_role",
+      "label": "Color",
+      "options": [
+        { "value": "accent", "label": "Accent" },
+        { "value": "text", "label": "Text" },
+        { "value": "muted", "label": "Muted" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rating",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,188 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{% liquid
+  assign desktop_size = block.settings.desktop_size | default: block.settings.size | default: 'medium'
+  assign mobile_size = block.settings.mobile_size | default: desktop_size
+%}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-spacer theme-spacer--desktop-{{ desktop_size }} theme-spacer--mobile-{{ mobile_size }}"
+  aria-hidden="true"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+></div>
+
+{% stylesheet %}
+  .theme-spacer {
+    width: 100%;
+    height: var(--spacer-size);
+  }
+  .theme-spacer--desktop-small {
+    --spacer-size: var(--space-3);
+  }
+  .theme-spacer--desktop-medium {
+    --spacer-size: var(--space-5);
+  }
+  .theme-spacer--desktop-large {
+    --spacer-size: var(--space-8);
+  }
+  @media (max-width: 749px) {
+    .theme-spacer--mobile-small {
+      --spacer-size: var(--space-3);
+    }
+    .theme-spacer--mobile-medium {
+      --spacer-size: var(--space-5);
+    }
+    .theme-spacer--mobile-large {
+      --spacer-size: var(--space-8);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spacer",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Legacy size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "desktop_size",
+      "label": "Desktop height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "mobile_size",
+      "label": "Mobile height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+<div class="section-extension section-extension--cart-drawer" {{ block.shopify_attributes }}>
+  {%- comment -%}
+    Cart drawer section.
+    Rendered at document root in theme.liquid for proper fixed-layer stacking context.
+  {%- endcomment -%}
+
+  {%- if settings.cart_type == 'drawer' -%}
+    <div class="cart-drawer-wrapper {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}">
+      {%- capture supplemental_content -%}
+        {% content_for 'blocks' %}
+        {%- assign has_cart_note = false -%}
+        {%- for child in block.blocks -%}
+          {%- if child.type == 'cart-note' -%}{%- assign has_cart_note = true -%}{%- endif -%}
+        {%- endfor -%}
+        {%- unless has_cart_note -%}
+          {% content_for 'block', type: 'cart-note', id: 'default-cart-note' %}
+        {%- endunless -%}
+      {%- endcapture -%}
+      {% render 'cart-drawer', supplemental_content: supplemental_content %}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer content",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "badge" },
+    { "type": "button" },
+    { "type": "cart-note" },
+    { "type": "cart-shipping-progress" },
+    { "type": "_cart-upsell" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart drawer content"
+    }
+  ]
+}
+{% endschema %}

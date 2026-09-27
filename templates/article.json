@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "content": {
+          "type": "_article-resource",
+          "settings": {}
+        }
+      },
+      "block_order": ["content"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

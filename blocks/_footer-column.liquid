@@ -1,0 +1,257 @@
+{%- liquid
+  assign column_type = block.settings.column_type | default: 'menu'
+  assign route_faq = settings.route_faq | default: pages.faq.url | default: '/pages/faq'
+  assign route_contact = settings.route_contact | default: pages.contact.url | default: '/pages/contact'
+  assign route_shipping = settings.route_shipping | default: shop.shipping_policy.url | default: pages.shipping.url | default: '/pages/shipping'
+  assign route_about = settings.route_about | default: pages.about.url | default: pages['about-us'].url | default: '/pages/about'
+  assign route_track_order = settings.route_track_order | default: '/pages/track-order'
+  assign route_returns = shop.refund_policy.url | default: '/policies/refund-policy'
+  assign route_privacy = shop.privacy_policy.url | default: '/policies/privacy-policy'
+  assign route_terms = shop.terms_of_service.url | default: '/policies/terms-of-service'
+  assign route_news = routes.root_url | append: 'blogs'
+-%}
+<div class="footer__column footer__column--{{ column_type }}" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+  {% case column_type %}
+    {% when 'menu' %}
+      {% if block.settings.menu != blank and block.settings.menu.links.size > 0 %}
+        <ul class="footer__menu" role="list">
+          {% for link in block.settings.menu.links %}
+            <li>
+              <a href="{{ link.url }}" class="footer__link">{{ link.title | escape }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% when 'customer_care' %}
+      <ul class="footer__menu" role="list">
+        <li><a href="{{ route_contact }}" class="footer__link">Contact Us</a></li>
+        <li><a href="{{ route_faq }}" class="footer__link">FAQ</a></li>
+        <li><a href="{{ route_track_order }}" class="footer__link">Track Your Order</a></li>
+        <li><a href="{{ route_shipping }}" class="footer__link">Shipping Info</a></li>
+        <li><a href="{{ route_returns }}" class="footer__link">Returns &amp; Refunds</a></li>
+      </ul>
+    {% when 'company' %}
+      <ul class="footer__menu" role="list">
+        <li><a href="{{ route_about }}" class="footer__link">About Us</a></li>
+        <li><a href="{{ route_news }}" class="footer__link">News &amp; Press</a></li>
+        <li><a href="{{ route_privacy }}" class="footer__link">Privacy Policy</a></li>
+        <li><a href="{{ route_terms }}" class="footer__link">Terms of Service</a></li>
+      </ul>
+    {% when 'text' %}
+      {% comment %} Content is rendered via child theme blocks {% endcomment %}
+  {% endcase %}
+</div>
+
+{% stylesheet %}
+  .footer__column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__column .theme-heading {
+    margin: 0 0 1.6rem;
+    width: 100%;
+  }
+
+  .footer__column .theme-heading .theme-heading__text,
+  .footer__heading {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin: 0 0 1.6rem;
+    color: var(--color-text);
+    text-align: left;
+  }
+
+  .footer__column .theme-heading .theme-heading__text {
+    margin: 0;
+  }
+
+  .footer__column .theme-text {
+    margin-bottom: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  .footer__column .theme-link {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer__column .theme-link:hover {
+    color: var(--color-text);
+  }
+
+  .footer__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer__link {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer__link:hover {
+    color: var(--color-text);
+  }
+
+  .footer__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 1.3rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+  }
+
+  .footer__text p {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    line-height: 1.4;
+  }
+
+  .footer__text br {
+    display: none;
+  }
+
+  .footer__text a {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer__text a:hover {
+    color: var(--color-text);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer column",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "icon"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "column_type",
+      "label": "Column type",
+      "options": [
+        { "value": "menu", "label": "Menu" },
+        { "value": "customer_care", "label": "Customer care" },
+        { "value": "company", "label": "Company" },
+        { "value": "text", "label": "Text" }
+      ],
+      "default": "menu"
+    },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+  ],
+  "presets": [
+    {
+      "name": "Footer menu column",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Shop",
+            "level": "h3",
+            "size": "small"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer care column",
+      "settings": {
+        "column_type": "customer_care"
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Customer Care",
+            "level": "h3",
+            "size": "small"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Company column",
+      "settings": {
+        "column_type": "company"
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Company",
+            "level": "h3",
+            "size": "small"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Footer text column",
+      "settings": {
+        "column_type": "text"
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "About us",
+            "level": "h3",
+            "size": "small"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Need help? Contact support or browse our quick guides.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,3171 @@
+{
+  "sections": {
+    "editorial-carousel-hero": {
+      "type": "editorial-carousel-hero",
+      "blocks": {
+        "chair-rail-1": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Signature Leather Lounge",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted for enduring comfort",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Supple leather and timeless silhouettes designed to anchor your space with quiet confidence.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Lounge",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "stool-rail-2": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Modern Barstool",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Precision lines in petrol blue",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Elevated proportions meet ergonomic contouring for contemporary dining and living spaces.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Seating",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-3": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Accent Lounge Chair",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Sculptural forms with lasting character",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Hand-finished upholstery crafted with tactile warmth that deepens with every passing season.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "View Accents",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "sofa-rail-4": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Living Room Icons",
+            "is_cover": true
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Made for the moments between",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Living",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-5": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Sculptural Lounge",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "A softer place to land",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Relaxed proportions and supple finishes bring an effortless warmth to your everyday space.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Comfort",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "stool-rail-6": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Counter Stool",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Precision lines in petrol blue",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Elevated proportions meet ergonomic contouring for contemporary dining and living spaces.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Seating",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-7": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Minimalist Chair",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted for enduring comfort",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Supple leather and timeless silhouettes designed to anchor your space with quiet confidence.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Studio",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "rail": {
+          "type": "_editorial-rail",
+          "settings": {
+            "card_size": 118,
+            "card_radius": 18,
+            "card_gap": 14,
+            "image_fit": "contain",
+            "accessibility_label": "Featured product selections"
+          }
+        }
+      },
+      "block_order": [
+        "chair-rail-1",
+        "stool-rail-2",
+        "chair-rail-3",
+        "sofa-rail-4",
+        "chair-rail-5",
+        "stool-rail-6",
+        "chair-rail-7",
+        "rail"
+      ],
+      "settings": {
+        "color_scheme": "bare-light",
+        "desktop_height": 840,
+        "page_width": 1600,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "initial_slide": 3,
+        "autoplay": false,
+        "autoplay_interval": 6
+      }
+    },
+    "icons-with-text": {
+      "type": "icons-with-text",
+      "blocks": {
+        "values-surface": {
+          "type": "surface",
+          "settings": {
+            "shade": "canvas",
+            "border": "off",
+            "shadow": "none",
+            "radius": "token",
+            "padding": "large"
+          },
+          "blocks": {
+            "values-grid": {
+              "type": "grid",
+              "settings": {
+                "columns_desktop": 3,
+                "columns_tablet": 3,
+                "columns_mobile": "1",
+                "gap": "6",
+                "equal_height": true
+              },
+              "blocks": {
+                "intentional-design": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "eye",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 1,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "intentional-design-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Intentional design",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "intentional-design-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Everything we do starts with why.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "intentional-design-heading",
+                    "intentional-design-text"
+                  ]
+                },
+                "made-with-care": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "heart",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 2,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "made-with-care-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Made with care",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "made-with-care-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We believe in building better.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "made-with-care-heading",
+                    "made-with-care-text"
+                  ]
+                },
+                "team-goal": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "account",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 3,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "team-goal-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "A team with a goal",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "team-goal-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Real people making great products.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "team-goal-heading",
+                    "team-goal-text"
+                  ]
+                }
+              },
+              "block_order": [
+                "intentional-design",
+                "made-with-care",
+                "team-goal"
+              ]
+            }
+          },
+          "block_order": [
+            "values-grid"
+          ]
+        }
+      },
+      "block_order": [
+        "values-surface"
+      ],
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "image-compare": {
+      "type": "image-compare",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1400,
+        "padding_top": 48,
+        "padding_bottom": 48
+      },
+      "blocks": {
+        "composition": {
+          "type": "media-text",
+          "settings": {
+            "media_position": "end",
+            "ratio": "media-wide"
+          },
+          "blocks": {
+            "slider": {
+              "type": "_image-compare",
+              "settings": {
+                "aspect_ratio": "wide",
+                "slider_height": "adapt",
+                "image_fit": "cover"
+              },
+              "blocks": {
+                "badge_before": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Tailored Fit"
+                  }
+                },
+                "badge_after": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "Relaxed Fit"
+                  }
+                }
+              },
+              "block_order": [
+                "badge_before",
+                "badge_after"
+              ]
+            },
+            "content": {
+              "type": "group",
+              "settings": {
+                "gap": "3",
+                "direction": "column",
+                "alignment": "start"
+              },
+              "blocks": {
+                "eyebrow": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Side by side comparison"
+                  }
+                },
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Find your perfect fit",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Discover the best of both worlds with our tailored and relaxed silhouettes.</p>"
+                  }
+                },
+                "actions": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "btn-1": {
+                      "type": "button",
+                      "settings": {
+                        "label": "View all",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    },
+                    "btn-2": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop now",
+                        "link": "/collections/all",
+                        "style": "secondary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "btn-1",
+                    "btn-2"
+                  ]
+                }
+              },
+              "block_order": [
+                "eyebrow",
+                "heading",
+                "text",
+                "actions"
+              ]
+            }
+          },
+          "block_order": [
+            "slider",
+            "content"
+          ]
+        }
+      },
+      "block_order": [
+        "composition"
+      ]
+    },
+    "collection-list-bento": {
+      "type": "collection-list-bento",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1300,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Shop collections",
+            "level": "h2",
+            "size": "inherit",
+            "alignment": "center"
+          }
+        },
+        "grid": {
+          "type": "grid",
+          "settings": {
+            "columns_desktop": 12,
+            "columns_tablet": 12,
+            "columns_mobile": "1"
+          },
+          "blocks": {
+            "card-1": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 1,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Living Room",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-2": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 2,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Seating & Lounges",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-3": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 3,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Dining & Entertaining",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-4": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 4,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Objects & Lighting",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            }
+          },
+          "block_order": [
+            "card-1",
+            "card-2",
+            "card-3",
+            "card-4"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "grid"
+      ]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Featured collection",
+            "level": "h2",
+            "size": "inherit",
+            "alignment": "center"
+          }
+        },
+        "tabs": {
+          "type": "_collection-tabs",
+          "settings": {
+            "active_tab": 2,
+            "products_to_show": 6,
+            "columns_desktop": 4
+          },
+          "blocks": {
+            "product-card": {
+              "type": "product-card",
+              "static": true,
+              "settings": {
+                "product": "{{ closest.product }}"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "settings": {
+                    "image": "{{ closest.product.featured_image }}",
+                    "link": "{{ closest.product.url }}",
+                    "alt": "{{ closest.product.title }}"
+                  }
+                },
+                "sale-badge": {
+                  "type": "badge",
+                  "settings": {
+                    "product": "{{ closest.product }}",
+                    "mode": "sale"
+                  }
+                },
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.product.title }}",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "rating": {
+                  "type": "rating",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "view-product": {
+                  "type": "button",
+                  "settings": {
+                    "label": "View product",
+                    "style": "link",
+                    "link": "{{ closest.product.url }}"
+                  }
+                },
+                "vendor": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "{{ closest.product.vendor }}",
+                    "color_role": "muted"
+                  }
+                },
+                "swatches": {
+                  "type": "product-swatches",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                }
+              },
+              "block_order": [
+                "image",
+                "sale-badge",
+                "vendor",
+                "title",
+                "price",
+                "rating",
+                "swatches",
+                "view-product"
+              ]
+            }
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "tabs"
+      ],
+      "settings": {
+        "page_width": 1360,
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "featured-product": {
+      "type": "featured-product",
+      "settings": {
+        "color_scheme": "bare-light"
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Product of the Month",
+            "level": "h2",
+            "size": "large",
+            "alignment": "center"
+          }
+        },
+        "content": {
+          "type": "_featured-product-content",
+          "settings": {
+            "color_scheme": "bare-light",
+            "page_width": 1150,
+            "padding_top": 32,
+            "padding_bottom": 32
+          },
+          "blocks": {
+            "badge": {
+              "type": "badge",
+              "settings": {
+                "label": "New!",
+                "style": "accent"
+              }
+            },
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Crispy Chili Oil",
+                "level": "h2",
+                "size": "medium"
+              }
+            },
+            "price": {
+              "type": "price",
+              "settings": {
+                "custom_price": "$12.00"
+              }
+            },
+            "description": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Deliciously fiery and surprisingly versatile! Bold, aromatic chilies get a savory boost from garlic and shallots, while a hint of soy sauce adds a delightful umami depth. This Crispy Chili Oil will elevate any dish with its perfect balance of heat and crunch, making it a must-have for everything from stir-fries to noodles, and even as a spicy dip. Indulge in its irresistible flavors anytime you crave a burst of zesty excitement!</p>"
+              }
+            },
+            "actions": {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "gap": "3",
+                "alignment": "stretch"
+              },
+              "blocks": {
+                "add_to_cart": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Add to cart",
+                    "style": "secondary"
+                  }
+                },
+                "buy_now": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Buy it now",
+                    "link": "/collections/all",
+                    "style": "primary"
+                  }
+                }
+              },
+              "block_order": [
+                "add_to_cart",
+                "buy_now"
+              ]
+            }
+          },
+          "block_order": [
+            "badge",
+            "title",
+            "price",
+            "description",
+            "actions"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "content"
+      ]
+    },
+    "collection-list-carousel": {
+      "type": "collection-list-carousel",
+      "blocks": {
+        "header": {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "center",
+            "gap": "3"
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Our <em>special</em> collections",
+                "level": "h2",
+                "size": "custom",
+                "custom_size": 26,
+                "alignment": "left"
+              }
+            },
+            "view-all": {
+              "type": "link",
+              "settings": {
+                "label": "EXPLORE ALL",
+                "link": "/collections",
+                "icon": "none"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "view-all"
+          ]
+        },
+        "carousel": {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 4,
+            "show_navigation": true
+          },
+          "blocks": {
+            "col-1": {
+              "type": "collection-card",
+              "settings": {
+                "aspect_ratio": "portrait",
+                "placeholder_index": 1
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tops",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "10",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "col-2": {
+              "type": "collection-card",
+              "settings": {
+                "aspect_ratio": "portrait",
+                "placeholder_index": 2
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "22",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "col-3": {
+              "type": "collection-card",
+              "settings": {
+                "aspect_ratio": "portrait",
+                "placeholder_index": 3
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Bottoms",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "15",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "col-4": {
+              "type": "collection-card",
+              "settings": {
+                "aspect_ratio": "portrait",
+                "placeholder_index": 4
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Outerwear",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "8",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            }
+          },
+          "block_order": [
+            "col-1",
+            "col-2",
+            "col-3",
+            "col-4"
+          ]
+        }
+      },
+      "block_order": [
+        "header",
+        "carousel"
+      ],
+      "settings": {
+        "page_width": 1360,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "editorial-triptych": {
+      "type": "editorial-triptych",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1400,
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "triptych": {
+          "type": "_editorial-triptych",
+          "settings": {
+            "desktop_height": "700px",
+            "mobile_height": "480px",
+            "overlay_opacity": 25
+          },
+          "blocks": {
+            "panel-1": {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 1
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The ultimate body care.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop body care",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "button"
+              ]
+            },
+            "panel-2": {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 2
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The ultimate skin retouch.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop skin retouch",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "button"
+              ]
+            },
+            "panel-3": {
+              "type": "_editorial-panel",
+              "settings": {
+                "panel_index": 3
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Serum for sensitive.",
+                    "level": "h3",
+                    "size": "medium",
+                    "weight": "regular"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop serum",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "panel-1",
+            "panel-2",
+            "panel-3"
+          ]
+        }
+      },
+      "block_order": [
+        "triptych"
+      ]
+    },
+    "collection-list-material-cards": {
+      "type": "collection-list-material-cards",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1300,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Hot this week",
+            "level": "h2",
+            "size": "inherit"
+          }
+        },
+        "carousel": {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 2
+          },
+          "blocks": {
+            "card-1": {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "The Vacation Shop"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Sun & Coastal Accessories",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Hand-finished travel bags, artisanal sunglasses, and beachside essentials for long summer escapes.</p>"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Accessories",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "text",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_1"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            },
+            "card-2": {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Clean Formulations"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Botanical Skincare Rituals",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Potent plant extracts and restorative serums crafted to nourish, hydrate, and illuminate daily.</p>"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Skincare",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "text",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_2"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            },
+            "card-3": {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Mindful Living"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Holistic Body & Wellness",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Calming bath soaks, restorative botanical oils, and sensory scents formulated to ground your space.</p>"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Wellness",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "text",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "hero_1"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            }
+          },
+          "block_order": [
+            "card-1",
+            "card-2",
+            "card-3"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "carousel"
+      ]
+    },
+    "collection-list-editorial": {
+      "type": "collection-list-editorial",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1400,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "intro": {
+          "type": "group",
+          "blocks": {
+            "eyebrow": {
+              "type": "eyebrow",
+              "settings": {
+                "text": "Care For Your Skin"
+              }
+            },
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Natural self care products",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We create safe products that really work and are designed to make you feel good</p>",
+                "color_role": "muted"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "heading",
+            "text"
+          ]
+        },
+        "carousel": {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 2,
+            "show_navigation": true
+          },
+          "blocks": {
+            "item-1": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 1
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The Sweetest Thing",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "18 items",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "item-2": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 2
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tools & Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "16 items",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "item-3": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 3
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Skincare Accessories",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "23 items",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            },
+            "item-4": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "editorial",
+                "aspect_ratio": "square",
+                "placeholder_style": "editorial",
+                "placeholder_index": 4
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Natural Essentials",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                },
+                "count": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "12 items",
+                    "style": "subtle"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "count"
+              ]
+            }
+          },
+          "block_order": [
+            "item-1",
+            "item-2",
+            "item-3",
+            "item-4"
+          ]
+        }
+      },
+      "block_order": [
+        "intro",
+        "carousel"
+      ]
+    },
+    "interactive-steps": {
+      "type": "interactive-steps",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1400,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "How to care for glowing skin.",
+            "level": "h2",
+            "size": "inherit",
+            "alignment": "center"
+          }
+        },
+        "steps": {
+          "type": "_interactive-steps",
+          "settings": {
+            "image_position": "left",
+            "always_expand": true,
+            "stretch_to_image": true,
+            "media_aspect_ratio": "portrait",
+            "enable_image_tilt": true,
+            "image_tilt": -3,
+            "pill_tilt": -2,
+            "enable_3d_tilt": true,
+            "active_step_default": 3
+          },
+          "blocks": {
+            "step-1": {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 1
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Cleansers",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Start with a gentle purifying cleanser to remove impurities while preserving your natural skin moisture barrier.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Cleansers",
+                    "link": "shopify://collections/all",
+                    "style": "primary"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "description",
+                "button"
+              ]
+            },
+            "step-2": {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 2
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Serums",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Target specific skin concerns with concentrated botanical actives and deeply penetrating hydration.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Serums",
+                    "link": "shopify://collections/all",
+                    "style": "primary"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "description",
+                "button"
+              ]
+            },
+            "step-3": {
+              "type": "_interactive-step",
+              "settings": {
+                "step_index": 3
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Toners",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "description": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Achieve glowing skin with our toners as part of your skincare routine. Scientifically formulated for optimal results.</p>",
+                    "color_role": "muted"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Toners",
+                    "link": "shopify://collections/all",
+                    "style": "primary"
+                  }
+                }
+              },
+              "block_order": [
+                "title",
+                "description",
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "step-1",
+            "step-2",
+            "step-3"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "steps"
+      ]
+    },
+    "comparison-table": {
+      "type": "comparison-table",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1240,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Find your ideal formula",
+            "level": "h2",
+            "alignment": "center"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Compare key features and skin compatibility side by side.</p>",
+            "alignment": "center"
+          }
+        },
+        "table": {
+          "type": "_comparison-table",
+          "settings": {},
+          "blocks": {
+            "row-1": {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "blank"
+              },
+              "blocks": {
+                "label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sensitive skin</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "label"
+              ]
+            },
+            "row-2": {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "check"
+              },
+              "blocks": {
+                "label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Dry skin</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "label"
+              ]
+            },
+            "row-3": {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "blank",
+                "col_3_type": "check"
+              },
+              "blocks": {
+                "label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Oily skin</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "label"
+              ]
+            },
+            "row-4": {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "check"
+              },
+              "blocks": {
+                "label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Normal skin</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "label"
+              ]
+            },
+            "row-5": {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "blank",
+                "col_3_type": "blank"
+              },
+              "blocks": {
+                "label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Combination skin</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "label"
+              ]
+            }
+          },
+          "block_order": [
+            "row-1",
+            "row-2",
+            "row-3",
+            "row-4",
+            "row-5"
+          ]
+        },
+        "conclusion-heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Conclusion",
+            "level": "h3",
+            "size": "small",
+            "alignment": "center"
+          }
+        },
+        "conclusion-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>HC+ Complex™ is carefully blended to support your body and skin as hormones fluctuate over time. From mid 40s and beyond (including all stages of the menopause). Blended to give you and your skin more.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "table",
+        "conclusion-heading",
+        "conclusion-text"
+      ]
+    },
+    "layered-slideshow": {
+      "type": "layered-slideshow",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1400,
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "slideshow": {
+          "type": "_layered-slideshow",
+          "settings": {
+            "desktop_height": 620,
+            "media_position": "right",
+            "card_radius": 24,
+            "autoplay": false,
+            "autoplay_speed": 5
+          },
+          "blocks": {
+            "slide-1": {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "Signature Fit"
+              },
+              "blocks": {
+                "slide-1-eyebrow": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Autumn / Winter Edit"
+                  }
+                },
+                "slide-1-heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Architectural Proportions",
+                    "size": "large"
+                  }
+                },
+                "slide-1-text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Layered silhouettes crafted from tactile wool, structured cotton, and clean lines.</p>"
+                  }
+                },
+                "slide-1-actions": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "slide-1-btn-1": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop collection",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    },
+                    "slide-1-btn-2": {
+                      "type": "button",
+                      "settings": {
+                        "label": "View lookbook",
+                        "link": "/collections/all",
+                        "style": "secondary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "slide-1-btn-1",
+                    "slide-1-btn-2"
+                  ]
+                }
+              },
+              "block_order": [
+                "slide-1-eyebrow",
+                "slide-1-heading",
+                "slide-1-text",
+                "slide-1-actions"
+              ]
+            },
+            "slide-2": {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "100% Wool"
+              },
+              "blocks": {
+                "slide-2-eyebrow": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Material Focus"
+                  }
+                },
+                "slide-2-heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Tactile Modernism",
+                    "size": "large"
+                  }
+                },
+                "slide-2-text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Pieces designed to develop warmth, character, and comfort over time.</p>"
+                  }
+                },
+                "slide-2-actions": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "slide-2-btn-1": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Explore fabrics",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    },
+                    "slide-2-btn-2": {
+                      "type": "button",
+                      "settings": {
+                        "label": "All outerwear",
+                        "link": "/collections/all",
+                        "style": "secondary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "slide-2-btn-1",
+                    "slide-2-btn-2"
+                  ]
+                }
+              },
+              "block_order": [
+                "slide-2-eyebrow",
+                "slide-2-heading",
+                "slide-2-text",
+                "slide-2-actions"
+              ]
+            },
+            "slide-3": {
+              "type": "_layered-slide",
+              "settings": {
+                "accessibility_label": "Pure Linen"
+              },
+              "blocks": {
+                "slide-3-eyebrow": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "Living Form"
+                  }
+                },
+                "slide-3-heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Quiet Luxury in Motion",
+                    "size": "large"
+                  }
+                },
+                "slide-3-text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Tailored silhouettes shaped from certified organic flax and hand-finished details.</p>"
+                  }
+                },
+                "slide-3-actions": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "row",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "slide-3-btn-1": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Explore lookbook",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    },
+                    "slide-3-btn-2": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Read story",
+                        "link": "/collections/all",
+                        "style": "secondary"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "slide-3-btn-1",
+                    "slide-3-btn-2"
+                  ]
+                }
+              },
+              "block_order": [
+                "slide-3-eyebrow",
+                "slide-3-heading",
+                "slide-3-text",
+                "slide-3-actions"
+              ]
+            }
+          },
+          "block_order": [
+            "slide-1",
+            "slide-2",
+            "slide-3"
+          ]
+        }
+      },
+      "block_order": [
+        "slideshow"
+      ]
+    },
+    "slideshow-inset": {
+      "type": "slideshow-inset",
+      "settings": {
+        "color_scheme": "bare-light",
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "slideshow": {
+          "type": "carousel",
+          "settings": {
+            "layout": "inset",
+            "slide_height": "medium",
+            "card_radius": 28,
+            "controls_layout": "split",
+            "show_navigation": false,
+            "show_indicators": true,
+            "autoplay": false,
+            "autoplay_speed": 5,
+            "loop": false
+          },
+          "blocks": {
+            "slide-1": {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Blend Beauty In You"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Get the skin you want to feel",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_1"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            },
+            "slide-2": {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Pure Plant Active Botanicals"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Elevate your daily ritual",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_2"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            },
+            "slide-3": {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": {
+                "content": {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Timeless Formulations"
+                      }
+                    },
+                    "heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Mindful care for your skin",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    "button": {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "heading",
+                    "button"
+                  ]
+                },
+                "media": {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "hero_1"
+                  }
+                }
+              },
+              "block_order": [
+                "content",
+                "media"
+              ]
+            }
+          },
+          "block_order": [
+            "slide-1",
+            "slide-2",
+            "slide-3"
+          ]
+        }
+      },
+      "block_order": [
+        "slideshow"
+      ]
+    },
+    "quotes-carousel": {
+      "type": "quotes-carousel",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1200,
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "size": "large",
+        "italic": true,
+        "show_quotation_marks": true,
+        "show_quote_icon": false,
+        "card_style": "none",
+        "alignment": "center",
+        "rating_color": "accent",
+        "text_casing": "none",
+        "loop": true,
+        "show_arrows": true,
+        "show_dots": true,
+        "autorotate": false,
+        "autorotate_speed": 5
+      },
+      "blocks": {
+        "quote-1": {
+          "type": "quote",
+          "settings": {
+            "text": "<p>Replace this sample with an approved customer quote.</p>",
+            "show_rating": false,
+            "show_source": false
+          }
+        },
+        "quote-2": {
+          "type": "quote",
+          "settings": {
+            "text": "<p>Replace this sample with an approved customer quote.</p>",
+            "show_rating": false,
+            "show_source": false
+          }
+        },
+        "quote-3": {
+          "type": "quote",
+          "settings": {
+            "text": "<p>Replace this sample with an approved customer quote.</p>",
+            "show_rating": false,
+            "show_source": false
+          }
+        }
+      },
+      "block_order": [
+        "quote-1",
+        "quote-2",
+        "quote-3"
+      ]
+    },
+    "events-list": {
+      "type": "events-list",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1280,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "header": {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "end",
+            "gap": "4"
+          },
+          "blocks": {
+            "title-group": {
+              "type": "group",
+              "settings": {
+                "gap": "2"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Upcoming events",
+                    "level": "h2",
+                    "size": "inherit"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Discover upcoming masterclasses, workshops, tastings, and dinners.</p>",
+                    "color_role": "muted"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "text"
+              ]
+            },
+            "view-all": {
+              "type": "button",
+              "settings": {
+                "label": "View all events",
+                "style": "link",
+                "icon": "arrow-right",
+                "link": "/pages/contact"
+              }
+            }
+          },
+          "block_order": [
+            "title-group",
+            "view-all"
+          ]
+        },
+        "events": {
+          "type": "_events-stack",
+          "settings": {
+            "card_surface": "surface",
+            "card_border": true,
+            "card_radius": 16,
+            "card_shadow": "subtle",
+            "hover_lift": true,
+            "stack_gap": 24,
+            "button_style": "outline"
+          },
+          "blocks": {
+            "event-1": {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "08 Oct",
+                "day": "Thursday",
+                "time": "03:30 – 06:30",
+                "demo_variant": "pasta"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Pasta From Scratch",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "tag": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "MASTERCLASS",
+                    "style": "subtle"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Learn how to mix, knead, roll, and shape fresh pasta by hand before enjoying your creations with two simple seasonal sauces.</p>"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "tag",
+                "text",
+                "button"
+              ]
+            },
+            "event-2": {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "08 Oct",
+                "day": "Thursday",
+                "time": "11:00 – 13:00",
+                "demo_variant": "supper"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Colorful Seasonal Supper",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "tag": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "SEASONAL DINNER",
+                    "style": "subtle"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Join Chef Mara Vale for an intimate seasonal dinner exploring bold flavors, vibrant produce, and creative combinations designed for sharing.</p>"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "tag",
+                "text",
+                "button"
+              ]
+            },
+            "event-3": {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "15 Oct",
+                "day": "Thursday",
+                "time": "14:00 – 17:00",
+                "demo_variant": "workshop"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Ceramic Hand-Building Workshop",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "tag": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "STUDIO CRAFT",
+                    "style": "subtle"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Explore tactile clay techniques, pinching, and coiling methods to craft your own sculptural tableware and custom vessels.</p>"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "tag",
+                "text",
+                "button"
+              ]
+            },
+            "event-4": {
+              "type": "_event-card",
+              "settings": {
+                "year": "2026",
+                "date": "22 Oct",
+                "day": "Thursday",
+                "time": "18:00 – 20:30",
+                "demo_variant": "tasting"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Natural Wine & Small Bites Tasting",
+                    "level": "h3",
+                    "size": "medium"
+                  }
+                },
+                "tag": {
+                  "type": "badge",
+                  "settings": {
+                    "label": "CELLAR SERIES",
+                    "style": "subtle"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sample six biodynamic natural wines paired with artisanal cheeses, cold-pressed olive oils, and cured delicacies from heritage producers.</p>"
+                  }
+                },
+                "button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "VIEW EVENT",
+                    "link": "/collections/all"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "tag",
+                "text",
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "event-1",
+            "event-2",
+            "event-3",
+            "event-4"
+          ]
+        }
+      },
+      "block_order": [
+        "header",
+        "events"
+      ]
+    },
+    "featured-blog": {
+      "type": "featured-blog",
+      "settings": {
+        "page_width": 1300,
+        "padding_top": 56,
+        "padding_bottom": 56
+      },
+      "blocks": {
+        "header": {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "center",
+            "gap": "3"
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "From the Journal",
+                "level": "h2",
+                "size": "inherit",
+                "alignment": "left"
+              }
+            },
+            "view-all": {
+              "type": "link",
+              "settings": {
+                "label": "View all",
+                "icon": "arrow-right"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "view-all"
+          ]
+        },
+        "carousel": {
+          "type": "_blog-carousel",
+          "settings": {
+            "post_limit": 6,
+            "aspect_ratio": "landscape",
+            "show_date": true,
+            "show_author": true,
+            "show_excerpt": true,
+            "show_navigation": true
+          }
+        }
+      },
+      "block_order": [
+        "header",
+        "carousel"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-intro": {
+          "type": "group",
+          "settings": {
+            "alignment": "center",
+            "gap": "2"
+          },
+          "blocks": {
+            "faq-intro-heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Everything You Need to Know",
+                "level": "h2",
+                "size": "inherit"
+              }
+            },
+            "faq-intro-text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Thoughtfully answered to make your experience seamless.</p>"
+              }
+            }
+          },
+          "block_order": [
+            "faq-intro-heading",
+            "faq-intro-text"
+          ]
+        },
+        "faq-layout": {
+          "type": "media-text",
+          "settings": {
+            "media_position": "start"
+          },
+          "blocks": {
+            "faq-media": {
+              "type": "_faq-media",
+              "settings": {
+                "aspect_ratio": "portrait"
+              }
+            },
+            "faq-content": {
+              "type": "accordion-items",
+              "blocks": {
+                "faq-1": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": true
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>In-stock items usually dispatch within 24–48 hours. Delivery timelines are shown at checkout based on your location.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "How long does delivery take?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "faq-2": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We offer a 30-day return policy for unused items in original packaging. Return shipping is complimentary for store credit or exchanges.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "What is your return policy?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "faq-3": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes! Our in-house design specialists are available via live chat or email to assist with dimensions, color palettes, and material choices.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Can I get styling or product help?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "faq-4": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Every piece includes our 5-year structural warranty covering materials, frame construction, and craftsmanship defects.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "What warranty is included?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "faq-5": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>All transactions are protected with industry-standard 256-bit SSL encryption. We never store complete credit card information.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "Is checkout secure?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                },
+                "faq-6": {
+                  "type": "accordion-item",
+                  "settings": {
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Dust gently with a clean dry microfiber cloth. Spot clean fabric or leather with a mild pH-neutral solution, avoiding direct heat or moisture.</p>"
+                      }
+                    },
+                    "trigger": {
+                      "type": "heading",
+                      "static": true,
+                      "settings": {
+                        "text": "How do I care for my products?",
+                        "level": "h3",
+                        "size": "inherit"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "text"
+                  ]
+                }
+              },
+              "block_order": [
+                "faq-1",
+                "faq-2",
+                "faq-3",
+                "faq-4",
+                "faq-5",
+                "faq-6"
+              ]
+            }
+          },
+          "block_order": [
+            "faq-media",
+            "faq-content"
+          ]
+        }
+      },
+      "block_order": [
+        "faq-intro",
+        "faq-layout"
+      ],
+      "settings": {
+        "page_width": 1300,
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {
+        "color_scheme": "bare-light",
+        "padding_top": 32,
+        "padding_bottom": 32
+      },
+      "blocks": {
+        "aside": {
+          "type": "_contact-form-aside",
+          "blocks": {
+            "aside_heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Get in touch",
+                "level": "h2",
+                "size": "large"
+              }
+            },
+            "aside_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Have questions about dimensions, orders, or trade accounts? Send our concierge a message.</p>"
+              }
+            },
+            "aside_box": {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "gap": "3",
+                "padding": "5",
+                "surface": "surface",
+                "border": "on"
+              },
+              "blocks": {
+                "box_heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Before you send",
+                    "level": "h4",
+                    "size": "small"
+                  }
+                },
+                "box_note_1": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "mail",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": {
+                    "box_note_1_text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Include order numbers and links for faster assistance.</p>"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "box_note_1_text"
+                  ]
+                },
+                "box_note_2": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "clock",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": {
+                    "box_note_2_text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Inquiries are answered within 24–48 hours.</p>"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "box_note_2_text"
+                  ]
+                },
+                "box_email": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Prefer email? Send directly to <a href=\"mailto:concierge@example.com\">concierge@example.com</a>.</p>"
+                  }
+                },
+                "box_faq": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Visit Help Center",
+                    "link": "/pages/faq",
+                    "style": "link",
+                    "icon": "arrow-right"
+                  }
+                }
+              },
+              "block_order": [
+                "box_heading",
+                "box_note_1",
+                "box_note_2",
+                "box_email",
+                "box_faq"
+              ]
+            }
+          },
+          "block_order": [
+            "aside_heading",
+            "aside_text",
+            "aside_box"
+          ],
+          "settings": {}
+        },
+        "form": {
+          "type": "_contact-form-content",
+          "blocks": {
+            "name_email_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": {
+                "field_name": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Name",
+                    "type": "text",
+                    "autocomplete": "name",
+                    "placeholder": "Name"
+                  }
+                },
+                "field_email": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Email",
+                    "type": "email",
+                    "autocomplete": "email",
+                    "placeholder": "Email"
+                  }
+                }
+              },
+              "block_order": [
+                "field_name",
+                "field_email"
+              ]
+            },
+            "subject_phone_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": {
+                "field_subject": {
+                  "type": "select",
+                  "settings": {
+                    "label": "Subject",
+                    "options": "General inquiry\nOrder status\nTrade program\nCustom dimensions\nReturns",
+                    "placeholder": "Select a subject"
+                  }
+                },
+                "field_phone": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Phone number",
+                    "type": "tel",
+                    "autocomplete": "tel",
+                    "placeholder": "Phone number"
+                  }
+                }
+              },
+              "block_order": [
+                "field_subject",
+                "field_phone"
+              ]
+            },
+            "field_body": {
+              "type": "textarea",
+              "settings": {
+                "label": "Comment",
+                "placeholder": "How can our concierge assist?",
+                "rows": 6,
+                "hint": "Please provide as much detail as possible."
+              }
+            },
+            "footer_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "justify": "between",
+                "alignment": "center",
+                "gap": "3"
+              },
+              "blocks": {
+                "reply_note": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Inquiries are answered within 24–48 hours.</p>"
+                  }
+                },
+                "submit_button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Send message",
+                    "style": "primary",
+                    "icon": "arrow-right"
+                  }
+                }
+              },
+              "block_order": [
+                "reply_note",
+                "submit_button"
+              ]
+            }
+          },
+          "block_order": [
+            "name_email_row",
+            "subject_phone_row",
+            "field_body",
+            "footer_row"
+          ],
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "aside",
+        "form"
+      ]
+    }
+  },
+  "order": [
+    "editorial-carousel-hero",
+    "icons-with-text",
+    "collection-list-bento",
+    "featured-collection",
+    "featured-product",
+    "image-compare",
+    "editorial-triptych",
+    "collection-list-carousel",
+    "collection-list-material-cards",
+    "collection-list-editorial",
+    "interactive-steps",
+    "comparison-table",
+    "layered-slideshow",
+    "slideshow-inset",
+    "quotes-carousel",
+    "events-list",
+    "featured-blog",
+    "faq",
+    "contact-form"
+  ]
+}

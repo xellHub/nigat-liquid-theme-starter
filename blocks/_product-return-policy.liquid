@@ -1,0 +1,35 @@
+<div class="product__return-card" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Return policy",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "icon" },
+    { "type": "badge" },
+    { "type": "_product-share" },
+    { "type": "@app" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Return policy",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Return"
+          }
+        },
+        {
+          "type": "_product-share"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

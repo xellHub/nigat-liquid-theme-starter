@@ -1,0 +1,216 @@
+<section
+  id="SlideshowInsetLayout-{{ section.id }}"
+  class="slideshow-layout--inset section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--slideshow-pt:{{ section.settings.padding_top }}px;--slideshow-pb:{{ section.settings.padding_bottom }}px;"
+>
+  {% content_for 'blocks' %}
+</section>
+{% stylesheet %}.slideshow-layout--inset{padding-block:var(--slideshow-pt) var(--slideshow-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Slideshow inset",
+  "tag": "section",
+  "class": "section-slideshow-inset",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "carousel" },
+    { "type": "media-text" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow inset",
+      "blocks": [
+        {
+          "type": "carousel",
+          "settings": {
+            "layout": "inset",
+            "slide_height": "medium",
+            "card_radius": 28,
+            "controls_layout": "split",
+            "show_navigation": false,
+            "show_indicators": true,
+            "autoplay": false,
+            "autoplay_speed": 5,
+            "loop": false
+          },
+          "blocks": [
+            {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Blend Beauty In You"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Get the skin you want to feel",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Pure Plant Active Botanicals"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Elevate your daily ritual",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "type": "media-text",
+              "settings": {
+                "layout": "split",
+                "media_position": "end",
+                "ratio": "equal",
+                "alignment": "center"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Timeless Formulations"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Mindful care for your skin",
+                        "level": "h2",
+                        "size": "large"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Now",
+                        "link": "/collections/all"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

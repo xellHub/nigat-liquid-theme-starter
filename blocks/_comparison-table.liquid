@@ -1,0 +1,704 @@
+{%- comment -%}
+  Product Comparison Table
+  Side-by-side feature and formulation comparison table with customizable product columns (1 primary + up to 4 others),
+  toggable headers, images, titles, row blocks, and rich color customization.
+  Matches reference design from agent-image/from-tinker/comparision-table/image.png
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = block.id
+  assign cols_count = block.settings.columns_count | default: 3 | at_most: 5 | at_least: 2
+
+  assign show_imgs = block.settings.show_column_images
+  assign show_titles = block.settings.show_column_titles
+-%}
+
+<div
+  id="ComparisonTable-{{ section_id }}"
+  class="comparison-table-section{% if block.settings.col_1_highlight %} comparison-table-section--highlight{% endif %}"
+  style="
+    --ct-pt: 0;
+    --ct-pb: 0;
+    --ct-max-w: 100%;
+    --ct-bg: var(--color-background);
+    --ct-hl-bg: color-mix(in srgb, var(--color-surface) 85%, var(--color-accent) 15%);
+    --ct-label-bg: var(--color-surface);
+    --ct-std-bg: var(--color-surface-raised);
+    --ct-border: var(--color-border);
+    --ct-check-color: var(--color-accent);
+    --ct-cross-color: var(--color-muted);
+    --ct-accent: var(--color-accent);
+  "
+  {{ block.shopify_attributes }}
+>
+  {% render 'section-background', section_id: section_id %}
+
+  <div class="comparison-table__container">
+    <div
+      class="comparison-table__table-wrapper"
+      tabindex="0"
+      role="region"
+      aria-label="Comparison Table"
+    >
+      <table class="comparison-table__table comparison-table__table--cols-{{ cols_count }}">
+        <!-- Optional Image Preview Row Above Columns -->
+        {%- if show_imgs -%}
+          <thead class="comparison-table__thead-images">
+            <tr>
+              <th
+                class="comparison-table__cell comparison-table__cell--corner"
+                aria-hidden="true"
+              ></th>
+              {%- for i in (1..cols_count) -%}
+                {%- liquid
+                  assign img_key = 'col_' | append: i | append: '_image'
+                  assign prod_key = 'col_' | append: i | append: '_product'
+                  assign svg_key = 'col_' | append: i | append: '_demo_svg'
+                  assign title_key = 'col_' | append: i | append: '_title'
+
+                  assign col_img = block.settings[img_key]
+                  assign col_prod = block.settings[prod_key]
+                  assign col_svg = block.settings[svg_key]
+                  assign col_title = block.settings[title_key]
+
+                  if col_img == blank and col_prod != blank and col_prod.featured_image != blank
+                    assign col_img = col_prod.featured_image
+                  endif
+                  if col_title == blank and col_prod != blank
+                    assign col_title = col_prod.title
+                  endif
+                -%}
+                <th class="comparison-table__cell comparison-table__cell--image {% if i == 1 and block.settings.col_1_highlight %}comparison-table__cell--highlight{% endif %}">
+                  <div class="comparison-table__media-wrap">
+                    {%- if col_prod != blank -%}
+                      <a
+                        href="{{ col_prod.url }}"
+                        class="comparison-table__product-link"
+                        aria-label="{{ col_title | default: 'Product' | escape }}"
+                      >
+                    {%- endif -%}
+
+                    {%- if col_img != blank -%}
+                      {%- assign comparison_image_alt = col_title | default: 'Product' -%}
+                      {{
+                        col_img
+                        | image_url: width: 320
+                        | image_tag:
+                          loading: 'lazy',
+                          class: 'comparison-table__image',
+                          alt: comparison_image_alt
+                      }}
+                    {%- elsif col_svg != blank and col_svg != 'none' -%}
+                      {% render 'comparison-table-demo-svg', variant: col_svg %}
+                    {%- else -%}
+                      {%- case i -%}
+                        {%- when 1 -%}
+                          {% render 'comparison-table-demo-svg', variant: 'serum' %}
+                        {%- when 2 -%}
+                          {% render 'comparison-table-demo-svg', variant: 'jar' %}
+                        {%- when 3 -%}
+                          {% render 'comparison-table-demo-svg', variant: 'oil' %}
+                        {%- when 4 -%}
+                          {% render 'comparison-table-demo-svg', variant: 'tube' %}
+                        {%- when 5 -%}
+                          {% render 'comparison-table-demo-svg', variant: 'dropper' %}
+                      {%- endcase -%}
+                    {%- endif -%}
+
+                    {%- if col_prod != blank -%}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+        {%- endif -%}
+
+        <!-- Optional Column Titles Header Row -->
+        {%- if show_titles -%}
+          <thead class="comparison-table__thead-titles">
+            <tr>
+              <th
+                class="comparison-table__cell comparison-table__cell--corner"
+                aria-hidden="true"
+              ></th>
+              {%- for i in (1..cols_count) -%}
+                {%- liquid
+                  assign title_key = 'col_' | append: i | append: '_title'
+                  assign prod_key = 'col_' | append: i | append: '_product'
+                  assign col_title = block.settings[title_key]
+                  assign col_prod = block.settings[prod_key]
+                  if col_title == blank and col_prod != blank
+                    assign col_title = col_prod.title
+                  endif
+                  if col_title == blank
+                    case i
+                      when 1
+                        assign col_title = 'Argan Milk Serum'
+                      when 2
+                        assign col_title = 'Whipped Argan Oil Body Butter'
+                      when 3
+                        assign col_title = 'Beautifying Oil Face'
+                      when 4
+                        assign col_title = 'Revitalizing Day Cream'
+                      when 5
+                        assign col_title = 'Restorative Night Elixir'
+                    endcase
+                  endif
+                -%}
+                <th
+                  scope="col"
+                  class="comparison-table__cell comparison-table__cell--title {% if i == 1 and block.settings.col_1_highlight %}comparison-table__cell--highlight{% endif %}"
+                >
+                  <span class="comparison-table__col-title">{{ col_title | escape }}</span>
+                </th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+        {%- endif -%}
+
+        <!-- Comparison Data Rows: nested row blocks -->
+        <tbody class="comparison-table__tbody">
+          {% content_for 'blocks' %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  #ComparisonTable-{{ section_id }} {
+    background-color: var(--ct-bg);
+    padding-top: var(--ct-pt);
+    padding-bottom: var(--ct-pb);
+    box-sizing: border-box;
+  }
+
+  #ComparisonTable-{{ section_id }} *,
+  #ComparisonTable-{{ section_id }} *::before,
+  #ComparisonTable-{{ section_id }} *::after {
+    box-sizing: border-box;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__container {
+    width: min(100% - 32px, var(--ct-max-w));
+    margin-inline: auto;
+  }
+
+  /* Table Wrapper & Grid */
+  #ComparisonTable-{{ section_id }} .comparison-table__table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    min-width: 680px;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__tbody {
+    display: table-row-group;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-2 .comparison-table__tbody td:nth-of-type(n+3),
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-3 .comparison-table__tbody td:nth-of-type(n+4),
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-4 .comparison-table__tbody td:nth-of-type(n+5) {
+    display: none;
+  }
+
+  #ComparisonTable-{{ section_id }}.comparison-table-section--highlight .comparison-table__cell--candidate-highlight {
+    background: var(--ct-hl-bg);
+  }
+
+  /* Column Width Distributions */
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-2 th:first-child,
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-2 td:first-child {
+    width: 36%;
+  }
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-3 th:first-child,
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-3 td:first-child {
+    width: 32%;
+  }
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-4 th:first-child,
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-4 td:first-child {
+    width: 26%;
+  }
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-5 th:first-child,
+  #ComparisonTable-{{ section_id }} .comparison-table__table--cols-5 td:first-child {
+    width: 22%;
+  }
+
+  /* Base Cells */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell {
+    padding: 14px 18px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid var(--ct-border);
+    margin: 0;
+  }
+
+  /* Image Row */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--corner {
+    border: none;
+    background: transparent;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--image {
+    border: none;
+    background: transparent;
+    padding-bottom: 24px;
+    vertical-align: bottom;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__media-wrap {
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__image {
+    max-height: 110px;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.25s ease;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__product-link:hover .comparison-table__image,
+  #ComparisonTable-{{ section_id }} .comparison-table__product-link:hover .comparison-table__demo-svg {
+    transform: scale(1.05);
+  }
+
+  /* Title Row */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--title {
+    background-color: var(--ct-label-bg);
+    color: currentColor;
+    font-family: var(--font-heading-family);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.35;
+    padding: 18px 14px;
+  }
+
+  /* Feature Labels Column (First column) */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--feature-label {
+    background-color: var(--ct-label-bg);
+    text-align: center;
+    font-family: var(--font-body-family);
+    font-size: 14px;
+    font-weight: 400;
+    color: color-mix(in srgb, currentColor 85%, transparent);
+    padding: 18px 16px;
+  }
+
+  /* Standard Data Cells */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--data {
+    background-color: var(--ct-std-bg);
+    padding: 18px 14px;
+  }
+
+  /* Primary / Highlight Column Backgrounds */
+  #ComparisonTable-{{ section_id }} .comparison-table__cell--highlight {
+    background-color: var(--ct-hl-bg) !important;
+  }
+
+  /* Icons */
+  #ComparisonTable-{{ section_id }} .comparison-table__icon--check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ct-check-color);
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__icon--cross {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ct-cross-color);
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__icon--dash {
+    color: var(--ct-cross-color);
+    font-weight: bold;
+  }
+
+  #ComparisonTable-{{ section_id }} .comparison-table__text-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: currentColor;
+  }
+
+
+
+  /* Mobile scroll hints */
+  @media (max-width: 768px) {
+    #ComparisonTable-{{ section_id }} .comparison-table__table {
+      min-width: 600px;
+    }
+    #ComparisonTable-{{ section_id }} .comparison-table__cell--feature-label {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      box-shadow: 2px 0 6px color-mix(in srgb, var(--color-shadow) 4%, transparent);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison experience",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_comparison-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display Elements Toggles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_images",
+      "label": "Show column images row",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_titles",
+      "label": "Show column titles row",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns_count",
+      "label": "Number of columns to compare",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "info": "Supports 1 primary product + up to 4 other products (2 to 5 total columns)"
+    },
+    {
+      "type": "header",
+      "content": "Column 1 (Primary / Original Product)"
+    },
+    {
+      "type": "checkbox",
+      "id": "col_1_highlight",
+      "label": "Highlight column 1 with tint",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "col_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "col_1_product",
+      "label": "Product link (optional auto-fill)"
+    },
+    {
+      "type": "select",
+      "id": "col_1_demo_svg",
+      "label": "Fallback illustration (when no image chosen)",
+      "options": [
+        {
+          "value": "serum",
+          "label": "Serum Dropper Bottle"
+        },
+        {
+          "value": "jar",
+          "label": "Body Butter Cream Jar"
+        },
+        {
+          "value": "oil",
+          "label": "Face Oil Pump Bottle"
+        },
+        {
+          "value": "tube",
+          "label": "Treatment Tube"
+        },
+        {
+          "value": "dropper",
+          "label": "Tall Dropper Bottle"
+        }
+      ],
+      "default": "serum"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "col_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "col_2_product",
+      "label": "Product link (optional auto-fill)"
+    },
+    {
+      "type": "select",
+      "id": "col_2_demo_svg",
+      "label": "Fallback illustration (when no image chosen)",
+      "options": [
+        {
+          "value": "serum",
+          "label": "Serum Dropper Bottle"
+        },
+        {
+          "value": "jar",
+          "label": "Body Butter Cream Jar"
+        },
+        {
+          "value": "oil",
+          "label": "Face Oil Pump Bottle"
+        },
+        {
+          "value": "tube",
+          "label": "Treatment Tube"
+        },
+        {
+          "value": "dropper",
+          "label": "Tall Dropper Bottle"
+        }
+      ],
+      "default": "jar"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "col_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "col_3_product",
+      "label": "Product link (optional auto-fill)"
+    },
+    {
+      "type": "select",
+      "id": "col_3_demo_svg",
+      "label": "Fallback illustration (when no image chosen)",
+      "options": [
+        {
+          "value": "serum",
+          "label": "Serum Dropper Bottle"
+        },
+        {
+          "value": "jar",
+          "label": "Body Butter Cream Jar"
+        },
+        {
+          "value": "oil",
+          "label": "Face Oil Pump Bottle"
+        },
+        {
+          "value": "tube",
+          "label": "Treatment Tube"
+        },
+        {
+          "value": "dropper",
+          "label": "Tall Dropper Bottle"
+        }
+      ],
+      "default": "oil"
+    },
+    {
+      "type": "header",
+      "content": "Column 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "col_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "col_4_product",
+      "label": "Product link (optional auto-fill)"
+    },
+    {
+      "type": "select",
+      "id": "col_4_demo_svg",
+      "label": "Fallback illustration (when no image chosen)",
+      "options": [
+        {
+          "value": "serum",
+          "label": "Serum Dropper Bottle"
+        },
+        {
+          "value": "jar",
+          "label": "Body Butter Cream Jar"
+        },
+        {
+          "value": "oil",
+          "label": "Face Oil Pump Bottle"
+        },
+        {
+          "value": "tube",
+          "label": "Treatment Tube"
+        },
+        {
+          "value": "dropper",
+          "label": "Tall Dropper Bottle"
+        }
+      ],
+      "default": "tube"
+    },
+    {
+      "type": "header",
+      "content": "Column 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "col_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "product",
+      "id": "col_5_product",
+      "label": "Product link (optional auto-fill)"
+    },
+    {
+      "type": "select",
+      "id": "col_5_demo_svg",
+      "label": "Fallback illustration (when no image chosen)",
+      "options": [
+        {
+          "value": "serum",
+          "label": "Serum Dropper Bottle"
+        },
+        {
+          "value": "jar",
+          "label": "Body Butter Cream Jar"
+        },
+        {
+          "value": "oil",
+          "label": "Face Oil Pump Bottle"
+        },
+        {
+          "value": "tube",
+          "label": "Treatment Tube"
+        },
+        {
+          "value": "dropper",
+          "label": "Tall Dropper Bottle"
+        }
+      ],
+      "default": "dropper"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Styling"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Spacing"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison experience",
+      "blocks": [
+        {
+          "type": "_comparison-row",
+          "settings": {
+            "col_1_type": "check",
+            "col_2_type": "check",
+            "col_3_type": "blank"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Sensitive skin</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_comparison-row",
+          "settings": {
+            "col_1_type": "check",
+            "col_2_type": "check",
+            "col_3_type": "check"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Dry skin</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_comparison-row",
+          "settings": {
+            "col_1_type": "check",
+            "col_2_type": "blank",
+            "col_3_type": "check"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Oily skin</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_comparison-row",
+          "settings": {
+            "col_1_type": "check",
+            "col_2_type": "check",
+            "col_3_type": "check"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Normal skin</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_comparison-row",
+          "settings": {
+            "col_1_type": "check",
+            "col_2_type": "blank",
+            "col_3_type": "blank"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Combination skin</p>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

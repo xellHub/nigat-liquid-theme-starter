@@ -1,0 +1,333 @@
+<section
+  id="IconsWithText-{{ section.id }}"
+  class="icon-grid-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--layout-padding-top: {{ section.settings.padding_top }}px; --layout-padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="icon-grid-layout__inner">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .icon-grid-layout {
+    padding-block: var(--layout-padding-top) var(--layout-padding-bottom);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+  .icon-grid-layout__inner {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Icons with text",
+  "tag": "section",
+  "class": "icons-with-text-section",
+  "blocks": [
+    { "type": "surface" },
+    { "type": "grid" },
+    { "type": "group" },
+    { "type": "icon-with-text" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top spacing",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Food & market spotlights",
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": [
+        {
+          "type": "surface",
+          "settings": {
+            "padding": "large",
+            "border": "off",
+            "shadow": "none"
+          },
+          "blocks": [
+            {
+              "type": "grid",
+              "settings": {
+                "columns_desktop": 4,
+                "columns_tablet": 2,
+                "columns_mobile": "1",
+                "gap": "5"
+              },
+              "blocks": [
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "media_type": "image",
+                    "demo_svg": "bag",
+                    "alignment": "center"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Local Pickup",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "center"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Get orders faster while avoiding shipping fees</p>",
+                        "color_role": "muted",
+                        "alignment": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "media_type": "image",
+                    "demo_svg": "box",
+                    "alignment": "center"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Local Delivery",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "center"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>100% curbside recyclable boxes</p>",
+                        "color_role": "muted",
+                        "alignment": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "media_type": "image",
+                    "demo_svg": "fern",
+                    "alignment": "center"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "For Conscious Eaters",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "center"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We support small farmers and producers</p>",
+                        "color_role": "muted",
+                        "alignment": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "media_type": "image",
+                    "demo_svg": "coconut",
+                    "alignment": "center"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Delicious & New Food",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "center"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Feel great about what you eat</p>",
+                        "color_role": "muted",
+                        "alignment": "center"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Text & Editorial"
+    },
+    {
+      "name": "Icons with text",
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": [
+        {
+          "type": "surface",
+          "settings": {
+            "shade": "canvas",
+            "padding": "large",
+            "border": "off",
+            "shadow": "none"
+          },
+          "blocks": [
+            {
+              "type": "grid",
+              "settings": {
+                "columns_desktop": 3,
+                "columns_tablet": 3,
+                "columns_mobile": "1",
+                "gap": "6",
+                "equal_height": true
+              },
+              "blocks": [
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "eye",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 1,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Intentional design",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Everything we do starts with why.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "heart",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 2,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Made with care",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We believe in building better.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "account",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 3,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "A team with a goal",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Real people making great products.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Text & Editorial"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

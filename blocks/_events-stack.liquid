@@ -1,0 +1,684 @@
+{%- liquid
+  case block.settings.card_surface
+    when 'surface_raised'
+      assign card_bg = 'var(--color-surface-raised)'
+    when 'background'
+      assign card_bg = 'var(--color-background)'
+    when 'transparent'
+      assign card_bg = 'transparent'
+    else
+      assign card_bg = 'var(--color-surface)'
+  endcase
+
+  if block.settings.card_border == false
+    assign card_border = 'transparent'
+  else
+    assign card_border = 'var(--color-border)'
+  endif
+
+  case block.settings.card_shadow
+    when 'none'
+      assign card_shadow = 'none'
+      assign card_shadow_hover = 'none'
+    when 'elevated'
+      assign card_shadow = '0 8px 24px color-mix(in srgb, currentColor calc(var(--shadow-opacity, 0.08) * 45%), transparent)'
+      assign card_shadow_hover = '0 16px 36px color-mix(in srgb, currentColor calc(var(--shadow-opacity, 0.08) * 75%), transparent)'
+    else
+      assign card_shadow = '0 2px 8px color-mix(in srgb, currentColor calc(var(--shadow-opacity, 0.08) * 20%), transparent)'
+      assign card_shadow_hover = '0 12px 30px color-mix(in srgb, currentColor calc(var(--shadow-opacity, 0.08) * 60%), transparent)'
+  endcase
+
+  if block.settings.hover_lift == false
+    assign card_shadow_hover = card_shadow
+  endif
+
+  assign events_button_style = block.settings.button_style | default: 'outline'
+-%}
+<div
+  id="EventsList-{{ block.id }}"
+  class="events-list-section events-list-section--btn-{{ events_button_style }}"
+  style="--evl-pt:0;--evl-pb:0;--evl-radius:{{ block.settings.card_radius | default: 16 }}px;--evl-gap:{{ block.settings.stack_gap | default: 24 }}px;--evl-card-bg:{{ card_bg }};--evl-border:{{ card_border }};--evl-shadow:{{ card_shadow }};--evl-shadow-hover:{{ card_shadow_hover }};--evl-tag-bg:color-mix(in srgb,var(--color-surface-raised) 85%,var(--color-text) 15%);--evl-tag-text:var(--color-text);"
+  {{ block.shopify_attributes }}
+>
+  <div class="events-list__container">
+    <div class="events-list__cards" role="list">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+<style>
+  #EventsList-{{ block.id }} {
+    padding-top: var(--evl-pt);
+    padding-bottom: var(--evl-pb);
+    box-sizing: border-box;
+  }
+
+  #EventsList-{{ block.id }} *,
+  #EventsList-{{ block.id }} *::before,
+  #EventsList-{{ block.id }} *::after {
+    box-sizing: border-box;
+  }
+
+  #EventsList-{{ block.id }} .events-list__container {
+    width: min(100% - 32px, 1280px);
+    margin-inline: auto;
+  }
+
+  #EventsList-{{ block.id }} .events-list__cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evl-gap, clamp(20px, 2.5vw, 28px));
+  }
+
+  #EventsList-{{ block.id }} .events-card {
+    background-color: var(--evl-card-bg);
+    border: 1px solid var(--evl-border);
+    border-radius: var(--evl-radius);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr) 380px;
+    align-items: stretch;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    box-shadow: var(--evl-shadow);
+  }
+
+  #EventsList-{{ block.id }} .events-card:hover {
+    box-shadow: var(--evl-shadow-hover);
+    {% if block.settings.hover_lift != false %}
+      transform: translateY(-2px);
+    {% endif %}
+  }
+
+  /* Date & Time Column */
+  #EventsList-{{ block.id }} .events-card__date-col {
+    padding: clamp(24px, 3vw, 36px) clamp(20px, 2.5vw, 32px);
+    border-right: 1px solid var(--evl-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #EventsList-{{ block.id }} .events-card__date-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__icon-badge {
+    color: color-mix(in srgb, currentColor 85%, transparent);
+    display: flex;
+    align-items: center;
+  }
+
+  #EventsList-{{ block.id }} .events-card__date-texts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #EventsList-{{ block.id }} .events-card__year {
+    font-size: 13px;
+    font-weight: 500;
+    color: color-mix(in srgb, currentColor 65%, transparent);
+    margin-bottom: 2px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__date {
+    font-size: clamp(20px, 2vw, 24px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: currentColor;
+  }
+
+  #EventsList-{{ block.id }} .events-card__day {
+    font-size: 14px;
+    color: color-mix(in srgb, currentColor 65%, transparent);
+    margin-top: 2px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__date-divider {
+    width: 100%;
+    max-width: 120px;
+    height: 1px;
+    background-color: var(--evl-border);
+    margin: 20px 0;
+    {% if block.settings.show_date_divider == false %}
+      display: none;
+    {% endif %}
+  }
+
+  #EventsList-{{ block.id }} .events-card__time-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__time {
+    font-size: 14px;
+    font-weight: 500;
+    color: currentColor;
+    white-space: nowrap;
+  }
+
+  /* Content Column */
+  #EventsList-{{ block.id }} .events-card__content-col {
+    padding: clamp(28px, 3.5vw, 44px) clamp(24px, 3vw, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  #EventsList-{{ block.id }} .events-card__content-col .theme-heading {
+    margin-bottom: 12px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__content-col .theme-badge {
+    margin-bottom: 14px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__content-col .theme-text {
+    margin-bottom: 20px;
+    max-width: 58ch;
+  }
+
+  #EventsList-{{ block.id }} .events-card__content-col .theme-button {
+    margin-top: auto;
+  }
+
+  #EventsList-{{ block.id }} .events-card__title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(22px, 2.2vw, 28px);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: currentColor;
+    margin: 0 0 14px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  #EventsList-{{ block.id }} .events-card__tag-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    background-color: var(--evl-tag-bg);
+    color: var(--evl-tag-text);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  #EventsList-{{ block.id }} .events-card__description {
+    font-family: var(--font-body-family);
+    font-size: clamp(14px, 1.05vw, 15px);
+    line-height: 1.6;
+    color: color-mix(in srgb, currentColor 72%, transparent);
+    margin: 0 0 24px;
+    max-width: 58ch;
+  }
+
+  #EventsList-{{ block.id }} .events-card__cta-wrap {
+    margin-top: auto;
+  }
+
+  #EventsList-{{ block.id }} .events-card__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-button, var(--corner-radius, 999px));
+    padding: 11px 28px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  {% case block.settings.button_style %}
+    {% when 'primary' %}
+      #EventsList-{{ block.id }} .events-card__cta-btn {
+        background-color: var(--color-button);
+        color: var(--color-button-text);
+        border: 1.5px solid var(--color-button);
+      }
+      #EventsList-{{ block.id }} .events-card__cta-btn:hover {
+        opacity: 0.88;
+        transform: translateY(-1px);
+      }
+    {% when 'secondary' %}
+      #EventsList-{{ block.id }} .events-card__cta-btn {
+        background-color: var(--color-surface);
+        color: var(--color-secondary-button-text, var(--color-text));
+        border: 1.5px solid var(--color-border);
+      }
+      #EventsList-{{ block.id }} .events-card__cta-btn:hover {
+        background-color: var(--color-surface-raised);
+        transform: translateY(-1px);
+      }
+    {% when 'link' %}
+      #EventsList-{{ block.id }} .events-card__cta-btn {
+        background-color: transparent;
+        color: var(--color-accent);
+        border: none;
+        padding: 0;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      #EventsList-{{ block.id }} .events-card__cta-btn:hover {
+        opacity: 0.75;
+        transform: none;
+      }
+    {% else %}
+      #EventsList-{{ block.id }} .events-card__cta-btn {
+        border: 1.5px solid currentColor;
+        background-color: transparent;
+        color: currentColor;
+      }
+      #EventsList-{{ block.id }} .events-card__cta-btn:hover {
+        background-color: currentColor;
+        color: var(--evl-card-bg, var(--color-surface));
+        transform: translateY(-1px);
+      }
+  {% endcase %}
+
+  /* Media Column */
+  #EventsList-{{ block.id }} .events-card__media-col {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface);
+    min-height: 260px;
+    display: flex;
+  }
+
+  #EventsList-{{ block.id }} .events-card__image,
+  #EventsList-{{ block.id }} .events-card__media-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  #EventsList-{{ block.id }} .events-card:hover .events-card__image,
+  #EventsList-{{ block.id }} .events-card:hover .events-card__media-svg {
+    transform: scale(1.03);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 980px) {
+    #EventsList-{{ block.id }} .events-card {
+      grid-template-columns: 180px minmax(0, 1fr) 280px;
+    }
+  }
+
+  @media (max-width: 840px) {
+    #EventsList-{{ block.id }} .events-card {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+    }
+
+    #EventsList-{{ block.id }} .events-card__media-col {
+      order: -1;
+      height: 240px;
+      min-height: auto;
+    }
+
+    #EventsList-{{ block.id }} .events-card__date-col {
+      border-right: none;
+      border-bottom: 1px solid var(--evl-border);
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+    }
+
+    #EventsList-{{ block.id }} .events-card__date-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #EventsList-{{ block.id }} .events-card__date-texts {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    #EventsList-{{ block.id }} .events-card__date-divider {
+      display: none;
+    }
+
+    #EventsList-{{ block.id }} .events-card__content-col {
+      padding: 24px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    #EventsList-{{ block.id }} .events-card__date-col {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    #EventsList-{{ block.id }} .events-card__media-col {
+      height: 200px;
+    }
+  }
+
+  /* Dark mode support */
+  html[data-color-mode="dark"] #EventsList-{{ block.id }} {
+    {% if block.settings.card_surface == 'transparent' %}
+      --evl-card-bg: transparent;
+    {% elsif block.settings.card_surface == 'background' %}
+      --evl-card-bg: var(--color-background);
+    {% elsif block.settings.card_surface == 'surface_raised' %}
+      --evl-card-bg: var(--color-surface-raised);
+    {% else %}
+      --evl-card-bg: var(--color-surface);
+    {% endif %}
+    {% if block.settings.card_border != false %}
+      --evl-border: color-mix(in srgb, var(--color-text) 12%, transparent);
+    {% endif %}
+    --evl-tag-bg: color-mix(in srgb, var(--color-text) 14%, transparent);
+    --evl-tag-text: var(--color-text);
+  }
+</style>
+{% schema %}
+{
+  "name": "Events stack",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_event-card"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card Surface & Border"
+    },
+    {
+      "type": "select",
+      "id": "card_surface",
+      "label": "Card surface",
+      "options": [
+        {
+          "value": "surface",
+          "label": "Surface (Default)"
+        },
+        {
+          "value": "surface_raised",
+          "label": "Surface raised"
+        },
+        {
+          "value": "background",
+          "label": "Canvas / Background"
+        },
+        {
+          "value": "transparent",
+          "label": "Transparent"
+        }
+      ],
+      "default": "surface"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show card border",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card Elevation"
+    },
+    {
+      "type": "select",
+      "id": "card_shadow",
+      "label": "Card shadow",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "subtle",
+          "label": "Subtle (Default)"
+        },
+        {
+          "value": "elevated",
+          "label": "Elevated"
+        }
+      ],
+      "default": "subtle"
+    },
+    {
+      "type": "checkbox",
+      "id": "hover_lift",
+      "label": "Elevate on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout & Spacing"
+    },
+    {
+      "type": "range",
+      "id": "stack_gap",
+      "label": "Card stack gap",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date_divider",
+      "label": "Show date divider line",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Action Button"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "link",
+          "label": "Link"
+        }
+      ],
+      "default": "outline"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Events stack",
+      "blocks": [
+        {
+          "type": "_event-card",
+          "settings": {
+            "demo_variant": "pasta"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Pasta From Scratch",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "badge",
+              "settings": {
+                "label": "MASTERCLASS",
+                "style": "subtle"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Learn how to mix, knead, roll, and shape fresh pasta by hand before enjoying your creations with two simple seasonal sauces.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "VIEW EVENT",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_event-card",
+          "settings": {
+            "demo_variant": "supper"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Colorful Seasonal Supper",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "badge",
+              "settings": {
+                "label": "SEASONAL DINNER",
+                "style": "subtle"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Join Chef Mara Vale for an intimate seasonal dinner exploring bold flavors, vibrant produce, and creative combinations designed for sharing.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "VIEW EVENT",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_event-card",
+          "settings": {
+            "demo_variant": "workshop"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Ceramic Hand-Building Workshop",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "badge",
+              "settings": {
+                "label": "STUDIO CRAFT",
+                "style": "subtle"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Explore tactile clay techniques, pinching, and coiling methods to craft your own sculptural tableware and custom vessels.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "VIEW EVENT",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_event-card",
+          "settings": {
+            "demo_variant": "tasting"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Natural Wine & Small Bites Tasting",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            {
+              "type": "badge",
+              "settings": {
+                "label": "CELLAR SERIES",
+                "style": "subtle"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Sample six biodynamic natural wines paired with artisanal cheeses, cold-pressed olive oils, and cured delicacies from heritage producers.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "VIEW EVENT",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

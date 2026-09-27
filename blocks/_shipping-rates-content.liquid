@@ -1,0 +1,106 @@
+<div class="section-extension section-extension--shipping-rates" {{ block.shopify_attributes }}>
+  <section
+    class="shipping-rates section {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}"
+    id="shipping-rates-{{ block.id }}"
+  >
+    {% render 'section-background', section: block %}
+    <div class="shipping-rates__inner page-width">
+      {% content_for 'blocks' %}
+
+      <div class="shipping-rates__grid">
+        {%- comment -%} Tier 1: Standard {%- endcomment -%}
+        <div class="shipping-card">
+          <div class="shipping-card__icon-wrap">
+            {% render 'icon', name: 'package' %}
+          </div>
+          <h3 class="shipping-card__title h4">{{ 'shipping.standard_title' | t }}</h3>
+          <p class="shipping-card__time">{{ 'shipping.standard_time' | t }}</p>
+          <span class="shipping-card__rate">{{ 'shipping.standard_rate' | t }}</span>
+          <ul class="shipping-card__perks" role="list">
+            <li>Reliable ground delivery</li>
+            <li>End-to-end tracking updates</li>
+            <li>Carbon-neutral shipping pledge</li>
+          </ul>
+        </div>
+
+        {%- comment -%} Tier 2: Express {%- endcomment -%}
+        <div class="shipping-card shipping-card--featured">
+          <span class="shipping-card__badge badge badge--accent">Popular</span>
+          <div class="shipping-card__icon-wrap">
+            {% render 'icon', name: 'truck' %}
+          </div>
+          <h3 class="shipping-card__title h4">{{ 'shipping.express_title' | t }}</h3>
+          <p class="shipping-card__time">{{ 'shipping.express_time' | t }}</p>
+          <span class="shipping-card__rate">{{ 'shipping.express_rate' | t }}</span>
+          <ul class="shipping-card__perks" role="list">
+            <li>Guaranteed priority dispatch</li>
+            <li>Air courier express transit</li>
+            <li>Signature on delivery option</li>
+          </ul>
+        </div>
+
+        {%- comment -%} Tier 3: International {%- endcomment -%}
+        <div class="shipping-card">
+          <div class="shipping-card__icon-wrap">
+            {% render 'icon', name: 'globe' %}
+          </div>
+          <h3 class="shipping-card__title h4">{{ 'shipping.intl_title' | t }}</h3>
+          <p class="shipping-card__time">{{ 'shipping.intl_time' | t }}</p>
+          <span class="shipping-card__rate">{{ 'shipping.intl_rate' | t }}</span>
+          <ul class="shipping-card__perks" role="list">
+            <li>Global delivery to 180+ countries</li>
+            <li>Prepaid customs & duties (DDP)</li>
+            <li>Full international tracking</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Shipping rates content",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "badge" },
+    { "type": "button" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping rates content",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Shipping Options & Delivery Timelines",
+            "level": "h2",
+            "size": "medium",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>We ship orders swiftly with leading carrier partners worldwide.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

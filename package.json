@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "nigat-shopify-theme",
+  "private": true,
+  "scripts": {
+    "dev": "shopify theme dev",
+    "lint": "node scripts/lint-blocks.cjs && bun run lint:composition",
+    "lint:duplication": "jscpd",
+    "format": "prettier --write . && bun run sync",
+    "format:check": "prettier --check .",
+    "sync": "node scripts/sync-section-library.mjs",
+    "lint:composition": "node scripts/lint-atomic-composition.mjs --strict",
+    "test:composition": "bun test scripts/lint-atomic-composition.test.mjs",
+    "audit:composition": "node scripts/lint-atomic-composition.mjs --audit",
+    "check:sections": "node scripts/check-sections.mjs",
+    "check:composition": "node scripts/check-composition.mjs",
+    "check:foundation": "bun run sync check && node scripts/generate-section-usage.mjs --check && node scripts/validate-json.mjs && node scripts/validate-palettes.mjs && node scripts/validate-tokens.mjs && node scripts/report-foundation-tokens.mjs --check && node scripts/validate-locales.mjs && node scripts/validate-image-tags.mjs && node scripts/audit-installed-theme.mjs . && node scripts/validate-section-library.mjs && node scripts/check-composition.mjs && bun test scripts/lint-atomic-composition.test.mjs scripts/audit-installed-theme.test.mjs scripts/product-bundle-runtime.test.mjs scripts/validate-image-tags.test.mjs && bun run check",
+    "report:foundation": "node scripts/report-foundation-release.mjs",
+    "check": "node scripts/validate-tokens.mjs && node scripts/check-sections.mjs && node scripts/check-composition.mjs && shopify theme check --path . && bun run lint:composition"
+  },
+  "devDependencies": {
+    "@shopify/liquid-html-parser": "^2.10.0",
+    "@shopify/prettier-plugin-liquid": "^1.11.0",
+    "embla-carousel": "^8.6.0",
+    "jscpd": "^5.3.0",
+    "prettier": "^3.9.9"
+  },
+  "engines": {
+    "bun": ">=1.4.0"
+  },
+  "packageManager": "bun@1.4.0"
+}

@@ -1,0 +1,67 @@
+{%- comment -%}
+  Renders a responsive, lazy-loaded image with a srcset and loading placeholder shimmer.
+
+  Accepts:
+  - image: {Object} a Shopify image / media object (required)
+  - sizes: {String} the sizes attribute (optional, default '100vw')
+  - widths: {String} comma-separated widths for srcset (optional)
+  - max_width: {Number} maximum width to request for primary src (optional, default 2000)
+  - class: {String} extra CSS classes for the <img> (optional)
+  - wrapper_class: {String} extra CSS classes for the loader wrapper (optional)
+  - loading: {String} 'lazy' (default) or 'eager'
+  - fetchpriority: {String} 'auto' (default), 'high', or 'low'
+  - alt: {String} override alt text (optional)
+  - no_wrapper: {Boolean} render <img> directly without the outer loader wrapper (optional, default false)
+
+  Usage:
+  {% render 'responsive-image', image: product.featured_media, sizes: '(min-width: 750px) 50vw, 100vw' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign image_sizes = sizes | default: '100vw'
+  assign image_widths = widths | default: '165, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000'
+  assign image_max_width = max_width | default: 2000
+  assign image_loading = loading | default: 'lazy'
+  assign image_priority = fetchpriority | default: 'auto'
+  assign image_alt = alt | default: image.alt | escape
+  assign image_aspect_ratio = image.aspect_ratio | default: 1
+-%}
+
+{%- if image != blank -%}
+  {%- if no_wrapper -%}
+    {{
+      image
+      | image_url: width: image_max_width
+      | image_tag:
+        loading: image_loading,
+        fetchpriority: image_priority,
+        sizes: image_sizes,
+        widths: image_widths,
+        class: class,
+        alt: image_alt
+    }}
+  {%- else -%}
+    <div
+      class="theme-image-loader theme-image-loader--loading{% if wrapper_class != blank %} {{ wrapper_class }}{% endif %}"
+      style="--image-aspect-ratio: {{ image_aspect_ratio }};"
+      data-theme-image-loader
+    >
+      <div class="theme-image-loader__shimmer" aria-hidden="true"></div>
+      {{
+        image
+        | image_url: width: image_max_width
+        | image_tag:
+          loading: image_loading,
+          fetchpriority: image_priority,
+          sizes: image_sizes,
+          widths: image_widths,
+          class: class,
+          alt: image_alt
+      }}
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <div class="placeholder-image {{ class }}">
+    {% render 'placeholder-image', variant: 'image' %}
+  </div>
+{%- endif -%}

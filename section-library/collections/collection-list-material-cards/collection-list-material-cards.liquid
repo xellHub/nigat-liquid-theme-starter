@@ -1,0 +1,308 @@
+<section
+  id="collection-material-{{ section.id }}"
+  class="collection-material-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--layout-width:{{ section.settings.page_width }}px;--layout-pt:{{ section.settings.padding_top }}px;--layout-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="collection-material-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+
+{% stylesheet %}
+  .collection-material-layout {
+    padding-block: var(--layout-pt) var(--layout-pb);
+    color: var(--color-text);
+    background: var(--color-background);
+    container-type: inline-size;
+    overflow-x: clip;
+  }
+  .collection-material-layout__inner {
+    display: flex;
+    width: min(calc(100% - 2 * var(--foundation-gutter-mobile)), var(--layout-width));
+    margin: auto;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .collection-material-layout .theme-carousel {
+    position: relative;
+    width: auto;
+    min-width: 0;
+    margin-inline-start: 0;
+    margin-inline-end: calc(
+      -1 * max(var(--foundation-gutter-mobile, 2rem), calc((100vw - var(--layout-width)) / 2))
+    );
+    margin-inline-end: calc(
+      -1 * max(var(--foundation-gutter-mobile, 2rem), calc((100cqw - var(--layout-width)) / 2))
+    );
+    overflow: visible;
+  }
+  .collection-material-layout .theme-carousel__viewport {
+    overflow: visible;
+  }
+  .collection-material-layout .theme-carousel__track {
+    display: flex;
+    flex-wrap: nowrap !important;
+    gap: var(--grid-gap, var(--space-4));
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-inline-start: 0;
+    padding-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-end: max(
+      var(--foundation-gutter-mobile, 2rem),
+      calc((100vw - var(--layout-width)) / 2)
+    );
+    padding-inline-end: max(
+      var(--foundation-gutter-mobile, 2rem),
+      calc((100cqw - var(--layout-width)) / 2)
+    );
+  }
+  .collection-material-layout .theme-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+  .collection-material-layout .theme-carousel__track > .theme-gradient-card,
+  .collection-material-layout .theme-carousel__track > .material-collection-card {
+    flex: 0 0 clamp(32rem, 58vw, 68rem);
+    min-width: clamp(30rem, 58vw, 68rem);
+    scroll-snap-align: start;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial collections",
+  "tag": "section",
+  "class": "collection-material-cards-section",
+  "blocks": [
+    { "type": "group" },
+    { "type": "carousel" },
+    { "type": "gradient-card" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1380
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial collections",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Hot this week",
+            "level": "h2",
+            "size": "large"
+          }
+        },
+        {
+          "type": "carousel",
+          "settings": {
+            "columns_desktop": 2
+          },
+          "blocks": [
+            {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "The Vacation Shop"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Sun & Coastal Accessories",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Hand-finished travel bags, artisanal sunglasses, and beachside essentials for long summer escapes.</p>"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Accessories",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_1"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Clean Formulations"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Botanical Skincare Rituals",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Potent plant extracts and restorative serums crafted to nourish, hydrate, and illuminate daily.</p>"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Skincare",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "lifestyle_2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "gradient-card",
+              "settings": {
+                "surface": "accent"
+              },
+              "blocks": [
+                {
+                  "type": "group",
+                  "settings": {
+                    "direction": "column",
+                    "alignment": "start",
+                    "gap": "3"
+                  },
+                  "blocks": [
+                    {
+                      "type": "eyebrow",
+                      "settings": {
+                        "text": "Mindful Living"
+                      }
+                    },
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Holistic Body & Wellness",
+                        "level": "h3",
+                        "size": "medium"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Calming bath soaks, restorative botanical oils, and sensory scents formulated to ground your space.</p>"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "label": "Shop Wellness",
+                        "link": "/collections/all",
+                        "style": "primary"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "image",
+                  "settings": {
+                    "placeholder_variant": "hero_1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Collections"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

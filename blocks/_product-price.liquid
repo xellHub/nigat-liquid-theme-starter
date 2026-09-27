@@ -1,0 +1,53 @@
+<div class="product__price-row" {{ block.shopify_attributes }}>
+  {%- assign product_rating = product.metafields.reviews.rating.value -%}
+  {%- assign product_rating_count = product.metafields.reviews.rating_count.value -%}
+  {%- if block.settings.show_rating != false and product_rating != blank and product_rating.scale_max > 0 -%}
+    {%- assign normalized_rating = product_rating.rating | times: 5.0 | divided_by: product_rating.scale_max | round | at_most: 5 -%}
+    <div class="product__rating" data-review-summary aria-label="{{ 'products.product.rating_aria' | t: rating: product_rating.rating, scale: product_rating.scale_max }}">
+      <div class="product__rating-stars" aria-hidden="true">
+        {% for star in (1..5) %}
+          {% if star <= normalized_rating %}
+            {% render 'icon', name: 'star' %}
+          {% else %}
+            {% render 'icon', name: 'star-empty' %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% if product_rating_count != blank %}
+        <span class="product__rating-count">
+          {% if product_rating_count == 1 %}
+            {{ 'products.product.review_count_one' | t: count: product_rating_count }}
+          {% else %}
+            {{ 'products.product.review_count' | t: count: product_rating_count }}
+          {% endif %}
+        </span>
+      {% endif %}
+    </div>
+  {%- endif -%}
+  <div class="product__price" data-product-price>
+    {% render 'price', product: product, use_variant: true %}
+  </div>
+</div>
+{%- if product.taxable -%}
+  <p class="product__tax-note caption">{{ 'products.product.include_taxes' | t }}</p>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Price",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "t:sections.main_product.blocks.price.settings.show_rating.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price"
+    }
+  ]
+}
+{% endschema %}

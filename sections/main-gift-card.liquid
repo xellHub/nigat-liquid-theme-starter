@@ -1,0 +1,31 @@
+<section
+  id="main-gift-card-{{ section.id }}"
+  class="main-gift-card-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% if section.blocks.size > 0 %}
+    {% content_for 'blocks' %}
+  {% else %}
+    {% content_for 'block', type: '_gift-card-resource', id: 'gift-card-resource' %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Gift card",
+  "tag": "section",
+  "class": "main-gift-card-wrapper",
+  "blocks": [
+    {
+      "type": "_gift-card-resource"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ]
+}
+{% endschema %}

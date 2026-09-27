@@ -1,0 +1,27 @@
+<section
+  id="main-blog-{{ section.id }}"
+  class="main-blog-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+>
+  {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "class": "main-blog-wrapper",
+  "blocks": [
+    {
+      "type": "_blog-resource"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ]
+}
+{% endschema %}

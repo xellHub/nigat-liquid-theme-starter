@@ -1,0 +1,374 @@
+{%- liquid
+  assign quote_has_manual_quotes = false
+  assign stripped_text = block.settings.text | strip_html | strip
+  if stripped_text contains '“' or stripped_text contains '"' or stripped_text contains '&ldquo;'
+    assign quote_has_manual_quotes = true
+  endif
+
+  assign show_source_text = false
+  if block.settings.show_source != false and block.settings.source != blank
+    assign show_source_text = true
+    if block.settings.logo == blank and block.settings.author != blank
+      assign src_lower = block.settings.source | strip | downcase
+      assign auth_lower = block.settings.author | strip | downcase
+      if auth_lower contains src_lower or src_lower contains auth_lower
+        assign show_source_text = false
+      endif
+    endif
+  endif
+-%}
+<figure class="theme-quote" {{ block.shopify_attributes }}>
+  {% if block.settings.verified %}
+    <span class="theme-quote__verified">
+      {% render 'icon', name: 'check' %}
+      <span>{{ 'accessibility.quotes.verified_review' | t }}</span>
+    </span>
+  {% endif %}
+
+  <div class="theme-quote__header">
+    {% if block.settings.show_rating %}
+      <div
+        class="theme-quote__rating"
+        role="img"
+        aria-label="{{ 'accessibility.quotes.rating' | t: rating: block.settings.rating }}"
+      >
+        {% for index in (1..5) %}
+          {% if index <= block.settings.rating %}
+            {% render 'icon', name: 'star', class: 'theme-quote__star' %}
+          {% else %}
+            {% render 'icon',
+              name: 'star-empty',
+              class: 'theme-quote__star theme-quote__star--empty'
+            %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <span class="theme-quote__mark" aria-hidden="true">“</span>
+
+    {% if block.settings.logo != blank or show_source_text %}
+      <div class="theme-quote__source">
+        {% if block.settings.logo != blank %}
+          {{
+            block.settings.logo
+            | image_url: height: 80
+            | image_tag: loading: 'lazy', class: 'theme-quote__logo', alt: block.settings.source
+          }}
+        {% elsif show_source_text %}
+          <span class="theme-quote__source-name">{{ block.settings.source | escape }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <blockquote class="theme-quote__text{% if quote_has_manual_quotes %} theme-quote__text--manual-quotes{% endif %}">
+    {{ block.settings.text }}
+  </blockquote>
+
+  {% if block.settings.author != blank or block.settings.author_title != blank %}
+    <figcaption class="theme-quote__author">
+      <span class="theme-quote__author-name">
+        {{ block.settings.author | escape }}
+      </span>
+      {% if block.settings.author_title != blank %}
+        <span class="theme-quote__author-title">, {{ block.settings.author_title | escape }}</span>
+      {% endif %}
+    </figcaption>
+  {% endif %}
+</figure>
+
+{% stylesheet %}
+  .theme-quote {
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: var(--foundation-reading-width);
+    margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .theme-quote__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .theme-quote__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-accent);
+  }
+
+  .theme-quote__star {
+    width: 1.8rem;
+    height: 1.8rem;
+    fill: currentColor;
+  }
+
+  .theme-quote__star--empty {
+    opacity: 0.3;
+  }
+
+  .theme-quote__mark {
+    display: none;
+    font-family: var(--font-heading-family);
+    font-size: 4.8rem;
+    line-height: 0.6;
+    height: 2.2rem;
+    color: var(--color-accent);
+    opacity: 0.85;
+    user-select: none;
+  }
+
+  .theme-quote__source {
+    min-height: 2.4rem;
+  }
+
+  .theme-quote__logo {
+    display: block;
+    width: auto;
+    max-height: 3.2rem;
+    object-fit: contain;
+    filter: grayscale(1);
+  }
+
+  .theme-quote__source-name {
+    font-family: var(--font-body-family);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .theme-quote__text {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    line-height: var(--line-height-heading);
+    text-wrap: balance;
+    font-size: clamp(2.4rem, 3.2vw, 3.8rem);
+  }
+
+  .theme-quote__text p {
+    margin: 0;
+  }
+
+  .theme-quote__author {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    color: var(--color-muted);
+    font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight);
+    font-size: var(--text-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .theme-quote__author-title {
+    opacity: 0.8;
+    text-transform: none;
+    font-style: italic;
+  }
+
+  .theme-quote__verified {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    text-transform: none;
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    padding: 0.2rem 0.8rem;
+    border-radius: var(--radius-pill);
+    z-index: 2;
+  }
+
+  .theme-quote__verified svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  .quote-carousel--uppercase .theme-quote__text {
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .quote-carousel--lowercase .theme-quote__text {
+    text-transform: lowercase;
+  }
+
+  .quote-carousel--size-small .theme-quote__text {
+    font-size: calc(1.8rem * var(--font-heading-scale));
+  }
+
+  .quote-carousel--size-medium .theme-quote__text {
+    font-size: calc(2.4rem * var(--font-heading-scale));
+  }
+
+  .quote-carousel--size-large .theme-quote__text {
+    font-size: clamp(2.4rem, 3.2vw, 3.8rem);
+  }
+
+  .quote-carousel--italic .theme-quote__text {
+    font-style: italic;
+  }
+
+  .quote-carousel:not(.quote-carousel--italic) .theme-quote__text {
+    font-style: normal;
+  }
+
+  .quote-carousel--show-quotes
+    .theme-quote__text:not(.theme-quote__text--manual-quotes)
+    > :first-child::before {
+    content: '“';
+  }
+
+  .quote-carousel--show-quotes
+    .theme-quote__text:not(.theme-quote__text--manual-quotes)
+    > :last-child::after {
+    content: '”';
+  }
+
+  .quote-carousel--show-quote-icon .theme-quote__mark {
+    display: block;
+  }
+
+  .quote-carousel--card-card .theme-quote {
+    background: var(--color-surface);
+    padding: var(--space-6) var(--space-8);
+    border-radius: var(--radius-card, var(--corner-radius));
+    box-shadow: 0 0.4rem 2rem color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+
+  .quote-carousel--card-bordered .theme-quote {
+    border: 0.1rem solid var(--color-border);
+    padding: var(--space-6) var(--space-8);
+    border-radius: var(--radius-card, var(--corner-radius));
+  }
+
+  .quote-carousel--card-card .theme-quote .theme-quote__verified,
+  .quote-carousel--card-bordered .theme-quote .theme-quote__verified {
+    top: var(--space-4);
+    right: var(--space-5);
+  }
+
+  .quote-carousel--align-left .theme-quote {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .quote-carousel--align-left .theme-quote__header {
+    align-items: flex-start;
+  }
+
+  .quote-carousel--align-left .theme-quote__author {
+    justify-content: flex-start;
+  }
+
+  .quote-carousel--align-right .theme-quote {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .quote-carousel--align-right .theme-quote__header {
+    align-items: flex-end;
+  }
+
+  .quote-carousel--align-right .theme-quote__author {
+    justify-content: flex-end;
+  }
+
+  .quote-carousel--rating-accent .theme-quote__rating {
+    color: var(--color-accent);
+  }
+
+  .quote-carousel--rating-text .theme-quote__rating {
+    color: var(--color-text);
+  }
+
+  .quote-carousel--rating-muted .theme-quote__rating {
+    color: var(--color-muted);
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Quote",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Quote",
+      "default": "<p>Add a real customer quote here.</p>"
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "label": "Author or subtitle"
+    },
+    {
+      "type": "text",
+      "id": "author_title",
+      "label": "Author title or subtitle"
+    },
+    {
+      "type": "checkbox",
+      "id": "verified",
+      "label": "Show verified review badge",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Source logo"
+    },
+    {
+      "type": "text",
+      "id": "source",
+      "label": "Source"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_source",
+      "label": "Show source / publication",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show star rating",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "rating",
+      "label": "Rating (stars)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quote"
+    }
+  ]
+}
+{% endschema %}

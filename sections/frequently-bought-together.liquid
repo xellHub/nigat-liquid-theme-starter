@@ -1,0 +1,27 @@
+<section
+  id="product-bundle-{{ section.id }}"
+  class="product-bundle-section section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--bundle-section-top: {{ section.settings.padding_top }}px; --bundle-section-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="product-bundle-section__inner">{% content_for 'blocks' %}</div>
+</section>
+
+{% stylesheet %}
+  .product-bundle-section { padding-block: var(--bundle-section-top) var(--bundle-section-bottom); background: var(--color-background); color: var(--color-text); }
+  .product-bundle-section__inner { width: min(calc(100% - 2 * var(--foundation-gutter-mobile)), var(--page-width)); margin-inline: auto; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.frequently_bought_together.name",
+  "tag": "section",
+  "disabled_on": {"groups":["header","footer"]},
+  "blocks": [{"type":"_product-bundle"}],
+  "settings": [
+    {"type":"color_scheme","id":"color_scheme","label":"t:sections.frequently_bought_together.settings.color_scheme","default":"bare-light"},
+    {"type":"range","id":"padding_top","label":"t:sections.frequently_bought_together.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":48},
+    {"type":"range","id":"padding_bottom","label":"t:sections.frequently_bought_together.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":48}
+  ],
+  "presets": [{"name":"t:sections.frequently_bought_together.name","blocks":[{"type":"_product-bundle","blocks":[{"type":"heading","settings":{"text":"Pair it with","level":"h2","size":"large"}},{"type":"bundle-item-controls","id":"bundle-controls","static":true,"settings":{"product":"{{ closest.product }}"}},{"type":"product-card","id":"bundle-card","static":true,"settings":{"product":"{{ closest.product }}","show_quick_add":false,"show_quick_view":false},"blocks":[{"type":"image","settings":{"image":"{{ closest.product.featured_image }}","link":"{{ closest.product.url }}","alt":"{{ closest.product.title }}"}},{"type":"heading","settings":{"text":"{{ closest.product.title }}","level":"h3","size":"small"}},{"type":"price","settings":{"product":"{{ closest.product }}"}}]}]}]}]
+}
+{% endschema %}

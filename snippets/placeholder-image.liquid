@@ -1,0 +1,84 @@
+{%- comment -%}
+  Placeholder image enum.
+
+  Valid values for `variant`:
+    hero_1, hero_2, hero_3
+    product_1 .. product_6
+    collection_1 .. collection_6
+    blog_1, blog_2, blog_3
+    detailed_1, lifestyle_1, lifestyle_2
+    image
+
+  Optional `id_prefix` namespaces SVG definitions when the same placeholder appears more than once.
+
+  Usage:
+    {% render 'placeholder-image', variant: 'product_1', class: 'placeholder-image__svg' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign placeholder_variant = variant | default: 'image'
+  assign placeholder_class = class | default: 'placeholder-image__svg'
+  assign placeholder_name = 'detailed-apparel-1'
+
+  case placeholder_variant
+    when 'image'
+      assign placeholder_name = 'detailed-apparel-1'
+    when 'hero_1'
+      assign placeholder_name = 'hero-apparel-1'
+    when 'hero_2'
+      assign placeholder_name = 'hero-apparel-2'
+    when 'hero_3'
+      assign placeholder_name = 'hero-apparel-3'
+    when 'product_1'
+      assign placeholder_name = 'product-apparel-1'
+    when 'product_2'
+      assign placeholder_name = 'product-apparel-2'
+    when 'product_3'
+      assign placeholder_name = 'product-apparel-3'
+    when 'product_4'
+      assign placeholder_name = 'product-apparel-4'
+    when 'product_5'
+      assign placeholder_name = 'product-apparel-1'
+    when 'product_6'
+      assign placeholder_name = 'product-apparel-2'
+    when 'collection_1'
+      assign placeholder_name = 'collection-apparel-1'
+    when 'collection_2'
+      assign placeholder_name = 'collection-apparel-2'
+    when 'collection_3'
+      assign placeholder_name = 'collection-apparel-3'
+    when 'collection_4'
+      assign placeholder_name = 'collection-apparel-4'
+    when 'collection_5'
+      assign placeholder_name = 'collection-apparel-1'
+    when 'collection_6'
+      assign placeholder_name = 'collection-apparel-2'
+    when 'blog_1'
+      assign placeholder_name = 'blog-apparel-1'
+    when 'blog_2'
+      assign placeholder_name = 'blog-apparel-2'
+    when 'blog_3'
+      assign placeholder_name = 'blog-apparel-3'
+    when 'lifestyle_1'
+      assign placeholder_name = 'detailed-apparel-1'
+    when 'lifestyle_2'
+      assign placeholder_name = 'hero-apparel-2'
+    when 'detailed_1'
+      assign placeholder_name = 'detailed-apparel-1'
+    else
+      assign placeholder_name = 'detailed-apparel-1'
+  endcase
+-%}
+
+{%- if id_prefix != blank -%}
+  {%- liquid
+    assign svg_id_prefix = id_prefix | handleize | append: '-'
+    assign svg_id_attribute = 'id="' | append: svg_id_prefix
+    assign svg_url_reference = 'url(#' | append: svg_id_prefix
+    assign svg_href_reference = 'href="#' | append: svg_id_prefix
+    assign placeholder_svg = placeholder_name | placeholder_svg_tag: placeholder_class
+  -%}
+  {{ placeholder_svg | replace: 'id="', svg_id_attribute | replace: 'url(#', svg_url_reference | replace: 'href="#', svg_href_reference }}
+{%- else -%}
+  {{ placeholder_name | placeholder_svg_tag: placeholder_class }}
+{%- endif -%}

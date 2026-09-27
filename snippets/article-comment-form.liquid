@@ -1,0 +1,50 @@
+{%- comment -%}
+  Plumbing snippet for article comment form fields.
+{%- endcomment -%}
+<div class="article__comment-form-fields">
+  <div class="field">
+    <label for="CommentForm-author" class="field__label">
+      {{- 'blogs.article.comment_name' | t -}}
+    </label>
+    <input
+      type="text"
+      name="comment[author]"
+      id="CommentForm-author"
+      class="field__input"
+      autocomplete="name"
+      value="{{ form.author }}"
+      aria-required="true"
+      required
+    >
+  </div>
+
+  <div class="field">
+    <label for="CommentForm-email" class="field__label">
+      {{- 'blogs.article.comment_email' | t -}}
+    </label>
+    <input
+      type="email"
+      name="comment[email]"
+      id="CommentForm-email"
+      class="field__input"
+      autocomplete="email"
+      value="{{ form.email }}"
+      aria-required="true"
+      required
+    >
+  </div>
+
+  <div class="field article__comment-form-body">
+    <label for="CommentForm-body" class="field__label">
+      {{- 'blogs.article.comment_body' | t -}}
+    </label>
+    <textarea
+      rows="5"
+      name="comment[body]"
+      id="CommentForm-body"
+      class="field__input field__input--textarea"
+      aria-required="true"
+      required
+    >{{ form.body }}</textarea>
+  </div>
+</div>

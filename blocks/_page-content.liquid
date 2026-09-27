@@ -1,0 +1,25 @@
+<article class="resource-page" {{ block.shopify_attributes }}>
+  <header class="resource-page__header">
+    <h1>{{ page.title | escape }}</h1>
+  </header>
+  <div class="resource-page__content rte">{{ page.content }}</div>
+</article>
+{% stylesheet %}
+  .resource-page {
+    width: 100%;
+  }
+  .resource-page__header {
+    margin-block-end: var(--space-6);
+  }
+  .resource-page__header h1 {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    line-height: var(--line-height-heading);
+  }
+  .resource-page__content {
+    color: var(--color-text);
+    font-family: var(--font-body-family);
+  }
+{% endstylesheet %}
+{% schema %}{"name":"Page content","tag":null,"settings":[],"presets":[{"name":"Page content"}]}{% endschema %}

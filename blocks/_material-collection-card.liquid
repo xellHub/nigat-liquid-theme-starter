@@ -1,0 +1,261 @@
+{%- liquid
+  assign card_collection = block.settings.collection
+  assign card_image = block.settings.image | default: card_collection.featured_image | default: card_collection.image
+-%}
+
+<article
+  class="material-collection-card material-collection-card--{{ block.settings.surface }}"
+  style="{% if block.settings.card_background != blank %}--material-card-background:{{ block.settings.card_background }};{% endif %}{% if block.settings.text_color != blank %}--material-card-text:{{ block.settings.text_color }};{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <div class="material-collection-card__media" aria-hidden="true">
+    {% if card_image != blank %}
+      {{
+        card_image
+        | image_url: width: 1000
+        | image_tag:
+          loading: 'lazy',
+          widths: '420, 640, 820, 1000',
+          class: 'material-collection-card__image',
+          alt: ''
+      }}
+    {% else %}
+      {% render 'collection-material-cards-demo-svg',
+        item_index: block.settings.placeholder_index,
+        card_title: ''
+      %}
+    {% endif %}
+  </div>
+  <div class="material-collection-card__content">
+    {% content_for 'blocks' %}
+    {%- if block.blocks.size == 0 -%}
+      <p class="material-collection-card__eyebrow">The Vacation Shop</p>
+      <h3 class="material-collection-card__heading">Care for Your Beauty</h3>
+      <p class="material-collection-card__description">
+        We create safe products that really work and are designed to make you feel good
+      </p>
+      <a
+        class="material-collection-card__button"
+        href="{{ card_collection.url | default: routes.all_products_collection_url }}"
+        >Shop now</a
+      >
+    {%- endif -%}
+  </div>
+</article>
+
+{% stylesheet %}
+  .material-collection-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: clamp(34rem, 40vw, 44rem);
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    color: var(--material-card-text, var(--color-text));
+    background: var(--material-card-background, var(--color-surface));
+  }
+  .material-collection-card--raised {
+    background: var(--material-card-background, var(--color-surface-raised));
+    box-shadow: var(--shadow-sm);
+  }
+  .material-collection-card--accent {
+    background: var(
+      --material-card-background,
+      color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%)
+    );
+  }
+  .material-collection-card__media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .material-collection-card__image,
+  .material-collection-card__media svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+  }
+  .material-collection-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      var(--material-card-background, var(--color-surface)) 0%,
+      var(--material-card-background, var(--color-surface)) 36%,
+      color-mix(in srgb, var(--material-card-background, var(--color-surface)) 92%, transparent) 48%,
+      color-mix(in srgb, var(--material-card-background, var(--color-surface)) 50%, transparent) 65%,
+      transparent 88%
+    );
+  }
+  .material-collection-card--accent .material-collection-card__media::after {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%) 0%,
+      color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%) 36%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%) 92%,
+          transparent
+        )
+        48%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%) 50%,
+          transparent
+        )
+        65%,
+      transparent 88%
+    );
+  }
+  .material-collection-card--raised .material-collection-card__media::after {
+    background: linear-gradient(
+      90deg,
+      var(--material-card-background, var(--color-surface-raised)) 0%,
+      var(--material-card-background, var(--color-surface-raised)) 36%,
+      color-mix(
+          in srgb,
+          var(--material-card-background, var(--color-surface-raised)) 92%,
+          transparent
+        )
+        48%,
+      color-mix(
+          in srgb,
+          var(--material-card-background, var(--color-surface-raised)) 50%,
+          transparent
+        )
+        65%,
+      transparent 88%
+    );
+  }
+  .material-collection-card__content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    width: 100%;
+    max-width: min(38rem, 60%);
+    min-width: 0;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: clamp(var(--space-5), 4vw, var(--space-8));
+    gap: var(--space-3);
+  }
+  .material-collection-card__eyebrow {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-body-family);
+    font-size: var(--text-sm);
+    font-weight: var(--font-body-weight);
+  }
+  .material-collection-card__heading {
+    max-width: 14ch;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(
+      calc(2.4rem * var(--font-heading-scale)),
+      2.6vw,
+      calc(4.2rem * var(--font-heading-scale))
+    );
+    font-weight: var(--font-heading-weight);
+    line-height: var(--line-height-heading);
+    text-wrap: balance;
+  }
+  .material-collection-card__description {
+    max-width: 30ch;
+    margin: var(--space-4) 0 0;
+    font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight);
+    line-height: var(--line-height-body);
+  }
+  .material-collection-card__button {
+    display: inline-flex;
+    min-height: var(--control-height);
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--space-5);
+    padding-inline: var(--space-6);
+    border-radius: var(--radius-button);
+    color: var(--color-button-text);
+    background: var(--color-button);
+    font-family: var(--font-body-family);
+    font-weight: var(--font-button-weight);
+    text-decoration: none;
+    transition:
+      transform var(--motion-duration-fast) var(--motion-ease),
+      opacity var(--motion-duration-fast) var(--motion-ease);
+  }
+  .material-collection-card__button:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial collection card",
+  "tag": null,
+  "blocks": [
+    { "type": "badge" },
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "image" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "image_picker", "id": "image", "label": "Image override" },
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Surface role",
+      "options": [
+        { "value": "surface", "label": "Surface" },
+        { "value": "raised", "label": "Raised" },
+        { "value": "accent", "label": "Accent tint" }
+      ],
+      "default": "accent"
+    },
+    { "type": "color", "id": "card_background", "label": "Custom card background" },
+    { "type": "color", "id": "text_color", "label": "Custom text color" },
+    {
+      "type": "range",
+      "id": "placeholder_index",
+      "label": "Placeholder",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial collection card",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "The Vacation Shop" } },
+        {
+          "type": "heading",
+          "settings": { "text": "Care for Your Beauty", "level": "h3", "size": "medium" }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>We create safe products that really work and are designed to make you feel good</p>"
+          }
+        },
+        {
+          "type": "button",
+          "settings": { "label": "Shop now", "link": "/collections/all", "style": "primary" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

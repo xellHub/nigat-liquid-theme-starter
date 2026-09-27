@@ -1,0 +1,102 @@
+{%- comment -%}
+  Global Image Configuration & Shopify Breakpoints Enum
+  Centralized definition of Shopify CDN standard breakpoints and responsive configurations:
+  - THUMBNAIL: Sized to match visual nav buttons (64px / 6.4rem) with 1x, 2x, 3x DPR quality levels (64, 128, 192).
+  - MAIN: Product detail main photo with standard Shopify breakpoints up to 2000px maximum.
+  - PORTAL: Ultra hi-res zoomer portal supporting maximum 3840px (4K) Shopify CDN limit.
+{%- endcomment -%}
+
+<script>
+  window.nigat = window.nigat || {};
+
+  /**
+   * @readonly
+   * @enum {Object}
+   */
+  window.nigat.ImageBreakpoints = Object.freeze({
+    // Standard Shopify CDN Breakpoint Tiers
+    SHOPIFY: Object.freeze([
+      64, 128, 165, 192, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000, 2400, 3000, 3840,
+    ]),
+
+    // Bottom Navigation Thumbnail Buttons (Equal to 64px visual size with 1x, 2x, 3x DPR quality)
+    THUMBNAIL: Object.freeze({
+      visualSize: 64,
+      sizes: '64px',
+      widths: Object.freeze([64, 128, 192]),
+      widthsString: '64, 128, 192',
+      defaultWidth: 192,
+      aspectRatio: '1:1',
+      crop: 'center',
+    }),
+
+    // Main Product Photo (Visual size up to 50vw on desktop, 100vw on mobile, up to 2000px max)
+    MAIN: Object.freeze({
+      sizes: '(min-width: 990px) 50vw, 100vw',
+      widths: Object.freeze([360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000]),
+      widthsString: '360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000',
+      defaultWidth: 2000,
+      maxWidth: 2000,
+    }),
+
+    // Portal Zoomer Lightbox (Maximum resolution up to 3840px 4K limit)
+    PORTAL: Object.freeze({
+      sizes: '100vw',
+      widths: Object.freeze([750, 1100, 1500, 1780, 2000, 2400, 3000, 3840]),
+      widthsString: '750, 1100, 1500, 1780, 2000, 2400, 3000, 3840',
+      defaultWidth: 3840,
+      maxWidth: 3840,
+    }),
+  });
+
+  // Alias for backward and semantic compatibility
+  window.nigat.ImageConfig = window.nigat.ImageBreakpoints;
+
+  // Global Image Loader Controller
+  window.nigat.initThemeImageLoaders = function (container) {
+    const root = container || document;
+    const loaders = root.querySelectorAll ? root.querySelectorAll('[data-theme-image-loader]') : [];
+    loaders.forEach((loader) => {
+      const img = loader.querySelector('img');
+      if (!img) return;
+      const markLoaded = () => {
+        loader.classList.remove('theme-image-loader--loading');
+        img.classList.add('is-loaded');
+      };
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded();
+      } else {
+        img.addEventListener('load', markLoaded, { once: true });
+        img.addEventListener('error', markLoaded, { once: true });
+      }
+    });
+  };
+
+  // Global capture listeners for instant response as images finish decoding
+  document.addEventListener(
+    'load',
+    (e) => {
+      if (e.target && e.target.tagName === 'IMG') {
+        const loader = e.target.closest('[data-theme-image-loader]');
+        if (loader) {
+          loader.classList.remove('theme-image-loader--loading');
+          e.target.classList.add('is-loaded');
+        }
+      }
+    },
+    true
+  );
+
+  document.addEventListener(
+    'error',
+    (e) => {
+      if (e.target && e.target.tagName === 'IMG') {
+        const loader = e.target.closest('[data-theme-image-loader]');
+        if (loader) {
+          loader.classList.remove('theme-image-loader--loading');
+        }
+      }
+    },
+    true
+  );
+</script>

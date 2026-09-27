@@ -1,0 +1,263 @@
+{
+  "type": "footer",
+  "name": "t:section_groups.footer.name",
+  "sections": {
+    "image-marquee": {
+      "type": "marquee-showcase",
+      "settings": {
+        "color_scheme": "bare-light",
+        "height_desktop": 320,
+        "height_mobile": 240,
+        "padding_top": 32,
+        "padding_bottom": 32
+      },
+      "blocks": {
+        "images": {
+          "type": "marquee",
+          "settings": {
+            "speed": 40,
+            "gap": "small",
+            "image_aspect_ratio": "portrait",
+            "pause_on_hover": true
+          },
+          "blocks": {
+            "image-1": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "hero_1"
+              }
+            },
+            "image-2": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "hero_2"
+              }
+            },
+            "image-3": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "hero_3"
+              }
+            },
+            "image-4": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "lifestyle_1"
+              }
+            },
+            "image-5": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "lifestyle_2"
+              }
+            },
+            "image-6": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "image"
+              }
+            }
+          },
+          "block_order": [
+            "image-1",
+            "image-2",
+            "image-3",
+            "image-4",
+            "image-5",
+            "image-6"
+          ]
+        }
+      },
+      "block_order": [
+        "images"
+      ]
+    },
+    "subscribe": {
+      "type": "footer-subscribe",
+      "blocks": {
+        "banner": {
+          "type": "_footer-subscribe",
+          "settings": {
+            "overlay_opacity": 35,
+            "alignment": "center"
+          },
+          "blocks": {
+            "subscribe_heading": {
+              "type": "heading",
+              "settings": {
+                "text": "A More Thoughtful Way to Live",
+                "level": "h2",
+                "size": "large",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            "subscribe_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Be the first to discover new collections, thoughtful design ideas, and curated pieces for your space.</p>",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            },
+            "subscribe_form": {
+              "type": "newsletter-form",
+              "blocks": {
+                "email_input": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Email",
+                    "type": "email",
+                    "autocomplete": "email"
+                  }
+                },
+                "submit_btn": {
+                  "type": "button",
+                  "settings": {
+                    "label": "SUBSCRIBE",
+                    "style": "primary",
+                    "icon": "arrow-right"
+                  }
+                }
+              },
+              "block_order": [
+                "email_input",
+                "submit_btn"
+              ],
+              "settings": {}
+            },
+            "subscribe_note": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We respect your inbox — only meaningful updates, always.</p>",
+                "size": "small",
+                "alignment": "center",
+                "color_role": "on_media"
+              }
+            }
+          },
+          "block_order": [
+            "subscribe_heading",
+            "subscribe_text",
+            "subscribe_form",
+            "subscribe_note"
+          ]
+        }
+      },
+      "block_order": [
+        "banner"
+      ],
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "content": {
+          "type": "_footer-content",
+          "settings": {
+            "show_design_controls": true,
+            "show_bottom_links": true,
+            "bottom_menu": "footer",
+            "logo_width": 44,
+            "show_payment_icons": false
+          },
+          "blocks": {
+            "shop": {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "menu",
+                "menu": "footer"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Shop",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              },
+              "block_order": [
+                "heading"
+              ]
+            },
+            "quick_links": {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "menu",
+                "menu": "main-menu"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Quick Links",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              },
+              "block_order": [
+                "heading"
+              ]
+            },
+            "customer_care": {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "customer_care"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Customer Care",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              },
+              "block_order": [
+                "heading"
+              ]
+            },
+            "company": {
+              "type": "_footer-column",
+              "settings": {
+                "column_type": "company"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Company",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                }
+              },
+              "block_order": [
+                "heading"
+              ]
+            }
+          },
+          "block_order": [
+            "shop",
+            "quick_links",
+            "customer_care",
+            "company"
+          ]
+        }
+      },
+      "block_order": [
+        "content"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "image-marquee",
+    "subscribe",
+    "footer"
+  ]
+}

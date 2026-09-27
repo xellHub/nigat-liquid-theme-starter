@@ -1,0 +1,845 @@
+{%- comment -%}
+  Site footer (Redesigned to match footer.webp reference):
+  - Top: Centered newsletter with bulleted highlights, dark input field, and vibrant accent submit button.
+  - Middle: Multi-column navigation and informational grid.
+  - Icons Row: Icon-only social links with pure CSS tooltips on the left, utility actions on the right.
+  - Bottom: Centered brand name and copyright row.
+{%- endcomment -%}
+{%- comment -%} Store route configurations (dynamic settings with graceful storefront fallbacks) {%- endcomment -%}
+{%- assign route_faq = settings.route_faq | default: pages.faq.url | default: '/pages/faq' -%}
+{%- assign route_contact = settings.route_contact
+  | default: pages.contact.url
+  | default: '/pages/contact'
+-%}
+{%- assign route_shipping = settings.route_shipping
+  | default: shop.shipping_policy.url
+  | default: pages.shipping.url
+  | default: '/pages/shipping'
+-%}
+{%- assign route_returns = settings.route_returns
+  | default: shop.refund_policy.url
+  | default: '/policies/refund-policy'
+-%}
+{%- assign route_privacy = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+{%- assign route_terms = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+
+<div class="footer" {{ block.shopify_attributes }}>
+  <div class="footer__inner page-width">
+    {%- comment -%} Middle Row: nested, self-scoped footer column blocks {%- endcomment -%}
+    <div class="footer__middle">
+      <div class="footer__columns">{% content_for 'blocks' %}</div>
+    </div>
+
+    {%- comment -%} Action Icons Row: Social Icons + Tooltip on Left, Utility on Right {%- endcomment -%}
+    <div class="footer__actions-row">
+      <div class="footer__actions-left">
+        <div class="footer__brand-wrapper">
+          <a href="{{ routes.root_url }}" class="footer__brand-link" aria-label="{{ shop.name }}">
+            <div class="footer__brand-content">
+              {%- assign footer_logo = block.settings.logo | default: settings.logo -%}
+              <div class="footer__logo-container">
+                {%- if footer_logo != blank -%}
+                  {%- assign logo_width = block.settings.logo_width | default: 44 -%}
+                  {%- assign logo_sizes = logo_width | append: 'px' -%}
+                  {%- assign logo_style = 'width: '
+                    | append: logo_width
+                    | append: 'px; height: auto;'
+                  -%}
+                  {{
+                    footer_logo
+                    | image_url: width: 280
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '60, 120, 180, 240, 280',
+                      sizes: logo_sizes,
+                      class: 'footer__logo-image',
+                      alt: shop.name,
+                      style: logo_style
+                  }}
+                {%- else -%}
+                  <span class="footer__logo-placeholder" aria-hidden="true">
+                    <svg
+                      class="icon icon-brand-mark"
+                      viewBox="0 0 32 32"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect width="32" height="32" rx="8" fill="var(--color-accent)"/>
+                      <path d="M9 22L16 9L23 22H9Z" fill="var(--color-accent-text)"/>
+                      <circle cx="16" cy="17.5" r="2.5" fill="var(--color-accent)"/>
+                    </svg>
+                  </span>
+                {%- endif -%}
+              </div>
+              <div class="footer__brand-text-group">
+                <span class="footer__brand-name">{{ shop.name }}</span>
+                {%- assign footer_tagline = settings.footer_tagline | default: shop.description -%}
+                {%- if footer_tagline != blank -%}
+                  <span class="footer__brand-tagline caption">{{ footer_tagline | escape }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </a>
+        </div>
+        {%- assign show_social_icons = block.settings.show_social_icons -%}
+        {%- if show_social_icons == null -%}
+          {%- assign show_social_icons = true -%}
+        {%- endif -%}
+
+        {%- assign url_x = settings.social_x | default: settings.social_twitter -%}
+        {%- assign url_facebook = settings.social_facebook -%}
+        {%- assign url_instagram = settings.social_instagram -%}
+        {%- assign url_tiktok = settings.social_tiktok -%}
+        {%- assign url_youtube = settings.social_youtube -%}
+        {%- assign url_linkedin = settings.social_linkedin -%}
+        {%- assign url_pinterest = settings.social_pinterest -%}
+
+        {%- if show_social_icons -%}
+          {%- if url_x != blank
+            or url_facebook != blank
+            or url_instagram != blank
+            or url_tiktok != blank
+            or url_youtube != blank
+            or url_linkedin != blank
+            or url_pinterest != blank
+          -%}
+            <ul
+              class="footer__icon-list footer__icon-list--social"
+              role="list"
+              aria-label="Social media links"
+            >
+              {%- if url_x != blank -%}
+                <li>
+                  <a
+                    href="{{ url_x }}"
+                    class="footer__icon-btn"
+                    aria-label="X (Twitter)"
+                    data-tooltip="X (Twitter)"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'x' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_facebook != blank -%}
+                <li>
+                  <a
+                    href="{{ url_facebook }}"
+                    class="footer__icon-btn"
+                    aria-label="Facebook"
+                    data-tooltip="Facebook"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'facebook' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_instagram != blank -%}
+                <li>
+                  <a
+                    href="{{ url_instagram }}"
+                    class="footer__icon-btn"
+                    aria-label="Instagram"
+                    data-tooltip="Instagram"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'instagram' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_tiktok != blank -%}
+                <li>
+                  <a
+                    href="{{ url_tiktok }}"
+                    class="footer__icon-btn"
+                    aria-label="TikTok"
+                    data-tooltip="TikTok"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'tiktok' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_youtube != blank -%}
+                <li>
+                  <a
+                    href="{{ url_youtube }}"
+                    class="footer__icon-btn"
+                    aria-label="YouTube"
+                    data-tooltip="YouTube"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'youtube' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_linkedin != blank -%}
+                <li>
+                  <a
+                    href="{{ url_linkedin }}"
+                    class="footer__icon-btn"
+                    aria-label="LinkedIn"
+                    data-tooltip="LinkedIn"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'linkedin' %}
+                  </a>
+                </li>
+              {%- endif -%}
+
+              {%- if url_pinterest != blank -%}
+                <li>
+                  <a
+                    href="{{ url_pinterest }}"
+                    class="footer__icon-btn"
+                    aria-label="Pinterest"
+                    data-tooltip="Pinterest"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {% render 'icon', name: 'pinterest' %}
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      <div class="footer__actions-right">
+        <ul
+          class="footer__icon-list footer__icon-list--utility"
+          role="list"
+          aria-label="Quick links"
+        >
+          <li>
+            {%- if shop.email != blank -%}
+              <a
+                href="mailto:{{ shop.email }}"
+                class="footer__icon-btn"
+                aria-label="Email Support"
+                data-tooltip="Email Support"
+              >
+                {% render 'icon', name: 'mail' %}
+              </a>
+            {%- else -%}
+              <a
+                href="{{ route_contact }}"
+                class="footer__icon-btn"
+                aria-label="Contact Support"
+                data-tooltip="Contact Support"
+              >
+                {% render 'icon', name: 'mail' %}
+              </a>
+            {%- endif -%}
+          </li>
+          <li>
+            <a
+              href="{{ routes.all_products_collection_url }}"
+              class="footer__icon-btn"
+              aria-label="Catalog"
+              data-tooltip="Catalog"
+            >
+              {% render 'icon', name: 'bag-plus' %}
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ routes.account_url }}"
+              class="footer__icon-btn"
+              aria-label="Account"
+              data-tooltip="Account"
+            >
+              {% render 'icon', name: 'check' %}
+            </a>
+          </li>
+        </ul>
+
+        {%- assign show_bottom_links = block.settings.show_bottom_links -%}
+        {%- if show_bottom_links == null -%}
+          {%- assign show_bottom_links = true -%}
+        {%- endif -%}
+
+        {%- if show_bottom_links -%}
+          {%- assign bottom_menu_handle = block.settings.bottom_menu
+            | default: settings.footer_menu
+            | default: 'footer'
+          -%}
+          {%- assign bottom_menu = linklists[bottom_menu_handle] -%}
+          <div class="footer__bottom-links-wrap">
+            <ul class="footer__bottom-links" role="list" aria-label="Footer navigation links">
+              {%- if bottom_menu != blank and bottom_menu.links.size > 0 -%}
+                {%- for link in bottom_menu.links -%}
+                  <li class="footer__bottom-link-item">
+                    <a href="{{ link.url }}" class="footer__bottom-link">
+                      {{ link.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              {%- elsif shop.policies.size > 0 -%}
+                {%- for policy in shop.policies -%}
+                  <li class="footer__bottom-link-item">
+                    <a href="{{ policy.url }}" class="footer__bottom-link">
+                      {{ policy.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              {%- else -%}
+                <li class="footer__bottom-link-item">
+                  <a href="{{ route_privacy }}" class="footer__bottom-link">Privacy Policy</a>
+                </li>
+                <li class="footer__bottom-link-item">
+                  <a href="{{ route_terms }}" class="footer__bottom-link">Terms of Service</a>
+                </li>
+                <li class="footer__bottom-link-item">
+                  <a href="{{ route_shipping }}" class="footer__bottom-link">Shipping Info</a>
+                </li>
+                <li class="footer__bottom-link-item">
+                  <a href="{{ route_returns }}" class="footer__bottom-link">Refund Policy</a>
+                </li>
+                <li class="footer__bottom-link-item">
+                  <a href="{{ route_faq }}" class="footer__bottom-link">FAQ</a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="footer__powered">
+          <span class="footer__copyright caption">
+            Copyright {{ 'now' | date: '%Y' }}. {{ powered_by_link }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {%- if block.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <div class="footer__payment-row">
+        <ul class="footer__payment payment-icons" role="list" aria-label="Payment methods">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'payment-icons__icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if block.settings.show_design_controls -%}
+  <div class="design-controls" data-design-controls>
+    <button
+      type="button"
+      class="design-controls__fab"
+      data-design-controls-toggle
+      aria-label="Open live design controls"
+      aria-haspopup="dialog"
+      aria-controls="DesignControls-{{ block.id }}"
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+      >
+        <path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="3.5"/>
+      </svg>
+      <span class="visually-hidden">Live design controls</span>
+    </button>
+
+    {% render 'design-controls', block_id: block.id %}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .footer {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-layout:has(.footer-subscribe) .footer,
+  .footer.footer--with-subscribe {
+    border-top: none;
+  }
+
+  .footer__inner {
+    padding-top: 5.6rem;
+    padding-bottom: 4rem;
+    max-width: 112rem;
+    margin-inline: auto;
+  }
+
+  .footer__middle {
+    padding-top: 4.8rem;
+    padding-bottom: 4.8rem;
+  }
+
+  .footer__columns {
+    display: grid;
+    gap: 3.2rem 2.4rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @media (min-width: 540px) {
+    .footer__columns {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3.6rem 2.8rem;
+    }
+  }
+
+  @media (min-width: 860px) {
+    .footer__columns {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      gap: 4rem 3.2rem;
+    }
+  }
+
+  .footer__actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2.4rem 2rem;
+    padding: 3.2rem 0 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer__actions-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+
+  .footer__brand-wrapper {
+    display: block;
+  }
+
+  .footer__brand-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+  }
+
+  .footer__brand-content {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+  }
+
+  .footer__logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .footer__logo-image {
+    height: auto;
+    max-height: 4.8rem;
+    object-fit: contain;
+    display: block;
+  }
+
+  .footer__logo-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .footer__logo-placeholder svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .footer__brand-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .footer__brand-name {
+    font-family: var(--font-heading-family);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .footer__brand-tagline {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    line-height: 1.35;
+    max-width: 34rem;
+  }
+
+  .footer__actions-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.4rem;
+  }
+
+  @media (max-width: 600px) {
+    .footer__actions-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2.4rem;
+    }
+
+    .footer__actions-right {
+      align-items: flex-start;
+    }
+  }
+
+  .footer__bottom-links-wrap {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 600px) {
+    .footer__bottom-links-wrap {
+      justify-content: flex-start;
+    }
+  }
+
+  .footer__bottom-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 600px) {
+    .footer__bottom-links {
+      justify-content: flex-start;
+    }
+  }
+
+  .footer__bottom-link-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer__bottom-link {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer__bottom-link:hover,
+  .footer__bottom-link:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .footer__powered {
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .footer__powered {
+      text-align: left;
+    }
+  }
+
+  .footer__copyright {
+    font-size: 1.3rem;
+    color: var(--color-muted);
+  }
+
+  .footer__copyright a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer__copyright a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer__icon-list {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer__icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: var(--border-radius-button, 4px);
+    color: var(--color-muted);
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .footer__icon-btn:hover,
+  .footer__icon-btn:focus-visible {
+    color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  .footer__icon-btn svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    display: block;
+  }
+
+  .footer__icon-btn[data-tooltip] {
+    position: relative;
+  }
+
+  .footer__icon-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--border-radius-button, 4px);
+    background-color: var(--color-surface, var(--color-background));
+    color: var(--color-text);
+    font-size: 1.15rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      visibility 0.15s ease;
+    z-index: var(--z-tooltip, 100);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-background) 60%, black 40%);
+  }
+
+  .footer__icon-btn[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    border-width: 5px 5px 0 5px;
+    border-style: solid;
+    border-color: var(--color-surface, var(--color-background)) transparent transparent transparent;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      visibility 0.15s ease;
+    z-index: var(--z-tooltip, 100);
+  }
+
+  .footer__icon-btn[data-tooltip]:hover::after,
+  .footer__icon-btn[data-tooltip]:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .footer__icon-btn[data-tooltip]:hover::before,
+  .footer__icon-btn[data-tooltip]:focus-visible::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .footer__payment-row {
+    margin-top: 1.6rem;
+    display: flex;
+    justify-content: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer content",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_footer-column"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "icon"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_design_controls",
+      "label": "Show live design controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_links",
+      "label": "t:sections.footer.settings.show_bottom_links.label",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "bottom_menu",
+      "label": "t:sections.footer.settings.bottom_menu.label",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social media icons",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.footer.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 24,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.footer.settings.logo_width.label",
+      "default": 44
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:sections.footer.settings.show_payment_icons.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer content",
+      "blocks": [
+        {
+          "type": "_footer-column",
+          "settings": {
+            "column_type": "menu",
+            "menu": "footer"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Shop",
+                "level": "h3",
+                "size": "small"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_footer-column",
+          "settings": {
+            "column_type": "menu",
+            "menu": "main-menu"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Quick Links",
+                "level": "h3",
+                "size": "small"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_footer-column",
+          "settings": {
+            "column_type": "customer_care"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Customer Care",
+                "level": "h3",
+                "size": "small"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_footer-column",
+          "settings": {
+            "column_type": "company"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Company",
+                "level": "h3",
+                "size": "small"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

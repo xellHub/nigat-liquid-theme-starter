@@ -1,0 +1,127 @@
+{%- comment -%}
+  Renders a single cart line item.
+  Accepts:
+  - item: {Object} Line item object (required)
+  - forloop: {Object} Loop object for line numbering (required)
+  - image_sizes: {String} Sizes attribute override (optional)
+  - form_id: {String} form owner when rendered outside the cart form (optional)
+{%- endcomment -%}
+{% # theme-check-disable ValidScopedCSSClass %}
+
+<li
+  class="cart__item"
+  data-cart-item
+  data-line="{{ forloop.index }}"
+  data-line-key="{{ item.key | escape }}"
+  data-variant-id="{{ item.variant_id }}"
+>
+  <div class="cart__item-loading-overlay" aria-hidden="true">
+    <span class="cart__item-spinner"></span>
+  </div>
+
+  <a href="{{ item.url }}" class="cart__item-media" tabindex="-1" aria-hidden="true">
+    {%- if item.image -%}
+      {%- assign cart_image_sizes = image_sizes | default: '90px' -%}
+      {%- assign cart_image_alt = item.image.alt | default: item.product.title -%}
+      {{
+        item.image
+        | image_url: width: 240
+        | image_tag: loading: 'lazy', widths: '100, 150, 200, 240', sizes: cart_image_sizes, alt: cart_image_alt
+      }}
+    {%- else -%}
+      <div class="placeholder-image">{% render 'placeholder-image', variant: 'product_1' %}</div>
+    {%- endif -%}
+  </a>
+
+  <div class="cart__item-details">
+    <div class="cart__item-header">
+      <a href="{{ item.url }}" class="cart__item-title">{{ item.product.title | escape }}</a>
+      <button
+        type="button"
+        class="cart__item-wishlist"
+        data-cart-wishlist
+        data-wishlist-add-label="{{ 'cart.general.add_to_wishlist' | t | escape }}"
+        data-wishlist-saved-label="{{ 'products.product.saved_to_wishlist' | t | escape }}"
+        data-variant-id="{{ item.variant_id }}"
+        data-product-id="{{ item.product_id }}"
+        data-product-handle="{{ item.product.handle }}"
+        aria-label="{{ 'cart.general.add_to_wishlist' | t }}"
+        title="{{ 'cart.general.add_to_wishlist' | t }}"
+      >
+        {% render 'icon', name: 'heart' %}
+      </button>
+    </div>
+
+    {%- unless item.product.has_only_default_variant -%}
+      <p class="cart__item-variant">{{ item.variant.title | replace: ' / ', ' - ' | escape }}</p>
+    {%- endunless -%}
+
+    {%- if item.selling_plan_allocation -%}
+      <p class="cart__item-variant">
+        {{ item.selling_plan_allocation.selling_plan.name | escape }}
+      </p>
+    {%- endif -%}
+
+    {%- if item.line_level_discount_allocations.size > 0 -%}
+      <ul class="cart__discounts" role="list">
+        {%- for discount in item.line_level_discount_allocations -%}
+          <li class="cart__discount caption">
+            {{ discount.discount_application.title }} (-{{ discount.amount | money }})
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="cart__item-footer">
+      <div class="cart__item-price">
+        {%- if item.original_line_price != item.final_line_price -%}
+          <s class="cart__item-price-old">{{ item.original_line_price | money }}</s>
+          <span class="cart__item-price-final">{{ item.final_line_price | money }}</span>
+        {%- else -%}
+          <span class="cart__item-price-final">{{ item.original_line_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <quantity-input class="quantity quantity--inline">
+        <button
+          type="button"
+          class="quantity__button quantity__button--inline"
+          name="minus"
+          aria-label="{{ 'accessibility.decrease_quantity' | t: product: item.product.title }}"
+        >
+          {% render 'icon', name: 'minus' %}
+        </button>
+        <input
+          class="quantity__input quantity__input--inline"
+          type="number"
+          name="updates[]"
+          value="{{ item.quantity }}"
+          min="0"
+          data-quantity-input
+          data-line="{{ forloop.index }}"
+          data-line-key="{{ item.key | escape }}"
+          {% if form_id != blank %}form="{{ form_id }}"{% endif %}
+          aria-label="{{ 'accessibility.quantity_field' | t: product: item.product.title }}"
+        >
+        <button
+          type="button"
+          class="quantity__button quantity__button--inline"
+          name="plus"
+          aria-label="{{ 'accessibility.increase_quantity' | t: product: item.product.title }}"
+        >
+          {% render 'icon', name: 'plus' %}
+        </button>
+      </quantity-input>
+      <button
+        type="button"
+        class="cart__item-remove theme-button theme-button--link"
+        data-cart-remove
+        data-line-key="{{ item.key | escape }}"
+        aria-label="{{ 'cart.general.remove_title' | t: title: item.product.title | escape }}"
+      >
+        {{ 'cart.general.remove' | t }}
+      </button>
+    </div>
+  </div>
+</li>
+{% # theme-check-enable ValidScopedCSSClass %}

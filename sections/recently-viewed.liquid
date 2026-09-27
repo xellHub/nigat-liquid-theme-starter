@@ -1,0 +1,34 @@
+<recently-viewed
+  id="recently-viewed-{{ section.id }}"
+  class="recently-viewed section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-current-handle="{{ product.handle | escape }}"
+  data-root-url="{{ routes.root_url }}"
+  data-limit="{{ section.settings.limit }}"
+  style="--recently-columns: {{ section.settings.columns_desktop }};"
+>
+  <div class="recently-viewed__inner" data-recently-content hidden>
+    {% content_for 'blocks' %}
+  </div>
+</recently-viewed>
+
+{% stylesheet %}
+  .recently-viewed { display: block; min-height: 1px; color: var(--color-text); background: var(--color-background); }
+  .recently-viewed__inner { width: min(calc(100% - 2 * var(--foundation-gutter-mobile)), var(--page-width)); margin-inline: auto; padding-block: var(--spacing-sections); }
+  .recently-viewed__inner > * + * { margin-block-start: var(--space-5); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "tag": "section",
+  "disabled_on": {"groups":["header","footer"]},
+  "blocks": [{"type":"heading"},{"type":"text"},{"type":"_recently-viewed"}],
+  "settings": [
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"bare-light"},
+    {"type":"range","id":"limit","label":"Products","min":1,"max":8,"step":1,"default":4},
+    {"type":"range","id":"columns_desktop","label":"Desktop columns","min":2,"max":5,"step":1,"default":4}
+  ],
+  "presets": [{"name":"Recently viewed","blocks":[{"type":"heading","settings":{"text":"Recently viewed","level":"h2","size":"large"}},{"type":"_recently-viewed","blocks":[{"type":"product-card","id":"product-card","static":true,"settings":{"product":"{{ closest.product }}"},"blocks":[{"type":"image","settings":{"image":"{{ closest.product.featured_image }}","link":"{{ closest.product.url }}","alt":"{{ closest.product.title }}"}},{"type":"heading","settings":{"text":"{{ closest.product.title }}","level":"h3","size":"small"}},{"type":"price","settings":{"product":"{{ closest.product }}"}},{"type":"button","settings":{"label":"View product","style":"link","link":"{{ closest.product.url }}"}}]}]}]}]
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{%- liquid
+  assign source = block.settings.source
+  assign info_content = blank
+  if source == 'description'
+    assign info_content = product.description
+  elsif source == 'page' and block.settings.page != blank
+    assign info_content = block.settings.page.content
+  elsif source == 'care'
+    assign info_content = product.metafields.custom.care_instructions | metafield_tag
+  elsif source == 'ingredients'
+    assign info_content = product.metafields.custom.ingredients | metafield_tag
+  endif
+-%}
+{%- if info_content != blank -%}
+  <details class="theme-accordion product-info" {{ block.shopify_attributes }}>
+    <summary class="theme-accordion__summary">
+      {% content_for 'block', type: 'heading', id: 'trigger' %}
+      <span class="theme-accordion__icon-wrap" aria-hidden="true">{% render 'icon', name: 'chevron-down' %}</span>
+    </summary>
+    <div class="theme-accordion__content rte">
+      {{ info_content }}
+      {% content_for 'blocks' %}
+    </div>
+  </details>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": null,
+  "blocks": [{"type":"heading"},{"type":"text"},{"type":"image"},{"type":"button"},{"type":"@app"}],
+  "settings": [
+    {"type":"select","id":"source","label":"Information source","options":[
+      {"value":"description","label":"Product description"},
+      {"value":"page","label":"Selected page"},
+      {"value":"care","label":"Care instructions metafield"},
+      {"value":"ingredients","label":"Ingredients metafield"}
+    ],"default":"description"},
+    {"type":"page","id":"page","label":"Page"}
+  ],
+  "presets": [
+    {"name":"Product description accordion","settings":{"source":"description"},"blocks":[{"type":"heading","id":"trigger","static":true,"settings":{"text":"Description","level":"h3","size":"inherit"}}]},
+    {"name":"Shipping and returns accordion","settings":{"source":"page"},"blocks":[{"type":"heading","id":"trigger","static":true,"settings":{"text":"Shipping and returns","level":"h3","size":"inherit"}}]},
+    {"name":"Care accordion","settings":{"source":"care"},"blocks":[{"type":"heading","id":"trigger","static":true,"settings":{"text":"Care","level":"h3","size":"inherit"}}]},
+    {"name":"Ingredients accordion","settings":{"source":"ingredients"},"blocks":[{"type":"heading","id":"trigger","static":true,"settings":{"text":"Ingredients","level":"h3","size":"inherit"}}]}
+  ]
+}
+{% endschema %}
+{% # theme-check-enable ValidScopedCSSClass %}

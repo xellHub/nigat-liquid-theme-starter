@@ -1,0 +1,27 @@
+{%- comment -%}
+  Demo stock photography for Editorial Triptych
+  Uses high-resolution beauty, skincare & spa photography.
+
+  Accepts:
+  - panel_index: 1 | 2 | 3
+  - title_line_1: string
+  - title_line_2: string
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = panel_index | default: 1 | plus: 0
+  if idx < 1 or idx > 3
+    assign idx = 1
+  endif
+  assign asset_name = 'editorial-triptych-' | append: idx | append: '.jpg'
+  assign alt_text = title_line_1 | append: ' ' | append: title_line_2 | strip | default: 'Editorial collection'
+-%}
+
+<img
+  src="{{ asset_name | asset_url }}"
+  alt="{{ alt_text | escape }}"
+  class="et__image"
+  loading="lazy"
+  width="900"
+  height="1350"
+>

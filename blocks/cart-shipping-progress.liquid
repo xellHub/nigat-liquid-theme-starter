@@ -1,0 +1,114 @@
+{%- liquid
+  assign threshold_minor = block.settings.threshold | times: 100
+  assign configured_currency = block.settings.currency_code | strip | upcase
+  assign configured_market = block.settings.market_handle | strip | downcase
+  assign active_currency = cart.currency.iso_code | upcase
+  assign active_market = localization.market.handle | downcase
+  assign show_progress = false
+  if block.settings.enabled and threshold_minor > 0 and configured_currency != blank and configured_currency == active_currency and cart.requires_shipping
+    if configured_market == blank or configured_market == active_market
+      assign show_progress = true
+    endif
+  endif
+
+  assign shippable_minor = 0
+  if show_progress
+    for item in cart.items
+      if item.requires_shipping
+        assign line_minor = item.original_line_price
+        for allocation in item.discount_allocations
+          assign line_minor = line_minor | minus: allocation.amount
+        endfor
+        if line_minor < 0
+          assign line_minor = 0
+        endif
+        assign shippable_minor = shippable_minor | plus: line_minor
+      endif
+    endfor
+  endif
+  assign remaining_minor = threshold_minor | minus: shippable_minor
+  if remaining_minor < 0
+    assign remaining_minor = 0
+  endif
+  assign progress_percent = 0
+  if show_progress
+    assign progress_percent = shippable_minor | times: 100.0 | divided_by: threshold_minor | round
+    if progress_percent > 100
+      assign progress_percent = 100
+    endif
+  endif
+  assign unlocked = false
+  if show_progress and remaining_minor == 0
+    assign unlocked = true
+  endif
+  assign remaining_money = remaining_minor | money
+-%}
+{% if show_progress %}
+  <div
+    class="cart-shipping-progress"
+    data-cart-shipping-progress
+    data-shipping-complete="{{ unlocked }}"
+    data-unlocked-message="{{ 'cart.general.shipping_progress_unlocked' | t | escape }}"
+    {{ block.shopify_attributes }}
+  >
+    <p class="cart-shipping-progress__message">
+      {% if unlocked %}
+        {{ 'cart.general.shipping_progress_unlocked' | t }}
+      {% else %}
+        {{ 'cart.general.shipping_progress_remaining' | t: amount: remaining_money }}
+      {% endif %}
+    </p>
+    <div
+      class="cart-shipping-progress__track"
+      role="progressbar"
+      aria-label="{{ 'cart.general.shipping_progress_label' | t }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ progress_percent }}"
+    >
+      <span class="cart-shipping-progress__fill" style="--cart-shipping-progress: {{ progress_percent }}%"></span>
+    </div>
+  </div>
+{% endif %}
+{% stylesheet %}
+  .cart-shipping-progress {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-family: var(--font-body-family);
+  }
+  .cart-shipping-progress__message {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  .cart-shipping-progress__track {
+    height: var(--space-2);
+    overflow: hidden;
+    border-radius: var(--radius-button);
+    background: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+  }
+  .cart-shipping-progress__fill {
+    display: block;
+    width: var(--cart-shipping-progress);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-accent);
+    transition: width var(--motion-duration-normal) var(--motion-ease);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cart-shipping-progress__fill { transition: none; }
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Cart shipping progress",
+  "tag": null,
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show shipping progress", "default": false },
+    { "type": "number", "id": "threshold", "label": "Threshold in currency units", "default": 0, "info": "Match an active free-shipping rate in Shopify. This message does not change checkout shipping rates." },
+    { "type": "text", "id": "currency_code", "label": "Currency ISO code", "info": "Show only when the cart uses this currency." },
+    { "type": "text", "id": "market_handle", "label": "Market handle (optional)", "info": "Leave blank for all markets using the selected currency." }
+  ],
+  "presets": [{ "name": "Cart shipping progress" }]
+}
+{% endschema %}

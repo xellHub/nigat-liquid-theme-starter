@@ -1,0 +1,177 @@
+<section
+  id="SlideshowLayout-{{ section.id }}"
+  class="slideshow-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--slideshow-pt:{{ section.settings.padding_top }}px;--slideshow-pb:{{ section.settings.padding_bottom }}px;"
+>
+  {% content_for 'blocks' %}
+</section>
+{% stylesheet %}.slideshow-layout{padding-block:var(--slideshow-pt) var(--slideshow-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Slideshow",
+  "tag": "section",
+  "class": "slideshow-section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "carousel" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:common.padding.bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "blocks": [
+        {
+          "type": "carousel",
+          "settings": {
+            "layout": "slideshow",
+            "slide_height": "fullscreen",
+            "autoplay": false,
+            "autoplay_speed": 5,
+            "show_navigation": true,
+            "show_indicators": true,
+            "indicator_style": "dots",
+            "indicator_position": "center",
+            "controls_layout": "split",
+            "loop": true
+          },
+          "blocks": [
+            {
+              "type": "_slideshow-full-slide",
+              "settings": {
+                "content_backdrop": "glass",
+                "content_position": "left",
+                "content_vertical_position": "middle",
+                "text_alignment": "left"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Modern Simplicity",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Elevate your everyday wardrobe with refined silhouettes and effortless styling.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop Collection",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_slideshow-full-slide",
+              "settings": {
+                "content_backdrop": "fade_horizontal",
+                "content_position": "center",
+                "content_vertical_position": "middle",
+                "text_alignment": "center"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Designed to Inspire",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sustainable materials, honest production, and enduring quality built to last.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "Discover Sustainability",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_slideshow-full-slide",
+              "settings": {
+                "content_backdrop": "card",
+                "content_position": "right",
+                "content_vertical_position": "middle",
+                "text_alignment": "left"
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The New Minimalist",
+                    "level": "h2",
+                    "size": "large"
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Timeless pieces crafted with precision for thoughtful living.</p>"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "label": "View New Arrivals",
+                    "link": "/collections/all"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Banners & Heroes"
+    }
+  ]
+}
+{% endschema %}

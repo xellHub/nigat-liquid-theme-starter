@@ -1,0 +1,59 @@
+<section
+  id="AnnouncementBar-{{ section.id }}"
+  class="announcement-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  aria-label="{{ 'sections.header.announcement' | t }}"
+>
+  <div class="announcement-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}
+  .announcement-layout {
+    min-height: var(--foundation-minimum-target-size);
+    padding-inline: var(--foundation-gutter-mobile);
+    color: var(--color-text);
+    background: var(--color-background);
+  }
+  .announcement-layout__inner {
+    display: grid;
+    min-height: inherit;
+    align-items: center;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Announcement bar",
+  "tag": "section",
+  "class": "announcement-bar-section",
+  "blocks": [{ "type": "_announcement-rotator" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        {
+          "type": "_announcement-rotator",
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Welcome to our store</p>",
+                "alignment": "center"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Information & Utility"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

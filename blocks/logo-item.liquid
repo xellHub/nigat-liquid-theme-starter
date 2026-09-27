@@ -1,0 +1,154 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{% if block.settings.image != blank %}
+{% assign logo_tag = 'div' %}
+{% if block.settings.link != blank %}{% assign logo_tag = 'a' %}{% endif %}
+<{{ logo_tag }}
+  class="{{ block.settings.foundation_custom_class | escape }} theme-logo-item theme-logo-item--{{ block.settings.size }}{% if block.settings.grayscale %} theme-logo-item--grayscale{% endif %}"
+  {% if block.settings.link != blank %}href="{{ block.settings.link }}" aria-label="{{ block.settings.label | escape }}"{% endif %}
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'responsive-image',
+    image: block.settings.image,
+    sizes: '240px',
+    class: 'theme-logo-item__image',
+    alt: block.settings.label
+  -%}
+</{{ logo_tag }}>
+{% endif %}
+{% stylesheet %}.theme-logo-item{display:grid;min-height:8rem;place-items:center;padding:var(--space-3);border-radius:var(--radius-card);background:var(--color-surface)}.theme-logo-item__image{width:auto;max-width:100%;max-height:6rem;object-fit:contain}.theme-logo-item--small .theme-logo-item__image{max-height:4rem}.theme-logo-item--large .theme-logo-item__image{max-height:8rem}.theme-logo-item--grayscale .theme-logo-item__image{filter:grayscale(1)}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Logo item",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Name",
+      "default": "Brand name"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Image size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    { "type": "checkbox", "id": "grayscale", "label": "Grayscale", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo item"
+    }
+  ]
+}
+{% endschema %}

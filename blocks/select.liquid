@@ -1,0 +1,64 @@
+{%- liquid
+  assign clean_label = block.settings.label | strip | default: 'option'
+  assign select_name = 'contact[' | append: clean_label | append: ']'
+-%}
+<label class="theme-field" {{ block.shopify_attributes }}>
+  <span>{{ block.settings.label | escape }}</span>
+  <select name="{{ select_name | escape }}">
+    {% if block.settings.placeholder != blank %}
+      <option value="" selected disabled>{{ block.settings.placeholder | escape }}</option>
+    {% endif %}
+    {% assign options = block.settings.options | newline_to_br | split: '<br />' %}
+    {% for option in options %}
+      <option value="{{ option | strip | escape }}">{{ option | strip | escape }}</option>
+    {% endfor %}
+  </select>
+</label>
+{% stylesheet %}
+  .theme-field select {
+    min-height: var(--control-height, 4.4rem);
+    padding-inline: var(--foundation-input-padding-x, var(--space-4));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input, var(--corner-radius, 4px));
+    color: var(--color-text);
+    background: var(--color-surface-raised, var(--color-background));
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+  }
+  .theme-field select:focus-visible {
+    outline: var(--foundation-focus-ring-width, 2px) solid var(--foundation-focus-outline-color, var(--color-accent));
+    outline-offset: var(--foundation-focus-ring-offset, 2px);
+    border-color: transparent;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Select",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Choose an option"
+    },
+    {
+      "type": "textarea",
+      "id": "options",
+      "label": "Options (one per line)",
+      "default": "First\nSecond\nThird"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Select an option"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Select"
+    }
+  ]
+}
+{% endschema %}

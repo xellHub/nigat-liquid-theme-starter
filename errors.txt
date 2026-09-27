@@ -1,0 +1,37 @@
+----------------------------------------------------
+ATOMIC DESIGN & SECTION COMPOSITION LINTER
+Checking 43 sections in sections
+----------------------------------------------------
+
+----------------------------------------------------
+✅ All 43/43 sections look composed (Theme Blocks + Snippets).
+Zero monolithic section violations found!
+----------------------------------------------------
+----------------------------------------------------
+COMPOSITION & THEME BLOCKS VIOLATION CHECK
+----------------------------------------------------
+✓ Audited 43 runtime sections in sections/
+✓ Audited 43 canonical sections in section-library/
+✓ Verified ZERO inline atomic settings (text, image, video, font) in sections
+✓ Audited 96 theme blocks in blocks/
+✓ Verified terminal leaf block boundaries & container schema.blocks contracts
+✓ Audited HTML5 semantic tree & verified ZERO interactive nesting around block slots
+✓ Audited single typography identity (no hardcoded font stacks or font_pickers)
+✓ Audited section group taxonomy in header-group.json and footer-group.json
+✓ Audited 43 section instances across 17 templates
+✓ Audited 411 nested theme block instances with strict parent whitelisting
+✓ Audited preset integrity across all sections and theme blocks
+✓ Scanned CSS tokens across 218 source files for hardcoded colors
+✓ Maximum nesting depth: 4 levels (Shopify limit: 8)
+  Deepest node: index.json > sections > icons-with-text (icons-with-text)/values-surface (surface)/values-grid (grid)/intentional-design (icon-with-text)/intentional-design-heading (heading)
+----------------------------------------------------
+
+SUCCESS: Zero composition errors found! All sections and blocks comply with fine-grained theme block standards.
+ATOMIC COMPOSITION AUDIT
+Audited 96 Liquid files in blocks/
+Audited 43 Liquid files in section-library/
+Audited 43 Liquid files in sections/
+[COMPOSITION] blocks/_collection-tabs.liquid: Container must render child theme blocks; a snippet wrapper alone does not make its content independently selectable.
+[PRESET] section-library/products/featured-collection-grid/featured-collection.liquid: Featured collection tabs/1 (_collection-tabs): preset uses an uncomposed container.
+[PRESET] sections/featured-collection.liquid: Featured collection tabs/1 (_collection-tabs): preset uses an uncomposed container.
+Found 3 composition violation(s). No files changed.

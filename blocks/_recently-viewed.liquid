@@ -1,0 +1,22 @@
+{%- if product != blank and product.available -%}
+  <template data-recently-card>
+    {%- assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: product.id -%}
+    <li>{% content_for 'block', type: 'product-card', id: 'product-card', closest.product: product, card_instance: card_instance %}</li>
+  </template>
+{%- endif -%}
+<ul class="recently-viewed__grid" role="list" data-recently-grid {{ block.shopify_attributes }}></ul>
+
+{% stylesheet %}
+  .recently-viewed__grid { display: grid; grid-template-columns: repeat(var(--recently-columns, 4), minmax(0, 1fr)); gap: var(--grid-gap); padding: 0; list-style: none; }
+  @media (max-width: 749px) { .recently-viewed__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Recently viewed products",
+  "tag": null,
+  "blocks": [{"type":"product-card"}],
+  "settings": [],
+  "presets": [{"name":"Recently viewed products","blocks":[{"type":"product-card","id":"product-card","static":true,"settings":{"product":"{{ closest.product }}"},"blocks":[{"type":"image","settings":{"image":"{{ closest.product.featured_image }}","link":"{{ closest.product.url }}","alt":"{{ closest.product.title }}"}},{"type":"heading","settings":{"text":"{{ closest.product.title }}","level":"h3","size":"small"}},{"type":"price","settings":{"product":"{{ closest.product }}"}},{"type":"button","settings":{"label":"View product","style":"link","link":"{{ closest.product.url }}"}}]}]}]
+}
+{% endschema %}

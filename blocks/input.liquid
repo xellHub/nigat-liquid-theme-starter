@@ -1,0 +1,186 @@
+{% # theme-check-disable UndefinedObject %}
+{%- liquid
+  assign field_name = ''
+  if block.settings.type == 'email'
+    assign field_name = 'contact[email]'
+  elsif block.settings.type == 'tel'
+    assign field_name = 'contact[phone]'
+  elsif block.settings.autocomplete == 'name'
+    assign field_name = 'contact[name]'
+  elsif block.settings.autocomplete == 'tel'
+    assign field_name = 'contact[phone]'
+  elsif block.settings.autocomplete == 'email'
+    assign field_name = 'contact[email]'
+  else
+    assign clean_label = block.settings.label | strip | default: 'note'
+    assign field_name = 'contact[' | append: clean_label | append: ']'
+  endif
+
+  assign field_value = ''
+  if form != blank
+    if block.settings.type == 'email' and form.email
+      assign field_value = form.email
+    elsif block.settings.autocomplete == 'name' and form.name
+      assign field_value = form.name
+    elsif block.settings.autocomplete == 'tel' and form.phone
+      assign field_value = form.phone
+    endif
+  endif
+  if field_value == blank and customer != blank
+    if block.settings.type == 'email' and customer.email
+      assign field_value = customer.email
+    elsif block.settings.autocomplete == 'name' and customer.name
+      assign field_value = customer.name
+    elsif block.settings.autocomplete == 'tel' and customer.phone
+      assign field_value = customer.phone
+    endif
+  endif
+
+  assign is_required = false
+  if block.settings.type == 'email'
+    assign is_required = true
+  endif
+-%}
+{% # theme-check-enable UndefinedObject %}
+<label class="theme-field" {{ block.shopify_attributes }}>
+  <span>
+    {{- block.settings.label | escape -}}
+    {%- if is_required -%}
+      <span class="field__required" aria-hidden="true">*</span>
+    {%- endif -%}
+  </span>
+  {% if block.settings.type == 'textarea' %}
+    <textarea
+      id="Field-{{ block.id }}"
+      name="{{ field_name | escape }}"
+      placeholder="{{ block.settings.placeholder | escape }}"
+      rows="5"
+      {% if is_required %}
+        required
+      {% endif %}
+    >{{ field_value | escape }}</textarea>
+  {% else %}
+    <input
+      id="Field-{{ block.id }}"
+      type="{{ block.settings.type }}"
+      name="{{ field_name | escape }}"
+      placeholder="{{ block.settings.placeholder | escape }}"
+      {% if field_value != blank %}
+        value="{{ field_value | escape }}"
+      {% endif %}
+      {% if block.settings.autocomplete != 'none' %}
+        autocomplete="{{ block.settings.autocomplete }}"
+      {% endif %}
+      {% if is_required %}
+        required
+      {% endif %}
+    >
+  {% endif %}
+</label>
+{% stylesheet %}
+  .theme-field {
+    display: grid;
+    width: 100%;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-family: var(--font-body-family);
+  }
+  .theme-field input,
+  .theme-field textarea {
+    min-height: var(--control-height, 4.4rem);
+    padding-inline: var(--foundation-input-padding-x, var(--space-4));
+    padding-block: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input, var(--corner-radius, 4px));
+    color: var(--color-text);
+    background: var(--color-surface-raised, var(--color-background));
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .theme-field input:focus-visible,
+  .theme-field textarea:focus-visible {
+    outline: var(--foundation-focus-ring-width, 2px) solid var(--foundation-focus-outline-color, var(--color-accent));
+    outline-offset: var(--foundation-focus-ring-offset, 2px);
+    border-color: transparent;
+  }
+  .theme-field .field__required {
+    color: var(--color-danger);
+    margin-left: var(--space-1);
+    font-weight: 600;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Input",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Email"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "email",
+          "label": "Email"
+        },
+        {
+          "value": "tel",
+          "label": "Telephone"
+        },
+        {
+          "value": "textarea",
+          "label": "Multi-line text"
+        }
+      ],
+      "default": "email"
+    },
+    {
+      "type": "select",
+      "id": "autocomplete",
+      "label": "Autocomplete",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "email",
+          "label": "Email"
+        },
+        {
+          "value": "name",
+          "label": "Name"
+        },
+        {
+          "value": "tel",
+          "label": "Telephone"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Input"
+    }
+  ]
+}
+{% endschema %}

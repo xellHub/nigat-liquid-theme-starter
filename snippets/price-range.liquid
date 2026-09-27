@@ -1,0 +1,172 @@
+{%- comment -%}
+  Renders modern dual-handle price range slider with real product availability histogram.
+  Accepts:
+  - filter: {Object} Shopify filter object of type 'price_range' (optional, graceful fallback)
+  - items: {Array} List of product items currently displayed (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign currency_symbol = cart.currency.symbol | default: '$'
+
+  assign max_limit = filter.range_max | money_without_currency | replace: ',', '' | round
+  if max_limit == 0 or max_limit == blank
+    assign max_limit = 2000
+  endif
+
+  assign min_val = filter.min_value.value | money_without_currency | replace: ',', '' | round
+  if min_val == blank
+    assign min_val = 0
+  endif
+
+  assign max_val = filter.max_value.value | money_without_currency | replace: ',', '' | round
+  if max_val == blank or max_val == 0
+    assign max_val = max_limit
+  endif
+
+  assign min_param = filter.min_value.param_name | default: 'filter.v.price.gte'
+  assign max_param = filter.max_value.param_name | default: 'filter.v.price.lte'
+
+  assign source_items = items
+  if source_items == blank or source_items.size == 0
+    if search.results and search.results.size > 0
+      assign source_items = search.results
+    elsif collection.products and collection.products.size > 0
+      assign source_items = collection.products
+    elsif collections.all.products.size > 0
+      assign source_items = collections.all.products
+    endif
+  endif
+
+  assign product_prices = ''
+  if source_items and source_items.size > 0
+    for item in source_items limit: 250
+      if item.object_type == blank or item.object_type == 'product'
+        assign item_price = item.price
+        if item_price == 0 and item.price_max > 0
+          assign item_price = item.price_max
+        endif
+        if item_price == 0 and item.selected_or_first_available_variant.price > 0
+          assign item_price = item.selected_or_first_available_variant.price
+        endif
+        if item_price != null
+          assign p = item_price | money_without_currency | replace: ',', '' | round
+          assign product_prices = product_prices | append: p | append: ','
+        endif
+      endif
+    endfor
+  endif
+-%}
+
+<price-range
+  class="price-range"
+  data-min-limit="0"
+  data-max-limit="{{ max_limit }}"
+  data-currency="{{ currency_symbol }}"
+  data-prices="{{ product_prices }}"
+>
+  {%- comment -%} Availability Histogram Graph & Floating Tooltips Area {%- endcomment -%}
+  <div class="price-range__graph-wrap">
+    <div class="price-range__histogram" aria-hidden="true" data-histogram>
+      {%- for i in (1..32) -%}
+        <div class="price-range__bar-slot">
+          <span class="price-range__bar-col" data-bar></span>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="price-range__tooltips-area" aria-hidden="true">
+      <div class="price-range__tooltip price-range__tooltip--min" data-tooltip-min>
+        <span class="price-range__tooltip-val" data-tooltip-text-min>
+          {{- currency_symbol }}
+          {{ min_val -}}
+        </span>
+      </div>
+      <div class="price-range__tooltip price-range__tooltip--max" data-tooltip-max>
+        <span class="price-range__tooltip-val" data-tooltip-text-max>
+          {{- currency_symbol }}
+          {{ max_val -}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Dual Range Slider Track with Handles {%- endcomment -%}
+  <div class="price-range__slider">
+    <div class="price-range__track">
+      <div class="price-range__bar" data-range-bar></div>
+    </div>
+
+    <input
+      type="range"
+      min="0"
+      max="{{ max_limit }}"
+      value="{{ min_val }}"
+      class="price-range__thumb price-range__thumb--min"
+      data-range-min
+      aria-label="{{ 'general.search.min_price' | t }}"
+    >
+    <input
+      type="range"
+      min="0"
+      max="{{ max_limit }}"
+      value="{{ max_val }}"
+      class="price-range__thumb price-range__thumb--max"
+      data-range-max
+      aria-label="{{ 'general.search.max_price' | t }}"
+    >
+  </div>
+
+  {%- comment -%} Dual Value Inputs Row (Clean 2-Column Grid with Clear Visible Numbers) {%- endcomment -%}
+  <div class="price-range__inputs-row">
+    <div class="price-range__field">
+      <label
+        for="PriceRange-From-{{ filter.param_name | default: 'price' }}"
+        class="price-range__field-label"
+      >
+        Min ({{ currency_symbol }})
+      </label>
+      <div class="price-range__box">
+        <input
+          type="number"
+          id="PriceRange-From-{{ filter.param_name | default: 'price' }}"
+          name="{{ min_param }}"
+          value="{% if filter.min_value.value %}{{ min_val }}{% endif %}"
+          placeholder="0"
+          min="0"
+          max="{{ max_limit }}"
+          class="price-range__input-val"
+          data-input-min
+          aria-label="{{ 'general.search.min_price' | t }}"
+        >
+      </div>
+    </div>
+
+    <div class="price-range__field">
+      <label
+        for="PriceRange-To-{{ filter.param_name | default: 'price' }}"
+        class="price-range__field-label"
+      >
+        Max ({{ currency_symbol }})
+      </label>
+      <div class="price-range__box">
+        <input
+          type="number"
+          id="PriceRange-To-{{ filter.param_name | default: 'price' }}"
+          name="{{ max_param }}"
+          value="{% if filter.max_value.value %}{{ max_val }}{% endif %}"
+          placeholder="{{ max_limit }}"
+          min="0"
+          max="{{ max_limit }}"
+          class="price-range__input-val"
+          data-input-max
+          aria-label="{{ 'general.search.max_price' | t }}"
+        >
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Search Button {%- endcomment -%}
+  <button type="submit" class="button button--primary button--full-width price-range__btn">
+    {{ 'general.search.search' | t }}
+  </button>
+</price-range>

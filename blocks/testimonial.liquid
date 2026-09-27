@@ -1,0 +1,205 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<figure
+  class="{{ block.settings.foundation_custom_class | escape }} theme-testimonial theme-testimonial--{{ block.settings.layout }} theme-testimonial--avatar-{{ block.settings.avatar_shape }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  <span class="theme-testimonial__mark" aria-hidden="true">“</span>
+  <div class="theme-testimonial__content">{% content_for 'blocks' %}</div>
+</figure>
+
+{% stylesheet %}
+  .theme-testimonial {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-3);
+    margin: 0;
+    padding: var(--space-5);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+  .theme-testimonial__mark {
+    color: var(--color-accent);
+    font-family: var(--font-heading-family);
+    font-size: 4.8rem;
+    line-height: 0.8;
+  }
+  .theme-testimonial__content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .theme-testimonial--image-first .theme-testimonial__content > .theme-image {
+    order: -1;
+  }
+  .theme-testimonial--avatar-round .theme-testimonial__content > .theme-image {
+    width: 8rem;
+    aspect-ratio: 1;
+    border-radius: var(--radius-full);
+  }
+  .theme-testimonial--avatar-square .theme-testimonial__content > .theme-image {
+    width: 8rem;
+    aspect-ratio: 1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Testimonial",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "text"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "badge"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "quote-first", "label": "Quote first" },
+        { "value": "image-first", "label": "Image first" }
+      ],
+      "default": "quote-first"
+    },
+    {
+      "type": "select",
+      "id": "avatar_shape",
+      "label": "Avatar shape",
+      "options": [
+        { "value": "round", "label": "Round" },
+        { "value": "square", "label": "Square" },
+        { "value": "natural", "label": "Natural" }
+      ],
+      "default": "round"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Use a focused customer quote that explains the outcome.</p>",
+            "size": "large"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Customer name",
+            "level": "h3",
+            "size": "small"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1181 @@
+{%- liquid
+  assign initial_index = section.settings.initial_slide | default: 0
+  assign total_slides = 0
+  assign has_rail_block = false
+  for block in section.blocks
+    if block.type == '_editorial-slide'
+      assign total_slides = total_slides | plus: 1
+    elsif block.type == '_editorial-rail'
+      assign has_rail_block = true
+    endif
+  endfor
+  if initial_index >= total_slides and total_slides > 0
+    assign initial_index = 0
+  endif
+-%}
+
+<section
+  id="EditorialHero-{{ section.id }}"
+  class="editorial-carousel-hero editorial-carousel section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--eh-desktop-height: {{ section.settings.desktop_height | default: 840 }}px; --eh-page-width: {{ section.settings.page_width | default: 1600 }}px; --eh-pt: {{ section.settings.padding_top | default: 0 }}px; --eh-pb: {{ section.settings.padding_bottom | default: 0 }}px;"
+  data-editorial-carousel
+  data-initial-slide="{{ initial_index }}"
+  data-autoplay="{{ section.settings.autoplay | default: false }}"
+  data-autoplay-interval="{{ section.settings.autoplay_interval | default: 6 }}"
+  aria-label="Editorial carousel hero"
+>
+  {% render 'section-background', section_id: section.id %}
+
+  <style>
+    #EditorialHero-{{ section.id }}:not([data-eh-ready]) .eh__slide:nth-child({{ initial_index | plus: 1 }}) {
+      position: relative;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+      z-index: 2;
+    }
+  </style>
+
+  {%- comment -%} Full bleed ambient background layers {%- endcomment -%}
+  <div class="eh__bg-stage" data-eh-bg-stage aria-hidden="true">
+    {%- assign slide_idx = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == '_editorial-slide' -%}
+        <div
+          class="eh__bg-layer{% if slide_idx == initial_index %} is-active{% endif %}"
+          data-eh-bg-layer
+          data-eh-bg-index="{{ slide_idx }}"
+        >
+          {%- liquid
+            assign slide_bg_img = block.settings.image
+          -%}
+          {%- if slide_bg_img != blank -%}
+            {{
+              slide_bg_img
+              | image_url: width: 2600
+              | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                widths: '750, 1100, 1600, 2200, 2600',
+                sizes: '100vw',
+                class: 'eh__bg-image'
+            }}
+          {%- else -%}
+            {%- assign hero_placeholder_index = slide_idx | modulo: 3 | plus: 1 -%}
+            {%- assign hero_placeholder_key = 'hero_' | append: hero_placeholder_index -%}
+            <div class="eh__bg-fallback">
+              {%- assign placeholder_id_prefix = section.id | append: '-' | append: block.id | append: '-background' -%}
+              {% render 'placeholder-image', variant: hero_placeholder_key, class: 'eh__bg-image', id_prefix: placeholder_id_prefix %}
+            </div>
+          {%- endif -%}
+        </div>
+        {%- assign slide_idx = slide_idx | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Ambient cinematic overlays {%- endcomment -%}
+  <div class="eh__ambient-overlay" aria-hidden="true"></div>
+  <div class="eh__bottom-gradient" aria-hidden="true"></div>
+
+  {%- comment -%} Container bounds: Slides and Rail {%- endcomment -%}
+  <div class="eh__container" data-eh-container>
+    {% content_for 'blocks' %}
+
+    {%- unless has_rail_block -%}
+      <div class="eh__bottom-bar" data-eh-rail-fallback>
+        <div class="eh__rail" aria-label="Featured product selections" data-eh-rail>
+          {%- assign slide_idx = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '_editorial-slide' -%}
+              {%- liquid
+                assign slide_card_img = block.settings.image
+              -%}
+              <div
+                class="eh__card{% if block.settings.is_cover %} eh__card--cover{% endif %}{% if slide_idx == initial_index %} is-active{% endif %}"
+                data-eh-index="{{ slide_idx }}"
+                tabindex="0"
+                role="button"
+                aria-label="{{ block.settings.card_label | default: 'Featured item' | escape }}"
+                aria-current="{% if slide_idx == initial_index %}true{% else %}false{% endif %}"
+              >
+                <div class="eh__card-media">
+                  {%- if slide_card_img != blank -%}
+                    {% render 'responsive-image',
+                      image: slide_card_img,
+                      max_width: 160,
+                      widths: '80, 120, 160',
+                      sizes: '118px',
+                      class: 'eh__card-img',
+                      alt: block.settings.card_label,
+                      loading: 'eager',
+                      no_wrapper: true
+                    %}
+                  {%- else -%}
+                    {%- assign hero_placeholder_index = slide_idx | modulo: 3 | plus: 1 -%}
+                    {%- assign hero_placeholder_key = 'hero_' | append: hero_placeholder_index -%}
+                    {%- assign placeholder_id_prefix = section.id | append: '-' | append: block.id | append: '-thumbnail' -%}
+                    {% render 'placeholder-image', variant: hero_placeholder_key, class: 'eh__card-img', id_prefix: placeholder_id_prefix %}
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- assign slide_idx = slide_idx | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endunless -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .editorial-carousel {
+    position: relative;
+    width: 100%;
+    min-height: clamp(700px, var(--eh-desktop-height, 840px), 95vh);
+    padding-top: var(--eh-pt, 0);
+    padding-bottom: var(--eh-pb, 0);
+    color: var(--color-on-media);
+    background-color: var(--color-background);
+    overflow: hidden;
+    container-type: inline-size;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y pinch-zoom;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .editorial-carousel.is-dragging {
+    cursor: grabbing;
+  }
+
+  /* Prevent transitions on initial load to eliminate late appearance / FOUC */
+  .editorial-carousel:not([data-eh-ready]) .eh__slide,
+  .editorial-carousel:not([data-eh-ready]) .eh__card,
+  .editorial-carousel:not([data-eh-ready]) .eh__bg-layer {
+    transition: none !important;
+  }
+
+  /* Full bleed ambient background layers */
+  .editorial-carousel .eh__bg-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .editorial-carousel .eh__bg-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+      visibility 0.55s;
+  }
+  .editorial-carousel .eh__bg-layer.is-active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+  }
+  .editorial-carousel .eh__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .editorial-carousel .eh__bg-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+  }
+
+  /* Ambient cinematic overlays */
+  .editorial-carousel .eh__ambient-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-media-overlay) 86%, transparent) 0%,
+      color-mix(in srgb, var(--color-media-overlay) 56%, transparent) 30%,
+      color-mix(in srgb, var(--color-media-overlay) 20%, transparent) 56%,
+      color-mix(in srgb, var(--color-media-overlay) 3%, transparent) 80%,
+      color-mix(in srgb, var(--color-media-overlay) 22%, transparent) 100%
+    );
+    pointer-events: none;
+  }
+  .editorial-carousel .eh__bottom-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 240px;
+    z-index: 3;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-media-overlay) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-media-overlay) 28%, transparent) 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Container bounds */
+  .editorial-carousel .eh__container {
+    position: relative;
+    z-index: 5;
+    width: min(100%, var(--eh-page-width, 1600px));
+    min-height: inherit;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 100%;
+    padding: clamp(36px, 5vh, 64px) clamp(24px, 4.5vw, 72px) clamp(28px, 4vh, 44px);
+    flex: 1;
+  }
+
+  .editorial-carousel .eh__slides-wrapper,
+  .editorial-carousel .eh__slide {
+    grid-row: 1;
+    grid-column: 1;
+    margin-top: clamp(8px, 2vh, 32px);
+  }
+
+  .editorial-carousel .eh__slides {
+    position: relative;
+    width: 100%;
+    min-height: 220px;
+  }
+
+  /* Bottom Rail & Controls */
+  .editorial-carousel .eh__bottom-bar {
+    grid-row: 2;
+    grid-column: 1;
+    align-self: end;
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: clamp(28px, 4vh, 60px);
+    padding-bottom: 4px;
+  }
+  .editorial-carousel .eh__rail {
+    display: flex;
+    align-items: center;
+    gap: var(--eh-card-gap, var(--grid-gap, 14px));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 14px 8px;
+    margin-block: -8px;
+  }
+  .editorial-carousel .eh__rail::-webkit-scrollbar {
+    display: none;
+  }
+  .editorial-carousel .eh__card {
+    position: relative;
+    flex: 0 0 var(--eh-card-size, clamp(96px, 8vw, 118px));
+    width: var(--eh-card-size, clamp(96px, 8vw, 118px));
+    height: var(--eh-card-size, clamp(96px, 8vw, 118px));
+    border-radius: var(--eh-card-radius, var(--radius-card, 18px));
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    overflow: hidden;
+    cursor: pointer;
+    scroll-snap-align: start;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transform: scale(0.88);
+    transform-origin: center center;
+    z-index: 1;
+    text-decoration: none;
+  }
+  .editorial-carousel .eh__card:hover:not(.is-active) {
+    opacity: 1;
+    transform: scale(0.94) translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-primary, var(--color-accent)) 40%, var(--color-border));
+  }
+  .editorial-carousel .eh__card.is-active {
+    opacity: 1;
+    border-color: var(--color-primary, var(--color-accent));
+    transform: scale(1.18);
+    z-index: 4;
+  }
+  .editorial-carousel .eh__card-media {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .editorial-carousel .eh__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 749px) {
+    .editorial-carousel .eh__container {
+      padding: 32px 18px 24px;
+      justify-content: flex-start;
+      gap: 32px;
+    }
+    .editorial-carousel .eh__bottom-bar {
+      margin-top: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .editorial-carousel .eh__card,
+    .editorial-carousel .eh__bg-layer {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    function initEditorialHero() {
+      const root = document.getElementById('EditorialHero-{{ section.id }}');
+      if (!root) return;
+
+      if (root._ehCleanup) {
+        root._ehCleanup();
+      }
+
+      const bgStage = root.querySelector('[data-eh-bg-stage]');
+      const slidesHost =
+        root.querySelector('[data-eh-container]') || root.querySelector('[data-eh-slides]');
+      const rail = root.querySelector('[data-eh-rail]');
+
+      if (!slidesHost) return;
+
+      let slides = [];
+      let bgLayers = [];
+      let cards = [];
+      let activeIndex = Number.parseInt(root.dataset.initialSlide, 10) || 0;
+      let hasDragged = false;
+      let autoplayTimer = null;
+      const isAutoplay = root.dataset.autoplay === 'true';
+      const autoplayInterval = (Number.parseFloat(root.dataset.autoplayInterval) || 6) * 1000;
+
+      const focusSlide = (index) => {
+        const activeSlide = slides[index];
+        if (!activeSlide) return;
+        activeSlide.focus({ preventScroll: true });
+        const rect = root.getBoundingClientRect();
+        if (rect.bottom < 100 || rect.top > window.innerHeight - 100) {
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+
+      const activate = (index, shouldScroll = false) => {
+        if (!slides.length) return;
+        const total = slides.length;
+        const prevIndex = activeIndex;
+        if (index < 0) index = total - 1;
+        if (index >= total) index = 0;
+        activeIndex = index;
+
+        const isWrapping =
+          (prevIndex === 0 && activeIndex === total - 1) ||
+          (prevIndex === total - 1 && activeIndex === 0);
+
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('is-active', i === activeIndex);
+        });
+
+        const activeCards =
+          cards.length === total ? cards : [...(rail ? rail.querySelectorAll('.eh__card') : [])];
+        activeCards.forEach((card, i) => {
+          const isActive = i === activeIndex;
+          card.classList.toggle('is-active', isActive);
+          card.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+
+        const activeBgs =
+          bgLayers.length === total
+            ? bgLayers
+            : [...(bgStage ? bgStage.querySelectorAll('.eh__bg-layer') : [])];
+        activeBgs.forEach((layer, i) => {
+          layer.classList.toggle('is-active', i === activeIndex);
+        });
+
+        if (shouldScroll && rail && activeCards[activeIndex]) {
+          const activeCard = activeCards[activeIndex];
+          const targetLeft =
+            activeCard.offsetLeft - (rail.clientWidth - activeCard.offsetWidth) / 2;
+          if (isWrapping) {
+            rail.style.scrollBehavior = 'auto';
+            rail.scrollLeft = targetLeft;
+            requestAnimationFrame(() => {
+              rail.style.scrollBehavior = '';
+            });
+          } else {
+            rail.scrollTo({
+              left: targetLeft,
+              behavior: 'smooth',
+            });
+          }
+        }
+      };
+
+      const rebuild = (forceRemount = false) => {
+        slides = [...slidesHost.querySelectorAll('[data-eh-slide]')];
+
+        if (!slides.length) {
+          if (bgStage) bgStage.innerHTML = '';
+          if (rail) rail.innerHTML = '';
+          return;
+        }
+
+        if (rail) rail.style.display = '';
+
+        if (activeIndex >= slides.length) {
+          activeIndex = Math.max(0, slides.length - 1);
+        }
+
+        const existingCards = rail ? [...rail.querySelectorAll('.eh__card')] : [];
+        const existingBgLayers = bgStage ? [...bgStage.querySelectorAll('.eh__bg-layer')] : [];
+
+        const canReuseDom =
+          !forceRemount &&
+          existingCards.length === slides.length &&
+          existingBgLayers.length === slides.length;
+
+        if (!canReuseDom) {
+          if (bgStage) bgStage.innerHTML = '';
+          if (rail) rail.innerHTML = '';
+
+          bgLayers = [];
+          cards = [];
+
+          slides.forEach((slide, i) => {
+            slide.dataset.ehSlideIndex = String(i);
+
+            // Mount background layer from slide template
+            const bgTpl = slide.querySelector('template[data-eh-bg-template]');
+            if (bgTpl && bgStage) {
+              const bgClone = bgTpl.content.firstElementChild?.cloneNode(true);
+              if (bgClone) {
+                bgClone.dataset.ehBgIndex = String(i);
+                if (i === activeIndex) bgClone.classList.add('is-active');
+                bgStage.appendChild(bgClone);
+                bgLayers.push(bgClone);
+              }
+            }
+
+            // Mount rail card from slide template
+            if (rail) {
+              const card = document.createElement('div');
+              card.className =
+                'eh__card' + (slide.dataset.ehCardCover === 'true' ? ' eh__card--cover' : '');
+              card.dataset.ehIndex = String(i);
+              card.tabIndex = 0;
+              card.setAttribute('role', 'button');
+              card.setAttribute('aria-label', slide.dataset.ehCardLabel || 'Slide ' + (i + 1));
+              card.setAttribute('aria-current', i === activeIndex ? 'true' : 'false');
+              if (i === activeIndex) card.classList.add('is-active');
+
+              const cardTpl = slide.querySelector('template[data-eh-card-template]');
+              if (cardTpl) {
+                const cardContent = cardTpl.content.cloneNode(true);
+                card.appendChild(cardContent);
+                if (window.nigat && window.nigat.initThemeImageLoaders) {
+                  window.nigat.initThemeImageLoaders(card);
+                }
+              }
+
+              rail.appendChild(card);
+              cards.push(card);
+            }
+
+            // Set slide active state
+            slide.classList.toggle('is-active', i === activeIndex);
+          });
+        } else {
+          // Re-use pre-rendered DOM directly for instantaneous zero-flash loading
+          cards = existingCards;
+          bgLayers = existingBgLayers;
+
+          slides.forEach((slide, i) => {
+            slide.dataset.ehSlideIndex = String(i);
+            slide.classList.toggle('is-active', i === activeIndex);
+          });
+
+          cards.forEach((card, i) => {
+            card.dataset.ehIndex = String(i);
+            card.classList.toggle('is-active', i === activeIndex);
+            card.setAttribute('aria-current', i === activeIndex ? 'true' : 'false');
+          });
+
+          bgLayers.forEach((layer, i) => {
+            layer.dataset.ehBgIndex = String(i);
+            layer.classList.toggle('is-active', i === activeIndex);
+          });
+        }
+
+        // Center active card initially
+        if (rail && (cards[activeIndex] || existingCards[activeIndex])) {
+          const activeCard = cards[activeIndex] || existingCards[activeIndex];
+          rail.scrollLeft = activeCard.offsetLeft - (rail.clientWidth - activeCard.offsetWidth) / 2;
+        }
+
+        requestAnimationFrame(() => {
+          if (rail && (cards[activeIndex] || existingCards[activeIndex])) {
+            const activeCard = cards[activeIndex] || existingCards[activeIndex];
+            rail.scrollLeft =
+              activeCard.offsetLeft - (rail.clientWidth - activeCard.offsetWidth) / 2;
+          }
+          root.dataset.ehReady = 'true';
+        });
+      };
+
+      // Rail event delegation: guarantees responsive navigation without per-card listener churn
+      const onRailClick = (e) => {
+        const card = e.target.closest('.eh__card');
+        if (!card || (rail && !rail.contains(card))) return;
+        const index = Number.parseInt(card.dataset.ehIndex, 10);
+        if (Number.isNaN(index)) return;
+        e.preventDefault();
+        activate(index, false);
+        focusSlide(index);
+        restartAutoplay();
+      };
+
+      const onRailKeyDown = (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const card = e.target.closest('.eh__card');
+        if (!card || (rail && !rail.contains(card))) return;
+        const index = Number.parseInt(card.dataset.ehIndex, 10);
+        if (Number.isNaN(index)) return;
+        e.preventDefault();
+        activate(index, false);
+        focusSlide(index);
+        restartAutoplay();
+      };
+
+      if (rail) {
+        rail.addEventListener('click', onRailClick);
+        rail.addEventListener('keydown', onRailKeyDown);
+      }
+
+      // Initial build (reuses server-rendered DOM for instantaneous load)
+      rebuild(false);
+
+      // MutationObserver: react strictly when slides are added, removed, or their data attributes change
+      let rebuildScheduled = false;
+      const scheduleRebuild = () => {
+        if (rebuildScheduled) return;
+        rebuildScheduled = true;
+        requestAnimationFrame(() => {
+          rebuildScheduled = false;
+          rebuild(true);
+        });
+      };
+
+      const isSlideMutation = (node) =>
+        node.nodeType === 1 &&
+        (node.matches?.('[data-eh-slide]') || node.querySelector?.('[data-eh-slide]'));
+
+      const observer = new MutationObserver((mutations) => {
+        let shouldRebuild = false;
+        for (const m of mutations) {
+          // Never react to changes occurring inside the rail container
+          if (m.target.closest?.('[data-eh-rail-block], [data-eh-rail]')) continue;
+
+          if (m.type === 'childList') {
+            const hasSlideChange = [...m.addedNodes, ...m.removedNodes].some(isSlideMutation);
+            if (hasSlideChange) {
+              shouldRebuild = true;
+              break;
+            }
+          } else if (m.type === 'attributes') {
+            if (m.target.matches?.('[data-eh-slide]')) {
+              shouldRebuild = true;
+              break;
+            }
+          }
+        }
+        if (shouldRebuild) {
+          scheduleRebuild();
+        }
+      });
+
+      observer.observe(slidesHost, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: [
+          'data-eh-card-label',
+          'data-eh-card-bg',
+          'data-eh-card-cover',
+          'data-eh-card-link',
+        ],
+      });
+
+      // Navigation controls
+      const onPrev = () => {
+        activate(activeIndex - 1, true);
+        restartAutoplay();
+      };
+      const onNext = () => {
+        activate(activeIndex + 1, true);
+        restartAutoplay();
+      };
+      const onKeyDown = (e) => {
+        if (e.key === 'ArrowLeft') {
+          activate(activeIndex - 1, true);
+          restartAutoplay();
+        } else if (e.key === 'ArrowRight') {
+          activate(activeIndex + 1, true);
+          restartAutoplay();
+        }
+      };
+
+      root.addEventListener('keydown', onKeyDown);
+
+      // Pointer drag interaction for slides (excludes all controls and navigation rail)
+      let isPointerDown = false;
+      let startX = 0;
+      let startY = 0;
+      let diffX = 0;
+
+      const onPointerDown = (e) => {
+        if (
+          e.target.closest(
+            'button, a, input, select, textarea, [data-eh-rail], [data-eh-rail-block], .eh__card'
+          )
+        )
+          return;
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+
+        isPointerDown = true;
+        hasDragged = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        diffX = 0;
+      };
+
+      const onPointerMove = (e) => {
+        if (!isPointerDown) return;
+        diffX = e.clientX - startX;
+        const diffY = e.clientY - startY;
+
+        if (!hasDragged && Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 8) {
+          isPointerDown = false;
+          root.classList.remove('is-dragging');
+          return;
+        }
+
+        if (Math.abs(diffX) > 8) {
+          hasDragged = true;
+          root.classList.add('is-dragging');
+        }
+      };
+
+      const onPointerUp = () => {
+        if (!isPointerDown) return;
+        isPointerDown = false;
+        root.classList.remove('is-dragging');
+
+        if (hasDragged && Math.abs(diffX) > 40) {
+          if (diffX < 0) {
+            activate(activeIndex + 1, true);
+          } else {
+            activate(activeIndex - 1, true);
+          }
+          restartAutoplay();
+        }
+
+        setTimeout(() => {
+          hasDragged = false;
+        }, 50);
+      };
+
+      root.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+
+      // Autoplay logic
+      const startAutoplay = () => {
+        if (!isAutoplay || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        stopAutoplay();
+        autoplayTimer = setInterval(() => {
+          activate(activeIndex + 1, true);
+        }, autoplayInterval);
+      };
+
+      const stopAutoplay = () => {
+        if (autoplayTimer) {
+          clearInterval(autoplayTimer);
+          autoplayTimer = null;
+        }
+      };
+
+      const restartAutoplay = () => {
+        stopAutoplay();
+        startAutoplay();
+      };
+
+      startAutoplay();
+      root.addEventListener('pointerenter', stopAutoplay);
+      root.addEventListener('pointerleave', startAutoplay);
+
+      // Shopify Theme Editor events
+      const onBlockSelect = (e) => {
+        const target = e.target;
+        if (!root.contains(target)) return;
+        const slide = target.closest('[data-eh-slide]');
+        if (slide) {
+          rebuild();
+          const currentSlides = [...slidesHost.querySelectorAll('[data-eh-slide]')];
+          const slideIndex = currentSlides.indexOf(slide);
+          if (slideIndex !== -1) {
+            activate(slideIndex, true);
+            focusSlide(slideIndex);
+            restartAutoplay();
+          }
+        }
+      };
+
+      document.addEventListener('shopify:block:select', onBlockSelect);
+      document.addEventListener('shopify:block:deselect', scheduleRebuild);
+      document.addEventListener('shopify:section:select', scheduleRebuild);
+      document.addEventListener('shopify:section:reorder', scheduleRebuild);
+
+      // Cleanup registration
+      root._ehCleanup = () => {
+        observer.disconnect();
+        stopAutoplay();
+        if (rail) {
+          rail.removeEventListener('click', onRailClick);
+          rail.removeEventListener('keydown', onRailKeyDown);
+        }
+        root.removeEventListener('pointerenter', stopAutoplay);
+        root.removeEventListener('pointerleave', startAutoplay);
+        root.removeEventListener('keydown', onKeyDown);
+        root.removeEventListener('pointerdown', onPointerDown);
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+        window.removeEventListener('pointercancel', onPointerUp);
+        document.removeEventListener('shopify:block:select', onBlockSelect);
+        document.removeEventListener('shopify:block:deselect', scheduleRebuild);
+        document.removeEventListener('shopify:section:select', scheduleRebuild);
+        document.removeEventListener('shopify:section:reorder', scheduleRebuild);
+      };
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initEditorialHero);
+    } else {
+      initEditorialHero();
+    }
+
+    document.addEventListener('shopify:section:load', (e) => {
+      if (!e.target) return;
+      if (
+        e.target.id === 'EditorialHero-{{ section.id }}' ||
+        e.target.querySelector?.('#EditorialHero-{{ section.id }}') ||
+        (e.target.id && e.target.id.includes('{{ section.id }}'))
+      ) {
+        initEditorialHero();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', (e) => {
+      if (!e.target) return;
+      if (
+        e.target.id === 'EditorialHero-{{ section.id }}' ||
+        e.target.querySelector?.('#EditorialHero-{{ section.id }}') ||
+        (e.target.id && e.target.id.includes('{{ section.id }}'))
+      ) {
+        const root = document.getElementById('EditorialHero-{{ section.id }}');
+        root?._ehCleanup?.();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Editorial carousel hero",
+  "tag": "section",
+  "class": "editorial-carousel-hero-section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "_editorial-slide"
+    },
+    {
+      "type": "_editorial-rail"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "badge"
+    },
+    {
+      "type": "eyebrow"
+    },
+    {
+      "type": "link"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 600,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 840
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1600
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "initial_slide",
+      "label": "Initial active slide",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Change slides every",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial carousel hero",
+      "settings": {
+        "desktop_height": 840,
+        "page_width": 1600,
+        "initial_slide": 3,
+        "autoplay": false,
+        "autoplay_interval": 6
+      },
+      "blocks": [
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Signature Leather Lounge",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted for enduring comfort",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Supple leather and timeless silhouettes designed to anchor your space with quiet confidence.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Lounge",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Modern Barstool",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Precision lines in petrol blue",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Elevated proportions meet ergonomic contouring for contemporary dining and living spaces.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Seating",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Accent Chair",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Sculptural forms with lasting character",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Hand-finished upholstery crafted with tactile warmth that deepens with every passing season.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "View Accents",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Living Room Icons",
+            "is_cover": true
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Made for the moments between",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Living",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Sculptural Lounge",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "A softer place to land",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Relaxed proportions and supple finishes bring an effortless warmth to your everyday space.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Comfort",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "High Stool",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Modern simplicity in form",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Stripped of excess, defined by purpose — handcrafted to endure everyday living.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Studio",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Minimalist Chair",
+            "is_cover": false
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Designed to stay in memory",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Every seam and curve shaped by heritage woodworking and mindful material selection.</p>",
+                "color_role": "on_media"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop Icons",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-rail",
+          "settings": {
+            "card_size": 118,
+            "card_radius": 18,
+            "card_gap": 14,
+            "image_fit": "contain",
+            "accessibility_label": "Featured product selections"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,96 @@
+<div class="resource-collection-index" {{ block.shopify_attributes }}>
+  <div class="resource-collection-index__header">
+    {% content_for 'blocks' %}
+  </div>
+  <ul class="resource-collection-index__grid" role="list">
+    {% for collection in collections %}
+      <li>
+        <a class="resource-collection-index__card" href="{{ collection.url }}">
+          <div class="resource-collection-index__media">
+            {% if collection.featured_image %}
+              {{
+                collection.featured_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: '(min-width: 750px) 33vw, 50vw',
+                  widths: '300, 450, 600, 800',
+                  alt: collection.title
+              }}
+            {% else %}
+              {% render 'placeholder-image', variant: 'collection_1' %}
+            {% endif %}
+          </div>
+          <h2>{{ collection.title | escape }}</h2>
+          <p>{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</p>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% stylesheet %}
+  .resource-collection-index__title {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+  }
+  .resource-collection-index__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .resource-collection-index__card {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .resource-collection-index__media {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-media);
+    background: var(--color-surface);
+  }
+  .resource-collection-index__media img,
+  .resource-collection-index__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .resource-collection-index__card h2 {
+    margin: var(--space-3) 0 var(--space-1);
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+  }
+  .resource-collection-index__card p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+  @container (max-width: 749px) {
+    .resource-collection-index__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Collection index",
+  "tag": null,
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "button" }, { "type": "@app" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection index",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Collections"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

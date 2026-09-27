@@ -1,0 +1,204 @@
+{% liquid
+  assign bg_color = block.settings.background_color | default: 'var(--color-surface)'
+  assign text_color = block.settings.text_color | default: 'var(--color-text)'
+  assign current_slide = block.settings.slide_index | default: 1
+%}
+<div
+  class="ssi__slide"
+  id="ssi-slide-{{ block.id }}"
+  style="--slide-bg:{{ bg_color }};--slide-text:{{ text_color }};{% if block.settings.text_color != blank %}--color-text:{{ text_color }};{% endif %}"
+  data-index="0"
+  role="group"
+  aria-roledescription="slide"
+  aria-label="{{ block.settings.heading | default: 'Promotional slide' | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ssi__card">
+    <div class="ssi__content">
+      {% content_for 'blocks' %}
+      {%- if block.blocks.size == 0 -%}
+        {% render 'section-header',
+          eyebrow: 'Blend Beauty In You',
+          heading: 'Get the skin you want to feel',
+          heading_size: 'xlarge',
+          alignment: 'left'
+        %}
+        <a href="{{ routes.all_products_collection_url }}" class="ssi__button"> Shop Now </a>
+      {%- endif -%}
+    </div>
+    <div class="ssi__media">
+      {% if block.settings.image != blank %}
+        {{
+          block.settings.image
+          | image_url: width: 1400
+          | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1400', class: 'ssi__image', alt: ''
+        }}
+      {% else %}
+        {% render 'slideshow-inset-demo-svg', slide_index: current_slide, title: 'Slide image' %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ssi__slide {
+    flex: 0 0 min(86vw, 1240px);
+    min-width: min(86vw, 1240px);
+    width: min(86vw, 1240px);
+    scroll-snap-align: center;
+    border-radius: var(--carousel-radius, 28px);
+    background-color: var(--slide-bg);
+    color: var(--slide-text);
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    transition:
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .ssi__slide {
+      flex: 0 0 92vw;
+      min-width: 92vw;
+      width: 92vw;
+    }
+  }
+
+  .ssi__card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: clamp(380px, 48vw, 530px);
+    height: 100%;
+    align-items: stretch;
+  }
+
+  @media (max-width: 900px) {
+    .ssi__card {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+
+  .ssi__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(32px, 5vw, 64px);
+    z-index: 2;
+    position: relative;
+  }
+
+  .ssi__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: var(--radius-button, 999px);
+    background-color: var(--color-button, var(--color-accent));
+    color: var(--color-button-text, var(--color-accent-text));
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+    margin-top: 24px;
+  }
+
+  .ssi__button:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+
+  .ssi__media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    overflow: hidden;
+  }
+
+  .ssi__image,
+  .ssi__media-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Inset slide",
+  "tag": null,
+  "blocks": [
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "button" },
+    { "type": "text" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "icon" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "slide_index",
+      "label": "Demo image index",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Card background color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inset slide",
+      "blocks": [
+        {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Blend Beauty In You"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Get the skin you want to feel",
+            "level": "h2",
+            "size": "large"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "/collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

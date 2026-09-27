@@ -1,0 +1,192 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign surface_padding = '0'
+  case block.settings.padding
+    when 'small'
+      assign surface_padding = 'var(--space-3)'
+    when 'medium'
+      assign surface_padding = 'var(--space-5)'
+    when 'large'
+      assign surface_padding = 'var(--space-7)'
+    when 'custom'
+      assign surface_padding = block.settings.custom_padding | append: 'px'
+  endcase
+  assign surface_radius = 'var(--radius-card)'
+  if block.settings.radius == 'none'
+    assign surface_radius = '0px'
+  elsif block.settings.radius == 'custom'
+    assign surface_radius = block.settings.custom_radius | append: 'px'
+  endif
+-%}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-surface theme-surface--{{ block.settings.shade }} theme-surface--border-{{ block.settings.border }} theme-surface--shadow-{{ block.settings.shadow }}{% if block.settings.hover_elevate %} theme-surface--hover-elevate{% endif %}"
+  style="--surface-padding:{{ surface_padding }};--surface-radius:{{ surface_radius }};--surface-border-width:{{ block.settings.border_width }}px;{% if block.settings.background != blank %}--surface-background:{{ block.settings.background }};{% endif %}{% if block.settings.border_color != blank %}--surface-border-color:{{ block.settings.border_color }};{% endif %}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Surface",
+  "tag": null,
+  "blocks": [
+    { "type": "group" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "image" },
+    { "type": "card" },
+    { "type": "gradient-card" },
+    { "type": "grid" },
+    { "type": "icon-with-text" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "shade",
+      "label": "Shade",
+      "options": [
+        { "value": "canvas", "label": "Canvas" },
+        { "value": "subtle", "label": "Subtle" },
+        { "value": "raised", "label": "Raised" },
+        { "value": "overlay", "label": "Overlay" }
+      ],
+      "default": "subtle"
+    },
+    { "type": "color", "id": "background", "label": "Custom background" },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "Border",
+      "options": [
+        { "value": "auto", "label": "Automatic" },
+        { "value": "on", "label": "On" },
+        { "value": "off", "label": "Off" }
+      ],
+      "default": "auto"
+    },
+    { "type": "color", "id": "border_color", "label": "Custom border color" },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "shadow",
+      "label": "Shadow",
+      "options": [
+        { "value": "auto", "label": "Automatic" },
+        { "value": "none", "label": "None" },
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "radius",
+      "label": "Radius",
+      "options": [
+        { "value": "token", "label": "Theme default" },
+        { "value": "none", "label": "None" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "token"
+    },
+    {
+      "type": "range",
+      "id": "custom_radius",
+      "label": "Custom radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "padding",
+      "label": "Padding",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "custom_padding",
+      "label": "Custom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    { "type": "checkbox", "id": "hover_elevate", "label": "Elevate on hover", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        { "value": "all", "label": "All devices" },
+        { "value": "mobile", "label": "Mobile only" },
+        { "value": "desktop", "label": "Desktop only" }
+      ],
+      "default": "all"
+    },
+    { "type": "text", "id": "foundation_custom_class", "label": "Custom class" },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    { "type": "text", "id": "foundation_anchor_id", "label": "Anchor ID" }
+  ],
+  "presets": [{ "name": "Surface", "blocks": [{ "type": "text" }] }]
+}
+{% endschema %}

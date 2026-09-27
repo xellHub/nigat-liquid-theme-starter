@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "blocks": {
+        "content": {
+          "type": "_blog-resource",
+          "settings": {}
+        }
+      },
+      "block_order": ["content"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "header",
+  "name": "t:section_groups.header.name",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "rotator": {
+          "type": "_announcement-rotator",
+          "settings": {
+            "autoplay": true,
+            "speed": 5
+          },
+          "blocks": {
+            "announcement": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Free shipping on orders over $75</p>",
+                "alignment": "center"
+              }
+            }
+          },
+          "block_order": ["announcement"]
+        }
+      },
+      "block_order": ["rotator"],
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": {},
+      "blocks": {
+        "content": {
+          "type": "_header-content",
+          "settings": {}
+        }
+      },
+      "block_order": ["content"]
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

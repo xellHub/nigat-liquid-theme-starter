@@ -1,0 +1,202 @@
+{
+  "sections": {
+    "contact-form": {
+      "type": "contact-form",
+      "blocks": {
+        "aside": {
+          "type": "_contact-form-aside",
+          "blocks": {
+            "aside_heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Contact us",
+                "level": "h1",
+                "size": "large"
+              }
+            },
+            "aside_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Choose a subject, then describe the issue in your own words. We'll use the email address you provide to follow up.</p>"
+              }
+            },
+            "aside_box": {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "gap": "3",
+                "padding": "5",
+                "surface": "surface",
+                "border": "on"
+              },
+              "blocks": {
+                "box_heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Before you send",
+                    "level": "h4",
+                    "size": "small"
+                  }
+                },
+                "box_note_1": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "mail",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": {
+                    "box_note_1_text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Add links, order numbers, and enough detail for our team to locate the issue promptly.</p>"
+                      }
+                    }
+                  },
+                  "block_order": ["box_note_1_text"]
+                },
+                "box_note_2": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "clock",
+                    "media_position": "side",
+                    "alignment": "left"
+                  },
+                  "blocks": {
+                    "box_note_2_text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Inquiries are reviewed and answered within 24–48 business hours.</p>"
+                      }
+                    }
+                  },
+                  "block_order": ["box_note_2_text"]
+                },
+                "box_email": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Prefer email? Send directly to <a href=\"mailto:support@example.com\">support@example.com</a>.</p>"
+                  }
+                },
+                "box_faq": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Frequently asked questions",
+                    "link": "/pages/faq",
+                    "style": "link",
+                    "icon": "arrow-right"
+                  }
+                }
+              },
+              "block_order": ["box_heading", "box_note_1", "box_note_2", "box_email", "box_faq"]
+            }
+          },
+          "block_order": ["aside_heading", "aside_text", "aside_box"],
+          "settings": {}
+        },
+        "form": {
+          "type": "_contact-form-content",
+          "blocks": {
+            "name_email_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": {
+                "field_name": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Name",
+                    "type": "text",
+                    "autocomplete": "name",
+                    "placeholder": "Name"
+                  }
+                },
+                "field_email": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Email",
+                    "type": "email",
+                    "autocomplete": "email",
+                    "placeholder": "Email"
+                  }
+                }
+              },
+              "block_order": ["field_name", "field_email"]
+            },
+            "subject_phone_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "gap": "3"
+              },
+              "blocks": {
+                "field_subject": {
+                  "type": "select",
+                  "settings": {
+                    "label": "Subject",
+                    "options": "General question\nOrder & shipping\nProduct support\nReturns & exchanges\nPartnership & business\nOther",
+                    "placeholder": "Select a subject"
+                  }
+                },
+                "field_phone": {
+                  "type": "input",
+                  "settings": {
+                    "label": "Phone number",
+                    "type": "tel",
+                    "autocomplete": "tel",
+                    "placeholder": "Phone number"
+                  }
+                }
+              },
+              "block_order": ["field_subject", "field_phone"]
+            },
+            "field_body": {
+              "type": "textarea",
+              "settings": {
+                "label": "Comment",
+                "placeholder": "Comment",
+                "rows": 6,
+                "hint": "Please provide as much detail as possible."
+              }
+            },
+            "footer_row": {
+              "type": "group",
+              "settings": {
+                "direction": "row",
+                "justify": "between",
+                "alignment": "center",
+                "gap": "3"
+              },
+              "blocks": {
+                "reply_note": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Inquiries are answered within 24–48 hours.</p>"
+                  }
+                },
+                "submit_button": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Send",
+                    "style": "primary",
+                    "icon": "arrow-right"
+                  }
+                }
+              },
+              "block_order": ["reply_note", "submit_button"]
+            }
+          },
+          "block_order": ["name_email_row", "subject_phone_row", "field_body", "footer_row"],
+          "settings": {}
+        }
+      },
+      "block_order": ["aside", "form"],
+      "settings": {
+        "color_scheme": "bare-light"
+      }
+    }
+  },
+  "order": ["contact-form"]
+}

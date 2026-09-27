@@ -1,0 +1,362 @@
+<div
+  id="EditorialTriptych-{{ block.id }}"
+  class="editorial-triptych"
+  style="--et-desktop-height:{{ block.settings.desktop_height }};--et-mobile-height:{{ block.settings.mobile_height }};--et-columns:3;--et-divider:color-mix(in srgb,var(--color-accent-text) 40%,transparent);--padding-top:0;--padding-bottom:0;--overlay-opacity:{{ block.settings.overlay_opacity | divided_by: 100.0 }};"
+  data-section-type="editorial-triptych"
+  {{ block.shopify_attributes }}
+>
+  <div class="et__grid" role="region" aria-label="Featured collections and highlights">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+<style>
+  #EditorialTriptych-{{ block.id }} {
+    padding-top: var(--padding-top, 0px);
+    padding-bottom: var(--padding-bottom, 0px);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #EditorialTriptych-{{ block.id }}.editorial-triptych--full {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--et-columns, 3), 1fr);
+    width: 100%;
+    height: var(--et-desktop-height, 700px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: var(--color-text);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__panel {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__panel:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--et-divider, color-mix(in srgb, var(--color-accent-text) 40%, transparent));
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__panel:hover .et__image {
+    transform: scale(1.04);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-shadow) 72%, transparent) 0%,
+      color-mix(in srgb, var(--color-shadow) calc(var(--overlay-opacity, 0.25) * 120%), transparent) 38%,
+      color-mix(in srgb, var(--color-shadow) calc(var(--overlay-opacity, 0.25) * 40%), transparent) 65%,
+      color-mix(in srgb, var(--color-shadow) 15%, transparent) 100%
+    );
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__content {
+    position: relative;
+    z-index: 4;
+    padding: clamp(32px, 4.5vw, 54px) clamp(20px, 3vw, 36px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__content .theme-heading {
+    width: 100%;
+    text-align: center;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__content .theme-heading__text {
+    margin-inline: auto;
+    color: var(--color-accent-text);
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__content .theme-button {
+    margin-top: clamp(16px, 2vw, 24px);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__heading {
+    margin: 0;
+    color: var(--color-accent-text);
+    text-align: center;
+    text-shadow: 0 2px 14px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__line-1 {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.75rem, 2.4vw, 2.35rem);
+    font-weight: var(--font-heading-weight, 500);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    color: var(--color-accent-text);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__line-2 {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-style: italic;
+    font-size: clamp(1.9rem, 2.6vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-top: 2px;
+    color: var(--color-accent-text);
+  }
+
+  #EditorialTriptych-{{ block.id }}:not(.editorial-triptych--full) .et__grid {
+    border-radius: var(--radius-card, 0);
+    overflow: hidden;
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__btn {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 26px;
+    border-radius: var(--radius-button, var(--corner-radius, 9999px));
+    background: color-mix(in srgb, var(--color-accent-text) 16%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.2px solid color-mix(in srgb, var(--color-accent-text) 45%, transparent);
+    color: var(--color-accent-text);
+    font-family: var(--font-body-family);
+    font-size: 13.5px;
+    font-weight: var(--font-button-weight, 500);
+    text-decoration: none;
+    line-height: 1;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 60%), transparent);
+  }
+
+  #EditorialTriptych-{{ block.id }} .et__btn:hover {
+    background: color-mix(in srgb, var(--color-accent-text) 30%, transparent);
+    border-color: var(--color-accent-text);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity) * 100%), transparent);
+  }
+
+  @media screen and (max-width: 768px) {
+    #EditorialTriptych-{{ block.id }} .et__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      height: var(--et-mobile-height, 480px);
+    }
+
+    #EditorialTriptych-{{ block.id }} .et__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    #EditorialTriptych-{{ block.id }} .et__panel {
+      flex: 0 0 84vw;
+      scroll-snap-align: center;
+      height: 100%;
+    }
+
+    #EditorialTriptych-{{ block.id }} .et__panel:last-child {
+      flex: 0 0 84vw;
+      margin-right: 8vw;
+    }
+
+    #EditorialTriptych-{{ block.id }} .et__panel:not(:last-child)::after {
+      width: 1px;
+      background-color: var(--et-divider, color-mix(in srgb, var(--color-accent-text) 40%, transparent));
+    }
+  }
+</style>
+{% stylesheet %}.editorial-triptych .et__overlay{opacity:var(--overlay-opacity)}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Editorial triptych",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_editorial-panel"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "options": [
+        {
+          "value": "600px",
+          "label": "600px"
+        },
+        {
+          "value": "700px",
+          "label": "700px"
+        },
+        {
+          "value": "800px",
+          "label": "800px"
+        },
+        {
+          "value": "100vh",
+          "label": "Full screen (100vh)"
+        }
+      ],
+      "default": "700px"
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "options": [
+        {
+          "value": "420px",
+          "label": "420px"
+        },
+        {
+          "value": "480px",
+          "label": "480px"
+        },
+        {
+          "value": "540px",
+          "label": "540px"
+        }
+      ],
+      "default": "480px"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Gradient overlay opacity",
+      "default": 25
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial triptych",
+      "blocks": [
+        {
+          "type": "_editorial-panel",
+          "settings": {
+            "panel_index": 1
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "The ultimate body care.",
+                "level": "h3",
+                "size": "medium",
+                "weight": "regular"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop body care",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-panel",
+          "settings": {
+            "panel_index": 2
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "The ultimate skin retouch.",
+                "level": "h3",
+                "size": "medium",
+                "weight": "regular"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop skin retouch",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        },
+        {
+          "type": "_editorial-panel",
+          "settings": {
+            "panel_index": 3
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Serum for sensitive.",
+                "level": "h3",
+                "size": "medium",
+                "weight": "regular"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "Shop serum",
+                "link": "/collections/all"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,241 @@
+{%- comment -%}
+  Header Search Banner Expansion (Inspired by Gymshark modern search banner).
+  - Full viewport slide-down drawer with backdrop.
+  - Centered wide input with clear button and close button.
+  - Left column: Recent searches (localStorage) + Trending searches.
+  - Right column: Popular products (initial) or Live AJAX predictive search results.
+  - Bottom bar: "Recent search" indicator and "View all results" link.
+{%- endcomment -%}
+
+<div
+  class="search-banner"
+  id="HeaderSearchBanner"
+  data-search-banner
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'general.search.search' | t }}"
+  data-popular-products-label="{{ 'general.search.popular_products' | t | escape }}"
+  data-search-label="{{ 'general.search.search' | t | escape }}"
+  data-recent-search-label="{{ 'general.search.recent_search' | t | escape }}"
+  data-keep-shopping-title="{{ 'general.search.keep_shopping_for_js' | t | escape }}"
+  data-results-title="{{ 'general.search.results_for_js' | t | escape }}"
+  data-no-results-title="{{ 'general.search.no_results_for_js' | t | escape }}"
+  data-view-all-label="{{ 'general.search.view_all' | t | escape }}"
+  data-remove-recent-label="{{ 'general.search.remove_recent' | t | escape }}"
+  data-view-all-products-label="{{ 'general.search.view_all_products' | t | escape }}"
+  data-view-all-for-label="{{ 'general.search.view_all_for' | t | escape }}"
+  data-search-for-label="{{ 'general.search.search_for' | t | escape }}"
+  data-sale-percentage-label="{{ 'general.search.sale_percentage' | t | escape }}"
+>
+  <div class="search-banner__backdrop" data-search-close aria-hidden="true"></div>
+
+  <div class="search-banner__dialog">
+    <div class="search-banner__top">
+      <div class="page-width search-banner__top-inner">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="search-banner__form"
+          data-search-banner-form
+        >
+          <input type="hidden" name="type" value="product">
+          <input type="hidden" name="options[prefix]" value="last">
+
+          <div class="search-banner__input-wrap">
+            {% render 'icon', name: 'search', class: 'search-banner__input-icon' %}
+            <input
+              type="search"
+              id="SearchBannerInput"
+              name="q"
+              value=""
+              placeholder="{{ 'general.search.what_are_you_looking_for' | t }}"
+              class="search-banner__input"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-search-banner-input
+              aria-label="{{ 'general.search.search' | t }}"
+            >
+            <button
+              type="button"
+              class="search-banner__input-clear"
+              data-search-banner-clear
+              aria-label="{{ 'accessibility.clear' | t }}"
+              hidden
+            >
+              {% render 'icon', name: 'close' %}
+            </button>
+          </div>
+        </form>
+
+        <button
+          type="button"
+          class="search-banner__close-btn"
+          data-search-close
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          {% render 'icon', name: 'close' %}
+        </button>
+      </div>
+
+      <div class="search-banner__loading" data-search-banner-loading hidden aria-hidden="true">
+        <div class="search-banner__loading-bar"></div>
+      </div>
+    </div>
+
+    <div class="search-banner__body">
+      <div class="page-width search-banner__body-inner">
+        {%- comment -%} Left Column: Recent & Trending Searches {%- endcomment -%}
+        <div class="search-banner__aside">
+          {%- comment -%} Recent Searches (Populated from real user searches via localStorage) {%- endcomment -%}
+          <div class="search-banner__recent" data-search-recent>
+            <div class="search-banner__aside-header" data-search-recent-header>
+              <h3 class="search-banner__aside-title">
+                {{ 'general.search.recent_searches' | t }}
+              </h3>
+              <button
+                type="button"
+                class="search-banner__clear-recent"
+                data-search-clear-recent
+                hidden
+              >
+                {{ 'general.search.clear_recent' | t }}
+              </button>
+            </div>
+            <ul
+              class="search-banner__recent-list"
+              data-search-recent-list
+              data-empty-title="{{ 'general.search.recent_empty_title' | t }}"
+              data-empty-description="{{ 'general.search.recent_empty_description' | t }}"
+              role="list"
+            >
+              <li class="search-banner__recent-empty" data-search-recent-empty>
+                <span class="search-banner__empty-icon">
+                  {% render 'icon', name: 'clock' %}
+                </span>
+                <p class="search-banner__recent-empty-title">
+                  {{
+                    'general.search.recent_empty_title'
+                    | t
+                  }}
+                </p>
+                <p class="search-banner__recent-empty-text">
+                  {{
+                    'general.search.recent_empty_description'
+                    | t
+                  }}
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          {%- comment -%} Suggestions / Matching Queries when typing {%- endcomment -%}
+          <div class="search-banner__suggestions" data-search-suggestions hidden>
+            <h3 class="search-banner__aside-title">
+              {{ 'general.search.suggestions' | t }}
+            </h3>
+            <ul
+              class="search-banner__suggestions-list"
+              data-search-suggestions-list
+              role="list"
+            ></ul>
+          </div>
+        </div>
+
+        {%- comment -%} Right Column: Popular Products or Live Results {%- endcomment -%}
+        <div class="search-banner__main">
+          {%- assign popular_items = collections.all.products -%}
+          {%- if popular_items == blank or popular_items.size == 0 -%}
+            {%- assign popular_items = search.results -%}
+          {%- endif -%}
+
+          <div
+            class="search-banner__main-header"
+            data-search-main-header
+            {% if popular_items == blank or popular_items.size == 0 %}
+              hidden
+            {% endif %}
+          >
+            <h3 class="search-banner__main-title" data-search-main-title>
+              {{ 'general.search.popular_products' | t }}
+            </h3>
+          </div>
+
+          <div class="search-banner__grid-wrap">
+            {%- comment -%} Default / Popular Products Grid {%- endcomment -%}
+            <div class="search-banner__default-grid" data-search-default-grid>
+              <ul class="search-banner__product-grid" role="list">
+                {%- for item in popular_items limit: 4 -%}
+                  {%- if item.object_type and item.object_type != 'product' -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  <li class="search-banner__product-item">
+                    {% render 'product-card', card_product: item, image_ratio: 'portrait' %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+              {%- if popular_items == blank or popular_items.size == 0 -%}
+                <div class="search-banner__catalog-empty">
+                  <span class="search-banner__empty-icon">
+                    {% render 'icon', name: 'search-catalog' %}
+                  </span>
+                  <h4 class="search-banner__empty-title">
+                    {{
+                      'general.search.catalog_empty_title'
+                      | t
+                    }}
+                  </h4>
+                  <p class="search-banner__empty-text">
+                    {{
+                      'general.search.catalog_empty_description'
+                      | t
+                    }}
+                  </p>
+                </div>
+              {%- endif -%}
+            </div>
+
+            {%- comment -%} Live AJAX Results Grid {%- endcomment -%}
+            <div class="search-banner__live-results" data-search-live-results hidden>
+              <ul class="search-banner__product-grid" data-search-live-grid role="list"></ul>
+            </div>
+
+            {%- comment -%} Empty Results State {%- endcomment -%}
+            <div class="search-banner__empty-state" data-search-banner-empty hidden>
+              <div class="search-empty__illustration">
+                {% render 'mascot', name: 'search' %}
+              </div>
+              <h4 class="search-banner__empty-title" data-search-empty-title>
+                {{ 'general.search.empty_title' | t }}
+              </h4>
+              <p class="search-banner__empty-text">
+                {{
+                  'general.search.no_results_suggestion'
+                  | t
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Bottom Bar {%- endcomment -%}
+    <div class="search-banner__footer">
+      <div class="page-width search-banner__footer-inner">
+        <div class="search-banner__footer-meta" data-search-footer-meta>
+          <span class="search-banner__footer-label" data-search-footer-label>
+            {{- 'general.search.recent_search' | t -}}
+          </span>
+        </div>
+        <div class="search-banner__footer-action">
+          <a href="{{ routes.search_url }}" class="search-banner__view-all" data-search-view-all>
+            {{ 'general.search.view_all' | t }} &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

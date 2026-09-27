@@ -1,0 +1,69 @@
+{% # theme-check-disable UndefinedObject %}
+{%- assign matching_resource_id = block.settings.match_collection.id | default: block.settings.match_page.id -%}
+{%- if matching_resource_id != blank and matching_resource_id == menu_resource_id -%}
+  <div class="header-mega-promo" {{ block.shopify_attributes }}>
+    {% content_for 'blocks' %}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .header-mega-promo { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-card); background: var(--color-surface); }
+  .header-mega-promo .theme-image { aspect-ratio: 4 / 3; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mega menu promotion",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "image"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "badge"
+    }
+  ],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "match_collection",
+      "label": "Matching menu collection",
+      "info": "Select the collection linked by a top-level menu item."
+    },
+    {
+      "type": "page",
+      "id": "match_page",
+      "label": "Matching menu page",
+      "info": "Use this for a top-level page link instead of a collection."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mega menu promotion",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Explore more",
+            "level": "h3",
+            "size": "small"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+{% # theme-check-enable UndefinedObject %}

@@ -1,0 +1,26 @@
+{%- comment -%}
+  Stock photography for Inset Hero Slideshow
+  Replaces vector SVGs with high-resolution photography.
+
+  Accepts:
+  - slide_index: 1..3
+  - title: string (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = slide_index | default: 1 | plus: 0
+  if idx < 1 or idx > 3
+    assign idx = 1
+  endif
+  assign asset_name = 'slideshow-inset-' | append: idx | append: '.jpg'
+  assign img_alt = title | default: 'Hero slide image'
+-%}
+
+<img
+  src="{{ asset_name | asset_url }}"
+  alt="{{ img_alt | escape }}"
+  class="ssi__image"
+  loading="lazy"
+  width="1200"
+  height="900"
+>

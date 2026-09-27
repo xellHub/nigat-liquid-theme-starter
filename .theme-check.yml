@@ -1,0 +1,11 @@
+extends: :recommended
+
+ignore:
+  - "section-library/**"
+
+# Disable online network schema fetches when offline / rate-limited
+ValidSchema:
+  enabled: false
+
+ValidJSON:
+  enabled: false

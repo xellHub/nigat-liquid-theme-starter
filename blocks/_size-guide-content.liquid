@@ -1,0 +1,209 @@
+<div class="section-extension section-extension--size-guide" {{ block.shopify_attributes }}>
+  <section
+    class="size-guide section {% if block.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ block.settings.color_scheme.id }}{% endif %}"
+    id="size-guide-{{ block.id }}"
+    data-size-guide
+  >
+    {% render 'section-background', section: block %}
+    <div class="size-guide__inner page-width">
+      <div class="size-guide__header">
+        {% content_for 'blocks' %}
+      </div>
+
+      {%- if block.settings.show_unit_switcher -%}
+        <div class="size-guide__toolbar">
+          <div class="size-guide__unit-toggle" role="radiogroup" aria-label="Measurement Units">
+            <button
+              type="button"
+              class="size-guide__unit-btn is-active"
+              data-unit-btn="cm"
+              role="radio"
+              aria-checked="true"
+            >
+              {{ 'size_guide.unit_cm' | t }}
+            </button>
+            <button
+              type="button"
+              class="size-guide__unit-btn"
+              data-unit-btn="in"
+              role="radio"
+              aria-checked="false"
+            >
+              {{ 'size_guide.unit_in' | t }}
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Responsive Measurement Tables {%- endcomment -%}
+      <div class="size-guide__tables-wrapper">
+        <div class="size-guide__table-card">
+          <h3 class="size-guide__card-title h4">Apparel Sizing</h3>
+          <div class="table-responsive">
+            <table class="size-table">
+              <caption class="visually-hidden">
+                Apparel sizing measurements
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Size</th>
+                  <th scope="col">US / UK</th>
+                  <th scope="col">EU</th>
+                  <th scope="col">{{ 'size_guide.chest' | t }}</th>
+                  <th scope="col">{{ 'size_guide.waist' | t }}</th>
+                  <th scope="col">{{ 'size_guide.hips' | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">XS</th>
+                  <td>34</td>
+                  <td>44</td>
+                  <td data-cm="84–88 cm" data-in="33–35 in">84–88 cm</td>
+                  <td data-cm="70–74 cm" data-in="27–29 in">70–74 cm</td>
+                  <td data-cm="86–90 cm" data-in="34–35 in">86–90 cm</td>
+                </tr>
+                <tr>
+                  <th scope="row">S</th>
+                  <td>36</td>
+                  <td>46</td>
+                  <td data-cm="89–94 cm" data-in="35–37 in">89–94 cm</td>
+                  <td data-cm="75–80 cm" data-in="29–31 in">75–80 cm</td>
+                  <td data-cm="91–96 cm" data-in="36–38 in">91–96 cm</td>
+                </tr>
+                <tr>
+                  <th scope="row">M</th>
+                  <td>38</td>
+                  <td>48</td>
+                  <td data-cm="95–102 cm" data-in="37–40 in">95–102 cm</td>
+                  <td data-cm="81–88 cm" data-in="32–35 in">81–88 cm</td>
+                  <td data-cm="97–104 cm" data-in="38–41 in">97–104 cm</td>
+                </tr>
+                <tr>
+                  <th scope="row">L</th>
+                  <td>40</td>
+                  <td>50</td>
+                  <td data-cm="103–110 cm" data-in="41–43 in">103–110 cm</td>
+                  <td data-cm="89–96 cm" data-in="35–38 in">89–96 cm</td>
+                  <td data-cm="105–112 cm" data-in="41–44 in">105–112 cm</td>
+                </tr>
+                <tr>
+                  <th scope="row">XL</th>
+                  <td>42</td>
+                  <td>52</td>
+                  <td data-cm="111–118 cm" data-in="44–46 in">111–118 cm</td>
+                  <td data-cm="97–104 cm" data-in="38–41 in">97–104 cm</td>
+                  <td data-cm="113–120 cm" data-in="44–47 in">113–120 cm</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} How to Measure Guide {%- endcomment -%}
+      <div class="size-guide__measure-instructions">
+        <h3 class="size-guide__measure-title h4">{{ 'size_guide.how_to_measure' | t }}</h3>
+        <div class="size-guide__steps-grid">
+          <div class="measure-step">
+            <span class="measure-step__num">1</span>
+            <h4 class="measure-step__title">{{ 'size_guide.chest' | t }}</h4>
+            <p class="measure-step__desc">{{ 'size_guide.chest_desc' | t }}</p>
+          </div>
+          <div class="measure-step">
+            <span class="measure-step__num">2</span>
+            <h4 class="measure-step__title">{{ 'size_guide.waist' | t }}</h4>
+            <p class="measure-step__desc">{{ 'size_guide.waist_desc' | t }}</p>
+          </div>
+          <div class="measure-step">
+            <span class="measure-step__num">3</span>
+            <h4 class="measure-step__title">{{ 'size_guide.hips' | t }}</h4>
+            <p class="measure-step__desc">{{ 'size_guide.hips_desc' | t }}</p>
+          </div>
+          <div class="measure-step">
+            <span class="measure-step__num">4</span>
+            <h4 class="measure-step__title">{{ 'size_guide.inseam' | t }}</h4>
+            <p class="measure-step__desc">{{ 'size_guide.inseam_desc' | t }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var sizeGuide = document.querySelector('[data-size-guide]');
+      if (!sizeGuide) return;
+
+      var unitBtns = sizeGuide.querySelectorAll('[data-unit-btn]');
+      var measurementCells = sizeGuide.querySelectorAll('[data-cm]');
+
+      unitBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var selectedUnit = btn.dataset.unitBtn;
+
+          unitBtns.forEach(function (b) {
+            b.classList.toggle('is-active', b === btn);
+            b.setAttribute('aria-checked', b === btn ? 'true' : 'false');
+          });
+
+          measurementCells.forEach(function (cell) {
+            if (selectedUnit === 'in' && cell.dataset.in) {
+              cell.textContent = cell.dataset.in;
+            } else if (cell.dataset.cm) {
+              cell.textContent = cell.dataset.cm;
+            }
+          });
+        });
+      });
+    });
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Size guide content",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "badge" },
+    { "type": "button" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_unit_switcher",
+      "label": "t:sections.size_guide.settings.show_unit_switcher.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size guide content",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Size & Measurement Guide"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Find your ideal fit with our comprehensive body measurements and sizing tables.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

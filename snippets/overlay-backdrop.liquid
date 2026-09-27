@@ -1,0 +1,36 @@
+{%- comment -%}
+  -----------------------------------------------------------------------------
+  Overlay Backdrop Primitive
+  -----------------------------------------------------------------------------
+  Reusable backdrop element that can be rendered inside any overlay component
+  (popover, drawer, modal, dropdown) or used standalone.
+
+  Arguments:
+    - type: 'popover' | 'drawer' | 'modal' | 'dropdown' (default: 'popover')
+    - class: Additional CSS classes for the backdrop
+    - backdrop_dismiss: boolean (default: true)
+    - custom_content: Optional inner HTML/Liquid (e.g. blur layer, texture)
+  -----------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- liquid
+  assign backdrop_type = type | default: 'popover'
+  if backdrop_dismiss == null
+    assign can_dismiss = true
+  else
+    assign can_dismiss = backdrop_dismiss
+  endif
+-%}
+
+<div
+  class="theme-overlay__backdrop theme-overlay__backdrop--{{ backdrop_type }}{% if class != blank %} {{ class }}{% endif %}"
+  data-overlay-backdrop
+  data-backdrop-dismiss="{% if can_dismiss %}true{% else %}false{% endif %}"
+  tabindex="-1"
+  aria-hidden="true"
+  {{ attributes }}
+>
+  {%- if custom_content != blank -%}
+    {{ custom_content }}
+  {%- endif -%}
+</div>

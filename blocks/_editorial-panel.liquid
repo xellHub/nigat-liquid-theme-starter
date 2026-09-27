@@ -1,0 +1,90 @@
+<article class="et__panel" {{ block.shopify_attributes }}>
+  <div class="et__media">
+    {% if block.settings.image != blank %}
+      {{
+        block.settings.image
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 768px) 33.3vw, 85vw',
+          widths: '500, 750, 1000, 1400',
+          class: 'et__image',
+          alt: ''
+      }}
+    {% else %}
+      {% render 'editorial-triptych-demo-svg',
+        panel_index: block.settings.panel_index,
+        title_line_1: 'The ultimate',
+        title_line_2: 'body care.'
+      %}
+    {% endif %}
+    <div class="et__overlay"></div>
+  </div>
+  <div class="et__content">
+    {% content_for 'blocks' %}
+    {%- if block.blocks.size == 0 -%}
+      <h2 class="et__heading">
+        <span class="et__line-1">The ultimate</span><span class="et__line-2">body care.</span>
+      </h2>
+      <a href="{{ routes.all_products_collection_url }}" class="et__btn">Shop body care</a>
+    {%- endif -%}
+  </div>
+</article>
+{% schema %}
+{
+  "name": "Editorial panel",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "button" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "spacer" },
+    { "type": "divider" },
+    { "type": "icon" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "panel_index",
+      "label": "Demo image index",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial panel",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "The ultimate body care.",
+            "level": "h3",
+            "size": "medium",
+            "weight": "regular"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop body care",
+            "link": "/collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

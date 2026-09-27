@@ -1,0 +1,588 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign media_type = block.settings.media_type | default: 'auto'
+  assign media_position = block.settings.media_position | default: 'top'
+  assign has_image = false
+  if block.settings.image != blank or block.settings.demo_svg != 'none' and block.settings.demo_svg != blank
+    assign has_image = true
+  endif
+
+  assign show_image = false
+  assign show_icon = false
+
+  if media_type == 'both'
+    assign show_image = true
+    assign show_icon = true
+  elsif media_type == 'image'
+    assign show_image = true
+  elsif media_type == 'icon'
+    assign show_icon = true
+  elsif has_image
+    assign show_image = true
+  else
+    assign show_icon = true
+  endif
+
+  assign radius_style = '0px'
+  case block.settings.image_radius
+    when 'sm'
+      assign radius_style = 'var(--radius-sm, 4px)'
+    when 'md'
+      assign radius_style = 'var(--radius-card, 12px)'
+    when 'full'
+      assign radius_style = 'var(--radius-full, 9999px)'
+  endcase
+
+  assign show_step = false
+  if block.settings.step_index > 0
+    assign show_step = true
+    if block.settings.step_index < 10
+      assign step_display = '0' | append: block.settings.step_index
+    else
+      assign step_display = block.settings.step_index
+    endif
+  endif
+-%}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-icon-text theme-icon-text--{{ block.settings.alignment }} theme-icon-text--pos-{{ media_position }}{% if block.settings.card_style != blank and block.settings.card_style != 'none' %} theme-icon-text--card theme-icon-text--card-{{ block.settings.card_style }} theme-icon-text--card-radius-{{ block.settings.card_radius | default: 'md' }} theme-icon-text--card-padding-{{ block.settings.card_padding | default: 'md' }}{% endif %}"
+  style="--icon-text-image-height: {{ block.settings.image_height }}px; --icon-text-icon-size: {{ block.settings.icon_size }}px; --icon-text-image-radius: {{ radius_style }}; --icon-text-image-fit: {{ block.settings.image_fit | default: 'contain' }};"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if show_step -%}
+    <div class="theme-icon-text__header">
+      {%- if show_image -%}
+        <div class="theme-icon-text__image">
+          {%- if block.settings.image != blank -%}
+            {%- assign icon_img_alt = block.settings.image.alt | default: '' -%}
+            {% render 'responsive-image',
+              image: block.settings.image,
+              sizes: '300px',
+              class: 'theme-icon-text__img',
+              alt: icon_img_alt
+            %}
+          {%- elsif block.settings.demo_svg != 'none' and block.settings.demo_svg != blank -%}
+            {% render 'icons-with-text-demo-svg', variant: block.settings.demo_svg %}
+          {%- endif -%}
+        </div>
+      {%- elsif show_icon -%}
+        <span class="theme-icon-text__icon" aria-hidden="true">
+          {%- if block.settings.custom_icon != blank -%}
+            {{
+              block.settings.custom_icon
+              | image_url: width: 120
+              | image_tag: loading: 'lazy', class: 'theme-icon-text__custom-icon', alt: ''
+            }}
+          {%- else -%}
+            {% render 'icon', name: block.settings.icon %}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+      <span class="theme-icon-text__step">{{ step_display }}</span>
+    </div>
+  {%- else -%}
+    {%- if show_image -%}
+      <div class="theme-icon-text__image">
+        {%- if block.settings.image != blank -%}
+          {%- assign icon_img_alt = block.settings.image.alt | default: '' -%}
+          {% render 'responsive-image',
+            image: block.settings.image,
+            sizes: '300px',
+            class: 'theme-icon-text__img',
+            alt: icon_img_alt
+          %}
+        {%- elsif block.settings.demo_svg != 'none' and block.settings.demo_svg != blank -%}
+          {% render 'icons-with-text-demo-svg', variant: block.settings.demo_svg %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if show_icon -%}
+      <span class="theme-icon-text__icon" aria-hidden="true">
+        {%- if block.settings.custom_icon != blank -%}
+          {{
+            block.settings.custom_icon
+            | image_url: width: 120
+            | image_tag: loading: 'lazy', class: 'theme-icon-text__custom-icon', alt: ''
+          }}
+        {%- else -%}
+          {% render 'icon', name: block.settings.icon %}
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="theme-icon-text__copy">
+    {%- liquid
+      if block.settings.link != blank
+        # theme-check-disable UnusedAssign
+        assign card_link = block.settings.link
+        # theme-check-enable UnusedAssign
+      endif
+    -%}
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .theme-icon-text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--color-text);
+    text-decoration: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .theme-icon-text--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .theme-icon-text--left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .theme-icon-text--pos-side {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .theme-icon-text__link-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .theme-icon-text__icon {
+    display: grid;
+    width: var(--icon-text-icon-size, var(--control-height));
+    height: var(--icon-text-icon-size, var(--control-height));
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: var(--radius-full);
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .theme-icon-text__icon .icon {
+    width: 50%;
+    height: 50%;
+  }
+
+  .theme-icon-text__custom-icon {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .theme-icon-text__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    height: var(--icon-text-image-height, 110px);
+    max-height: var(--icon-text-image-height, 110px);
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    border-radius: var(--icon-text-image-radius, 0);
+    flex-shrink: 0;
+  }
+
+  .theme-icon-text--pos-side .theme-icon-text__image {
+    width: var(--icon-text-image-height, 80px);
+    max-width: var(--icon-text-image-height, 80px);
+    height: var(--icon-text-image-height, 80px);
+  }
+
+  .theme-icon-text__image img,
+  .theme-icon-text__image svg,
+  .theme-icon-text__img {
+    width: 100%;
+    height: 100%;
+    max-height: var(--icon-text-image-height, 110px);
+    object-fit: var(--icon-text-image-fit, contain);
+    object-position: center;
+    display: block;
+  }
+
+  .theme-icon-text__copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .theme-icon-text--center .theme-icon-text__copy {
+    align-items: center;
+  }
+
+  .theme-icon-text--left .theme-icon-text__copy {
+    align-items: flex-start;
+  }
+
+  .theme-icon-text--center .theme-heading {
+    --heading-alignment: center;
+  }
+
+  .theme-icon-text--center .theme-heading .theme-heading__text {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .theme-icon-text--center .theme-text {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .theme-icon-text--left .theme-heading {
+    --heading-alignment: left;
+  }
+
+  .theme-icon-text--left .theme-heading .theme-heading__text {
+    margin-inline: 0 auto;
+    text-align: left;
+  }
+
+  .theme-icon-text--left .theme-text {
+    margin-inline: 0 auto;
+    text-align: left;
+  }
+
+  .theme-icon-text__copy .theme-heading__text {
+    font-size: calc(2rem * var(--font-heading-scale));
+  }
+
+  .theme-icon-text__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: var(--space-3);
+  }
+
+  .theme-icon-text__step {
+    font-family: var(--font-heading-family);
+    font-size: calc(1.8rem * var(--font-body-scale, 1));
+    font-weight: var(--font-heading-weight, 600);
+    line-height: 1;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  .theme-icon-text--card {
+    height: 100%;
+    background: var(--color-surface);
+    box-sizing: border-box;
+    transition: border-color var(--motion-duration-fast, 0.2s) ease, transform var(--motion-duration-fast, 0.2s) ease;
+  }
+
+  .theme-icon-text--card-dashed {
+    border: 1.5px dashed color-mix(in srgb, var(--color-border) 80%, var(--color-text) 20%);
+  }
+
+  .theme-icon-text--card-dashed:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 60%, var(--color-border));
+  }
+
+  .theme-icon-text--card-solid {
+    border: 1px solid var(--color-border);
+  }
+
+  .theme-icon-text--card-surface {
+    border: 1px solid transparent;
+    background: var(--color-surface);
+  }
+
+  .theme-icon-text--card-radius-none {
+    border-radius: 0;
+  }
+
+  .theme-icon-text--card-radius-sm {
+    border-radius: var(--radius-sm, 4px);
+  }
+
+  .theme-icon-text--card-radius-md {
+    border-radius: var(--radius-card, 12px);
+  }
+
+  .theme-icon-text--card-radius-lg {
+    border-radius: var(--radius-xl, 16px);
+  }
+
+  .theme-icon-text--card-radius-xl {
+    border-radius: 24px;
+  }
+
+  .theme-icon-text--card-padding-sm {
+    padding: var(--space-4, 16px);
+  }
+
+  .theme-icon-text--card-padding-md {
+    padding: var(--space-6, 24px);
+  }
+
+  .theme-icon-text--card-padding-lg {
+    padding: var(--space-8, 32px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Icon with text",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "badge" },
+    { "type": "icon" },
+    { "type": "spacer" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        { "value": "auto", "label": "Automatic" },
+        { "value": "image", "label": "Image only" },
+        { "value": "icon", "label": "Icon only" },
+        { "value": "both", "label": "Icon and image" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        { "value": "top", "label": "Top (stacked)" },
+        { "value": "side", "label": "Side (inline)" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "heart", "label": "Heart" },
+        { "value": "account", "label": "Person" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "truck", "label": "Truck" },
+        { "value": "star", "label": "Star" },
+        { "value": "globe", "label": "Globe" },
+        { "value": "clock", "label": "Clock" },
+        { "value": "return", "label": "Return" },
+        { "value": "palette", "label": "Palette" },
+        { "value": "mail", "label": "Mail" },
+        { "value": "chat", "label": "Chat" },
+        { "value": "eye", "label": "Eye" }
+      ],
+      "default": "check"
+    },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "custom_icon", "label": "Custom icon image" },
+    {
+      "type": "select",
+      "id": "demo_svg",
+      "label": "Fallback illustration",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "bag", "label": "Shopping bag" },
+        { "value": "box", "label": "Delivery boxes" },
+        { "value": "fern", "label": "Fern leaf" },
+        { "value": "coconut", "label": "Coconut" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 110
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "contain", "label": "Contain (natural illustration)" },
+        { "value": "cover", "label": "Cover (fill frame)" }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "select",
+      "id": "image_radius",
+      "label": "Image corners",
+      "options": [
+        { "value": "none", "label": "Sharp (0px)" },
+        { "value": "sm", "label": "Subtle (4px)" },
+        { "value": "md", "label": "Card (token)" },
+        { "value": "full", "label": "Pill / Circle" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        { "value": "none", "label": "None (inline)" },
+        { "value": "dashed", "label": "Dashed border" },
+        { "value": "solid", "label": "Solid border" },
+        { "value": "surface", "label": "Filled surface" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "step_index",
+      "label": "Step index",
+      "info": "0 hides number. 1 displays 01, etc.",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "card_radius",
+      "label": "Card corners",
+      "options": [
+        { "value": "none", "label": "Sharp (0px)" },
+        { "value": "sm", "label": "Subtle (4px)" },
+        { "value": "md", "label": "Card (token)" },
+        { "value": "lg", "label": "Large (16px)" },
+        { "value": "xl", "label": "Extra large (24px)" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "card_padding",
+      "label": "Card padding",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        { "value": "all", "label": "All devices" },
+        { "value": "mobile", "label": "Mobile only" },
+        { "value": "desktop", "label": "Desktop only" }
+      ],
+      "default": "all"
+    },
+    { "type": "text", "id": "foundation_custom_class", "label": "Custom class" },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "2", "label": "XS" },
+        { "value": "4", "label": "Medium" },
+        { "value": "6", "label": "Large" },
+        { "value": "8", "label": "XL" }
+      ],
+      "default": "none"
+    },
+    { "type": "text", "id": "foundation_anchor_id", "label": "Anchor ID" }
+  ],
+  "presets": [
+    {
+      "name": "Icon with text",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Thoughtful detail",
+            "level": "h3",
+            "size": "inherit",
+            "alignment": "left"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Explain the value in one concise sentence.</p>",
+            "color_role": "muted",
+            "alignment": "left"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

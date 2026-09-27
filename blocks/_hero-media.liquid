@@ -1,0 +1,258 @@
+{%- liquid
+  assign media_side = block.settings.media_side | default: 'right'
+  assign loading = 'lazy'
+  assign fetch_priority = 'auto'
+  if settings.foundation_image_loading == 'eager-hero' and section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+<div
+  id="HeroMedia-{{ block.id }}"
+  class="hero-media hero-media--{{ block.settings.height }} hero-media--{{ media_side }} hero-media--{{ block.settings.scrim_tone }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="hero-media__asset">
+    {%- if block.settings.image != blank -%}
+      <picture>
+        {%- if block.settings.mobile_image != blank -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="{{ block.settings.mobile_image | image_url: width: 750 }} 750w, {{ block.settings.mobile_image | image_url: width: 1100 }} 1100w"
+          >
+        {%- endif -%}
+        {{
+          block.settings.image
+          | image_url: width: 3000
+          | image_tag:
+            loading: loading,
+            fetchpriority: fetch_priority,
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 2000, 2400, 3000',
+            class: 'hero-media__image',
+            alt: block.settings.image.alt
+        }}
+      </picture>
+    {%- else -%}
+      <div class="hero-media__placeholder">{% render 'placeholder-image', variant: 'hero_1' %}</div>
+    {%- endif -%}
+  </div>
+  <div class="hero-media__scrim" aria-hidden="true"></div>
+  <div class="hero-media__inner">
+    <div class="hero-media__content">{% content_for 'blocks' %}</div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero-media {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 64rem;
+    overflow: hidden;
+    color: var(--color-on-media);
+    background: var(--color-background);
+    container-type: inline-size;
+  }
+  .hero-media--small {
+    min-height: 48rem;
+  }
+  .hero-media--large {
+    min-height: 80rem;
+  }
+  .hero-media--fullscreen {
+    min-height: calc(
+      100vh -
+        var(
+          --header-total-height,
+          calc(var(--header-height, 6rem) + var(--announcement-height, 0px))
+        )
+    );
+    min-height: calc(
+      100dvh -
+        var(
+          --header-total-height,
+          calc(var(--header-height, 6rem) + var(--announcement-height, 0px))
+        )
+    );
+  }
+  .hero-media__asset,
+  .hero-media__scrim {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-media__asset {
+    z-index: var(--z-base);
+  }
+  .hero-media__image,
+  .hero-media__placeholder,
+  .hero-media__placeholder svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: var(--foundation-image-fit);
+  }
+  .hero-media__scrim {
+    z-index: var(--z-raised);
+    pointer-events: none;
+  }
+  .hero-media--dark.hero-media--right .hero-media__scrim {
+    background: linear-gradient(
+      90deg,
+      var(--color-media-overlay),
+      color-mix(in srgb, var(--color-media-overlay) 46%, transparent) 55%,
+      transparent 92%
+    );
+  }
+  .hero-media--dark.hero-media--left .hero-media__scrim {
+    background: linear-gradient(
+      270deg,
+      var(--color-media-overlay),
+      color-mix(in srgb, var(--color-media-overlay) 46%, transparent) 55%,
+      transparent 92%
+    );
+  }
+  .hero-media--light .hero-media__scrim {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-background) 96%, transparent),
+      color-mix(in srgb, var(--color-background) 44%, transparent) 55%,
+      transparent 92%
+    );
+  }
+  .hero-media--light.hero-media--left .hero-media__scrim {
+    background: linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--color-background) 96%, transparent),
+      color-mix(in srgb, var(--color-background) 44%, transparent) 55%,
+      transparent 92%
+    );
+  }
+  .hero-media--light {
+    color: var(--color-text);
+  }
+  .hero-media__inner {
+    position: relative;
+    z-index: var(--z-elevated);
+    display: flex;
+    width: min(calc(100% - (2 * var(--foundation-gutter-mobile))), var(--page-width));
+    min-height: inherit;
+    align-items: center;
+    margin-inline: auto;
+    padding-block: var(--foundation-section-spacing-desktop);
+  }
+  .hero-media--left .hero-media__inner {
+    justify-content: flex-end;
+  }
+  .hero-media__content {
+    display: flex;
+    width: min(100%, var(--foundation-media-text-max-width));
+    flex-flow: row wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .hero-media__content > :not(.theme-button) {
+    flex-basis: 100%;
+  }
+  @container (max-width: 749px) {
+    .hero-media,
+    .hero-media--small,
+    .hero-media--large,
+    .hero-media--fullscreen {
+      min-height: 56rem;
+    }
+    .hero-media__scrim,
+    .hero-media--left .hero-media__scrim {
+      background: linear-gradient(
+        180deg,
+        transparent,
+        color-mix(in srgb, var(--color-media-overlay) 26%, transparent) 34%,
+        var(--color-media-overlay)
+      );
+    }
+    .hero-media__inner,
+    .hero-media--left .hero-media__inner {
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding-block: var(--foundation-section-spacing-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero media",
+  "tag": null,
+  "blocks": [
+    { "type": "badge" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "spacer" },
+    { "type": "divider" }
+  ],
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+    {
+      "type": "select",
+      "id": "media_side",
+      "label": "Media focal side",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "scrim_tone",
+      "label": "Scrim tone",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "Full screen" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero media",
+      "blocks": [
+        { "type": "badge", "settings": { "label": "New collection", "style": "on-media" } },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Designed to last, made to love",
+            "level": "h1",
+            "size": "display",
+            "color_role": "on_media"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Thoughtful essentials made with enduring materials and effortless form.</p>",
+            "size": "large",
+            "color_role": "on_media"
+          }
+        },
+        { "type": "button", "settings": { "label": "Shop collection", "style": "primary" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

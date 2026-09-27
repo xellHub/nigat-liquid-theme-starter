@@ -1,0 +1,192 @@
+<section
+  id="ComparisonTableLayout-{{ section.id }}"
+  class="comparison-layout section {% if section.settings.color_scheme.id == settings.palette_5_light.id %}color-global{% else %}color-{{ section.settings.color_scheme.id }}{% endif %}"
+  style="--comparison-width:{{ section.settings.page_width }}px;--comparison-pt:{{ section.settings.padding_top }}px;--comparison-pb:{{ section.settings.padding_bottom }}px;"
+>
+  <div class="comparison-layout__inner">{% content_for 'blocks' %}</div>
+</section>
+{% stylesheet %}.comparison-layout{padding-block:var(--comparison-pt) var(--comparison-pb);color:var(--color-text);background:var(--color-background);container-type:inline-size}.comparison-layout__inner{display:flex;flex-direction:column;gap:var(--space-6);width:min(calc(100% - 2 * var(--foundation-gutter-mobile)),var(--comparison-width));margin:auto}{% endstylesheet %}
+{% schema %}
+{
+  "name": "Comparison table",
+  "tag": "section",
+  "class": "section-comparison-table",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "group" },
+    { "type": "button" },
+    { "type": "link" },
+    { "type": "_comparison-table" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "bare-light"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1240
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison table",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Find your ideal formula",
+            "level": "h2",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Compare key features and skin compatibility side by side.</p>",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "_comparison-table",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "blank"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sensitive skin</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "check"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Dry skin</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "blank",
+                "col_3_type": "check"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Oily skin</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "check",
+                "col_3_type": "check"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Normal skin</p>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "_comparison-row",
+              "settings": {
+                "col_1_type": "check",
+                "col_2_type": "blank",
+                "col_3_type": "blank"
+              },
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Combination skin</p>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Conclusion",
+            "level": "h3",
+            "size": "small",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>HC+ Complex™ is carefully blended to support your body and skin as hormones fluctuate over time. From mid 40s and beyond (including all stages of the menopause). Blended to give you and your skin more.</p>",
+            "alignment": "center",
+            "color_role": "muted"
+          }
+        }
+      ],
+      "category": "Products"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,197 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<p
+  class="{{ block.settings.foundation_custom_class | escape }} theme-eyebrow theme-eyebrow--{{ block.settings.color_role }} theme-eyebrow--tracking-{{ block.settings.letter_spacing }}{% if block.settings.uppercase %} theme-eyebrow--uppercase{% else %} theme-eyebrow--natural{% endif %}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text | escape }}
+</p>
+{% stylesheet %}
+  .theme-eyebrow {
+    margin: 0;
+    font-family: var(--font-accent-family, var(--font-body-family));
+    font-size: var(--foundation-small-text-size);
+    font-weight: var(--font-accent-weight, var(--font-button-weight));
+    letter-spacing: var(--foundation-label-tracking);
+    line-height: 1.2;
+    text-transform: var(--foundation-label-case);
+  }
+  .theme-eyebrow--natural {
+    text-transform: none;
+  }
+  .theme-eyebrow--uppercase {
+    text-transform: uppercase;
+  }
+  .theme-eyebrow--tracking-tight {
+    letter-spacing: 0.04em;
+  }
+  .theme-eyebrow--tracking-wide {
+    letter-spacing: 0.16em;
+  }
+  .theme-eyebrow--text {
+    color: var(--color-text);
+  }
+  .theme-eyebrow--muted {
+    color: var(--color-muted);
+  }
+  .theme-eyebrow--accent {
+    color: var(--color-accent);
+  }
+  .theme-eyebrow--on_media {
+    color: var(--color-on-media);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Eyebrow",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "New arrival"
+    },
+    {
+      "type": "select",
+      "id": "color_role",
+      "label": "Color",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "muted",
+          "label": "Muted"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "on_media",
+          "label": "On media"
+        }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "options": [
+        { "value": "tight", "label": "Tight" },
+        { "value": "theme", "label": "Theme default" },
+        { "value": "wide", "label": "Wide" }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Eyebrow"
+    }
+  ]
+}
+{% endschema %}

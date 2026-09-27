@@ -1,0 +1,185 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-accordion-items theme-accordion-items--icon-{{ block.settings.icon_style }} theme-accordion-items--divider-{{ block.settings.show_divider }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .theme-accordion-items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .theme-accordion-items--icon-chevron-down .theme-accordion__icon--plus,
+  .theme-accordion-items--icon-chevron .theme-accordion__icon--plus {
+    display: none !important;
+  }
+  .theme-accordion-items--icon-plus .theme-accordion__icon--chevron {
+    display: none !important;
+  }
+  .theme-accordion-items--icon-plus .theme-accordion__icon--plus {
+    display: inline-block !important;
+  }
+  .theme-accordion-items--icon-none .theme-accordion__icon-wrap {
+    display: none !important;
+  }
+  .theme-accordion-items--divider-false .theme-accordion {
+    border-block-end: 0 !important;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion items",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "accordion-item"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "chevron-down",
+          "label": "Chevron"
+        },
+        {
+          "value": "plus",
+          "label": "Plus"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "chevron-down"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider between items",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion items",
+      "blocks": [
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

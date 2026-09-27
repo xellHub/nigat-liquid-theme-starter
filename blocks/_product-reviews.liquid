@@ -1,0 +1,13 @@
+<div class="product-reviews" id="product-reviews-{{ section.id }}" data-product-reviews {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "tag": null,
+  "blocks": [{"type":"heading"},{"type":"text"},{"type":"@app"}],
+  "settings": [],
+  "presets": [{"name":"Product reviews"}]
+}
+{% endschema %}

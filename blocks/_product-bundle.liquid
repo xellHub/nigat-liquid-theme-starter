@@ -1,0 +1,146 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{%- assign bundle_count = 0 -%}
+{%- assign seen_products = ',' -%}
+{%- for candidate in block.settings.products -%}
+  {%- assign candidate_key = candidate.id | append: ',' | prepend: ',' -%}
+  {%- unless candidate.available == false or seen_products contains candidate_key -%}
+    {%- unless candidate.id == product.id and block.settings.include_current == false -%}
+      {%- assign bundle_count = bundle_count | plus: 1 -%}
+      {%- assign seen_products = seen_products | append: candidate.id | append: ',' -%}
+    {%- endunless -%}
+  {%- endunless -%}
+{%- endfor -%}
+{%- if bundle_count > 0 or request.design_mode -%}
+  <product-bundle class="product-bundle" data-error-message="{{ 'products.bundle.error' | t | escape }}" data-empty-message="{{ 'products.bundle.select_product' | t | escape }}" {{ block.shopify_attributes }}>
+    <div class="product-bundle__intro">{% content_for 'blocks' %}</div>
+    {%- if bundle_count > 0 -%}
+      <ul class="product-bundle__list" role="list">
+        {%- assign seen_products = ',' -%}
+        {%- for candidate in block.settings.products -%}
+          {%- assign candidate_key = candidate.id | append: ',' | prepend: ',' -%}
+          {%- unless candidate.available == false or seen_products contains candidate_key -%}
+            {%- unless candidate.id == product.id and block.settings.include_current == false -%}
+              {%- assign seen_products = seen_products | append: candidate.id | append: ',' -%}
+              {%- assign selected_variant = candidate.selected_or_first_available_variant -%}
+              {%- assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: candidate.id -%}
+              <li class="product-bundle__item" data-bundle-item data-price="{{ selected_variant.price }}" data-variant-id="{{ selected_variant.id }}">
+                {% content_for 'block', type: 'bundle-item-controls', id: 'bundle-controls', closest.product: candidate %}
+                {% content_for 'block', type: 'product-card', id: 'bundle-card', closest.product: candidate, card_instance: card_instance %}
+              </li>
+            {%- endunless -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </ul>
+      <div class="product-bundle__footer">
+        <p class="product-bundle__total">{{ 'products.bundle.total' | t }}: <strong data-bundle-total></strong></p>
+        <button type="button" class="theme-button theme-button--primary" data-bundle-submit hidden>{{ 'products.bundle.add_selected' | t }}</button>
+        <p role="alert" data-bundle-error hidden></p>
+      </div>
+    {%- endif -%}
+  </product-bundle>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-bundle { display: grid; gap: var(--space-5); }
+  .product-bundle__intro { display: grid; gap: var(--space-2); }
+  .product-bundle__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); margin: 0; padding: 0; list-style: none; }
+  .product-bundle__item { display: grid; gap: var(--space-3); min-width: 0; }
+  .product-bundle__footer { display: grid; justify-items: start; gap: var(--space-3); }
+  .product-bundle__total { margin: 0; font-family: var(--font-heading-family); font-weight: var(--font-heading-weight); }
+  .product-bundle [data-bundle-error] { margin: 0; color: var(--color-accent); }
+  @media (max-width: 749px) { .product-bundle__list { grid-template-columns: 1fr; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.frequently_bought_together.blocks.bundle.name",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "badge"
+    },
+    {
+      "type": "bundle-item-controls"
+    },
+    {
+      "type": "product-card"
+    }
+  ],
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "t:sections.frequently_bought_together.blocks.bundle.products",
+      "limit": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "include_current",
+      "label": "t:sections.frequently_bought_together.blocks.bundle.include_current",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.frequently_bought_together.blocks.bundle.preset",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Pair it with",
+            "level": "h2",
+            "size": "large"
+          }
+        },
+        {
+          "type": "bundle-item-controls",
+          "id": "bundle-controls",
+          "static": true,
+          "settings": {"product":"{{ closest.product }}"}
+        },
+        {
+          "type": "product-card",
+          "id": "bundle-card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}",
+            "show_quick_add": false,
+            "show_quick_view": false
+          },
+          "blocks": [
+            {
+              "type": "image",
+              "settings": {
+                "image": "{{ closest.product.featured_image }}",
+                "link": "{{ closest.product.url }}",
+                "alt": "{{ closest.product.title }}"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "{{ closest.product.title }}",
+                "level": "h3",
+                "size": "small"
+              }
+            },
+            {
+              "type": "price",
+              "settings": {
+                "product": "{{ closest.product }}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+{% # theme-check-enable ValidScopedCSSClass %}

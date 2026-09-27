@@ -1,0 +1,93 @@
+{% liquid
+  assign note_form_id = 'cart-page-form'
+  if section.id contains 'cart-drawer'
+    assign note_form_id = 'cart-drawer-form'
+  endif
+%}
+<div
+  class="cart-note"
+  data-cart-note
+  data-note-saving="{{ 'cart.general.note_saving' | t | escape }}"
+  data-note-saved="{{ 'cart.general.note_saved' | t | escape }}"
+  data-note-error="{{ 'cart.general.note_error' | t | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <label class="cart-note__label" for="CartNote-{{ block.id }}">{{ 'cart.general.note' | t }}</label>
+  <textarea
+    id="CartNote-{{ block.id }}"
+    class="cart-note__input"
+    name="note"
+    form="{{ note_form_id }}"
+    rows="3"
+    data-cart-note-input
+  >{{ cart.note | escape }}</textarea>
+  <div class="cart-note__actions">
+    <button type="submit" name="update" form="{{ note_form_id }}" class="cart-note__save" data-cart-note-save>
+      {{ 'cart.general.note_save' | t }}
+    </button>
+    <span class="cart-note__status" role="status" aria-live="polite" data-cart-note-status></span>
+    <button type="button" class="cart-note__retry" data-cart-note-retry hidden>
+      {{ 'cart.general.note_retry' | t }}
+    </button>
+  </div>
+</div>
+{% stylesheet %}
+  .cart-note {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-family: var(--font-body-family);
+  }
+  .cart-note__label {
+    font-weight: var(--font-body-weight);
+  }
+  .cart-note__input {
+    width: 100%;
+    min-height: 8rem;
+    padding: var(--space-3) var(--foundation-input-padding-x, var(--space-4));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    font: inherit;
+    resize: vertical;
+  }
+  .cart-note__input:focus-visible,
+  .cart-note__save:focus-visible,
+  .cart-note__retry:focus-visible {
+    outline: var(--foundation-focus-ring-width) solid var(--foundation-focus-outline-color);
+    outline-offset: var(--foundation-focus-ring-offset);
+  }
+  .cart-note__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .cart-note__save,
+  .cart-note__retry {
+    min-height: var(--foundation-minimum-target-size, 44px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-accent);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .cart-note__status {
+    color: var(--color-muted);
+    font-size: 1.3rem;
+  }
+  .cart-note[data-note-state='error'] .cart-note__status {
+    color: var(--color-danger);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Cart note",
+  "tag": null,
+  "settings": [],
+  "presets": [{ "name": "Cart note" }]
+}
+{% endschema %}

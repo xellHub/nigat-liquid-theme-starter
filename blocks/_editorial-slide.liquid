@@ -1,0 +1,263 @@
+{%- liquid
+  assign loading = 'lazy'
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+<div
+  class="eh__slide"
+  data-eh-slide
+  tabindex="-1"
+  data-eh-card-label="{{ block.settings.accessibility_label | default: 'Featured item' | escape }}"
+  data-eh-card-cover="{% if block.settings.is_cover %}true{% else %}false{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <template data-eh-bg-template>
+    <div class="eh__bg-layer" data-eh-bg-layer>
+      {%- liquid
+        assign slide_bg_img = block.settings.image
+        assign is_stool = false
+        assign is_sofa = false
+        if block.id contains '2' or block.id contains 'stool' or block.id contains '6'
+          assign is_stool = true
+        elsif block.id contains '4' or block.id contains 'sofa'
+          assign is_sofa = true
+        endif
+      -%}
+      {%- if slide_bg_img != blank -%}
+        {{
+          slide_bg_img
+          | image_url: width: 2600
+          | image_tag:
+            loading: loading,
+            fetchpriority: fetch_priority,
+            widths: '750, 1100, 1600, 2200, 2600',
+            sizes: '100vw',
+            class: 'eh__bg-image'
+        }}
+      {%- else -%}
+        {%- assign hero_placeholder = 'hero_1' -%}
+        {%- if is_stool -%}{%- assign hero_placeholder = 'hero_2' -%}{%- elsif is_sofa -%}{%- assign hero_placeholder = 'hero_3' -%}{%- endif -%}
+        <div class="eh__bg-fallback">
+          {%- assign placeholder_id_prefix = section.id | append: '-' | append: block.id | append: '-template-background' -%}
+          {% render 'placeholder-image', variant: hero_placeholder, class: 'eh__bg-image', id_prefix: placeholder_id_prefix %}
+        </div>
+      {%- endif -%}
+    </div>
+  </template>
+
+  <template data-eh-card-template>
+    <div class="eh__card-media">
+      {%- liquid
+        assign slide_card_img = block.settings.image
+        assign is_stool = false
+        assign is_sofa = false
+        if block.id contains '2' or block.id contains 'stool' or block.id contains '6'
+          assign is_stool = true
+        elsif block.id contains '4' or block.id contains 'sofa'
+          assign is_sofa = true
+        endif
+      -%}
+      {%- if slide_card_img != blank -%}
+        {% render 'responsive-image',
+          image: slide_card_img,
+          max_width: 160,
+          widths: '80, 120, 160',
+          sizes: '118px',
+          class: 'eh__card-img',
+          alt: block.settings.accessibility_label,
+          loading: 'eager',
+          no_wrapper: true
+        %}
+      {%- else -%}
+        {%- assign hero_placeholder = 'hero_1' -%}
+        {%- if is_stool -%}{%- assign hero_placeholder = 'hero_2' -%}{%- elsif is_sofa -%}{%- assign hero_placeholder = 'hero_3' -%}{%- endif -%}
+        {%- assign placeholder_id_prefix = section.id | append: '-' | append: block.id | append: '-template-thumbnail' -%}
+        {% render 'placeholder-image', variant: hero_placeholder, class: 'eh__card-img', id_prefix: placeholder_id_prefix %}
+      {%- endif -%}
+    </div>
+  </template>
+
+  <div class="eh__slide-copy">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .eh__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      visibility 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .eh__card-media {
+    width: 100%;
+    height: 100%;
+  }
+
+  .eh__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .eh__slide.is-active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    z-index: 2;
+  }
+
+  .eh__slide:focus {
+    outline: none;
+  }
+
+  .eh__slide:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--color-on-media) 65%, transparent);
+    outline-offset: 6px;
+    border-radius: var(--radius-sm, 4px);
+  }
+
+  .eh__slide-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    max-width: min(100%, 720px);
+    color: var(--color-on-media);
+  }
+
+  .eh__slide .theme-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-on-media);
+  }
+
+  .eh__slide .theme-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 44px;
+    height: 1.5px;
+    background: currentColor;
+    opacity: 0.75;
+    flex-shrink: 0;
+  }
+
+  .eh__slide .theme-heading {
+    color: var(--color-on-media);
+  }
+
+  .eh__slide .theme-heading__text {
+    color: inherit;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .eh__slide .theme-text {
+    color: color-mix(in srgb, var(--color-on-media) 88%, transparent);
+    font-size: clamp(1.5rem, 1.8vw, 1.8rem);
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+
+  @media (max-width: 749px) {
+    .eh__slide-copy {
+      gap: var(--space-3);
+    }
+    .eh__slide .theme-eyebrow::before {
+      width: 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eh__slide {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial slide",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "badge" },
+    { "type": "link" },
+    { "type": "group" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Card thumbnail label",
+      "default": "Signature Lounge"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Slide and navigation image"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_cover",
+      "label": "Thumbnail fill (cover)",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial slide",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Made for the moments between",
+            "level": "h1",
+            "size": "display",
+            "color_role": "on_media",
+            "alignment": "left"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+            "color_role": "on_media",
+            "size": "medium",
+            "alignment": "left"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Explore Collection",
+            "style": "primary",
+            "size": "medium"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

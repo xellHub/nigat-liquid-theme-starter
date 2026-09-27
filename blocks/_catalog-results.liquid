@@ -1,0 +1,205 @@
+<div
+  class="resource-catalog"
+  style="--columns-desktop: {{ block.settings.columns_desktop }}; --columns-mobile: {{ block.settings.columns_mobile }};"
+  {{ block.shopify_attributes }}
+>
+  <div class="resource-catalog__header">
+    {% content_for 'blocks' %}
+  </div>
+  {% if block.settings.mode == 'search' %}
+    {% paginate search.results by block.settings.items_per_page %}
+      {% capture product_card_items %}
+        {% for item in search.results %}
+          {% assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: paginate.current_page | append: '-' | append: forloop.index %}
+          <li class="product-grid__item">
+            {% if item.object_type == 'product' %}
+              {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: item, card_instance: card_instance %}
+            {% else %}
+              <a class="search-result" href="{{ item.url }}">{{ item.title | escape }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endcapture %}
+      {% render 'catalog-facets',
+        mode: 'search',
+        section: block,
+        results: search,
+        items: search.results,
+        items_count: search.results_count,
+        paginate: paginate,
+        columns_desktop: block.settings.columns_desktop,
+        card_items: product_card_items
+      %}
+    {% endpaginate %}
+  {% else %}
+    {% paginate collection.products by block.settings.items_per_page %}
+      {% capture product_card_items %}
+        {% for item in collection.products %}
+          {% assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: paginate.current_page | append: '-' | append: forloop.index %}
+          <li class="product-grid__item">
+            {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: item, card_instance: card_instance %}
+          </li>
+        {% endfor %}
+      {% endcapture %}
+      {% render 'catalog-facets',
+        mode: 'collection',
+        section: block,
+        results: collection,
+        items: collection.products,
+        items_count: collection.products_count,
+        paginate: paginate,
+        columns_desktop: block.settings.columns_desktop,
+        card_items: product_card_items
+      %}
+    {% endpaginate %}
+  {% endif %}
+</div>
+{% stylesheet %}
+  @media (max-width: 749px) {
+    .resource-catalog .product-grid { grid-template-columns: repeat(var(--columns-mobile, 2), minmax(0, 1fr)); }
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Catalog results",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "badge"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "product-card"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "Resource",
+      "options": [
+        {
+          "value": "collection",
+          "label": "Collection"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        }
+      ],
+      "default": "collection"
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "label": "Items per page",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Desktop columns",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Catalog results",
+      "blocks": [
+        {
+          "id": "product-card",
+          "type": "product-card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.product }}"
+          },
+          "blocks": [
+            {
+              "type": "image",
+              "settings": {
+                "image": "{{ closest.product.featured_image }}",
+                "link": "{{ closest.product.url }}",
+                "alt": "{{ closest.product.title }}"
+              }
+            },
+            {
+              "type": "badge",
+              "settings": {
+                "product": "{{ closest.product }}",
+                "mode": "sale"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "{{ closest.product.title }}",
+                "level": "h3",
+                "size": "small"
+              }
+            },
+            {
+              "type": "price",
+              "settings": {
+                "product": "{{ closest.product }}"
+              }
+            },
+            {
+              "type": "rating",
+              "settings": {
+                "product": "{{ closest.product }}"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "label": "View product",
+                "style": "link",
+                "link": "{{ closest.product.url }}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

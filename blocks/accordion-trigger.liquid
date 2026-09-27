@@ -1,0 +1,144 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<button
+  class="{{ block.settings.foundation_custom_class | escape }} theme-accordion-trigger"
+  type="button"
+  aria-expanded="{{ block.settings.default_open }}"
+  data-accordion-trigger="{{ block.settings.target | handle }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  <span>{{ block.settings.label | escape }}</span>
+  {%- if block.settings.icon != 'none' %}{% render 'icon', name: block.settings.icon %}{% endif %}
+</button>
+{% stylesheet %}.theme-accordion-trigger { display: flex; width: 100%; min-height: var(--foundation-minimum-target-size); align-items: center; justify-content: space-between; border: 0; color: var(--color-text); background: transparent; font-family: var(--font-heading-family); font-weight: var(--font-heading-weight); cursor: pointer; } .theme-accordion-trigger .icon { width: 1.8rem; }{% endstylesheet %}
+{% schema %}
+{
+  "name": "Accordion trigger",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Accordion item"
+    },
+    {
+      "type": "text",
+      "id": "target",
+      "label": "Panel identifier",
+      "default": "accordion-panel"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "chevron-down", "label": "Chevron" },
+        { "value": "plus", "label": "Plus" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "chevron-down"
+    },
+    { "type": "checkbox", "id": "default_open", "label": "Open by default", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion trigger"
+    }
+  ]
+}
+{% endschema %}

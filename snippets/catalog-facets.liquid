@@ -1,0 +1,528 @@
+{%- comment -%}
+  Catalog Facets & Product Grid Layout Component.
+  Reusable component shared between search and collection pages.
+
+  Accepts:
+  - mode: {String} 'search' or 'collection'
+  - section: {Object} The section object
+  - results: {Object} `search` or `collection`
+  - items: {Array} `search.results` or `collection.products`
+  - items_count: {Number} `search.results_count` or `collection.products_count`
+  - paginate: {Object} The paginate object
+  - columns_desktop: {Number} Desktop columns count (default: 4)
+{%- endcomment -%}
+
+{%- liquid
+  assign clean_terms = ''
+  if mode == 'search' and results.terms != blank
+    assign clean_terms = results.terms | remove: '*' | strip
+  endif
+
+  assign has_active_filters = false
+  assign active_filter_count = 0
+  for filter in results.filters
+    if filter.active_values.size > 0
+      assign has_active_filters = true
+      assign active_filter_count = active_filter_count | plus: filter.active_values.size
+    endif
+    if filter.min_value.value != null or filter.max_value.value != null
+      assign has_active_filters = true
+      assign active_filter_count = active_filter_count | plus: 1
+    endif
+  endfor
+
+  assign filter_source = results.filters
+  if mode == 'search'
+    if filter_source == blank or filter_source.size == 0
+      assign filter_source = collections.all.filters
+    endif
+  endif
+
+  if mode == 'search'
+    assign default_sort = 'relevance'
+    assign current_sort = results.sort_by | default: 'relevance'
+    assign form_action = routes.search_url
+    if clean_terms != blank
+      assign encoded_terms = results.terms | url_encode
+      assign clear_url = routes.search_url | append: '?q=' | append: encoded_terms | append: '&type=product'
+    else
+      assign clear_url = routes.search_url
+    endif
+  else
+    assign default_sort = results.default_sort_by | default: 'manual'
+    assign current_sort = results.sort_by | default: default_sort
+    assign form_action = results.url | default: '/collections/all'
+    assign clear_url = results.url | default: '/collections/all'
+  endif
+
+  if current_sort == blank or current_sort == 'manual'
+    if mode == 'search'
+      assign current_sort = 'relevance'
+    else
+      assign current_sort = default_sort
+    endif
+  endif
+
+  assign can_clear_all = false
+  if has_active_filters or current_sort != default_sort
+    assign can_clear_all = true
+  endif
+
+  if mode == 'search'
+    assign filter_heading_title = 'general.search.search' | t
+  elsif mode == 'collection'
+    if results.title != blank
+      assign filter_heading_title = results.title
+    elsif collection.title != blank
+      assign filter_heading_title = collection.title
+    elsif results.handle == 'all' or collection.handle == 'all'
+      assign filter_heading_title = 'general.search.products' | t
+    else
+      assign filter_heading_title = 'collections.general.title' | t
+    endif
+  else
+    assign filter_heading_title = results.title
+    if filter_heading_title == blank
+      assign filter_heading_title = 'general.search.filter_and_sort' | t
+    endif
+  endif
+-%}
+
+<facet-filters-form
+  id="FacetFiltersForm-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-count-one="{{ 'general.search.count_one' | t | escape }}"
+  data-count-other="{{ 'general.search.count_other' | t | escape }}"
+  data-view-all-count="{{ 'general.search.view_all_count' | t | escape }}"
+  class="facet-filters-form"
+>
+  {%- comment -%} Mobile Sticky Filter & Sort Bar (under header) {%- endcomment -%}
+  <div class="search-mobile-sticky-bar" data-mobile-sticky-bar>
+    <div class="search-mobile-sticky-bar__inner">
+      <button
+        type="button"
+        class="search-mobile-sticky-bar__btn"
+        data-filter-sheet-open
+        aria-label="{{ filter_heading_title | escape }}"
+      >
+        {% render 'icon', name: 'filter', class: 'search-mobile-sticky-bar__btn-icon' %}
+        <span data-ajax-filter-title>{{ filter_heading_title | escape }}</span>
+        <span
+          class="search-mobile-sticky-bar__badge{% if active_filter_count == 0 %} is-hidden{% endif %}"
+          data-ajax-mobile-badge
+        >
+          {{- active_filter_count -}}
+        </span>
+      </button>
+
+      <span class="search-mobile-sticky-bar__count" data-ajax-mobile-count>
+        {{ 'collections.general.items_with_count' | t: count: items_count }}
+      </span>
+    </div>
+  </div>
+
+  <div class="search-layout">
+    {%- comment -%} Unified Filter & Sort (Mobile Bottom Sheet, Desktop Sticky Sidebar) {%- endcomment -%}
+    <div class="search-filter-sheet" id="SearchFilterSheet" data-filter-sheet aria-hidden="true">
+      <div class="search-filter-sheet__overlay" data-filter-sheet-close></div>
+
+      <div
+        class="search-filter-sheet__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ filter_heading_title | escape }}"
+      >
+        <div class="search-filter-sheet__grabber" aria-hidden="true" data-filter-sheet-close>
+          <span class="search-filter-sheet__grabber-line"></span>
+        </div>
+
+        <div class="search-filter-sheet__header">
+          <div class="search-filter-sheet__title-group">
+            <h2 class="search-filter-sheet__title" data-ajax-sheet-title>
+              {{ filter_heading_title | escape }}
+            </h2>
+            <div class="search-filter-sheet__meta" data-ajax-meta-container>
+              {%- if mode == 'search' and clean_terms != blank and items.size > 0 -%}
+                <p class="search-filter-sheet__count caption">
+                  {{
+                    'general.search.results_with_count'
+                    | t: count: items_count, terms: clean_terms
+                  }}
+                </p>
+              {%- elsif items.size > 0 -%}
+                <p class="search-filter-sheet__count caption">
+                  {{ 'collections.general.items_with_count' | t: count: items_count }}
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="search-filter-sheet__header-actions" data-ajax-sheet-header-actions>
+            {%- if can_clear_all -%}
+              <a href="{{ clear_url }}" class="search-filter-sheet__clear" data-ajax-clear-all>
+                {{ 'general.search.clear_all' | t }}
+              </a>
+            {%- endif -%}
+            <button
+              type="button"
+              class="search-filter-sheet__close"
+              data-filter-sheet-close
+              aria-label="{{ 'accessibility.close' | t }}"
+            >
+              {% render 'icon', name: 'close' %}
+            </button>
+          </div>
+        </div>
+
+        <div class="search-filter-sheet__body">
+          <form action="{{ form_action }}" method="get" class="search-filter-form" data-filter-form>
+            {%- if mode == 'search' -%}
+              <input type="hidden" name="type" value="product">
+            {%- endif -%}
+
+            {%- comment -%} Search by Product Name Filter {%- endcomment -%}
+            <div class="search-filter-name">
+              <label for="SidebarSearchByName" class="visually-hidden">
+                {{ 'general.search.search_by_name' | t }}
+              </label>
+              <div class="search-filter-name__input-wrap">
+                {% render 'icon', name: 'search', class: 'search-filter-name__icon' %}
+                <input
+                  type="text"
+                  inputmode="search"
+                  id="SidebarSearchByName"
+                  name="q"
+                  value="{% if mode == 'search' %}{{ clean_terms | escape }}{% endif %}"
+                  placeholder="{{ 'general.search.search_by_name_placeholder' | t }}"
+                  class="search-filter-name__input"
+                  data-sidebar-search-input
+                  autocomplete="off"
+                  autocorrect="off"
+                  spellcheck="false"
+                >
+                <button
+                  type="button"
+                  class="search-filter-name__clear{% if mode != 'search' or clean_terms == blank %} is-hidden{% endif %}"
+                  data-sidebar-search-clear
+                  aria-label="{{ 'accessibility.clear' | t }}"
+                >
+                  {% render 'icon', name: 'close' %}
+                </button>
+              </div>
+            </div>
+
+            {%- comment -%} Sort By Accordion {%- endcomment -%}
+            <details class="search-filter search-filter--sort" open>
+              <summary class="search-filter__summary">
+                <span>{{ 'general.search.sort_by' | t }}</span>
+                {% render 'icon', name: 'chevron-down' %}
+              </summary>
+              <div class="search-filter__body">
+                <div class="search-sort-radios">
+                  <label class="search-sort-radio">
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="price-ascending"
+                      {% if current_sort == 'price-ascending' %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="search-sort-radio__circle"></span>
+                    <span class="search-sort-radio__label">
+                      {{- 'general.search.sort_price_asc' | t -}}
+                    </span>
+                  </label>
+
+                  <label class="search-sort-radio">
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="price-descending"
+                      {% if current_sort == 'price-descending' %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="search-sort-radio__circle"></span>
+                    <span class="search-sort-radio__label">
+                      {{- 'general.search.sort_price_desc' | t -}}
+                    </span>
+                  </label>
+
+                  {%- if mode == 'search' -%}
+                    <label class="search-sort-radio">
+                      <input
+                        type="radio"
+                        name="sort_by"
+                        value="relevance"
+                        {% if current_sort == 'relevance' %}
+                          checked
+                        {% endif %}
+                      >
+                      <span class="search-sort-radio__circle"></span>
+                      <span class="search-sort-radio__label">
+                        {{- 'general.search.sort_relevance' | t -}}
+                      </span>
+                    </label>
+                  {%- else -%}
+                    <label class="search-sort-radio">
+                      <input
+                        type="radio"
+                        name="sort_by"
+                        value="manual"
+                        {% if current_sort == 'manual' %}
+                          checked
+                        {% endif %}
+                      >
+                      <span class="search-sort-radio__circle"></span>
+                      <span class="search-sort-radio__label">
+                        {{- 'collections.general.sort_featured' | t -}}
+                      </span>
+                    </label>
+                  {%- endif -%}
+
+                  <label class="search-sort-radio">
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="created-descending"
+                      {% if current_sort == 'created-descending' %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="search-sort-radio__circle"></span>
+                    <span class="search-sort-radio__label">
+                      {{- 'general.search.sort_newest' | t -}}
+                    </span>
+                  </label>
+
+                  <label class="search-sort-radio">
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="best-selling"
+                      {% if current_sort == 'best-selling' %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="search-sort-radio__circle"></span>
+                    <span class="search-sort-radio__label">
+                      {{- 'general.search.sort_discount' | t -}}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </details>
+
+            {%- comment -%} Category & Attribute Facet Accordions {%- endcomment -%}
+            {%- if filter_source.size > 0 -%}
+              {%- for filter in filter_source -%}
+                {%- liquid
+                  assign is_filter_active = false
+                  if filter.active_values.size > 0
+                    assign is_filter_active = true
+                  endif
+                  if filter.min_value.value != null or filter.max_value.value != null
+                    assign is_filter_active = true
+                  endif
+                -%}
+                <details
+                  class="search-filter"
+                  {% if is_filter_active %}
+                    open
+                  {% endif %}
+                >
+                  <summary class="search-filter__summary">
+                    <span>{{ filter.label | escape }}</span>
+                    {% render 'icon', name: 'chevron-down' %}
+                  </summary>
+                  <div class="search-filter__body">
+                    {%- case filter.type -%}
+                      {%- when 'list', 'boolean' -%}
+                        <ul class="search-filter__list" role="list">
+                          {%- for value in filter.values -%}
+                            <li class="search-filter__item">
+                              <label class="search-filter__label">
+                                <input
+                                  type="checkbox"
+                                  name="{{ value.param_name }}"
+                                  value="{{ value.value | escape }}"
+                                  class="search-filter__checkbox"
+                                  {% if value.active %}
+                                    checked
+                                  {% endif %}
+                                  {% if value.count == 0 and value.active == false %}
+                                    disabled
+                                  {% endif %}
+                                >
+                                <span class="search-filter__custom-checkbox"></span>
+                                <span class="search-filter__value-name">
+                                  {{- value.label | escape -}}
+                                </span>
+                                {%- if value.count > 0 -%}
+                                  <span class="search-filter__value-count"
+                                    >({{ value.count }})</span
+                                  >
+                                {%- endif -%}
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- when 'price_range' -%}
+                        {% render 'price-range', filter: filter, items: items %}
+                    {%- endcase -%}
+                  </div>
+                </details>
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Fallback Gymshark Reference Category Attributes when store has no filters configured {%- endcomment -%}
+              {%- assign sample_facets = 'Size:XS,S,M,L,XL,XXL|Gender:Women,Men,Unisex|Features:Seamless,Lightweight,Breathable,Sweat-Wicking|Fit:Regular Fit,Slim Fit,Oversized|Rise:High Waisted,Mid Rise,Low Rise|Activity:Gym & Training,Running,Rest Day'
+                | split: '|'
+              -%}
+              {%- for facet_item in sample_facets -%}
+                {%- assign facet_parts = facet_item | split: ':' -%}
+                {%- assign facet_title = facet_parts[0] -%}
+                {%- assign facet_values = facet_parts[1] | split: ',' -%}
+                <details class="search-filter">
+                  <summary class="search-filter__summary">
+                    <span>{{ facet_title }}</span>
+                    {% render 'icon', name: 'chevron-down' %}
+                  </summary>
+                  <div class="search-filter__body">
+                    <ul class="search-filter__list" role="list">
+                      {%- for val in facet_values -%}
+                        <li class="search-filter__item">
+                          <label class="search-filter__label">
+                            <input
+                              type="checkbox"
+                              name="filter.v.option.{{ facet_title | downcase }}"
+                              value="{{ val }}"
+                              class="search-filter__checkbox"
+                            >
+                            <span class="search-filter__custom-checkbox"></span>
+                            <span class="search-filter__value-name">{{ val }}</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </details>
+              {%- endfor -%}
+
+              <details class="search-filter" open>
+                <summary class="search-filter__summary">
+                  <span>{{ 'products.product.price.regular_price' | t | default: 'Price' }}</span>
+                  {% render 'icon', name: 'chevron-down' %}
+                </summary>
+                <div class="search-filter__body">
+                  {% render 'price-range', filter: null, items: items %}
+                </div>
+              </details>
+            {%- endif -%}
+
+            <noscript>
+              <button
+                type="submit"
+                class="button button--secondary button--full-width"
+                style="margin-top: 1.6rem;"
+              >
+                {{ 'general.search.submit' | t }}
+              </button>
+            </noscript>
+          </form>
+        </div>
+
+        <div class="search-filter-sheet__footer" data-ajax-sheet-footer>
+          <button
+            type="button"
+            class="button button--primary button--full-width"
+            data-filter-sheet-apply
+          >
+            <span data-ajax-apply-count>
+              {{- 'general.search.view_all_count' | t | replace: '[count]', items_count -}}</span
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Main Results Column {%- endcomment -%}
+    <div class="search-main" data-ajax-main>
+      <div class="search-loading-bar" data-ajax-loading-bar aria-hidden="true"></div>
+
+      <div class="search-results-container" data-ajax-results-container tabindex="-1">
+        {%- if items.size > 0 -%}
+          <ul
+            class="search-results product-grid"
+            role="list"
+            data-product-grid
+          >
+            {{ card_items }}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        {%- else -%}
+          {%- comment -%} Clean Empty State {%- endcomment -%}
+          <div class="search-empty">
+            <div class="search-empty__illustration" aria-hidden="true">
+              {%- if mode == 'search' and clean_terms != blank -%}
+                {% render 'mascot', name: 'search' %}
+              {%- elsif has_active_filters -%}
+                {% render 'mascot', name: 'filter' %}
+              {%- else -%}
+                {% render 'mascot', name: 'catalog' %}
+              {%- endif -%}
+            </div>
+
+            <h2 class="search-empty__title h2">
+              {%- if mode == 'search' and clean_terms != blank -%}
+                {{ 'general.search.empty_title' | t }}: &ldquo;{{ clean_terms | escape }}&rdquo;
+              {%- elsif has_active_filters -%}
+                {{ 'general.search.empty_filtered_title' | t }}
+              {%- elsif mode == 'search' -%}
+                {{ 'general.search.empty_no_terms_title' | t }}
+              {%- else -%}
+                {{ 'collections.general.no_matches' | t }}
+              {%- endif -%}
+            </h2>
+
+            <p class="search-empty__subtext">
+              {%- if mode == 'search' and clean_terms != blank -%}
+                {{ 'general.search.empty_subtext' | t }}
+              {%- elsif mode == 'search' -%}
+                {{
+                  'general.search.empty_no_terms_subtext' | t
+                }}
+              {%- else -%}
+                {{
+                  'collections.general.use_fewer_filters' | t
+                }}
+              {%- endif -%}
+            </p>
+
+            <div class="search-empty__actions">
+              {%- if can_clear_all -%}
+                <a
+                  href="{{ clear_url }}"
+                  class="button button--secondary search-empty__btn"
+                  data-ajax-clear-all
+                >
+                  <span>{{ 'collections.general.clear_all' | t }}</span>
+                </a>
+              {%- else -%}
+                <a
+                  href="{{ routes.all_products_collection_url }}"
+                  class="button button--primary search-empty__btn"
+                >
+                  <span>{{ 'general.search.browse_catalog' | t }}</span>
+                  {% render 'icon', name: 'arrow-right' %}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</facet-filters-form>

@@ -1,0 +1,157 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-stat theme-stat--{{ block.settings.number_size }} theme-stat--label-{{ block.settings.label_position }}"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  <strong
+    {% if block.settings.count_up %}
+      data-stat-count-up="{{ block.settings.value | escape }}"
+    {% endif %}
+  >
+    {{- block.settings.value | escape -}}</strong
+  ><span>{{ block.settings.label | escape }}</span>
+</div>
+{% stylesheet %}.theme-stat{display:flex;flex-direction:column;gap:var(--space-1);color:var(--color-text)}.theme-stat strong{font-family:var(--font-heading-family);font-size:calc(4rem * var(--font-heading-scale));font-weight:var(--font-heading-weight);line-height:1}.theme-stat--small strong{font-size:calc(2.8rem * var(--font-heading-scale))}.theme-stat--large strong{font-size:calc(5.6rem * var(--font-heading-scale))}.theme-stat span{color:var(--color-muted);font-family:var(--font-body-family)}.theme-stat--label-above span{order:-1}{% endstylesheet %}
+{% javascript %}document.querySelectorAll('[data-stat-count-up]').forEach((node)=>{if(node.dataset.counted)return;node.dataset.counted='true';const raw=node.dataset.statCountUp;const target=Number.parseFloat(raw);if(!Number.isFinite(target))return;const suffix=raw.replace(String(target),'');const start=performance.now();const tick=(now)=>{const progress=Math.min(1,(now-start)/900);node.textContent=Math.round(target*progress)+suffix;if(progress<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)});{% endjavascript %}
+{% schema %}
+{
+  "name": "Stat",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "value",
+      "label": "Value",
+      "default": "98%"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Customer satisfaction"
+    },
+    {
+      "type": "select",
+      "id": "number_size",
+      "label": "Number size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "label_position",
+      "label": "Label position",
+      "options": [
+        { "value": "below", "label": "Below" },
+        { "value": "above", "label": "Above" }
+      ],
+      "default": "below"
+    },
+    { "type": "checkbox", "id": "count_up", "label": "Count-up animation", "default": false },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stat"
+    }
+  ]
+}
+{% endschema %}

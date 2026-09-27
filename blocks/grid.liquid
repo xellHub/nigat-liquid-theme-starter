@@ -1,0 +1,392 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign grid_gap = 'var(--space-4)'
+  case block.settings.gap
+    when 'inherit'
+      assign grid_gap = 'var(--grid-gap, var(--space-4))'
+    when '2'
+      assign grid_gap = 'var(--space-2)'
+    when '3'
+      assign grid_gap = 'var(--space-3)'
+    when '5'
+      assign grid_gap = 'var(--space-5)'
+    when '6'
+      assign grid_gap = 'var(--space-6)'
+  endcase
+
+  assign grid_row_gap = grid_gap
+  assign grid_column_gap = grid_gap
+  if block.settings.split_gap
+    case block.settings.row_gap
+      when 'inherit'
+        assign grid_row_gap = 'var(--grid-gap, var(--space-4))'
+      when '2'
+        assign grid_row_gap = 'var(--space-2)'
+      when '3'
+        assign grid_row_gap = 'var(--space-3)'
+      when '5'
+        assign grid_row_gap = 'var(--space-5)'
+      when '6'
+        assign grid_row_gap = 'var(--space-6)'
+    endcase
+    case block.settings.column_gap
+      when 'inherit'
+        assign grid_column_gap = 'var(--grid-gap, var(--space-4))'
+      when '2'
+        assign grid_column_gap = 'var(--space-2)'
+      when '3'
+        assign grid_column_gap = 'var(--space-3)'
+      when '5'
+        assign grid_column_gap = 'var(--space-5)'
+      when '6'
+        assign grid_column_gap = 'var(--space-6)'
+    endcase
+  endif
+
+  assign grid_desktop_columns = block.settings.columns_desktop
+  assign grid_mobile_columns = block.settings.columns_mobile
+  if block.settings.columns_mode == 'inherit'
+    assign grid_desktop_columns = 'var(--foundation-grid-columns-desktop, 4)'
+    assign grid_mobile_columns = 'var(--foundation-grid-columns-mobile, 2)'
+  endif
+-%}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-grid theme-grid--{{ block.settings.sizing_mode }} theme-grid--align-{{ block.settings.align_items }} theme-grid--justify-{{ block.settings.justify_items }}{% if block.settings.equal_height %} theme-grid--equal-height{% endif %}"
+  style="--theme-grid-columns:{{ grid_desktop_columns }};--theme-grid-columns-tablet:{{ block.settings.columns_tablet }};--theme-grid-columns-mobile:{{ grid_mobile_columns }};--theme-grid-min-item-width:{{ block.settings.min_item_width }}px;--theme-grid-row-gap:{{ grid_row_gap }};--theme-grid-column-gap:{{ grid_column_gap }};"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+{% stylesheet %}
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--theme-grid-columns), minmax(0, 1fr));
+    row-gap: var(--theme-grid-row-gap);
+    column-gap: var(--theme-grid-column-gap);
+  }
+  .theme-grid--auto-fit {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(100%, var(--theme-grid-min-item-width)), 1fr)
+    );
+  }
+  .theme-grid--align-start {
+    align-items: start;
+  }
+  .theme-grid--align-center {
+    align-items: center;
+  }
+  .theme-grid--align-end {
+    align-items: end;
+  }
+  .theme-grid--align-stretch {
+    align-items: stretch;
+  }
+  .theme-grid--justify-start {
+    justify-items: start;
+  }
+  .theme-grid--justify-center {
+    justify-items: center;
+  }
+  .theme-grid--justify-end {
+    justify-items: end;
+  }
+  .theme-grid--justify-stretch {
+    justify-items: stretch;
+  }
+  .theme-grid--equal-height > * {
+    height: 100%;
+  }
+  @media (max-width: 989px) {
+    .theme-grid--fixed {
+      grid-template-columns: repeat(var(--theme-grid-columns-tablet), minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 749px) {
+    .theme-grid--fixed {
+      grid-template-columns: repeat(var(--theme-grid-columns-mobile), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Grid",
+  "tag": null,
+  "blocks": [
+    { "type": "collection-card" },
+    { "type": "product-card" },
+    { "type": "card" },
+    { "type": "gradient-card" },
+    { "type": "feature-item" },
+    { "type": "testimonial" },
+    { "type": "stat" },
+    { "type": "logo-item" },
+    { "type": "group" },
+    { "type": "surface" },
+    { "type": "image" },
+    { "type": "icon-with-text" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns_mode",
+      "label": "Column source",
+      "options": [
+        { "value": "custom", "label": "This grid" },
+        { "value": "inherit", "label": "Theme defaults" }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "sizing_mode",
+      "label": "Column sizing",
+      "options": [
+        { "value": "fixed", "label": "Fixed columns" },
+        { "value": "auto-fit", "label": "Automatic fit" }
+      ],
+      "default": "fixed"
+    },
+    {
+      "type": "range",
+      "id": "min_item_width",
+      "label": "Minimum item width",
+      "min": 120,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 240
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Tablet columns",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap token",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "3",
+          "label": "Small"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "5",
+          "label": "Large"
+        },
+        {
+          "value": "6",
+          "label": "XL"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "split_gap",
+      "label": "Set row and column gaps separately",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "row_gap",
+      "label": "Row gap",
+      "options": [
+        { "value": "inherit", "label": "Theme default" },
+        { "value": "2", "label": "XS" },
+        { "value": "3", "label": "Small" },
+        { "value": "4", "label": "Medium" },
+        { "value": "5", "label": "Large" },
+        { "value": "6", "label": "XL" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "column_gap",
+      "label": "Column gap",
+      "options": [
+        { "value": "inherit", "label": "Theme default" },
+        { "value": "2", "label": "XS" },
+        { "value": "3", "label": "Small" },
+        { "value": "4", "label": "Medium" },
+        { "value": "5", "label": "Large" },
+        { "value": "6", "label": "XL" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "align_items",
+      "label": "Item alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" },
+        { "value": "stretch", "label": "Stretch" }
+      ],
+      "default": "stretch"
+    },
+    {
+      "type": "select",
+      "id": "justify_items",
+      "label": "Horizontal item alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" },
+        { "value": "stretch", "label": "Stretch" }
+      ],
+      "default": "stretch"
+    },
+    { "type": "checkbox", "id": "equal_height", "label": "Equal-height items", "default": true },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid",
+      "settings": {
+        "columns_mode": "inherit",
+        "gap": "inherit"
+      }
+    }
+  ]
+}
+{% endschema %}

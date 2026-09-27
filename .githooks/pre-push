@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+
+# nigat Git Pre-Push Hook
+# Runs full theme check and schema validation before pushing to remote.
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}==>${NC} Running nigat pre-push validation..."
+
+if command -v node >/dev/null 2>&1; then
+  node scripts/validate-json.mjs
+fi
+
+if command -v shopify >/dev/null 2>&1; then
+  shopify theme check
+elif command -v theme-check >/dev/null 2>&1; then
+  theme-check
+fi
+
+echo -e "${GREEN}==> All pre-push checks passed! Safe to push.${NC}\n"

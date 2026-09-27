@@ -1,0 +1,16 @@
+# Dependencies and system
+node_modules/
+.git/
+.shopify/
+bun.lock
+
+# Section runtime installation target (canonical source is section-library/)
+sections/
+
+# Generated documentation and manifests
+section-library/**/usage.md
+section-library/.usage-manifest.json
+
+# Vendor and minified assets
+assets/*.min.js
+assets/embla-carousel.umd.js

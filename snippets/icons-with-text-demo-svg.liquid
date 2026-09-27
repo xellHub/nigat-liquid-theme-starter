@@ -1,0 +1,225 @@
+{%- comment -%}
+  Icons With Text Demo SVG illustrations
+  Provides bespoke fallback spot illustrations matching agent-image/from-tinker/icon-with-text/image copy.png
+  Variants:
+  - 'bag'     : Brown kraft paper grocery shopping bag with folded handles
+  - 'box'     : Cardboard delivery parcel box paired with white product carton
+  - 'fern'    : Botanical green fern leaf frond
+  - 'coconut' : Textured organic whole coconut
+{%- endcomment -%}
+
+{%- case variant -%}
+  {%- when 'bag' -%}
+    <svg
+      class="iwt__demo-svg"
+      viewBox="0 0 200 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Kraft paper shopping bag"
+      preserveAspectRatio="xMidYMid meet"
+      style="width:100%;height:100%;max-height:130px;display:block;"
+    >
+      <defs>
+        <linearGradient id="kraft-body" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E5BE94"/>
+          <stop offset="60%" stop-color="#D4A778"/>
+          <stop offset="100%" stop-color="#BC8D5C"/>
+        </linearGradient>
+        <linearGradient id="kraft-fold" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#C29463"/>
+          <stop offset="100%" stop-color="#AB7C4C"/>
+        </linearGradient>
+        <filter id="bag-drop-shadow" x="-20%" y="-10%" width="140%" height="130%">
+          <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#543A22" flood-opacity="0.18"/>
+        </filter>
+      </defs>
+
+      <!-- Bag shadow -->
+      <ellipse cx="102" cy="184" rx="54" ry="7" fill="#2E2319" opacity="0.2"/>
+
+      <g filter="url(#bag-drop-shadow)">
+        <!-- Handles behind bag top -->
+        <path d="M78,80 L78,48 C78,40 84,36 92,36 L108,36 C116,36 122,40 122,48 L122,80" stroke="#B88A58" stroke-width="12" stroke-linecap="square" fill="none"/>
+        <path d="M82,78 L82,48 C82,44 86,41 93,41 L107,41 C114,41 118,44 118,48 L118,78" stroke="#DEC09A" stroke-width="4" stroke-linecap="square" fill="none"/>
+
+        <!-- Main bag body -->
+        <polygon points="56,76 144,76 154,180 46,180" fill="url(#kraft-body)"/>
+
+        <!-- Top fold lip -->
+        <polygon points="56,76 144,76 142,88 58,88" fill="#C29463"/>
+
+        <!-- Crease creases & bottom gusset lines -->
+        <line x1="56" y1="76" x2="68" y2="180" stroke="#AB7C4C" stroke-width="1.5" opacity="0.6"/>
+        <line x1="144" y1="76" x2="132" y2="180" stroke="#FFE7C7" stroke-width="1.5" opacity="0.5"/>
+        <polygon points="46,150 154,150 153,158 47,158" fill="url(#kraft-fold)" opacity="0.5"/>
+
+        <!-- Minimal crown/zigzag stamp mark in lower-right -->
+        <path d="M124,166 L124,156 L128,162 L132,156 L136,162 L140,156 L140,166 Z" stroke="#1A1A1A" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+      </g>
+    </svg>
+
+  {%- when 'box' -%}
+    <svg
+      class="iwt__demo-svg"
+      viewBox="0 0 220 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Cardboard delivery and recyclable boxes"
+      preserveAspectRatio="xMidYMid meet"
+      style="width:100%;height:100%;max-height:130px;display:block;"
+    >
+      <defs>
+        <linearGradient id="box-kraft-face" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E5C5A0"/>
+          <stop offset="100%" stop-color="#CB9F6E"/>
+        </linearGradient>
+        <linearGradient id="box-white-face" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="100%" stop-color="#ECECEC"/>
+        </linearGradient>
+        <filter id="box-shadow" x="-15%" y="-10%" width="130%" height="130%">
+          <feDropShadow dx="3" dy="8" stdDeviation="7" flood-color="#36291C" flood-opacity="0.18"/>
+        </filter>
+      </defs>
+
+      <!-- Soft ground shadows -->
+      <ellipse cx="140" cy="180" rx="55" ry="8" fill="#2E2319" opacity="0.16"/>
+      <ellipse cx="88" cy="183" rx="38" ry="6" fill="#2E2319" opacity="0.22"/>
+
+      <!-- Big brown shipping carton -->
+      <g filter="url(#box-shadow)">
+        <rect x="88" y="70" width="102" height="106" rx="4" fill="url(#box-kraft-face)"/>
+        <!-- Top tape / handle cutout -->
+        <rect x="118" y="88" width="24" height="7" rx="3.5" fill="#B38755"/>
+        <!-- Brand stamp -->
+        <path d="M162,160 L162,152 L166,157 L170,152 L174,157 L178,152 L178,160 Z" stroke="#1A1A1A" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+      </g>
+
+      <!-- Smaller white recyclable carton overlapping in front left -->
+      <g filter="url(#box-shadow)">
+        <rect x="62" y="112" width="62" height="66" rx="3" fill="url(#box-white-face)"/>
+        <rect x="62" y="112" width="16" height="66" fill="#DFDFDF" opacity="0.4"/>
+        <path d="M102,164 L102,158 L105,162 L108,158 L111,162 L114,158 L114,164 Z" stroke="#1A1A1A" stroke-width="1.4" fill="none" stroke-linejoin="round"/>
+      </g>
+    </svg>
+
+  {%- when 'fern' -%}
+    <svg
+      class="iwt__demo-svg"
+      viewBox="0 0 220 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Fresh botanical green fern leaf"
+      preserveAspectRatio="xMidYMid meet"
+      style="width:100%;height:100%;max-height:130px;display:block;"
+    >
+      <defs>
+        <filter id="fern-shadow" x="-10%" y="-10%" width="120%" height="130%">
+          <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#1B3A1C" flood-opacity="0.18"/>
+        </filter>
+      </defs>
+
+      <!-- Soft leaf shadow -->
+      <path d="M30,165 Q110,135 195,120" stroke="#253A22" stroke-width="14" stroke-linecap="round" opacity="0.12" filter="blur(4px)"/>
+
+      <!-- Main fern frond angled horizontally -->
+      <g transform="translate(10, 10) rotate(-8 100 100)" filter="url(#fern-shadow)">
+        <!-- Central green rachis / spine stem -->
+        <path d="M25,145 Q100,105 190,82" stroke="#5C8538" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+        <!-- Leaf pinnae pairs graduating in size -->
+        <!-- Stem end small -->
+        <path d="M35,142 Q40,155 45,158" stroke="#48782B" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M38,138 Q42,126 48,124" stroke="#528430" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Pair 1 -->
+        <path d="M50,132 Q58,155 70,160" stroke="#3D6B24" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M54,129 Q60,108 72,106" stroke="#4C802B" stroke-width="4.5" stroke-linecap="round"/>
+
+        <!-- Pair 2 (Main lush body) -->
+        <path d="M68,123 Q80,154 96,162" stroke="#447326" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M72,120 Q84,94 100,90" stroke="#568F32" stroke-width="5.5" stroke-linecap="round"/>
+
+        <!-- Pair 3 -->
+        <path d="M88,114 Q105,148 122,156" stroke="#467828" stroke-width="6" stroke-linecap="round"/>
+        <path d="M92,111 Q108,82 126,80" stroke="#5C9A35" stroke-width="6" stroke-linecap="round"/>
+
+        <!-- Pair 4 -->
+        <path d="M110,106 Q128,138 146,146" stroke="#4C802B" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M114,103 Q132,74 150,72" stroke="#66A83B" stroke-width="5.5" stroke-linecap="round"/>
+
+        <!-- Pair 5 -->
+        <path d="M132,98 Q148,126 164,132" stroke="#548C2E" stroke-width="5" stroke-linecap="round"/>
+        <path d="M136,95 Q152,70 168,68" stroke="#71B542" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- Pair 6 towards tip -->
+        <path d="M152,90 Q166,112 178,116" stroke="#5B9632" stroke-width="4" stroke-linecap="round"/>
+        <path d="M156,87 Q170,68 182,66" stroke="#7CBF4A" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Tip pinnule -->
+        <path d="M172,84 Q186,81 195,80" stroke="#87CA53" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+  {%- when 'coconut' -%}
+    <svg
+      class="iwt__demo-svg"
+      viewBox="0 0 200 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Natural fibrous whole coconut"
+      preserveAspectRatio="xMidYMid meet"
+      style="width:100%;height:100%;max-height:130px;display:block;"
+    >
+      <defs>
+        <radialGradient id="coconut-shell" cx="38%" cy="38%" r="65%">
+          <stop offset="0%" stop-color="#84634B"/>
+          <stop offset="45%" stop-color="#593D2A"/>
+          <stop offset="85%" stop-color="#3A2417"/>
+          <stop offset="100%" stop-color="#24140B"/>
+        </radialGradient>
+        <filter id="coconut-shadow" x="-20%" y="-10%" width="140%" height="130%">
+          <feDropShadow dx="2" dy="10" stdDeviation="9" flood-color="#221208" flood-opacity="0.25"/>
+        </filter>
+      </defs>
+
+      <!-- Ground contact shadow -->
+      <ellipse cx="102" cy="172" rx="46" ry="8" fill="#1C1008" opacity="0.28"/>
+
+      <g filter="url(#coconut-shadow)">
+        <!-- Main textured round oval shell -->
+        <ellipse cx="100" cy="116" rx="52" ry="56" fill="url(#coconut-shell)"/>
+
+        <!-- Whispy hair fibers extending from the husk -->
+        <path d="M60,80 Q48,60 52,48" stroke="#4A3222" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M72,70 Q68,52 74,40" stroke="#694833" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M92,62 Q90,44 86,34" stroke="#543A27" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M110,62 Q118,46 114,35" stroke="#6E4C35" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M130,70 Q144,54 140,42" stroke="#4E3422" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M148,88 Q164,80 166,70" stroke="#5E402B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M152,118 Q168,122 172,130" stroke="#4E3422" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M48,124 Q34,130 30,138" stroke="#543825" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+        <!-- Surface fiber cross-hatching -->
+        <path d="M70,95 Q100,110 130,100" stroke="#7A563C" stroke-width="1.2" opacity="0.4" fill="none"/>
+        <path d="M65,120 Q100,135 135,125" stroke="#7A563C" stroke-width="1.2" opacity="0.4" fill="none"/>
+        <path d="M75,145 Q100,152 125,145" stroke="#362215" stroke-width="1.2" opacity="0.5" fill="none"/>
+      </g>
+    </svg>
+
+  {%- else -%}
+    <svg
+      class="iwt__demo-svg"
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Showcase icon"
+    >
+      <circle cx="50" cy="50" r="30" fill="#E5E7EB"/>
+    </svg>
+{%- endcase -%}

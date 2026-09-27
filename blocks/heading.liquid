@@ -1,0 +1,346 @@
+{% if block.settings.foundation_anchor_id != blank -%}
+  <span
+    id="{{ block.settings.foundation_anchor_id | handle }}"
+    class="foundation-block-anchor"
+    aria-hidden="true"
+  ></span>
+{%- endif %}
+{%- liquid
+  assign heading_tag = block.settings.level | default: 'h2'
+  assign heading_size = block.settings.size | default: 'inherit'
+  assign heading_color = 'var(--color-text)'
+  if block.settings.color_role == 'accent'
+    assign heading_color = 'var(--color-accent)'
+  elsif block.settings.color_role == 'on_media'
+    assign heading_color = 'var(--color-on-media)'
+  endif
+-%}
+<div
+  class="{{ block.settings.foundation_custom_class | escape }} theme-heading theme-heading--{{ heading_size }} theme-heading--{{ block.settings.alignment }}"
+  style="--heading-color: {{ heading_color }}; --heading-max-width: {{ block.settings.max_width }}ch; --heading-custom-size: {{ block.settings.custom_size }}px; --heading-weight: {% if block.settings.weight == 'regular' %}var(--font-body-weight){% elsif block.settings.weight == 'bold' %}700{% else %}var(--font-heading-weight){% endif %};"
+  data-foundation-visibility="{{ block.settings.foundation_visibility }}"
+  data-foundation-margin-top="{{ block.settings.foundation_margin_top }}"
+  data-foundation-margin-bottom="{{ block.settings.foundation_margin_bottom }}"
+  {{ block.shopify_attributes }}
+>
+  <{{ heading_tag }} class="theme-heading__text">{{ block.settings.text }}</{{ heading_tag }}>
+</div>
+{% stylesheet %}
+  .theme-heading {
+    width: 100%;
+    color: var(--heading-color, var(--color-text));
+    text-align: var(--heading-alignment, left);
+  }
+  .theme-heading--left {
+    --heading-alignment: left;
+  }
+  .theme-heading--center {
+    --heading-alignment: center;
+  }
+  .theme-heading--right {
+    --heading-alignment: right;
+  }
+  .theme-heading__text {
+    max-width: var(--heading-max-width, 24ch);
+    margin: 0;
+    margin-inline: auto;
+    color: inherit;
+    font-family: var(--font-heading-family);
+    font-weight: var(--heading-weight, var(--font-heading-weight));
+    line-height: var(--line-height-heading);
+    text-wrap: balance;
+  }
+  .theme-heading__text em {
+    font-style: normal;
+  }
+  .theme-heading--left .theme-heading__text {
+    margin-inline: 0 auto;
+    text-align: left;
+  }
+  .theme-heading--center .theme-heading__text {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .theme-heading--right .theme-heading__text {
+    margin-inline: auto 0;
+    text-align: right;
+  }
+  .theme-heading--inherit .theme-heading__text {
+    font-size: calc(2rem * var(--font-heading-scale));
+  }
+  .theme-heading--inherit h1.theme-heading__text {
+    font-size: clamp(4.4rem, 8vw, calc(8rem * var(--font-heading-scale) * var(--foundation-display-scale) / 1.4));
+    line-height: 1;
+  }
+  .theme-heading--inherit h2.theme-heading__text {
+    font-size: clamp(2.6rem, 4vw, calc(3.6rem * var(--font-heading-scale)));
+  }
+  .theme-heading--inherit h3.theme-heading__text {
+    font-size: calc(2rem * var(--font-heading-scale));
+  }
+  .theme-heading--inherit h4.theme-heading__text,
+  .theme-heading--inherit h5.theme-heading__text,
+  .theme-heading--inherit h6.theme-heading__text {
+    font-size: calc(1.6rem * var(--font-heading-scale));
+  }
+  .theme-heading--small .theme-heading__text {
+    font-size: calc(2rem * var(--font-heading-scale));
+  }
+  .theme-heading--medium .theme-heading__text {
+    font-size: calc(3.2rem * var(--font-heading-scale));
+  }
+  .theme-heading--large .theme-heading__text {
+    font-size: clamp(3.8rem, 6vw, calc(6.4rem * var(--font-heading-scale)));
+  }
+  .theme-heading--display .theme-heading__text {
+    font-size: clamp(4.4rem, 8vw, calc(8rem * var(--font-heading-scale) * var(--foundation-display-scale) / 1.4));
+    line-height: 1;
+  }
+  .theme-heading--custom .theme-heading__text {
+    font-size: var(--heading-custom-size);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Heading",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Heading",
+      "default": "Tell your story"
+    },
+    {
+      "type": "select",
+      "id": "level",
+      "label": "Heading level",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Use global hierarchy"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "display",
+          "label": "Display"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "custom_size",
+      "label": "Custom size",
+      "min": 16,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "Weight",
+      "options": [
+        { "value": "theme", "label": "Theme heading" },
+        { "value": "regular", "label": "Regular" },
+        { "value": "bold", "label": "Bold" }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "color_role",
+      "label": "Color",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "on_media",
+          "label": "On media"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "ch",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "foundation_visibility",
+      "label": "Visibility",
+      "options": [
+        {
+          "value": "all",
+          "label": "All devices"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "foundation_custom_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_top",
+      "label": "Top margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "foundation_margin_bottom",
+      "label": "Bottom margin",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "2",
+          "label": "XS"
+        },
+        {
+          "value": "4",
+          "label": "Medium"
+        },
+        {
+          "value": "6",
+          "label": "Large"
+        },
+        {
+          "value": "8",
+          "label": "XL"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "foundation_anchor_id",
+      "label": "Anchor ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading"
+    },
+    {
+      "name": "Display heading",
+      "settings": {
+        "level": "h1",
+        "size": "display",
+        "max_width": 18
+      }
+    }
+  ]
+}
+{% endschema %}

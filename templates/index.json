@@ -1,0 +1,849 @@
+{
+  "sections": {
+    "editorial-carousel-hero": {
+      "type": "editorial-carousel-hero",
+      "blocks": {
+        "chair-rail-1": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Signature Leather Lounge",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted for enduring comfort",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Supple leather and timeless silhouettes designed to anchor your space with quiet confidence.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Lounge",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "stool-rail-2": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Modern Barstool",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Precision lines in petrol blue",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Elevated proportions meet ergonomic contouring for contemporary dining and living spaces.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Seating",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-3": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Accent Lounge Chair",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Sculptural forms with lasting character",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Hand-finished upholstery crafted with tactile warmth that deepens with every passing season.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "View Accents",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "sofa-rail-4": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Living Room Icons",
+            "is_cover": true
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Made for the moments between",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Timeless forms bring calm structure to the rooms where conversations take their time.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Living",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-5": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Sculptural Lounge",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "A softer place to land",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Relaxed proportions and supple finishes bring an effortless warmth to your everyday space.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Comfort",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "stool-rail-6": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Counter Stool",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Precision lines in petrol blue",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Elevated proportions meet ergonomic contouring for contemporary dining and living spaces.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Seating",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "chair-rail-7": {
+          "type": "_editorial-slide",
+          "settings": {
+            "accessibility_label": "Minimalist Chair",
+            "is_cover": false
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Crafted for enduring comfort",
+                "level": "h1",
+                "size": "display",
+                "color_role": "on_media"
+              }
+            },
+            "text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Supple leather and timeless silhouettes designed to anchor your space with quiet confidence.</p>",
+                "color_role": "on_media"
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop Studio",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        },
+        "rail": {
+          "type": "_editorial-rail",
+          "settings": {
+            "card_size": 118,
+            "card_radius": 18,
+            "card_gap": 14,
+            "image_fit": "contain",
+            "accessibility_label": "Featured product selections"
+          }
+        }
+      },
+      "block_order": [
+        "chair-rail-1",
+        "stool-rail-2",
+        "chair-rail-3",
+        "sofa-rail-4",
+        "chair-rail-5",
+        "stool-rail-6",
+        "chair-rail-7",
+        "rail"
+      ],
+      "settings": {
+        "color_scheme": "bare-light",
+        "desktop_height": 840,
+        "page_width": 1600,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "initial_slide": 3,
+        "autoplay": false,
+        "autoplay_interval": 6
+      }
+    },
+    "icons-with-text": {
+      "type": "icons-with-text",
+      "blocks": {
+        "values-surface": {
+          "type": "surface",
+          "settings": {
+            "shade": "canvas",
+            "border": "off",
+            "shadow": "none",
+            "radius": "token",
+            "padding": "large"
+          },
+          "blocks": {
+            "values-grid": {
+              "type": "grid",
+              "settings": {
+                "columns_desktop": 3,
+                "columns_tablet": 3,
+                "columns_mobile": "1",
+                "gap": "6",
+                "equal_height": true
+              },
+              "blocks": {
+                "intentional-design": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "eye",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 1,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "intentional-design-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Intentional design",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "intentional-design-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Everything we do starts with why.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "intentional-design-heading",
+                    "intentional-design-text"
+                  ]
+                },
+                "made-with-care": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "heart",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 2,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "made-with-care-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Made with care",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "made-with-care-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We believe in building better.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "made-with-care-heading",
+                    "made-with-care-text"
+                  ]
+                },
+                "team-goal": {
+                  "type": "icon-with-text",
+                  "settings": {
+                    "icon": "account",
+                    "alignment": "left",
+                    "card_style": "dashed",
+                    "step_index": 3,
+                    "card_radius": "lg",
+                    "card_padding": "lg"
+                  },
+                  "blocks": {
+                    "team-goal-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "A team with a goal",
+                        "level": "h3",
+                        "size": "inherit",
+                        "alignment": "left"
+                      }
+                    },
+                    "team-goal-text": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Real people making great products.</p>",
+                        "color_role": "muted",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "team-goal-heading",
+                    "team-goal-text"
+                  ]
+                }
+              },
+              "block_order": [
+                "intentional-design",
+                "made-with-care",
+                "team-goal"
+              ]
+            }
+          },
+          "block_order": [
+            "values-grid"
+          ]
+        }
+      },
+      "block_order": [
+        "values-surface"
+      ],
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "collection-list-bento": {
+      "type": "collection-list-bento",
+      "settings": {
+        "color_scheme": "bare-light",
+        "page_width": 1300,
+        "padding_top": 24,
+        "padding_bottom": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Shop collections",
+            "level": "h2",
+            "size": "inherit",
+            "alignment": "center"
+          }
+        },
+        "grid": {
+          "type": "grid",
+          "settings": {
+            "columns_desktop": 12,
+            "columns_tablet": 12,
+            "columns_mobile": "1"
+          },
+          "blocks": {
+            "card-1": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 1,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.collection.title }}",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-2": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 2,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.collection.title }}",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-3": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "wide",
+                "placeholder_index": 3,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.collection.title }}",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            },
+            "card-4": {
+              "type": "collection-card",
+              "settings": {
+                "presentation": "overlay",
+                "column_span": "narrow",
+                "placeholder_index": 4,
+                "overlay_surface": "background"
+              },
+              "blocks": {
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.collection.title }}",
+                    "level": "h3",
+                    "size": "inherit"
+                  }
+                }
+              },
+              "block_order": [
+                "title"
+              ]
+            }
+          },
+          "block_order": [
+            "card-1",
+            "card-2",
+            "card-3",
+            "card-4"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "grid"
+      ]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Featured collection",
+            "level": "h2",
+            "size": "inherit",
+            "alignment": "center"
+          }
+        },
+        "tabs": {
+          "type": "_collection-tabs",
+          "settings": {
+            "active_tab": 2,
+            "products_to_show": 6,
+            "columns_desktop": 4
+          },
+          "blocks": {
+            "product-card": {
+              "type": "product-card",
+              "static": true,
+              "settings": {
+                "product": "{{ closest.product }}"
+              },
+              "blocks": {
+                "image": {
+                  "type": "image",
+                  "settings": {
+                    "image": "{{ closest.product.featured_image }}",
+                    "link": "{{ closest.product.url }}",
+                    "alt": "{{ closest.product.title }}"
+                  }
+                },
+                "sale-badge": {
+                  "type": "badge",
+                  "settings": {
+                    "product": "{{ closest.product }}",
+                    "mode": "sale"
+                  }
+                },
+                "title": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "{{ closest.product.title }}",
+                    "level": "h3",
+                    "size": "small"
+                  }
+                },
+                "price": {
+                  "type": "price",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "rating": {
+                  "type": "rating",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                },
+                "view-product": {
+                  "type": "button",
+                  "settings": {
+                    "label": "View product",
+                    "style": "link",
+                    "link": "{{ closest.product.url }}"
+                  }
+                },
+                "vendor": {
+                  "type": "eyebrow",
+                  "settings": {
+                    "text": "{{ closest.product.vendor }}",
+                    "color_role": "muted"
+                  }
+                },
+                "swatches": {
+                  "type": "product-swatches",
+                  "settings": {
+                    "product": "{{ closest.product }}"
+                  }
+                }
+              },
+              "block_order": [
+                "image",
+                "sale-badge",
+                "vendor",
+                "title",
+                "price",
+                "rating",
+                "swatches",
+                "view-product"
+              ]
+            }
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "tabs"
+      ],
+      "settings": {
+        "page_width": 1360,
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "image-with-text": {
+      "type": "custom-section",
+      "settings": {
+        "page_width": 1200,
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "composition": {
+          "type": "media-text",
+          "settings": {
+            "media_position": "start",
+            "ratio": "media-wide",
+            "alignment": "center"
+          },
+          "blocks": {
+            "media": {
+              "type": "image",
+              "settings": {
+                "placeholder_variant": "lifestyle_1"
+              }
+            },
+            "copy": {
+              "type": "group",
+              "settings": {
+                "direction": "column",
+                "alignment": "start",
+                "gap": "3"
+              },
+              "blocks": {
+                "heading": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "The everyday edit",
+                    "level": "h2",
+                    "size": "medium"
+                  }
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Easy layers, useful details, and pieces to reach for again and again.</p>"
+                  }
+                }
+              },
+              "block_order": [
+                "heading",
+                "text"
+              ]
+            }
+          },
+          "block_order": [
+            "media",
+            "copy"
+          ]
+        }
+      },
+      "block_order": [
+        "composition"
+      ]
+    },
+    "featured-product": {
+      "type": "featured-product",
+      "settings": {
+        "color_scheme": "bare-light"
+      },
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Product of the month",
+            "level": "h2",
+            "size": "medium",
+            "alignment": "center"
+          }
+        },
+        "content": {
+          "type": "_featured-product-content",
+          "blocks": {
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "{{ closest.product.title }}",
+                "level": "h3",
+                "size": "medium"
+              }
+            },
+            "price": {
+              "type": "price",
+              "settings": {
+                "product": "{{ closest.product }}"
+              }
+            }
+          },
+          "block_order": [
+            "title",
+            "price"
+          ]
+        }
+      },
+      "block_order": [
+        "heading",
+        "content"
+      ]
+    },
+    "featured-blog": {
+      "type": "featured-blog",
+      "settings": {
+        "page_width": 1300,
+        "padding_top": 56,
+        "padding_bottom": 56
+      },
+      "blocks": {
+        "header": {
+          "type": "group",
+          "settings": {
+            "direction": "row",
+            "alignment": "center",
+            "gap": "3"
+          },
+          "blocks": {
+            "heading": {
+              "type": "heading",
+              "settings": {
+                "text": "From the Journal",
+                "level": "h2",
+                "size": "small",
+                "alignment": "left"
+              }
+            },
+            "view-all": {
+              "type": "link",
+              "settings": {
+                "label": "View all",
+                "icon": "arrow-right"
+              }
+            }
+          },
+          "block_order": [
+            "heading",
+            "view-all"
+          ]
+        },
+        "carousel": {
+          "type": "_blog-carousel",
+          "settings": {
+            "post_limit": 6,
+            "aspect_ratio": "landscape",
+            "show_date": true,
+            "show_author": true,
+            "show_excerpt": true,
+            "show_navigation": true
+          }
+        }
+      },
+      "block_order": [
+        "header",
+        "carousel"
+      ]
+    }
+  },
+  "order": [
+    "editorial-carousel-hero",
+    "icons-with-text",
+    "collection-list-bento",
+    "featured-collection",
+    "image-with-text",
+    "featured-product",
+    "featured-blog"
+  ]
+}
