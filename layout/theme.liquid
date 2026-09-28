@@ -1,7 +1,20 @@
+{%- liquid
+  assign initial_palette = settings.default_palette | default: 'palette_5'
+  assign initial_mode = 'light'
+  if settings.default_color_mode == 'dark'
+    assign initial_mode = 'dark'
+  endif
+  assign initial_scheme_key = initial_palette | append: '_' | append: initial_mode
+  assign initial_scheme = settings[initial_scheme_key] | default: settings.palette_5_light
+-%}
 <!doctype html>
 <html
   lang="{{ request.locale.iso_code }}"
   class="no-js"
+  data-palette="{{ initial_palette | escape }}"
+  data-color-mode="{{ initial_mode }}"
+  data-color-scheme="{{ initial_scheme.id | escape }}"
+  data-card-style="{{ settings.card_style | escape }}"
   data-focus-ring-style="{{ settings.foundation_focus_ring_style | escape }}"
   data-primary-button-style="{{ settings.foundation_button_style | default: 'solid' | escape }}"
   data-secondary-button-style="{{ settings.foundation_secondary_button_style | default: 'outline' | escape }}"
@@ -17,10 +30,55 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      (() => {
+        const paletteKey = 'framework-palette';
+        const modeKey = 'framework-color-mode';
+        const palettes = {
+          palette_1: { light: {{ settings.palette_1_light.id | json }}, dark: {{ settings.palette_1_dark.id | json }} },
+          palette_2: { light: {{ settings.palette_2_light.id | json }}, dark: {{ settings.palette_2_dark.id | json }} },
+          palette_3: { light: {{ settings.palette_3_light.id | json }}, dark: {{ settings.palette_3_dark.id | json }} },
+          palette_4: { light: {{ settings.palette_4_light.id | json }}, dark: {{ settings.palette_4_dark.id | json }} },
+          palette_5: { light: {{ settings.palette_5_light.id | json }}, dark: {{ settings.palette_5_dark.id | json }} }
+        };
+        function readStoredValue(key, legacyKeys) {
+          const value = localStorage.getItem(key);
+          if (value !== null) {
+            legacyKeys.forEach((legacyKey) => localStorage.removeItem(legacyKey));
+            return value;
+          }
+          for (const legacyKey of legacyKeys) {
+            const legacyValue = localStorage.getItem(legacyKey);
+            if (legacyValue === null) continue;
+            localStorage.setItem(key, legacyValue);
+            localStorage.removeItem(legacyKey);
+            return legacyValue;
+          }
+          return null;
+        }
+        let savedPalette = null;
+        let savedMode = null;
+        try {
+          savedPalette = readStoredValue(paletteKey, ['nigat-palette']);
+          savedMode = readStoredValue(modeKey, ['nigat-color-mode', 'nigat-color-scheme']);
+        } catch (_) {}
+        const palette = Object.hasOwn(palettes, savedPalette) ? savedPalette : {{ initial_palette | json }};
+        const preferredMode = {{ settings.default_color_mode | json }};
+        const mode = savedMode === 'light' || savedMode === 'dark'
+          ? savedMode
+          : preferredMode === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : preferredMode === 'dark' ? 'dark' : 'light';
+        document.documentElement.dataset.palette = palette;
+        document.documentElement.dataset.colorMode = mode;
+        document.documentElement.dataset.colorScheme = palettes[palette][mode];
+        document.documentElement.dataset.cardStyle = {{ settings.card_style | json }};
+      })();
+    </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta
       name="theme-color"
-      content="{{ settings.palette_5_light.settings.background | default: '#ffffff' }}"
+      content="{{ initial_scheme.settings.background | default: '#ffffff' }}"
       data-theme-color
     >
     <link rel="canonical" href="{{ canonical_url }}">
@@ -265,52 +323,6 @@
         }
       {% endfor %}
     {% endstyle %}
-
-    <script>
-      (() => {
-        const paletteKey = 'framework-palette';
-        const modeKey = 'framework-color-mode';
-        const palettes = {
-          palette_1: { light: {{ settings.palette_1_light.id | json }}, dark: {{ settings.palette_1_dark.id | json }} },
-          palette_2: { light: {{ settings.palette_2_light.id | json }}, dark: {{ settings.palette_2_dark.id | json }} },
-          palette_3: { light: {{ settings.palette_3_light.id | json }}, dark: {{ settings.palette_3_dark.id | json }} },
-          palette_4: { light: {{ settings.palette_4_light.id | json }}, dark: {{ settings.palette_4_dark.id | json }} },
-          palette_5: { light: {{ settings.palette_5_light.id | json }}, dark: {{ settings.palette_5_dark.id | json }} }
-        };
-        function readStoredValue(key, legacyKeys) {
-          const value = localStorage.getItem(key);
-          if (value !== null) {
-            legacyKeys.forEach((legacyKey) => localStorage.removeItem(legacyKey));
-            return value;
-          }
-          for (const legacyKey of legacyKeys) {
-            const legacyValue = localStorage.getItem(legacyKey);
-            if (legacyValue === null) continue;
-            localStorage.setItem(key, legacyValue);
-            localStorage.removeItem(legacyKey);
-            return legacyValue;
-          }
-          return null;
-        }
-        let savedPalette = null;
-        let savedMode = null;
-        try {
-          savedPalette = readStoredValue(paletteKey, ['nigat-palette']);
-          savedMode = readStoredValue(modeKey, ['nigat-color-mode', 'nigat-color-scheme']);
-        } catch (_) {}
-        const palette = palettes[savedPalette] ? savedPalette : {{ settings.default_palette | json }};
-        const preferredMode = {{ settings.default_color_mode | json }};
-        const mode = savedMode === 'light' || savedMode === 'dark'
-          ? savedMode
-          : preferredMode === 'system'
-            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-            : preferredMode;
-        document.documentElement.dataset.palette = palette;
-        document.documentElement.dataset.colorMode = mode;
-        document.documentElement.dataset.colorScheme = palettes[palette][mode];
-        document.documentElement.dataset.cardStyle = {{ settings.card_style | json }};
-      })();
-    </script>
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
 
