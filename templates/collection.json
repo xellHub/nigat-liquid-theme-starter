@@ -8,21 +8,6 @@
         "padding_bottom": 64
       },
       "blocks": {
-        "banner": {
-          "type": "_collection-banner",
-          "settings": {},
-          "blocks": {
-            "collection-image": {
-              "type": "image",
-              "static": true,
-              "settings": {
-                "image": "{{ closest.collection.image }}",
-                "alt": "{{ closest.collection.title }}"
-              }
-            }
-          },
-          "block_order": []
-        },
         "navigation": {
           "type": "_collection-navigation",
           "settings": {}
@@ -101,7 +86,6 @@
         }
       },
       "block_order": [
-        "banner",
         "navigation",
         "content"
       ]
