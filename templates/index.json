@@ -268,7 +268,7 @@
             "card_size": 118,
             "card_radius": 18,
             "card_gap": 14,
-            "image_fit": "contain",
+            "image_fit": "cover",
             "accessibility_label": "Featured product selections"
           }
         }

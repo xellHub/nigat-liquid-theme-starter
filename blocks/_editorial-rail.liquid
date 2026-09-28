@@ -2,7 +2,7 @@
   assign card_size = block.settings.card_size | default: 118
   assign card_radius = block.settings.card_radius | default: 18
   assign card_gap = block.settings.card_gap | default: 14
-  assign image_fit = block.settings.image_fit | default: 'contain'
+  assign image_fit = block.settings.image_fit | default: 'cover'
   assign initial_index = 0
 -%}
 
@@ -10,6 +10,7 @@
   class="eh__bottom-bar"
   id="EditorialRail-{{ block.id }}"
   data-eh-rail-block
+  data-eh-image-fit="{{ image_fit }}"
   style="
     --eh-card-size: {{ card_size }}px;
     --eh-card-radius: {{ card_radius }}px;
@@ -166,6 +167,12 @@
   .eh__card--cover .eh__card-img {
     object-fit: cover;
   }
+  .eh__bottom-bar[data-eh-image-fit='cover'] .eh__card-media {
+    padding: 0;
+  }
+  .eh__bottom-bar[data-eh-image-fit='cover'] .eh__card-media img {
+    object-fit: cover;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -223,7 +230,7 @@
           "label": "Cover (fill card area)"
         }
       ],
-      "default": "contain"
+      "default": "cover"
     },
     {
       "type": "text",

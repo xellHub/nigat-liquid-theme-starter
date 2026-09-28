@@ -254,6 +254,7 @@
       "items_with_count": "{{ count }} product",
       "items_with_count_plural": "{{ count }} products",
       "no_matches": "No products found.",
+      "empty_subtext": "Check back soon for new products.",
       "preview_collection_1": "New arrivals",
       "preview_collection_2": "Everyday",
       "preview_collection_3": "Accessories",

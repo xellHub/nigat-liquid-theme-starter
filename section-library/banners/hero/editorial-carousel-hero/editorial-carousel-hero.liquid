@@ -84,7 +84,7 @@
     {% content_for 'blocks' %}
 
     {%- unless has_rail_block -%}
-      <div class="eh__bottom-bar" data-eh-rail-fallback>
+      <div class="eh__bottom-bar" data-eh-rail-fallback data-eh-image-fit="cover">
         <div class="eh__rail" aria-label="Featured product selections" data-eh-rail>
           {%- assign slide_idx = 0 -%}
           {%- for block in section.blocks -%}
@@ -327,6 +327,12 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  .editorial-carousel .eh__bottom-bar[data-eh-image-fit='cover'] .eh__card-media {
+    padding: 0;
+  }
+  .editorial-carousel .eh__bottom-bar[data-eh-image-fit='cover'] .eh__card-media img {
+    object-fit: cover;
   }
 
   @media (max-width: 749px) {
@@ -1170,7 +1176,7 @@
             "card_size": 118,
             "card_radius": 18,
             "card_gap": 14,
-            "image_fit": "contain",
+            "image_fit": "cover",
             "accessibility_label": "Featured product selections"
           }
         }

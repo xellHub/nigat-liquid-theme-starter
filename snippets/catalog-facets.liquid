@@ -494,32 +494,34 @@
                 {{
                   'general.search.empty_no_terms_subtext' | t
                 }}
+              {%- elsif has_active_filters -%}
+                {{ 'collections.general.use_fewer_filters' | t }}
               {%- else -%}
-                {{
-                  'collections.general.use_fewer_filters' | t
-                }}
+                {{ 'collections.general.empty_subtext' | t }}
               {%- endif -%}
             </p>
 
-            <div class="search-empty__actions">
-              {%- if can_clear_all -%}
-                <a
-                  href="{{ clear_url }}"
-                  class="button button--secondary search-empty__btn"
-                  data-ajax-clear-all
-                >
-                  <span>{{ 'collections.general.clear_all' | t }}</span>
-                </a>
-              {%- else -%}
-                <a
-                  href="{{ routes.all_products_collection_url }}"
-                  class="button button--primary search-empty__btn"
-                >
-                  <span>{{ 'general.search.browse_catalog' | t }}</span>
-                  {% render 'icon', name: 'arrow-right' %}
-                </a>
-              {%- endif -%}
-            </div>
+            {%- if can_clear_all or mode == 'search' or results.handle != 'all' -%}
+              <div class="search-empty__actions">
+                {%- if can_clear_all -%}
+                  <a
+                    href="{{ clear_url }}"
+                    class="button button--secondary search-empty__btn"
+                    data-ajax-clear-all
+                  >
+                    <span>{{ 'collections.general.clear_all' | t }}</span>
+                  </a>
+                {%- else -%}
+                  <a
+                    href="{{ routes.all_products_collection_url }}"
+                    class="button button--primary search-empty__btn"
+                  >
+                    <span>{{ 'general.search.browse_catalog' | t }}</span>
+                    {% render 'icon', name: 'arrow-right' %}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
           </div>
         {%- endif -%}
       </div>

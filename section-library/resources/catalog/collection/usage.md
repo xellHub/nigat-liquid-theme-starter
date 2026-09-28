@@ -31,10 +31,6 @@ _No settings._
 Allowed children:
 
 - `image`
-- `heading`
-- `text`
-- `button`
-- `badge`
 
 ## Block: `image`
 
@@ -48,6 +44,17 @@ Allowed children:
 Allowed children:
 
 - None
+
+## Block: `_collection-navigation`
+
+| ID | Type | Default | Editor label |
+| --- | --- | --- | --- |
+| `menu` | link_list | — | Subcategory menu |
+
+Allowed children:
+
+- `heading`
+- `text`
 
 ## Block: `heading`
 
@@ -91,25 +98,25 @@ Allowed children:
 
 - None
 
-## Block: `button`
+## Block: `_catalog-results`
 
 | ID | Type | Default | Editor label |
 | --- | --- | --- | --- |
-| `label` | text | Shop now | Label |
-| `link` | url | — | Link |
-| `open_in_new_tab` | checkbox | false | Open in new tab |
-| `style` | select | primary | Style |
-| `size` | select | medium | Size |
-| `icon` | select | none | Icon |
-| `foundation_visibility` | select | all | Visibility |
-| `foundation_custom_class` | text | — | Custom class |
-| `foundation_margin_top` | select | none | Top margin |
-| `foundation_margin_bottom` | select | none | Bottom margin |
-| `foundation_anchor_id` | text | — | Anchor ID |
+| `mode` | select | collection | Resource |
+| `items_per_page` | range | 12 | Items per page |
+| `columns_desktop` | range | 4 | Desktop columns |
+| `columns_mobile` | select | 2 | Mobile columns |
+| `enable_sorting` | checkbox | true | Enable sorting |
+| `enable_filtering` | checkbox | true | Enable filtering |
 
 Allowed children:
 
-- None
+- `heading`
+- `text`
+- `badge`
+- `button`
+- `product-card`
+- `@app`
 
 ## Block: `badge`
 
@@ -132,36 +139,25 @@ Allowed children:
 
 - None
 
-## Block: `_collection-navigation`
+## Block: `button`
 
 | ID | Type | Default | Editor label |
 | --- | --- | --- | --- |
-| `menu` | link_list | — | Subcategory menu |
+| `label` | text | Shop now | Label |
+| `link` | url | — | Link |
+| `open_in_new_tab` | checkbox | false | Open in new tab |
+| `style` | select | primary | Style |
+| `size` | select | medium | Size |
+| `icon` | select | none | Icon |
+| `foundation_visibility` | select | all | Visibility |
+| `foundation_custom_class` | text | — | Custom class |
+| `foundation_margin_top` | select | none | Top margin |
+| `foundation_margin_bottom` | select | none | Bottom margin |
+| `foundation_anchor_id` | text | — | Anchor ID |
 
 Allowed children:
 
-- `heading`
-- `text`
-
-## Block: `_catalog-results`
-
-| ID | Type | Default | Editor label |
-| --- | --- | --- | --- |
-| `mode` | select | collection | Resource |
-| `items_per_page` | range | 12 | Items per page |
-| `columns_desktop` | range | 4 | Desktop columns |
-| `columns_mobile` | select | 2 | Mobile columns |
-| `enable_sorting` | checkbox | true | Enable sorting |
-| `enable_filtering` | checkbox | true | Enable filtering |
-
-Allowed children:
-
-- `heading`
-- `text`
-- `badge`
-- `button`
-- `product-card`
-- `@app`
+- None
 
 ## Block: `product-card`
 

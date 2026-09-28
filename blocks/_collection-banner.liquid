@@ -1,33 +1,25 @@
-<div class="collection-banner" {{ block.shopify_attributes }}>
-  {%- if collection.image != blank -%}
+{%- if collection.image != blank -%}
+  <div class="collection-banner" {{ block.shopify_attributes }}>
     <div class="collection-banner__media">
       {% content_for 'block', type: 'image', id: 'collection-image' %}
     </div>
-  {%- endif -%}
-  <div class="collection-banner__content">
-    {% content_for 'blocks' %}
   </div>
-</div>
+{%- endif -%}
 
 {% stylesheet %}
-  .collection-banner { display: grid; gap: var(--space-6); margin-block-end: var(--space-7); }
-  .collection-banner:has(.collection-banner__media) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .collection-banner { margin-block-end: var(--space-7); }
   .collection-banner__media { aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-card); }
   .collection-banner__media .theme-image { height: 100%; }
-  .collection-banner__content { display: grid; gap: var(--space-3); }
-  @media (max-width: 749px) { .collection-banner:has(.collection-banner__media) { grid-template-columns: 1fr; } }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Collection banner",
   "tag": null,
-  "blocks": [{"type":"image"},{"type":"heading"},{"type":"text"},{"type":"button"},{"type":"badge"}],
+  "blocks": [{"type":"image"}],
   "settings": [],
   "presets": [{"name":"Collection banner","blocks":[
-    {"type":"image","id":"collection-image","static":true,"settings":{"image":"{{ closest.collection.image }}","alt":"{{ closest.collection.title }}"}},
-    {"type":"heading","settings":{"text":"{{ closest.collection.title }}","level":"h1","size":"large"}},
-    {"type":"text","settings":{"text":"{{ closest.collection.description }}"}}
+    {"type":"image","id":"collection-image","static":true,"settings":{"image":"{{ closest.collection.image }}","alt":"{{ closest.collection.title }}"}}
   ]}]
 }
 {% endschema %}

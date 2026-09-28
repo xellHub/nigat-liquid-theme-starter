@@ -12,8 +12,6 @@ The section owns layout and color context only. Content and behavior are supplie
 | ID | Type | Default | Editor label |
 | --- | --- | --- | --- |
 | `color_scheme` | color_scheme | bare-light | Color scheme |
-| `padding_top` | range | 64 | t:common.padding.top |
-| `padding_bottom` | range | 64 | t:common.padding.bottom |
 
 ## Accepted top-level blocks
 

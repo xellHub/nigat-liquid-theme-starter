@@ -19,26 +19,9 @@
                 "image": "{{ closest.collection.image }}",
                 "alt": "{{ closest.collection.title }}"
               }
-            },
-            "title": {
-              "type": "heading",
-              "settings": {
-                "text": "{{ closest.collection.title }}",
-                "level": "h1",
-                "size": "large"
-              }
-            },
-            "description": {
-              "type": "text",
-              "settings": {
-                "text": "{{ closest.collection.description }}"
-              }
             }
           },
-          "block_order": [
-            "title",
-            "description"
-          ]
+          "block_order": []
         },
         "navigation": {
           "type": "_collection-navigation",

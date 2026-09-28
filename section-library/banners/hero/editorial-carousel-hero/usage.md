@@ -1113,7 +1113,7 @@ Allowed children:
 | `card_size` | range | 118 | Thumbnail button size |
 | `card_radius` | range | 18 | Corner radius |
 | `card_gap` | range | 14 | Gap between cards |
-| `image_fit` | select | contain | Thumbnail image fit |
+| `image_fit` | select | cover | Thumbnail image fit |
 | `accessibility_label` | text | Featured product selections | Accessibility label |
 
 Allowed children:
