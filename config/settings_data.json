@@ -309,7 +309,7 @@
     "route_returns": "/policies/refund-policy"
   },
   "presets": {
-    "nigat": {
+    "framework": {
       "color_schemes": {
         "violet-light": {
           "settings": {

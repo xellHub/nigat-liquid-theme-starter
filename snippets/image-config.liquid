@@ -7,13 +7,14 @@
 {%- endcomment -%}
 
 <script>
-  window.nigat = window.nigat || {};
+  window.framework = Object.assign({}, window.nigat || {}, window.framework || {});
+  window.nigat = window.framework;
 
   /**
    * @readonly
    * @enum {Object}
    */
-  window.nigat.ImageBreakpoints = Object.freeze({
+  window.framework.ImageBreakpoints = Object.freeze({
     // Standard CDN breakpoint tiers
     CDN: Object.freeze([
       64, 128, 165, 192, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000, 2400, 3000, 3840,
@@ -50,10 +51,10 @@
   });
 
   // Alias for backward and semantic compatibility
-  window.nigat.ImageConfig = window.nigat.ImageBreakpoints;
+  window.framework.ImageConfig = window.framework.ImageBreakpoints;
 
   // Global Image Loader Controller
-  window.nigat.initThemeImageLoaders = function (container) {
+  window.framework.initThemeImageLoaders = function (container) {
     const root = container || document;
     const loaders = root.querySelectorAll ? root.querySelectorAll('[data-theme-image-loader]') : [];
     loaders.forEach((loader) => {

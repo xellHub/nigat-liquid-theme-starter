@@ -6,7 +6,7 @@ Read [the implementation tasks](fork-foundation-plan.md) after this review. Each
 
 ## Recommendation
 
-Keep the current nested theme-block architecture. Nigat already has the core structure needed for a reusable foundation. The next work should make its contracts reliable, complete the essential commerce features, and make brand changes propagate consistently through tokens.
+Keep the current nested theme-block architecture. Framework already has the core structure needed for a reusable foundation. The next work should make its contracts reliable, complete the essential commerce features, and make brand changes propagate consistently through tokens.
 
 The principal weakness is the difference between declaring reusable blocks/tokens and actually using them throughout the storefront. A passing composition check does not establish that every visible element is selectable, every setting changes the page, or every commerce interaction works.
 

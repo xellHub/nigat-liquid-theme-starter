@@ -2,7 +2,7 @@
 
 ## Goal
 
-Nigat is intended to be a forkable foundation theme rather than a one-brand storefront. A fork should be able to establish a distinct visual system through settings and semantic tokens instead of searching for hard-coded colors, spacing, radii, shadows, or motion values throughout section code.
+Framework is intended to be a forkable foundation theme rather than a one-brand storefront. A fork should be able to establish a distinct visual system through settings and semantic tokens instead of searching for hard-coded colors, spacing, radii, shadows, or motion values throughout section code.
 
 The desired end state is:
 

@@ -594,14 +594,14 @@
 
     const initAfterLoad = async () => {
       if (typeof window.EmblaCarousel !== 'function') {
-        window.nigatEmblaLoader ||= new Promise((resolve) => {
+        window.frameworkEmblaLoader ||= new Promise((resolve) => {
           const script = document.createElement('script');
           script.src = {{ 'embla-carousel.umd.js' | asset_url | json }};
           script.onload = resolve;
           script.onerror = resolve;
           document.head.appendChild(script);
         });
-        await window.nigatEmblaLoader;
+        await window.frameworkEmblaLoader;
       }
       init();
     };

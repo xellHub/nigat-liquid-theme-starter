@@ -97,11 +97,6 @@
     color: var(--color-text);
     cursor: pointer;
     box-shadow: var(--shadow-xs);
-    transition:
-      background-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
-      border-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
-      transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
-      box-shadow var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
   }
 
   .collection-editorial-layout .theme-carousel__button svg {
@@ -174,13 +169,6 @@
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-xs);
-    transition:
-      transform var(--motion-duration-normal, 250ms)
-        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1)),
-      box-shadow var(--motion-duration-normal, 250ms)
-        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1)),
-      border-color var(--motion-duration-normal, 250ms)
-        var(--motion-ease, cubic-bezier(0.4, 0, 0.2, 1));
   }
 
   .collection-editorial-layout .theme-collection-card:hover {
@@ -213,8 +201,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--motion-duration-normal, 400ms)
-      var(--motion-ease, cubic-bezier(0.2, 0, 0.2, 1));
   }
 
   .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__image,
@@ -265,17 +251,12 @@
     border-radius: var(--radius-full, 9999px);
     background: var(--color-surface);
     color: var(--color-text);
-    transition:
-      background-color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
-      color var(--motion-duration-fast, 150ms) var(--motion-ease, ease),
-      transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
   }
 
   .collection-editorial-layout .theme-collection-card__arrow svg {
     width: 1.6rem;
     height: 1.6rem;
     transform: rotate(-45deg);
-    transition: transform var(--motion-duration-fast, 150ms) var(--motion-ease, ease);
   }
 
   .collection-editorial-layout .theme-collection-card:hover .theme-collection-card__arrow {

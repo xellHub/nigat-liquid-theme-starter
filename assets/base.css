@@ -1,5 +1,5 @@
 /* ==========================================================================
-   nigat — base.css
+   Framework — base.css
    A small, modern Online Store 2.0 theme stylesheet.
    Mobile-first. No framework. No dependencies.
    ========================================================================== */
@@ -89,6 +89,10 @@
   --z-drawer: 9500; /* Sliding cart drawer */
   --z-modal: 99999; /* Modals, quick-view, product zoomer, search banner expansion */
   --z-toast: 100000; /* Global notifications, site toast alerts */
+  --ui-transition-fast: var(--motion-duration-fast, 180ms);
+  --ui-transition-normal: var(--motion-duration-normal, 240ms);
+  --ui-transition-slow: var(--motion-duration-slow, 480ms);
+  --ui-transition-easing: var(--motion-ease, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 :root:has(.announcement-bar-section),
@@ -962,13 +966,6 @@ textarea:focus {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  transition: transform var(--motion-duration, 240ms) cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
-}
-
-.header-section:has(.header--sticky.header--hidden),
-.header-section.header--hidden {
-  transform: translateY(-100%);
 }
 
 .header {
@@ -976,7 +973,15 @@ textarea:focus {
   z-index: var(--z-header);
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  transition: box-shadow var(--motion-duration, 240ms) ease;
+  transition: box-shadow var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+html.has-overlay-locked:has(cart-drawer .theme-overlay.is-open)
+  .header-section:has(.header--sticky) {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: calc(var(--z-drawer-backdrop, 9000) + 1);
+  pointer-events: none;
 }
 
 .footer,
@@ -993,11 +998,111 @@ textarea:focus {
     color-mix(in srgb, var(--color-shadow) calc(var(--shadow-opacity, 0.1) * 100%), transparent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .header-section:has(.header--sticky),
-  .header-section.header-section--sticky {
-    transition: none;
-  }
+/* --- Shared Card Transitions ------------------------------------------ */
+.theme-product-card--swap-true .theme-image::after {
+  transition: opacity var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.theme-collection-card__image,
+.theme-collection-card__media svg,
+.theme-collection-card__placeholder {
+  transition: transform var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.theme-gradient-card--hover-lift {
+  transition:
+    transform var(--ui-transition-fast) var(--ui-transition-easing),
+    box-shadow var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.theme-gradient-card--hover-shadow {
+  transition: box-shadow var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.material-collection-card__button {
+  transition:
+    transform var(--ui-transition-fast) var(--ui-transition-easing),
+    opacity var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.article-card__media svg,
+.article-card__image {
+  transition: transform var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.eh__card {
+  transition:
+    transform var(--ui-transition-normal) var(--ui-transition-easing),
+    border-color var(--ui-transition-fast) var(--ui-transition-easing),
+    box-shadow var(--ui-transition-normal) var(--ui-transition-easing),
+    opacity var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.eh__card-media img,
+.eh__card-img {
+  transition:
+    transform var(--ui-transition-normal) var(--ui-transition-easing),
+    opacity var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.events-list-section .events-card {
+  transition:
+    box-shadow var(--ui-transition-normal) var(--ui-transition-easing),
+    transform var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.events-list-section .events-card__cta-btn {
+  transition:
+    background-color var(--ui-transition-fast) var(--ui-transition-easing),
+    color var(--ui-transition-fast) var(--ui-transition-easing),
+    border-color var(--ui-transition-fast) var(--ui-transition-easing),
+    transform var(--ui-transition-fast) var(--ui-transition-easing),
+    opacity var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.events-list-section .events-card__image,
+.events-list-section .events-card__media-svg {
+  transition: transform var(--ui-transition-slow) var(--ui-transition-easing);
+}
+
+.editorial-triptych .et__image {
+  transition: transform calc(var(--ui-transition-slow) * 1.5) var(--ui-transition-easing);
+}
+
+.editorial-triptych .et__btn {
+  transition: all var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.collection-editorial-layout .theme-carousel__button {
+  transition:
+    background-color var(--ui-transition-fast) var(--ui-transition-easing),
+    border-color var(--ui-transition-fast) var(--ui-transition-easing),
+    transform var(--ui-transition-fast) var(--ui-transition-easing),
+    box-shadow var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.collection-editorial-layout .theme-collection-card {
+  transition:
+    transform var(--ui-transition-normal) var(--ui-transition-easing),
+    box-shadow var(--ui-transition-normal) var(--ui-transition-easing),
+    border-color var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.collection-editorial-layout .theme-collection-card__image,
+.collection-editorial-layout .theme-collection-card__media svg,
+.collection-editorial-layout .theme-collection-card__placeholder {
+  transition: transform var(--ui-transition-normal) var(--ui-transition-easing);
+}
+
+.collection-editorial-layout .theme-collection-card__arrow {
+  transition:
+    background-color var(--ui-transition-fast) var(--ui-transition-easing),
+    color var(--ui-transition-fast) var(--ui-transition-easing),
+    transform var(--ui-transition-fast) var(--ui-transition-easing);
+}
+
+.collection-editorial-layout .theme-collection-card__arrow svg {
+  transition: transform var(--ui-transition-fast) var(--ui-transition-easing);
 }
 
 .header__inner {
@@ -1123,6 +1228,10 @@ textarea:focus {
 }
 
 /* --- Global Body Scroll Locking for Drawers & Modals ------------------ */
+html.has-overlay-locked {
+  scrollbar-gutter: stable;
+}
+
 html.has-overlay-locked,
 body.scroll-locked {
   overflow: hidden !important;
@@ -1174,8 +1283,8 @@ body.scroll-locked {
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--motion-duration-fast, 180ms) var(--motion-ease, ease),
-    visibility var(--motion-duration-fast, 180ms) var(--motion-ease, ease);
+    opacity var(--ui-transition-fast) var(--ui-transition-easing),
+    visibility var(--ui-transition-fast) var(--ui-transition-easing);
 }
 
 .theme-overlay__backdrop-wrapper {
@@ -1227,13 +1336,13 @@ body.scroll-locked {
 .theme-overlay__panel {
   box-sizing: border-box;
   transition:
-    opacity var(--motion-duration-fast, 180ms) var(--motion-ease, ease),
-    transform var(--motion-duration-fast, 180ms) var(--motion-ease, ease),
-    visibility var(--motion-duration-fast, 180ms) var(--motion-ease, ease);
+    opacity var(--ui-transition-fast) var(--ui-transition-easing),
+    transform var(--ui-transition-fast) var(--ui-transition-easing),
+    visibility var(--ui-transition-fast) var(--ui-transition-easing);
 }
 
 .theme-overlay__panel[hidden] {
-  display: none !important;
+  display: none;
 }
 
 /* Popover Panel */
@@ -8631,14 +8740,13 @@ html[data-card-style="elevated"] :is(.product-card__info, .article-card__content
 }
 
 .cart-drawer {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-drawer);
+  display: block;
+  position: static;
+  width: 0;
+  height: 0;
   visibility: hidden;
   pointer-events: none;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  transition: visibility var(--ui-transition-normal) linear;
 }
 
 .cart-drawer.is-open,
@@ -8655,7 +8763,7 @@ html[data-card-style="elevated"] :is(.product-card__info, .article-card__content
   opacity: 0;
   backdrop-filter: var(--foundation-overlay-backdrop-filter);
   -webkit-backdrop-filter: var(--foundation-overlay-backdrop-filter);
-  transition: opacity 0.3s var(--foundation-motion-easing, ease);
+  transition: opacity var(--ui-transition-normal) var(--ui-transition-easing);
   cursor: pointer;
   z-index: var(--z-drawer-backdrop, 9000);
 }
@@ -8680,7 +8788,9 @@ html[data-card-style="elevated"] :is(.product-card__info, .article-card__content
   flex-direction: column;
   background-color: var(--color-background);
   transform: translateX(100%);
-  transition: transform 0.32s var(--foundation-motion-easing, ease);
+  transition:
+    transform var(--ui-transition-normal) var(--ui-transition-easing),
+    display var(--ui-transition-normal) allow-discrete;
   box-shadow: var(--shadow-drawer);
   overflow: hidden;
   z-index: var(--z-drawer, 9500);
@@ -8690,6 +8800,13 @@ html[data-card-style="elevated"] :is(.product-card__info, .article-card__content
 .cart-drawer .theme-overlay.is-open .cart-drawer__inner,
 .cart-drawer .theme-overlay[open] .cart-drawer__inner {
   transform: translateX(0);
+}
+
+@starting-style {
+  .cart-drawer .theme-overlay.is-open .cart-drawer__inner,
+  .cart-drawer .theme-overlay[open] .cart-drawer__inner {
+    transform: translateX(100%);
+  }
 }
 
 /* 1. Header */
@@ -10764,5 +10881,87 @@ html[data-card-style="elevated"] :is(.product-card__info, .article-card__content
 @media (min-width: 750px) {
   [data-foundation-visibility="mobile"] {
     display: none !important;
+  }
+}
+
+/* Horizontal content with frosted, position-aware scroll affordances. */
+.horizontal-scroll-frame {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.horizontal-scroll-viewport {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.horizontal-scroll-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll-edge {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  width: min(4.5rem, 18%);
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast, 180ms) ease, visibility var(--motion-duration-fast, 180ms) ease;
+}
+
+.horizontal-scroll-edge--left {
+  left: 0;
+  justify-content: flex-start;
+  padding-left: var(--space-2);
+  background: linear-gradient(to right, var(--color-background) 15%, transparent);
+}
+
+.horizontal-scroll-edge--right {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: var(--space-2);
+  background: linear-gradient(to left, var(--color-background) 15%, transparent);
+}
+
+.horizontal-scroll-frame[data-can-scroll-left="true"] > .horizontal-scroll-edge--left,
+.horizontal-scroll-frame[data-can-scroll-right="true"] > .horizontal-scroll-edge--right {
+  visibility: visible;
+  opacity: 1;
+}
+
+.horizontal-scroll-arrow {
+  display: grid;
+  width: var(--foundation-icon-button-size);
+  height: var(--foundation-icon-button-size);
+  flex: none;
+  padding: 0;
+  place-items: center;
+  border: var(--foundation-divider-width) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.horizontal-scroll-arrow svg {
+  width: 1.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizontal-scroll-edge {
+    transition: none;
   }
 }

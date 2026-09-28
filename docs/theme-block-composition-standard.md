@@ -1,7 +1,7 @@
 # The 5-Layer Theme Block Composition Standard
 
 > **Status:** Authoritative & Permanent Architecture Reference  
-> **Applies to:** All future sections, composite blocks, atomic theme blocks, and template configurations across `nigat` and its specialized forks.
+> **Applies to:** All future sections, composite blocks, atomic theme blocks, and template configurations across Framework and its specialized forks.
 
 ---
 

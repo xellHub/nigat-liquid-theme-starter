@@ -268,8 +268,8 @@
 
     <script>
       (() => {
-        const paletteKey = 'nigat-palette';
-        const modeKey = 'nigat-color-mode';
+        const paletteKey = 'framework-palette';
+        const modeKey = 'framework-color-mode';
         const palettes = {
           palette_1: { light: {{ settings.palette_1_light.id | json }}, dark: {{ settings.palette_1_dark.id | json }} },
           palette_2: { light: {{ settings.palette_2_light.id | json }}, dark: {{ settings.palette_2_dark.id | json }} },
@@ -277,11 +277,26 @@
           palette_4: { light: {{ settings.palette_4_light.id | json }}, dark: {{ settings.palette_4_dark.id | json }} },
           palette_5: { light: {{ settings.palette_5_light.id | json }}, dark: {{ settings.palette_5_dark.id | json }} }
         };
+        function readStoredValue(key, legacyKeys) {
+          const value = localStorage.getItem(key);
+          if (value !== null) {
+            legacyKeys.forEach((legacyKey) => localStorage.removeItem(legacyKey));
+            return value;
+          }
+          for (const legacyKey of legacyKeys) {
+            const legacyValue = localStorage.getItem(legacyKey);
+            if (legacyValue === null) continue;
+            localStorage.setItem(key, legacyValue);
+            localStorage.removeItem(legacyKey);
+            return legacyValue;
+          }
+          return null;
+        }
         let savedPalette = null;
         let savedMode = null;
         try {
-          savedPalette = localStorage.getItem(paletteKey);
-          savedMode = localStorage.getItem(modeKey) || localStorage.getItem('nigat-color-scheme');
+          savedPalette = readStoredValue(paletteKey, ['nigat-palette']);
+          savedMode = readStoredValue(modeKey, ['nigat-color-mode', 'nigat-color-scheme']);
         } catch (_) {}
         const palette = palettes[savedPalette] ? savedPalette : {{ settings.default_palette | json }};
         const preferredMode = {{ settings.default_color_mode | json }};

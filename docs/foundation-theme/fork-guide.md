@@ -18,8 +18,8 @@ Run `bun run report:foundation` for a dated, read-only local release report. Sup
 Two example profiles live in [`profiles/sharp-compact.json`](profiles/sharp-compact.json) and [`profiles/soft-spacious.json`](profiles/soft-spacious.json). They contain only existing foundation setting keys and semantic roles. Generate settings files outside the active theme:
 
 ```bash
-node scripts/preview-foundation-profile.mjs sharp-compact /tmp/nigat-sharp-settings.json
-node scripts/preview-foundation-profile.mjs soft-spacious /tmp/nigat-soft-settings.json
+node scripts/preview-foundation-profile.mjs sharp-compact /tmp/framework-sharp-settings.json
+node scripts/preview-foundation-profile.mjs soft-spacious /tmp/framework-soft-settings.json
 ```
 
 Use separate preview theme copies for those files as `config/settings_data.json`. The source theme's production settings stay untouched. Check contrast, long labels and 200% zoom after changing colors or fonts.

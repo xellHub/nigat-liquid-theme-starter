@@ -76,8 +76,8 @@ This checkout contains 41 public block filenames and 55 private extension filena
 
 `assets/theme.js` manages persistent visitor choices:
 
-- `nigat-palette` in `localStorage`
-- `nigat-color-mode` in `localStorage`
+- `framework-palette` in `localStorage`
+- `framework-color-mode` in `localStorage`
 - `data-palette`, `data-color-mode`, and `data-color-scheme` on `<html>`
 
 Header controls use `data-theme-toggle`, `data-palette-toggle`, and `data-palette-option`.
@@ -91,6 +91,6 @@ Header controls use `data-theme-toggle`, `data-palette-toggle`, and `data-palett
 - active layout/radius/elevation/type/motion tokens
 - the entire future foundation-token inventory in collapsed groups
 
-Preview values are saved only in `sessionStorage` under `nigat-design-preview`; they are never written to theme settings. The FAB writes root inline custom properties. `Reset preview` removes them.
+Preview values are saved only in `sessionStorage` under `framework-design-preview`; they are never written to theme settings. The FAB writes root inline custom properties. `Reset preview` removes them. Existing values under the former `nigat-*` keys are migrated when read.
 
 For custom accent values, `assets/theme.js` calculates a black or white foreground to preserve button-label contrast.

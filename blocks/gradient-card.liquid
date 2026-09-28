@@ -58,19 +58,9 @@
     --gradient-card-bg: color-mix(in srgb, var(--color-surface) 84%, var(--color-accent) 16%);
   }
 
-  .theme-gradient-card--hover-lift {
-    transition:
-      transform var(--motion-duration-fast) var(--motion-ease),
-      box-shadow var(--motion-duration-fast) var(--motion-ease);
-  }
-
   .theme-gradient-card--hover-lift:hover {
     transform: translateY(calc(var(--foundation-hover-lift) * -1));
     box-shadow: var(--shadow-md);
-  }
-
-  .theme-gradient-card--hover-shadow {
-    transition: box-shadow var(--motion-duration-fast) var(--motion-ease);
   }
 
   .theme-gradient-card--hover-shadow:hover {

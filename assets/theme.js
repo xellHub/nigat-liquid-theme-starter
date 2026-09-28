@@ -1,5 +1,5 @@
 /* ==========================================================================
-   nigat — theme.js
+   Framework — theme.js
    Vanilla, dependency-free interactivity built on Web Components.
    Uses the storefront cart and predictive-search APIs.
    ========================================================================== */
@@ -7,8 +7,34 @@
 (function () {
   "use strict";
 
+  function readStorageWithMigration(storage, key, legacyKeys = []) {
+    try {
+      const value = storage.getItem(key);
+      if (value !== null) {
+        removeStoredKeys(storage, ...legacyKeys);
+        return value;
+      }
+      for (const legacyKey of legacyKeys) {
+        const legacyValue = storage.getItem(legacyKey);
+        if (legacyValue === null) continue;
+        storage.setItem(key, legacyValue);
+        storage.removeItem(legacyKey);
+        return legacyValue;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  function removeStoredKeys(storage, ...keys) {
+    try {
+      keys.forEach((key) => storage.removeItem(key));
+    } catch (_) {}
+  }
+
+  const legacyFramework = window.nigat || {};
+
   /* --- Small helpers --------------------------------------------------- */
-  const nigat = {
+  const framework = {
     routes: window.Shopify && window.Shopify.routes ? window.Shopify.routes : { root: "/" },
     money(cents) {
       return (cents / 100).toLocaleString(undefined, {
@@ -25,7 +51,8 @@
       };
     },
     ImageBreakpoints: Object.freeze(
-      (window.nigat && window.nigat.ImageBreakpoints) || {
+      (window.framework && window.framework.ImageBreakpoints) ||
+      legacyFramework.ImageBreakpoints || {
         CDN: Object.freeze([
           64, 128, 165, 192, 360, 533, 720, 940, 1066, 1200, 1500, 1780, 2000, 2400, 3000, 3840,
         ]),
@@ -114,7 +141,7 @@
       },
     };
   }
-  nigat.ImageConfig = nigat.ImageBreakpoints;
+  framework.ImageConfig = framework.ImageBreakpoints;
 
   /* --- Shared Recent Searches Storage --------------------------------- */
   const RECENT_SEARCHES_STORAGE_KEY = "lumen_recent_searches";
@@ -172,17 +199,19 @@
     } catch (e) {}
   }
 
-  nigat.RECENT_SEARCHES_STORAGE_KEY = RECENT_SEARCHES_STORAGE_KEY;
-  nigat.getRecentSearches = getRecentSearches;
-  nigat.addRecentSearch = addRecentSearch;
-  nigat.removeRecentSearch = removeRecentSearch;
-  nigat.clearRecentSearches = clearRecentSearches;
+  framework.RECENT_SEARCHES_STORAGE_KEY = RECENT_SEARCHES_STORAGE_KEY;
+  framework.getRecentSearches = getRecentSearches;
+  framework.addRecentSearch = addRecentSearch;
+  framework.removeRecentSearch = removeRecentSearch;
+  framework.clearRecentSearches = clearRecentSearches;
 
-  window.nigat = Object.assign(window.nigat || {}, nigat);
+  window.framework = Object.assign({}, legacyFramework, window.framework || {}, framework);
+  // Keep the previous public namespace available for storefront customizations during the rename.
+  window.nigat = window.framework;
 
   /* --- Visitor appearance controls ------------------------------------ */
-  const COLOR_MODE_KEY = "nigat-color-mode";
-  const PALETTE_KEY = "nigat-palette";
+  const COLOR_MODE_KEY = "framework-color-mode";
+  const PALETTE_KEY = "framework-palette";
 
   function getPaletteOption(palette = document.documentElement.dataset.palette) {
     return document.querySelector(`[data-palette-option][data-palette="${palette}"]`);
@@ -300,7 +329,7 @@
   syncAppearanceControls();
 
   /* --- Live design controls (tab-only preview) ------------------------ */
-  const DESIGN_PREVIEW_KEY = "nigat-design-preview";
+  const DESIGN_PREVIEW_KEY = "framework-design-preview";
   const designPreviewProperties = [
     "--color-background",
     "--color-surface",
@@ -350,7 +379,10 @@
 
   function restoreDesignPreview() {
     try {
-      const values = JSON.parse(sessionStorage.getItem(DESIGN_PREVIEW_KEY) || "{}");
+      const values = JSON.parse(
+        readStorageWithMigration(sessionStorage, DESIGN_PREVIEW_KEY, ["nigat-design-preview"]) ||
+          "{}"
+      );
       Object.entries(values).forEach(([property, value]) =>
         document.documentElement.style.setProperty(property, value)
       );
@@ -380,7 +412,7 @@
     root.dataset.showPaletteSwitcher = root.dataset.showPaletteSwitcherDefault;
     root.dataset.surfaceTreatment = root.dataset.surfaceTreatmentDefault;
     try {
-      sessionStorage.removeItem(DESIGN_PREVIEW_KEY);
+      removeStoredKeys(sessionStorage, DESIGN_PREVIEW_KEY, "nigat-design-preview");
     } catch (_) {}
   }
 
@@ -617,7 +649,7 @@
   const CartEvents = new EventTarget();
 
   async function refreshCart(signal) {
-    const res = await fetch(`${nigat.routes.root}cart.js`, {
+    const res = await fetch(`${framework.routes.root}cart.js`, {
       headers: { Accept: "application/json" },
       signal,
     });
@@ -676,7 +708,7 @@
       const drawerScroll = drawerBody?.querySelector(".cart-drawer__main")?.scrollTop || 0;
       const pageScroll = page?.querySelector("[data-cart-line-items]")?.scrollTop || 0;
       const ids = [...new Set(targets.map((t) => t.id))].join(",");
-      const res = await fetch(`${nigat.routes.root}?sections=${ids}`, { signal });
+      const res = await fetch(`${framework.routes.root}?sections=${ids}`, { signal });
       if (!res.ok) throw new Error(`cart sections failed (${res.status})`);
       const data = await res.json();
       if (signal?.aborted) return false;
@@ -725,15 +757,20 @@
       }
       return rendered;
     } catch (err) {
-      console.warn("[nigat] cart section render failed", err);
+      console.warn("[framework] cart section render failed", err);
       return false;
     }
   }
 
   /* --- Wishlist System -------------------------------------------------- */
+  const WISHLIST_STORAGE_KEY = "framework_wishlist";
+  const LEGACY_WISHLIST_STORAGE_KEY = "nigat_wishlist";
+
   function getWishlist() {
     try {
-      const stored = localStorage.getItem("nigat_wishlist");
+      const stored = readStorageWithMigration(localStorage, WISHLIST_STORAGE_KEY, [
+        LEGACY_WISHLIST_STORAGE_KEY,
+      ]);
       if (!stored) return [];
       const parsed = JSON.parse(stored);
       return Array.isArray(parsed) ? parsed.map(String) : [];
@@ -744,7 +781,8 @@
 
   function setWishlist(list) {
     try {
-      localStorage.setItem("nigat_wishlist", JSON.stringify(list));
+      localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(list));
+      removeStoredKeys(localStorage, LEGACY_WISHLIST_STORAGE_KEY);
       window.dispatchEvent(new CustomEvent("wishlist:updated", { detail: { wishlist: list } }));
       document.dispatchEvent(
         new CustomEvent("shopify:wishlist:updated", { detail: { wishlist: list } })
@@ -941,7 +979,7 @@
         cartNoteState.status = "saving";
         syncCartNoteUI();
         try {
-          const res = await fetch(`${nigat.routes.root}cart/update.js`, {
+          const res = await fetch(`${framework.routes.root}cart/update.js`, {
             ...fetchConfig(),
             body: JSON.stringify({ note: next }),
           });
@@ -950,7 +988,7 @@
           cartNoteState.saved = next;
           CartEvents.dispatchEvent(new CustomEvent("cart:updated", { detail: cart }));
         } catch (err) {
-          console.warn("[nigat] cart note save failed", err);
+          console.warn("[framework] cart note save failed", err);
           cartNoteState.status = "error";
           syncCartNoteUI();
           return false;
@@ -1092,7 +1130,7 @@
       const savedCode = sessionStorage.getItem("cart_discount_code");
       if (savedCode) {
         e.preventDefault();
-        window.location.href = `${nigat.routes.root}checkout?discount=${encodeURIComponent(savedCode)}`;
+        window.location.href = `${framework.routes.root}checkout?discount=${encodeURIComponent(savedCode)}`;
       }
     }
   });
@@ -1145,7 +1183,8 @@
   function lockBodyScroll() {
     if (scrollLockCount === 0) {
       scrollbarWidth = getScrollbarWidth();
-      if (scrollbarWidth > 0) {
+      const hasStableScrollbarGutter = window.CSS?.supports?.("scrollbar-gutter: stable");
+      if (scrollbarWidth > 0 && !hasStableScrollbarGutter) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
       document.documentElement.style.overflow = "hidden";
@@ -1167,8 +1206,8 @@
     }
   }
 
-  window.nigat.lockBodyScroll = lockBodyScroll;
-  window.nigat.unlockBodyScroll = unlockBodyScroll;
+  window.framework.lockBodyScroll = lockBodyScroll;
+  window.framework.unlockBodyScroll = unlockBodyScroll;
 
   /* --- Reusable drawer controller ------------------------------------- */
   class Drawer {
@@ -1228,7 +1267,7 @@
       this.lifecycle.destroy();
     }
   }
-  window.nigat.Drawer = Drawer;
+  window.framework.Drawer = Drawer;
 
   /* --- Reusable Composable Overlay Primitive (<theme-overlay>) ---------
      Supports 4 primitives: popover, drawer, modal, dropdown.
@@ -1529,7 +1568,7 @@
   if (!customElements.get("theme-overlay")) {
     customElements.define("theme-overlay", ThemeOverlay);
   }
-  window.nigat.ThemeOverlay = ThemeOverlay;
+  window.framework.ThemeOverlay = ThemeOverlay;
 
   /* --- <cart-drawer> --------------------------------------------------- */
   class CartDrawer extends HTMLElement {
@@ -1638,7 +1677,7 @@
         config.body = formData;
         config.signal = request.signal;
 
-        const res = await fetch(`${nigat.routes.root}cart/add.js`, config);
+        const res = await fetch(`${framework.routes.root}cart/add.js`, config);
         const data = await res.json();
         if (!this.isConnected || request.signal.aborted) return;
 
@@ -1667,12 +1706,12 @@
         if (drawer) {
           drawer.open(this.button);
         } else {
-          window.location.href = `${nigat.routes.root}cart`;
+          window.location.href = `${framework.routes.root}cart`;
         }
       } catch (err) {
         if (err.name === "AbortError" || !this.isConnected) return;
         this.showError(this.dataset.errorMessage);
-        console.error("[nigat] add to cart failed", err);
+        console.error("[framework] add to cart failed", err);
       } finally {
         this.lifecycle?.untrackRequest(request);
         if (this.isConnected) this.setLoading(false);
@@ -1731,7 +1770,7 @@
         this.overlay.close();
         const drawer = getDrawer();
         if (drawer) drawer.open(returnTrigger);
-        else window.location.href = `${nigat.routes.root}cart`;
+        else window.location.href = `${framework.routes.root}cart`;
       });
     }
 
@@ -1831,7 +1870,7 @@
       });
       observer.observe(document.documentElement, { childList: true, subtree: true });
       try {
-        const response = await fetch(`${nigat.routes.root}cart/add.js`, {
+        const response = await fetch(`${framework.routes.root}cart/add.js`, {
           method: "POST",
           body: new FormData(form),
           headers: { Accept: "application/json" },
@@ -1850,7 +1889,7 @@
         if (!form.isConnected || request.signal.aborted) return;
         const drawer = getDrawer();
         if (drawer) drawer.open(button);
-        else window.location.href = `${nigat.routes.root}cart`;
+        else window.location.href = `${framework.routes.root}cart`;
       } catch (cause) {
         if (cause.name !== "AbortError" && form.isConnected && error) {
           error.textContent = cause.serverResponse ? cause.message : this.dataset.addError;
@@ -1930,7 +1969,7 @@
         while (state.quantity !== null) {
           const nextQuantity = state.quantity;
           state.quantity = null;
-          const res = await fetch(`${nigat.routes.root}cart/change.js`, {
+          const res = await fetch(`${framework.routes.root}cart/change.js`, {
             ...fetchConfig(),
             body: JSON.stringify({ id: key, quantity: nextQuantity }),
           });
@@ -1942,12 +1981,12 @@
         }
       })
       .catch(async (err) => {
-        console.error("[nigat] cart change failed", err);
+        console.error("[framework] cart change failed", err);
         try {
           await refreshCart();
           await renderCartSections();
         } catch (refreshError) {
-          console.warn("[nigat] cart recovery failed", refreshError);
+          console.warn("[framework] cart recovery failed", refreshError);
         }
       })
       .finally(() => {
@@ -2214,7 +2253,7 @@
       price.classList.toggle("price--on-sale", onSale);
       price.classList.toggle("price--sold-out", !variant.available);
       if (regular) {
-        regular.textContent = nigat.money(onSale ? variant.compare_at_price : variant.price);
+        regular.textContent = framework.money(onSale ? variant.compare_at_price : variant.price);
         regular.hidden = false;
       }
       let sale = container.querySelector(".price-item--sale");
@@ -2224,7 +2263,7 @@
           sale.className = "price-item price-item--sale";
           container.appendChild(sale);
         }
-        sale.textContent = nigat.money(variant.price);
+        sale.textContent = framework.money(variant.price);
       } else sale?.remove();
       let unit = price.querySelector(".price__unit");
       if (variant.unit_price && variant.unit_price_measurement) {
@@ -2234,7 +2273,7 @@
           price.appendChild(unit);
         }
         const measure = variant.unit_price_measurement;
-        unit.textContent = `${nigat.money(variant.unit_price)} / ${measure.reference_value === 1 ? "" : measure.reference_value}${measure.reference_unit}`;
+        unit.textContent = `${framework.money(variant.unit_price)} / ${measure.reference_value === 1 ? "" : measure.reference_value}${measure.reference_unit}`;
       } else unit?.remove();
     }
 
@@ -2247,7 +2286,7 @@
       }
       const priceEl = sticky.querySelector("[data-sticky-price]");
       if (priceEl) {
-        priceEl.textContent = variant ? nigat.money(variant.price) : this.dataset.unavailableText;
+        priceEl.textContent = variant ? framework.money(variant.price) : this.dataset.unavailableText;
       }
       const btn = sticky.querySelector("[data-sticky-submit]");
       const btnText = sticky.querySelector("[data-sticky-btn-text]");
@@ -2793,14 +2832,14 @@
       this.request = request;
       try {
         const res = await fetch(
-          `${nigat.routes.root}search/suggest.json?q=${encodeURIComponent(term)}&resources[type]=product,page&resources[options][prefix]=last&resources[limit]=6`,
+          `${framework.routes.root}search/suggest.json?q=${encodeURIComponent(term)}&resources[type]=product,page&resources[options][prefix]=last&resources[limit]=6`,
           { signal: request.signal }
         );
         const data = await res.json();
         if (request.signal.aborted || !this.isConnected) return;
         this.render(data.resources.results, term);
       } catch (err) {
-        if (err.name !== "AbortError") console.warn("[nigat] predictive search failed", err);
+        if (err.name !== "AbortError") console.warn("[framework] predictive search failed", err);
       } finally {
         this.lifecycle?.untrackRequest(request);
         if (this.request === request) this.request = null;
@@ -2822,7 +2861,7 @@
           ? `<img class="search-result__image" src="${p.image}" alt="" width="48" height="48" loading="lazy">`
           : "";
         const price = p.price
-          ? `<span class="caption">${nigat.money(Math.round(parseFloat(p.price) * 100))}</span>`
+          ? `<span class="caption">${framework.money(Math.round(parseFloat(p.price) * 100))}</span>`
           : "";
         html += `<li><a class="search-result" href="${p.url}" role="option">${img}<span class="search-result__title">${p.title}</span>${price}</a></li>`;
       });
@@ -2917,7 +2956,7 @@
 
       // Input changes (live debounced search)
       if (this.input) {
-        this.onInputDebounced = nigat.debounce(this.handleSearch.bind(this), 250);
+        this.onInputDebounced = framework.debounce(this.handleSearch.bind(this), 250);
         this.input.addEventListener("input", () => {
           const val = this.input.value.trim();
           if (this.clearBtn) this.clearBtn.hidden = val.length === 0;
@@ -2963,7 +3002,7 @@
           const term = tagBtn.dataset.searchTerm || tagBtn.textContent.trim();
           if (term) {
             this.addRecentSearch(term);
-            window.location.href = `${nigat.routes.root}search?q=${encodeURIComponent(term)}&type=product`;
+            window.location.href = `${framework.routes.root}search?q=${encodeURIComponent(term)}&type=product`;
           }
           return;
         }
@@ -3088,14 +3127,14 @@
           );
         if (this.footerLabel) this.footerLabel.textContent = this.labels.recentSearch;
         if (this.viewAll) {
-          this.viewAll.href = `${nigat.routes.root}search?q=${encodeURIComponent(topRecent)}&type=product`;
+          this.viewAll.href = `${framework.routes.root}search?q=${encodeURIComponent(topRecent)}&type=product`;
           this.viewAll.textContent = this.labels.viewAllFor.replace("[term]", topRecent);
         }
       } else {
         if (this.mainTitle) this.mainTitle.textContent = this.labels.popularProducts;
         if (this.footerLabel) this.footerLabel.textContent = this.labels.search;
         if (this.viewAll) {
-          this.viewAll.href = `${nigat.routes.root}search`;
+          this.viewAll.href = `${framework.routes.root}search`;
           this.viewAll.textContent = this.labels.viewAllProducts;
         }
       }
@@ -3116,7 +3155,7 @@
       if (this.loading) this.loading.hidden = false;
 
       try {
-        const url = `${nigat.routes.root}search/suggest.json?q=${encodeURIComponent(term)}&resources[type]=product,collection,query&resources[options][prefix]=last&resources[limit]=8`;
+        const url = `${framework.routes.root}search/suggest.json?q=${encodeURIComponent(term)}&resources[type]=product,collection,query&resources[options][prefix]=last&resources[limit]=8`;
         const res = await fetch(url);
         const data = await res.json();
 
@@ -3127,7 +3166,7 @@
         this.renderResults(data.resources ? data.resources.results : {}, term);
       } catch (err) {
         if (this.loading) this.loading.hidden = true;
-        console.warn("[nigat] predictive search error", err);
+        console.warn("[framework] predictive search error", err);
       }
     }
 
@@ -3182,11 +3221,11 @@
 
               const priceNum = parseFloat(p.price) || 0;
               const priceFormatted =
-                priceNum > 0 ? `${nigat.money(Math.round(priceNum * 100))}` : "Br 0.00";
+                priceNum > 0 ? `${framework.money(Math.round(priceNum * 100))}` : "Br 0.00";
 
               const compareNum = parseFloat(p.compare_at_price_max || p.compare_at_price) || 0;
               const onSale = compareNum > priceNum && priceNum > 0;
-              const compareFormatted = onSale ? `${nigat.money(Math.round(compareNum * 100))}` : "";
+              const compareFormatted = onSale ? `${framework.money(Math.round(compareNum * 100))}` : "";
 
               let badgeHtml = "";
               if (onSale) {
@@ -3237,7 +3276,7 @@
         this.footerLabel.textContent = this.labels.searchFor.replace("[term]", term);
       }
       if (this.viewAll) {
-        this.viewAll.href = `${nigat.routes.root}search?q=${encodeURIComponent(term)}&type=product`;
+        this.viewAll.href = `${framework.routes.root}search?q=${encodeURIComponent(term)}&type=product`;
         this.viewAll.textContent = this.labels.viewAllFor.replace("[term]", term);
       }
     }
@@ -3638,7 +3677,7 @@
           if (val === "") {
             return;
           }
-          nigat.addRecentSearch(val);
+          framework.addRecentSearch(val);
           const isCollection = window.location.pathname.includes("/collections");
           if (isCollection) {
             window.location.href = `${window.Shopify?.routes?.root || "/"}search?q=${encodeURIComponent(val)}*&type=product`;
@@ -3772,7 +3811,7 @@
       if (target.matches("[data-sidebar-search-input]")) {
         const val = target.value.trim();
         if (val) {
-          nigat.addRecentSearch(val);
+          framework.addRecentSearch(val);
         }
       }
       if (
@@ -3790,7 +3829,7 @@
       const isSearchPage = window.location.pathname.includes("/search");
       const searchInput = this.querySelector("[data-sidebar-search-input]");
       if (searchInput && searchInput.value.trim() !== "") {
-        nigat.addRecentSearch(searchInput.value.trim());
+        framework.addRecentSearch(searchInput.value.trim());
       } else if (isSearchPage && searchInput && searchInput.value.trim() === "") {
         return;
       }
@@ -3888,7 +3927,7 @@
             if (key === "q") {
               const cleanQ = trimmed.replace(/\*+$/, "").trim();
               if (cleanQ === "") continue;
-              nigat.addRecentSearch(cleanQ);
+              framework.addRecentSearch(cleanQ);
               const wildcardQ = cleanQ
                 .split(/\s+/)
                 .map((w) => (w.endsWith("*") ? w : w + "*"))
@@ -4001,7 +4040,7 @@
         }
       } catch (err) {
         if (err.name !== "AbortError") {
-          console.error("[nigat] facet filter fetch failed", err);
+          console.error("[framework] facet filter fetch failed", err);
         }
       } finally {
         if (this.abortController === request) {
@@ -4478,7 +4517,7 @@
 
     updateTotal() {
       const items = this.selectedItems({ validate: false });
-      if (this.total) this.total.textContent = nigat.money((items || []).reduce((sum, item) => sum + item.price * item.quantity, 0));
+      if (this.total) this.total.textContent = framework.money((items || []).reduce((sum, item) => sum + item.price * item.quantity, 0));
       if (this.error) this.error.hidden = true;
     }
 
@@ -4495,7 +4534,7 @@
       const request = this.lifecycle.trackRequest(new AbortController());
       this.request = request;
       try {
-        const response = await fetch(`${nigat.routes.root}cart/add.js`, {
+        const response = await fetch(`${framework.routes.root}cart/add.js`, {
           ...fetchConfig("javascript"),
           body: JSON.stringify({ items: items.map(({ id, quantity }) => ({ id, quantity })) }),
           signal: request.signal,
@@ -4520,13 +4559,13 @@
           await renderCartSections(request.signal);
         } catch (refreshError) {
           if (refreshError.name === "AbortError") return;
-          location.href = `${nigat.routes.root}cart`;
+          location.href = `${framework.routes.root}cart`;
           return;
         }
         if (!this.isConnected) return;
         const drawer = getDrawer();
         if (drawer) drawer.open(this.button);
-        else location.href = `${nigat.routes.root}cart`;
+        else location.href = `${framework.routes.root}cart`;
       } catch (error) {
         if (error.name !== "AbortError" && this.isConnected && this.error) {
           this.error.textContent = this.dataset.errorMessage;
@@ -4541,7 +4580,8 @@
   }
   if (!customElements.get("product-bundle")) customElements.define("product-bundle", ProductBundle);
 
-  const recentStorageKey = "nigat:recently-viewed:v1";
+  const recentStorageKey = "framework:recently-viewed:v1";
+  const legacyRecentStorageKey = "nigat:recently-viewed:v1";
   const recentMaxAge = 30 * 24 * 60 * 60 * 1000;
   let privacyReady;
   function loadPrivacyApi() {
@@ -4576,7 +4616,9 @@
 
     readHistory() {
       try {
-        const parsed = JSON.parse(localStorage.getItem(recentStorageKey) || "[]");
+        const parsed = JSON.parse(
+          readStorageWithMigration(localStorage, recentStorageKey, [legacyRecentStorageKey]) || "[]"
+        );
         return (Array.isArray(parsed) ? parsed : [])
           .filter((entry) => entry && /^[a-z0-9-]+$/.test(entry.handle) && Date.now() - entry.at < recentMaxAge && entry.at <= Date.now())
           .slice(0, 12);
@@ -4592,7 +4634,7 @@
         this.observer = null;
         this.querySelector("[data-recently-content]")?.setAttribute("hidden", "");
         this.querySelector("[data-recently-grid]")?.replaceChildren();
-        try { localStorage.removeItem(recentStorageKey); } catch { /* Storage may be unavailable. */ }
+        removeStoredKeys(localStorage, recentStorageKey, legacyRecentStorageKey);
         this.dataset.loaded = "false";
         return;
       }
@@ -5498,7 +5540,7 @@
     );
   }
 
-  /* --- Sticky Header (Reveal on scroll up) ----------------------------- */
+  /* --- Sticky Header (Always visible) ---------------------------------- */
   function initStickyHeader() {
     const header = document.querySelector("[data-header].header--sticky");
     if (!header || header.dataset.stickyInitialized) return;
@@ -5513,9 +5555,7 @@
     updateHeaderHeight();
     window.addEventListener("resize", updateHeaderHeight, { passive: true });
 
-    let lastScrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop);
     let ticking = false;
-    const threshold = 6;
 
     function onScroll() {
       if (ticking) return;
@@ -5524,53 +5564,11 @@
       requestAnimationFrame(() => {
         const scrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop);
         const headerHeight = header.offsetHeight || 52;
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-
-        // Prevent iOS overscroll bounce at the bottom from triggering reveal/hide
-        if (scrollTop >= maxScroll - 15) {
-          ticking = false;
-          return;
-        }
-
-        // Keep header visible if search panel or mobile menu is open
-        const mobileMenu = document.querySelector("[data-mobile-menu]");
-        const searchPanel = document.querySelector("[data-search-panel]");
-        const isMenuOpen = mobileMenu && !mobileMenu.hidden;
-        const isSearchOpen = searchPanel && !searchPanel.hidden;
-
-        if (isMenuOpen || isSearchOpen) {
-          header.classList.remove("header--hidden");
-          headerSection.classList.remove("header--hidden");
-          lastScrollTop = scrollTop;
-          ticking = false;
-          return;
-        }
-
-        if (scrollTop <= headerHeight) {
-          header.classList.remove("header--hidden");
-          header.classList.remove("header--scrolled");
-          headerSection.classList.remove("header--hidden");
-          headerSection.classList.remove("header--scrolled");
-        } else {
-          header.classList.add("header--scrolled");
-          headerSection.classList.add("header--scrolled");
-          const scrollDelta = scrollTop - lastScrollTop;
-
-          if (scrollDelta > threshold && scrollTop > headerHeight + 20) {
-            // Scrolling DOWN -> hide header
-            header.classList.add("header--hidden");
-            headerSection.classList.add("header--hidden");
-            header
-              .querySelectorAll(".header__dropdown[open]")
-              .forEach((d) => d.removeAttribute("open"));
-          } else if (scrollDelta < -threshold) {
-            // Scrolling UP -> reveal header
-            header.classList.remove("header--hidden");
-            headerSection.classList.remove("header--hidden");
-          }
-        }
-
-        lastScrollTop = scrollTop;
+        const isScrolled = scrollTop > headerHeight;
+        header.classList.remove("header--hidden");
+        headerSection.classList.remove("header--hidden");
+        header.classList.toggle("header--scrolled", isScrolled);
+        headerSection.classList.toggle("header--scrolled", isScrolled);
         ticking = false;
       });
     }
@@ -5616,14 +5614,14 @@
   syncReviewSummary();
   syncWishlistUI();
 
-  if (window.nigat && window.nigat.initThemeImageLoaders) {
-    window.nigat.initThemeImageLoaders();
-    window.addEventListener("load", () => window.nigat.initThemeImageLoaders());
+  if (window.framework && window.framework.initThemeImageLoaders) {
+    window.framework.initThemeImageLoaders();
+    window.addEventListener("load", () => window.framework.initThemeImageLoaders());
     document.addEventListener("shopify:section:load", (e) => {
-      if (e.target) window.nigat.initThemeImageLoaders(e.target);
+      if (e.target) window.framework.initThemeImageLoaders(e.target);
     });
     document.addEventListener("shopify:block:select", (e) => {
-      if (e.target) window.nigat.initThemeImageLoaders(e.target);
+      if (e.target) window.framework.initThemeImageLoaders(e.target);
     });
   }
 
@@ -5635,7 +5633,7 @@
       if (q) {
         const cleanTerm = q.replace(/\*+$/, "").trim();
         if (cleanTerm) {
-          nigat.addRecentSearch(cleanTerm);
+          framework.addRecentSearch(cleanTerm);
         }
       }
     } catch (e) {}

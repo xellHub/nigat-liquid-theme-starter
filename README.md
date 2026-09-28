@@ -1,8 +1,8 @@
-# Nigat — Advanced Liquid Theme Starter Pack
+# Framework — Advanced Liquid Theme Starter Pack
 
 **An open-source, MIT-licensed, AI-agent-ready foundation for building composed Liquid storefronts.**
 
-Nigat gives developers and teams a structured starting point for storefronts built with Liquid: reusable sections, independently configurable theme blocks, shared design tokens, and documented workflows for both people and coding agents.
+Framework gives developers and teams a structured starting point for storefronts built with Liquid: reusable sections, independently configurable theme blocks, shared design tokens, and documented workflows for both people and coding agents.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
@@ -17,7 +17,7 @@ Nigat gives developers and teams a structured starting point for storefronts bui
 
 ## AI-agent ready
 
-Nigat includes repository-specific guidance so coding agents can make focused, reviewable changes:
+Framework includes repository-specific guidance so coding agents can make focused, reviewable changes:
 
 - [`AGENTS.md`](AGENTS.md) describes repository conventions and canonical edit paths.
 - [`PR_REVIEWER.md`](PR_REVIEWER.md) provides a focused pull request review checklist.
@@ -60,7 +60,7 @@ For a section update, edit its canonical package under `section-library/<group>/
 
 ## Platform compatibility
 
-Liquid is a template language; storefront hosts provide the runtime, editor, and commerce APIs. Nigat uses host-specific runtime contracts for those features. Moving it to a different Liquid host may require replacing or adapting those integrations.
+Liquid is a template language; storefront hosts provide the runtime, editor, and commerce APIs. Framework uses host-specific runtime contracts for those features. Moving it to a different Liquid host may require replacing or adapting those integrations.
 
 ## Motion graphics reference captures
 
@@ -108,4 +108,4 @@ The local preview exposes one product, **Sample Sneaker - XM1** (`/products/samp
 
 ## License
 
-Nigat is released under the [MIT License](LICENSE). You are free to use, modify, and redistribute the code under its terms. The license retains attribution for portions derived from the Lumen theme.
+Framework is released under the [MIT License](LICENSE). You are free to use, modify, and redistribute the code under its terms. The license retains attribution for portions derived from the Lumen theme.

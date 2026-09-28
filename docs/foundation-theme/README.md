@@ -3,7 +3,7 @@
 Start a brand fork with the [fork and preview guide](fork-guide.md). Keep the [implementation progress](implementation-progress.md) record alongside static and live acceptance evidence.
 Use the [release handoff](release-handoff.md) to inventory installed merchant data and record release gates.
 
-This directory explains the configurable foundation-theme system added to Nigat and is the starting point for any agent continuing the work.
+This directory explains the configurable foundation-theme system added to Framework and is the starting point for any agent continuing the work.
 
 For the 2026-09-26 fork-foundation review and next implementation work, start with:
 

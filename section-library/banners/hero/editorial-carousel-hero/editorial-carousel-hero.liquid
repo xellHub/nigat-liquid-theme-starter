@@ -496,8 +496,8 @@
               if (cardTpl) {
                 const cardContent = cardTpl.content.cloneNode(true);
                 card.appendChild(cardContent);
-                if (window.nigat && window.nigat.initThemeImageLoaders) {
-                  window.nigat.initThemeImageLoaders(card);
+                if (window.framework && window.framework.initThemeImageLoaders) {
+                  window.framework.initThemeImageLoaders(card);
                 }
               }
 

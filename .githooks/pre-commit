@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# nigat Git Pre-Commit Hook
+# Framework Git Pre-Commit Hook
 # Validates Liquid schemas, JSON integrity, and syntax before commit.
 
 RED='\033[0;31m'
@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${BLUE}==>${NC} Running nigat pre-commit checks..."
+echo -e "${BLUE}==>${NC} Running Framework pre-commit checks..."
 
 # 1. Check for unresolved merge conflict markers in staged files
 echo "  [1/3] Checking for merge conflict markers..."
@@ -49,4 +49,4 @@ else
   echo "    Install via: bun add --global @shopify/cli"
 fi
 
-echo -e "${GREEN}==> All nigat pre-commit checks passed! Proceeding with commit.${NC}\n"
+echo -e "${GREEN}==> All Framework pre-commit checks passed! Proceeding with commit.${NC}\n"

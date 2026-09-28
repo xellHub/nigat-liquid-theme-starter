@@ -1,8 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "nigat-liquid-theme",
+  "name": "framework-liquid-theme",
   "private": true,
   "scripts": {
+    "build": "bun scripts/build-theme.mjs",
     "dev": "shopify theme dev",
     "lint": "node scripts/lint-blocks.cjs && bun run lint:composition",
     "lint:duplication": "jscpd",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@shopify/liquid-html-parser": "^2.10.0",
     "@shopify/prettier-plugin-liquid": "^1.11.0",
+    "csso": "^5.0.5",
     "embla-carousel": "^8.6.0",
     "jscpd": "^5.3.0",
     "prettier": "^3.9.9"

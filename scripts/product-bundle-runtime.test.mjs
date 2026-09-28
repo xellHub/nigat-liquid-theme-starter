@@ -18,7 +18,7 @@ function harness(fetch) {
     refreshCart: async () => { calls.refresh += 1; },
     renderCartSections: async () => { calls.render += 1; },
     getDrawer: () => ({ open: () => { calls.open += 1; } }),
-    nigat: { routes: { root: "/en/" }, money: (minor) => `minor:${minor}` },
+    framework: { routes: { root: "/en/" }, money: (minor) => `minor:${minor}` },
     location: { href: "" },
   };
   const ProductBundle = runInNewContext(classExpression, context);

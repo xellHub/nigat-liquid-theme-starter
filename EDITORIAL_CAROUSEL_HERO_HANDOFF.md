@@ -107,7 +107,7 @@ Each mini-card block (`rail_item`) selects one of four copy layouts, catering to
 
 ## 5. Theme Variables & Dark Mode System
 
-The section leverages Nigat’s unified design system tokens:
+The section leverages Framework’s unified design system tokens:
 
 ### Global Design Tokens
 

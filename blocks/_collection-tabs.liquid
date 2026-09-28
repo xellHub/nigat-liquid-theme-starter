@@ -4,7 +4,8 @@
   style="--collection-tabs-columns: {{ block.settings.columns_desktop }};"
   {{ block.shopify_attributes }}
 >
-  <div class="collection-tabs__triggers" role="tablist" aria-label="Featured collections">
+  <div class="horizontal-scroll-frame collection-tabs__trigger-scroller" data-horizontal-scroll>
+    <div class="horizontal-scroll-viewport collection-tabs__triggers" role="tablist" aria-label="Featured collections">
     {%- assign tab_count = block.settings.collections.count | default: 4 | at_most: 4 -%}
     {%- assign tab_limit = tab_count | at_least: 1 -%}
     {% for tab_collection in block.settings.collections limit: tab_limit %}
@@ -35,6 +36,8 @@
         </button>
       {% endfor %}
     {%- endif -%}
+    </div>
+    {% render 'horizontal-scroll-edges', label: 'collections' %}
   </div>
   <div class="collection-tabs__panels">
     {%- assign panel_count = block.settings.collections.count | default: 4 | at_most: 4 -%}
@@ -51,7 +54,8 @@
             hidden
           {% endunless %}
         >
-          <div class="collection-tabs__rail">
+          <div class="horizontal-scroll-frame collection-tabs__rail-scroller" data-horizontal-scroll>
+            <div class="horizontal-scroll-viewport collection-tabs__rail">
             {% if tab_collection != blank and tab_collection.products.size > 0 %}
               {% for product in tab_collection.products limit: block.settings.products_to_show %}
                 {% assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: index | append: '-' | append: forloop.index %}
@@ -62,6 +66,8 @@
             {% else %}
               <p>{{ 'collections.general.no_matches' | t }}</p>
             {% endif %}
+            </div>
+            {% render 'horizontal-scroll-edges', label: 'products' %}
           </div>
           <div class="collection-tabs__controls">
             <div class="collection-tabs__nav">
@@ -88,13 +94,16 @@
             hidden
           {% endunless %}
         >
-          <div class="collection-tabs__rail">
+          <div class="horizontal-scroll-frame collection-tabs__rail-scroller" data-horizontal-scroll>
+            <div class="horizontal-scroll-viewport collection-tabs__rail">
             {% for placeholder_index in (1..4) %}
               {% assign card_instance = section.id | append: '-' | append: block.id | append: '-' | append: index | append: '-preview-' | append: placeholder_index %}
               <div class="collection-tabs__card">
                 {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: nil, card_instance: card_instance, placeholder_variant: placeholder_index %}
               </div>
             {% endfor %}
+            </div>
+            {% render 'horizontal-scroll-edges', label: 'products' %}
           </div>
           <div class="collection-tabs__controls">
             <div class="collection-tabs__nav">
@@ -120,15 +129,20 @@
   .collection-tabs {
     display: flex;
     width: 100%;
+    min-width: 0;
     flex-direction: column;
     gap: var(--space-5);
+  }
+  .collection-tabs__panels,
+  .collection-tabs__panel {
+    min-width: 0;
+    max-width: 100%;
   }
   .collection-tabs__source-note { margin: 0; color: var(--color-muted); font-family: var(--font-body-family); }
   .collection-tabs__triggers {
     display: flex;
-    justify-content: center;
+    justify-content: safe center;
     gap: var(--space-5);
-    overflow-x: auto;
   }
   .collection-tabs__trigger {
     min-height: var(--foundation-minimum-target-size);
@@ -151,6 +165,7 @@
   }
   .collection-tabs__rail {
     display: grid;
+    width: 100%;
     grid-template-columns: repeat(var(--collection-tabs-columns), minmax(0, 1fr));
     gap: var(--grid-gap);
   }
@@ -195,7 +210,6 @@
   @container (max-width: 989px) {
     .collection-tabs__rail {
       display: flex;
-      overflow-x: auto;
       scroll-snap-type: x mandatory;
     }
     .collection-tabs__card {
@@ -217,6 +231,43 @@
     root.dataset.initialized = 'true';
     const triggers = Array.from(root.querySelectorAll('[data-tab-index], [data-tab-trigger]'));
     const panels = Array.from(root.querySelectorAll('[data-panel-index]'));
+    const scrollUpdates = Array.from(root.querySelectorAll('[data-horizontal-scroll]')).map((frame) => {
+      const viewport = frame.querySelector(':scope > .horizontal-scroll-viewport');
+      const previous = frame.querySelector(':scope > .horizontal-scroll-edge--left [data-scroll-previous]');
+      const next = frame.querySelector(':scope > .horizontal-scroll-edge--right [data-scroll-next]');
+      if (!viewport) return () => {};
+      const update = () => {
+        const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+        const canScrollLeft = viewport.scrollLeft > 2;
+        const canScrollRight = viewport.scrollLeft < maxScroll - 2;
+        frame.dataset.canScrollLeft = String(canScrollLeft);
+        frame.dataset.canScrollRight = String(canScrollRight);
+        if (previous) previous.disabled = !canScrollLeft;
+        if (next) next.disabled = !canScrollRight;
+      };
+      const scrollStep = () => {
+        const first = viewport.firstElementChild;
+        const gap = Number.parseFloat(getComputedStyle(viewport).gap) || 0;
+        return first?.clientWidth ? first.clientWidth + gap : viewport.clientWidth * 0.8;
+      };
+      previous?.addEventListener('click', () =>
+        viewport.scrollBy({ left: -scrollStep(), behavior: 'smooth' })
+      );
+      next?.addEventListener('click', () =>
+        viewport.scrollBy({ left: scrollStep(), behavior: 'smooth' })
+      );
+      viewport.addEventListener('scroll', update, { passive: true });
+      if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(update);
+        observer.observe(viewport);
+      } else {
+        window.addEventListener('resize', update, { passive: true });
+      }
+      update();
+      return update;
+    });
+    const updateScrollers = () => scrollUpdates.forEach((update) => update());
+    window.addEventListener('load', updateScrollers, { once: true });
     const bindPanel = (panel) => {
       const rail = panel.querySelector('.collection-tabs__rail');
       const cards = Array.from(panel.querySelectorAll('.collection-tabs__card'));
@@ -245,8 +296,9 @@
       );
       rail.addEventListener('scroll', update, { passive: true });
       update();
+      return update;
     };
-    panels.forEach(bindPanel);
+    const panelUpdates = panels.map(bindPanel);
     triggers.forEach((trigger, idx) =>
       trigger.addEventListener('click', () => {
         const selected = trigger.dataset.tabIndex || trigger.dataset.tabTrigger || String(idx + 1);
@@ -260,6 +312,10 @@
           const active = panel.dataset.panelIndex === selected;
           panel.classList.toggle('is-active', active);
           panel.hidden = !active;
+        });
+        requestAnimationFrame(() => {
+          updateScrollers();
+          panelUpdates.forEach((update) => update());
         });
       })
     );

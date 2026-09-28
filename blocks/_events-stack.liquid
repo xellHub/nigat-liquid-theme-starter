@@ -78,7 +78,6 @@
     display: grid;
     grid-template-columns: 210px minmax(0, 1fr) 380px;
     align-items: stretch;
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
     box-shadow: var(--evl-shadow);
   }
 
@@ -244,7 +243,6 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, opacity 0.15s ease;
   }
 
   {% case block.settings.button_style %}
@@ -309,7 +307,6 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   #EventsList-{{ block.id }} .events-card:hover .events-card__image,

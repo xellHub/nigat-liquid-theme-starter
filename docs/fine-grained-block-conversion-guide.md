@@ -6,7 +6,7 @@ This guide provides an end-to-end, reproducible manual for decomposing any monol
 
 ## 1. Architectural Philosophy: The 5-Layer Model
 
-In this repository (`nigat`), components strictly follow a 5-layer dependency hierarchy. A layer may only depend on layers below it:
+In this repository (Framework), components strictly follow a 5-layer dependency hierarchy. A layer may only depend on layers below it:
 
 ```text
 Layer 1: Layout & Storeframe (layout/theme.liquid)
